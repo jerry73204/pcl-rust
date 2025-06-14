@@ -16,6 +16,10 @@ fn main() {
         println!("cargo:include=/usr/include");
     }
 
+    // Link additional PCL libraries needed for search and octree functionality
+    println!("cargo:rustc-link-lib=pcl_search");
+    println!("cargo:rustc-link-lib=pcl_octree");
+
     // Build cxx bridge
     let mut build = cxx_build::bridge("src/lib.rs");
 

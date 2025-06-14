@@ -80,6 +80,36 @@ impl KdTreeXYZRGB {
         ffi::set_input_cloud_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
+
+    /// Find the k nearest neighbors to a query point
+    pub fn nearest_k_search(&self, point: &PointXYZRGB, k: i32) -> PclResult<Vec<i32>> {
+        if k <= 0 {
+            return Err(PclError::InvalidParameters(
+                "k must be positive".to_string(),
+            ));
+        }
+
+        // Note: This would need additional FFI function for PointXYZRGB search
+        // For now, return empty result with a not implemented error
+        Err(PclError::NotImplemented(
+            "KdTree search for PointXYZRGB not yet implemented".to_string(),
+        ))
+    }
+
+    /// Find all neighbors within a radius of a query point
+    pub fn radius_search(&self, point: &PointXYZRGB, radius: f64) -> PclResult<Vec<i32>> {
+        if radius <= 0.0 {
+            return Err(PclError::InvalidParameters(
+                "radius must be positive".to_string(),
+            ));
+        }
+
+        // Note: This would need additional FFI function for PointXYZRGB search
+        // For now, return empty result with a not implemented error
+        Err(PclError::NotImplemented(
+            "KdTree radius search for PointXYZRGB not yet implemented".to_string(),
+        ))
+    }
 }
 
 impl Default for KdTreeXYZRGB {

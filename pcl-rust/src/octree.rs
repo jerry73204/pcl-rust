@@ -107,6 +107,14 @@ impl OctreeVoxelCentroidXYZ {
         let inner = ffi::new_octree_voxel_centroid_xyz(resolution);
         Ok(Self { inner })
     }
+
+    /// Set the input point cloud
+    /// Note: Full voxel centroid functionality would require additional FFI functions
+    pub fn set_input_cloud(&mut self, _cloud: &PointCloudXYZ) -> PclResult<()> {
+        Err(PclError::NotImplemented(
+            "OctreeVoxelCentroid operations not yet fully implemented".to_string(),
+        ))
+    }
 }
 
 impl std::fmt::Debug for OctreeVoxelCentroidXYZ {

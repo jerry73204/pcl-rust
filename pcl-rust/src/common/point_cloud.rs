@@ -2,7 +2,7 @@
 //!
 //! This module provides safe, idiomatic Rust interfaces for PCL's PointCloud template.
 
-use crate::error::{PclError, PclResult};
+use crate::error::PclResult;
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
