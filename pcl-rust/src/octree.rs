@@ -25,8 +25,11 @@ impl OctreeSearchXYZ {
     /// Create a new octree with the specified resolution
     pub fn new(resolution: f64) -> PclResult<Self> {
         if resolution <= 0.0 {
-            return Err(PclError::InvalidParameters(
-                "resolution must be positive".to_string(),
+            return Err(PclError::invalid_parameters(
+                "resolution must be positive",
+                "resolution",
+                "positive value",
+                &format!("{}", resolution),
             ));
         }
 
@@ -47,9 +50,19 @@ impl OctreeSearchXYZ {
 
     /// Find the k nearest neighbors to a query point
     pub fn nearest_k_search(&mut self, point: &PointXYZ, k: i32) -> PclResult<Vec<i32>> {
+        if !self.has_cloud {
+            return Err(PclError::invalid_state(
+                "No input cloud set",
+                "input cloud set",
+                "no input cloud",
+            ));
+        }
         if k <= 0 {
-            return Err(PclError::InvalidParameters(
-                "k must be positive".to_string(),
+            return Err(PclError::invalid_parameters(
+                "k must be positive",
+                "k",
+                "positive integer",
+                &format!("{}", k),
             ));
         }
 
@@ -59,9 +72,19 @@ impl OctreeSearchXYZ {
 
     /// Find all neighbors within a radius of a query point
     pub fn radius_search(&mut self, point: &PointXYZ, radius: f64) -> PclResult<Vec<i32>> {
+        if !self.has_cloud {
+            return Err(PclError::invalid_state(
+                "No input cloud set",
+                "input cloud set",
+                "no input cloud",
+            ));
+        }
         if radius <= 0.0 {
-            return Err(PclError::InvalidParameters(
-                "radius must be positive".to_string(),
+            return Err(PclError::invalid_parameters(
+                "radius must be positive",
+                "radius",
+                "positive value",
+                &format!("{}", radius),
             ));
         }
 
@@ -71,6 +94,13 @@ impl OctreeSearchXYZ {
 
     /// Find all points in the same voxel as the query point
     pub fn voxel_search(&mut self, point: &PointXYZ) -> PclResult<Vec<i32>> {
+        if !self.has_cloud {
+            return Err(PclError::invalid_state(
+                "No input cloud set",
+                "input cloud set",
+                "no input cloud",
+            ));
+        }
         let indices = ffi::voxel_search_octree_xyz(self.inner.pin_mut(), &point.inner);
         Ok(indices)
     }
@@ -100,9 +130,9 @@ impl NearestNeighborSearch<PointXYZ> for OctreeSearchXYZ {
     fn nearest_k_search(&self, _point: &PointXYZ, _k: i32) -> PclResult<Vec<i32>> {
         // Octree requires mutable reference, so we need to handle this differently
         // For now, return not implemented
-        Err(PclError::NotImplemented(
-            "Const nearest_k_search not available for octree (requires mutable reference)"
-                .to_string(),
+        Err(PclError::not_implemented(
+            "Const nearest_k_search for octree",
+            Some("Use the mutable nearest_k_search method directly on OctreeSearchXYZ".to_string()),
         ))
     }
 
@@ -111,14 +141,16 @@ impl NearestNeighborSearch<PointXYZ> for OctreeSearchXYZ {
         _point: &PointXYZ,
         _k: i32,
     ) -> PclResult<(Vec<i32>, Vec<f32>)> {
-        Err(PclError::NotImplemented(
-            "Const nearest_k_search_with_distances not available for octree".to_string(),
+        Err(PclError::not_implemented(
+            "Const nearest_k_search_with_distances for octree",
+            Some("Use the mutable nearest_k_search method directly on OctreeSearchXYZ".to_string()),
         ))
     }
 
     fn radius_search(&self, _point: &PointXYZ, _radius: f64) -> PclResult<Vec<i32>> {
-        Err(PclError::NotImplemented(
-            "Const radius_search not available for octree (requires mutable reference)".to_string(),
+        Err(PclError::not_implemented(
+            "Const radius_search for octree",
+            Some("Use the mutable radius_search method directly on OctreeSearchXYZ".to_string()),
         ))
     }
 
@@ -127,8 +159,9 @@ impl NearestNeighborSearch<PointXYZ> for OctreeSearchXYZ {
         _point: &PointXYZ,
         _radius: f64,
     ) -> PclResult<(Vec<i32>, Vec<f32>)> {
-        Err(PclError::NotImplemented(
-            "Const radius_search_with_distances not available for octree".to_string(),
+        Err(PclError::not_implemented(
+            "Const radius_search_with_distances for octree",
+            Some("Use the mutable radius_search method directly on OctreeSearchXYZ".to_string()),
         ))
     }
 }
@@ -201,8 +234,11 @@ impl OctreeVoxelCentroidXYZ {
     /// Create a new voxel centroid octree with the specified resolution
     pub fn new(resolution: f64) -> PclResult<Self> {
         if resolution <= 0.0 {
-            return Err(PclError::InvalidParameters(
-                "resolution must be positive".to_string(),
+            return Err(PclError::invalid_parameters(
+                "resolution must be positive",
+                "resolution",
+                "positive value",
+                &format!("{}", resolution),
             ));
         }
 
@@ -223,8 +259,10 @@ impl OctreeVoxelCentroidXYZ {
     /// Add points from the input cloud to the octree
     pub fn add_points_from_input_cloud(&mut self) -> PclResult<()> {
         if !self.has_cloud {
-            return Err(PclError::InvalidPointCloud(
-                "No input cloud set".to_string(),
+            return Err(PclError::invalid_state(
+                "No input cloud set",
+                "input cloud set",
+                "no input cloud",
             ));
         }
         ffi::add_points_from_input_cloud_voxel_xyz(self.inner.pin_mut());

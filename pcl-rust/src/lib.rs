@@ -17,6 +17,9 @@ pub mod error;
 pub mod octree;
 pub mod search;
 
+#[cfg(test)]
+mod error_tests;
+
 // Re-export common types for convenience
 pub use common::{PointCloudXYZ, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB};
 pub use error::{PclError, PclResult};

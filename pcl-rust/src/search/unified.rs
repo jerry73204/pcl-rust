@@ -20,10 +20,10 @@ impl SearchXYZ {
     pub fn new(method: SearchMethod) -> PclResult<Self> {
         match method {
             SearchMethod::KdTree => Ok(SearchXYZ::KdTree(KdTreeXYZ::new()?)),
-            _ => Err(PclError::NotImplemented(format!(
-                "{} search not yet implemented for PointXYZ",
-                method.name()
-            ))),
+            _ => Err(PclError::not_implemented(
+                format!("{} search for PointXYZ", method.name()),
+                Some("Use KdTree method for now".to_string()),
+            )),
         }
     }
 
@@ -109,10 +109,10 @@ impl SearchXYZRGB {
     pub fn new(method: SearchMethod) -> PclResult<Self> {
         match method {
             SearchMethod::KdTree => Ok(SearchXYZRGB::KdTree(KdTreeXYZRGB::new()?)),
-            _ => Err(PclError::NotImplemented(format!(
-                "{} search not yet implemented for PointXYZRGB",
-                method.name()
-            ))),
+            _ => Err(PclError::not_implemented(
+                format!("{} search for PointXYZRGB", method.name()),
+                Some("Use KdTree method for now".to_string()),
+            )),
         }
     }
 

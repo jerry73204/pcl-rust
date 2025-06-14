@@ -32,9 +32,19 @@ impl KdTreeXYZ {
 
     /// Find the k nearest neighbors to a query point
     pub fn nearest_k_search(&self, point: &PointXYZ, k: i32) -> PclResult<Vec<i32>> {
+        if !self.has_cloud {
+            return Err(PclError::invalid_state(
+                "No input cloud set",
+                "input cloud set",
+                "no input cloud",
+            ));
+        }
         if k <= 0 {
-            return Err(PclError::InvalidParameters(
-                "k must be positive".to_string(),
+            return Err(PclError::invalid_parameters(
+                "k must be positive",
+                "k",
+                "positive integer",
+                &format!("{}", k),
             ));
         }
 
@@ -44,9 +54,19 @@ impl KdTreeXYZ {
 
     /// Find all neighbors within a radius of a query point
     pub fn radius_search(&self, point: &PointXYZ, radius: f64) -> PclResult<Vec<i32>> {
+        if !self.has_cloud {
+            return Err(PclError::invalid_state(
+                "No input cloud set",
+                "input cloud set",
+                "no input cloud",
+            ));
+        }
         if radius <= 0.0 {
-            return Err(PclError::InvalidParameters(
-                "radius must be positive".to_string(),
+            return Err(PclError::invalid_parameters(
+                "radius must be positive",
+                "radius",
+                "positive value",
+                &format!("{}", radius),
             ));
         }
 
@@ -96,8 +116,11 @@ impl SearchConfiguration for KdTreeXYZ {
 
     fn set_epsilon(&mut self, epsilon: f32) -> PclResult<()> {
         if epsilon < 0.0 {
-            return Err(PclError::InvalidParameters(
-                "epsilon must be non-negative".to_string(),
+            return Err(PclError::invalid_parameters(
+                "epsilon must be non-negative",
+                "epsilon",
+                "non-negative value",
+                &format!("{}", epsilon),
             ));
         }
         ffi::set_epsilon_xyz(self.inner.pin_mut(), epsilon);
@@ -147,9 +170,19 @@ impl KdTreeXYZRGB {
 
     /// Find the k nearest neighbors to a query point
     pub fn nearest_k_search(&self, point: &PointXYZRGB, k: i32) -> PclResult<Vec<i32>> {
+        if !self.has_cloud {
+            return Err(PclError::invalid_state(
+                "No input cloud set",
+                "input cloud set",
+                "no input cloud",
+            ));
+        }
         if k <= 0 {
-            return Err(PclError::InvalidParameters(
-                "k must be positive".to_string(),
+            return Err(PclError::invalid_parameters(
+                "k must be positive",
+                "k",
+                "positive integer",
+                &format!("{}", k),
             ));
         }
 
@@ -159,9 +192,19 @@ impl KdTreeXYZRGB {
 
     /// Find all neighbors within a radius of a query point
     pub fn radius_search(&self, point: &PointXYZRGB, radius: f64) -> PclResult<Vec<i32>> {
+        if !self.has_cloud {
+            return Err(PclError::invalid_state(
+                "No input cloud set",
+                "input cloud set",
+                "no input cloud",
+            ));
+        }
         if radius <= 0.0 {
-            return Err(PclError::InvalidParameters(
-                "radius must be positive".to_string(),
+            return Err(PclError::invalid_parameters(
+                "radius must be positive",
+                "radius",
+                "positive value",
+                &format!("{}", radius),
             ));
         }
 
@@ -211,8 +254,11 @@ impl SearchConfiguration for KdTreeXYZRGB {
 
     fn set_epsilon(&mut self, epsilon: f32) -> PclResult<()> {
         if epsilon < 0.0 {
-            return Err(PclError::InvalidParameters(
-                "epsilon must be non-negative".to_string(),
+            return Err(PclError::invalid_parameters(
+                "epsilon must be non-negative",
+                "epsilon",
+                "non-negative value",
+                &format!("{}", epsilon),
             ));
         }
         ffi::set_epsilon_xyzrgb(self.inner.pin_mut(), epsilon);
