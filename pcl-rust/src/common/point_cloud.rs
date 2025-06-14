@@ -156,6 +156,11 @@ impl PointCloudXYZRGB {
     pub fn as_raw(&self) -> &ffi::PointCloud_PointXYZRGB {
         &self.inner
     }
+
+    /// Create from a UniquePtr (internal use)
+    pub(crate) fn from_unique_ptr(inner: UniquePtr<ffi::PointCloud_PointXYZRGB>) -> Self {
+        Self { inner }
+    }
 }
 
 impl Default for PointCloudXYZRGB {

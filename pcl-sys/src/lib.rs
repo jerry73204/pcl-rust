@@ -4,6 +4,7 @@
 //! For safe, idiomatic Rust APIs, use the `pcl` crate instead.
 
 pub mod common;
+pub mod filters;
 pub mod io;
 pub mod octree;
 pub mod sample_consensus;
@@ -58,6 +59,12 @@ pub mod ffi {
         type SampleConsensusModelPlane_PointXYZRGB;
         #[namespace = "pcl"]
         type SampleConsensusModelSphere_PointXYZRGB;
+
+        // Filter types
+        #[namespace = "pcl"]
+        type PassThrough_PointXYZ;
+        #[namespace = "pcl"]
+        type PassThrough_PointXYZRGB;
 
         // Point cloud functions
         fn new_point_cloud_xyz() -> UniquePtr<PointCloud_PointXYZ>;
@@ -293,6 +300,50 @@ pub mod ffi {
         fn get_inliers_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> Vec<i32>;
         fn get_model_coefficients_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> Vec<f32>;
         fn get_inliers_count_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> usize;
+
+        // Filter functions
+        // PassThrough filter functions - PointXYZ
+        fn new_pass_through_xyz() -> UniquePtr<PassThrough_PointXYZ>;
+        fn set_input_cloud_pass_xyz(
+            filter: Pin<&mut PassThrough_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_filter_field_name_xyz(filter: Pin<&mut PassThrough_PointXYZ>, field_name: &str);
+        fn get_filter_field_name_xyz(filter: &PassThrough_PointXYZ) -> String;
+        fn set_filter_limits_xyz(filter: Pin<&mut PassThrough_PointXYZ>, min: f32, max: f32);
+        fn set_filter_limits_negative_xyz(filter: Pin<&mut PassThrough_PointXYZ>, negative: bool);
+        fn get_filter_limits_negative_xyz(filter: &PassThrough_PointXYZ) -> bool;
+        fn set_keep_organized_xyz(filter: Pin<&mut PassThrough_PointXYZ>, keep_organized: bool);
+        fn get_keep_organized_xyz(filter: &PassThrough_PointXYZ) -> bool;
+        fn filter_pass_xyz(
+            filter: Pin<&mut PassThrough_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // PassThrough filter functions - PointXYZRGB
+        fn new_pass_through_xyzrgb() -> UniquePtr<PassThrough_PointXYZRGB>;
+        fn set_input_cloud_pass_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_filter_field_name_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+            field_name: &str,
+        );
+        fn get_filter_field_name_xyzrgb(filter: &PassThrough_PointXYZRGB) -> String;
+        fn set_filter_limits_xyzrgb(filter: Pin<&mut PassThrough_PointXYZRGB>, min: f32, max: f32);
+        fn set_filter_limits_negative_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+            negative: bool,
+        );
+        fn get_filter_limits_negative_xyzrgb(filter: &PassThrough_PointXYZRGB) -> bool;
+        fn set_keep_organized_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+            keep_organized: bool,
+        );
+        fn get_keep_organized_xyzrgb(filter: &PassThrough_PointXYZRGB) -> bool;
+        fn filter_pass_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
     }
 }
 
@@ -313,3 +364,5 @@ pub type PlaneModelXYZ = ffi::SampleConsensusModelPlane_PointXYZ;
 pub type SphereModelXYZ = ffi::SampleConsensusModelSphere_PointXYZ;
 pub type PlaneModelXYZRGB = ffi::SampleConsensusModelPlane_PointXYZRGB;
 pub type SphereModelXYZRGB = ffi::SampleConsensusModelSphere_PointXYZRGB;
+pub type PassThroughXYZ = ffi::PassThrough_PointXYZ;
+pub type PassThroughXYZRGB = ffi::PassThrough_PointXYZRGB;

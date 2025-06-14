@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pcl/filters/passthrough.h"
 #include "pcl/octree/octree_pointcloud.h"
 #include "pcl/octree/octree_pointcloud_voxelcentroid.h"
 #include "pcl/octree/octree_search.h"
@@ -37,4 +38,8 @@ using SampleConsensusModelPlane_PointXYZRGB =
     SampleConsensusModelPlane<PointXYZRGB>;
 using SampleConsensusModelSphere_PointXYZRGB =
     SampleConsensusModelSphere<PointXYZRGB>;
+
+// Filter type aliases
+using PassThrough_PointXYZ = PassThrough<PointXYZ>;
+using PassThrough_PointXYZRGB = PassThrough<PointXYZRGB>;
 } // namespace pcl
