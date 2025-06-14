@@ -122,6 +122,135 @@ bool is_dense_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
   return cloud.is_dense;
 }
 
+// Point manipulation functions
+rust::Vec<float> get_point_coords(const pcl::PointCloud<pcl::PointXYZ> &cloud,
+                                  size_t index) {
+  if (index >= cloud.size()) {
+    return rust::Vec<float>();
+  }
+  const auto &point = cloud.points[index];
+  rust::Vec<float> coords;
+  coords.push_back(point.x);
+  coords.push_back(point.y);
+  coords.push_back(point.z);
+  return coords;
+}
+
+rust::Vec<float>
+get_point_coords_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud,
+                      size_t index) {
+  if (index >= cloud.size()) {
+    return rust::Vec<float>();
+  }
+  const auto &point = cloud.points[index];
+  rust::Vec<float> coords;
+  coords.push_back(point.x);
+  coords.push_back(point.y);
+  coords.push_back(point.z);
+  coords.push_back(point.intensity);
+  return coords;
+}
+
+rust::Vec<float>
+get_point_coords_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                        size_t index) {
+  if (index >= cloud.size()) {
+    return rust::Vec<float>();
+  }
+  const auto &point = cloud.points[index];
+  rust::Vec<float> coords;
+  coords.push_back(point.x);
+  coords.push_back(point.y);
+  coords.push_back(point.z);
+  coords.push_back(static_cast<float>(point.r));
+  coords.push_back(static_cast<float>(point.g));
+  coords.push_back(static_cast<float>(point.b));
+  return coords;
+}
+
+void set_point_coords(pcl::PointCloud<pcl::PointXYZ> &cloud, size_t index,
+                      rust::Slice<const float> coords) {
+  if (index >= cloud.size() || coords.size() < 3) {
+    return;
+  }
+  auto &point = cloud.points[index];
+  point.x = coords[0];
+  point.y = coords[1];
+  point.z = coords[2];
+}
+
+void set_point_coords_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud, size_t index,
+                           rust::Slice<const float> coords) {
+  if (index >= cloud.size() || coords.size() < 4) {
+    return;
+  }
+  auto &point = cloud.points[index];
+  point.x = coords[0];
+  point.y = coords[1];
+  point.z = coords[2];
+  point.intensity = coords[3];
+}
+
+void set_point_coords_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                             size_t index, rust::Slice<const float> coords) {
+  if (index >= cloud.size() || coords.size() < 6) {
+    return;
+  }
+  auto &point = cloud.points[index];
+  point.x = coords[0];
+  point.y = coords[1];
+  point.z = coords[2];
+  point.r = static_cast<uint8_t>(coords[3]);
+  point.g = static_cast<uint8_t>(coords[4]);
+  point.b = static_cast<uint8_t>(coords[5]);
+}
+
+void push_back_xyz(pcl::PointCloud<pcl::PointXYZ> &cloud,
+                   rust::Slice<const float> coords) {
+  if (coords.size() < 3) {
+    return;
+  }
+  pcl::PointXYZ point;
+  point.x = coords[0];
+  point.y = coords[1];
+  point.z = coords[2];
+  cloud.points.push_back(point);
+  cloud.width = cloud.points.size();
+  cloud.height = 1;
+}
+
+void push_back_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud,
+                    rust::Slice<const float> coords) {
+  if (coords.size() < 4) {
+    return;
+  }
+  pcl::PointXYZI point;
+  point.x = coords[0];
+  point.y = coords[1];
+  point.z = coords[2];
+  point.intensity = coords[3];
+  cloud.points.push_back(point);
+  cloud.width = cloud.points.size();
+  cloud.height = 1;
+}
+
+void push_back_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                      rust::Slice<const float> coords) {
+  if (coords.size() < 6) {
+    return;
+  }
+  pcl::PointXYZRGB point;
+  point.x = coords[0];
+  point.y = coords[1];
+  point.z = coords[2];
+  point.r = static_cast<uint8_t>(coords[3]);
+  point.g = static_cast<uint8_t>(coords[4]);
+  point.b = static_cast<uint8_t>(coords[5]);
+  cloud.points.push_back(point);
+  cloud.width = cloud.points.size();
+  cloud.height = 1;
+}
+
 // Search functions
 std::unique_ptr<pcl::search::KdTree<pcl::PointXYZ>> new_kdtree_xyz() {
   return std::make_unique<pcl::search::KdTree<pcl::PointXYZ>>();
@@ -209,6 +338,51 @@ float get_epsilon_xyzrgb(
 
 void set_epsilon_xyzrgb(pcl::search::KdTree<pcl::PointXYZRGB> &searcher,
                         float epsilon) {
+  searcher.setEpsilon(epsilon);
+}
+
+// KdTree PointXYZI functions
+std::unique_ptr<pcl::search::KdTree<pcl::PointXYZI>> new_kdtree_xyzi() {
+  return std::make_unique<pcl::search::KdTree<pcl::PointXYZI>>();
+}
+
+rust::Vec<int32_t>
+nearest_k_search_xyzi(const pcl::search::KdTree<pcl::PointXYZI> &searcher,
+                      const pcl::PointXYZI &point, int32_t k) {
+  std::vector<int> indices;
+  std::vector<float> distances;
+  searcher.nearestKSearch(point, k, indices, distances);
+  rust::Vec<int32_t> result;
+  for (int idx : indices) {
+    result.push_back(static_cast<int32_t>(idx));
+  }
+  return result;
+}
+
+rust::Vec<int32_t>
+radius_search_xyzi(const pcl::search::KdTree<pcl::PointXYZI> &searcher,
+                   const pcl::PointXYZI &point, double radius) {
+  std::vector<int> indices;
+  std::vector<float> distances;
+  searcher.radiusSearch(point, radius, indices, distances);
+  rust::Vec<int32_t> result;
+  for (int idx : indices) {
+    result.push_back(static_cast<int32_t>(idx));
+  }
+  return result;
+}
+
+void set_input_cloud_xyzi(pcl::search::KdTree<pcl::PointXYZI> &searcher,
+                          const pcl::PointCloud<pcl::PointXYZI> &cloud) {
+  searcher.setInputCloud(cloud.makeShared());
+}
+
+float get_epsilon_xyzi(const pcl::search::KdTree<pcl::PointXYZI> &searcher) {
+  return searcher.getEpsilon();
+}
+
+void set_epsilon_xyzi(pcl::search::KdTree<pcl::PointXYZI> &searcher,
+                      float epsilon) {
   searcher.setEpsilon(epsilon);
 }
 

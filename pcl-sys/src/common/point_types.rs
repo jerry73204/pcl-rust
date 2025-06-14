@@ -3,7 +3,7 @@
 //! This module provides FFI bindings for PCL's various point types.
 
 use crate::ffi;
-use crate::{PointXYZ, PointXYZI, PointXYZRGB};
+use crate::ffi::{PointXYZ, PointXYZI, PointXYZRGB};
 
 impl PointXYZ {
     pub fn x(&self) -> f32 {

@@ -4,4 +4,7 @@
 //! including generic search, nearest neighbor, and radius search.
 
 // Re-export types from the main FFI module
-pub use crate::ffi::{KdTree_PointXYZ as KdTreeXYZ, KdTree_PointXYZRGB as KdTreeXYZRGB};
+pub use crate::ffi::{
+    KdTree_PointXYZ as KdTreeXYZ, KdTree_PointXYZI as KdTreeXYZI,
+    KdTree_PointXYZRGB as KdTreeXYZRGB,
+};

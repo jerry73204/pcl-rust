@@ -3,11 +3,11 @@
 //! This module provides FFI bindings for PCL's PointCloud template.
 
 use crate::ffi;
-use crate::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::ffi::{PointCloud_PointXYZ, PointCloud_PointXYZRGB};
 use cxx::UniquePtr;
 use std::pin::Pin;
 
-impl PointCloudXYZ {
+impl PointCloud_PointXYZ {
     pub fn new() -> UniquePtr<Self> {
         ffi::new_point_cloud_xyz()
     }
@@ -25,7 +25,7 @@ impl PointCloudXYZ {
     }
 }
 
-impl PointCloudXYZRGB {
+impl PointCloud_PointXYZRGB {
     pub fn new() -> UniquePtr<Self> {
         ffi::new_point_cloud_xyzrgb()
     }
