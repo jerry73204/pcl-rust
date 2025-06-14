@@ -27,7 +27,11 @@
 #include "pcl/sample_consensus/sac_model_plane.h"
 #include "pcl/sample_consensus/sac_model_sphere.h"
 #include "pcl/search/kdtree.h"
+#include "pcl/segmentation/conditional_euclidean_clustering.h"
 #include "pcl/segmentation/extract_clusters.h"
+#include "pcl/segmentation/extract_polygonal_prism_data.h"
+#include "pcl/segmentation/min_cut_segmentation.h"
+#include "pcl/segmentation/progressive_morphological_filter.h"
 #include "pcl/segmentation/region_growing.h"
 #include "pcl/segmentation/region_growing_rgb.h"
 #include "pcl/segmentation/sac_segmentation.h"
@@ -100,6 +104,10 @@ using RegionGrowingRGB_PointXYZRGB = RegionGrowingRGB<PointXYZRGB>;
 using EuclideanClusterExtraction_PointXYZ =
     EuclideanClusterExtraction<PointXYZ>;
 using SACSegmentation_PointXYZ = SACSegmentation<PointXYZ>;
+using MinCutSegmentation_PointXYZ = MinCutSegmentation<PointXYZ>;
+using ExtractPolygonalPrismData_PointXYZ = ExtractPolygonalPrismData<PointXYZ>;
+using ProgressiveMorphologicalFilter_PointXYZ = ProgressiveMorphologicalFilter<PointXYZ>;
+using ConditionalEuclideanClustering_PointXYZ = ConditionalEuclideanClustering<PointXYZ>;
 
 // Features type aliases
 using NormalEstimation_PointXYZ_Normal = NormalEstimation<PointXYZ, Normal>;

@@ -115,6 +115,14 @@ pub mod ffi {
         type EuclideanClusterExtraction_PointXYZ;
         #[namespace = "pcl"]
         type SACSegmentation_PointXYZ;
+        #[namespace = "pcl"]
+        type MinCutSegmentation_PointXYZ;
+        #[namespace = "pcl"]
+        type ExtractPolygonalPrismData_PointXYZ;
+        #[namespace = "pcl"]
+        type ProgressiveMorphologicalFilter_PointXYZ;
+        #[namespace = "pcl"]
+        type ConditionalEuclideanClustering_PointXYZ;
 
         // Features types
         #[namespace = "pcl"]
@@ -993,6 +1001,121 @@ pub mod ffi {
             radius: f64,
         ) -> UniquePtr<PointCloud_Normal>;
 
+        // Min-Cut Segmentation - PointXYZ
+        fn new_min_cut_segmentation_xyz() -> UniquePtr<MinCutSegmentation_PointXYZ>;
+        fn set_input_cloud_min_cut_xyz(
+            mc: Pin<&mut MinCutSegmentation_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_foreground_points_min_cut_xyz(
+            mc: Pin<&mut MinCutSegmentation_PointXYZ>,
+            foreground_points: &PointCloud_PointXYZ,
+        );
+        fn set_sigma_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>, sigma: f64);
+        fn get_sigma_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>) -> f64;
+        fn set_radius_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>, radius: f64);
+        fn get_radius_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>) -> f64;
+        fn set_number_of_neighbours_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>, k: i32);
+        fn get_number_of_neighbours_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>) -> i32;
+        fn set_source_weight_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>, weight: f64);
+        fn get_source_weight_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>) -> f64;
+        fn extract_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>) -> Vec<i32>;
+
+        // Extract Polygonal Prism Data - PointXYZ
+        fn new_extract_polygonal_prism_xyz() -> UniquePtr<ExtractPolygonalPrismData_PointXYZ>;
+        fn set_input_cloud_polygonal_prism_xyz(
+            prism: Pin<&mut ExtractPolygonalPrismData_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_planar_hull_polygonal_prism_xyz(
+            prism: Pin<&mut ExtractPolygonalPrismData_PointXYZ>,
+            hull: &PointCloud_PointXYZ,
+        );
+        fn set_height_limits_polygonal_prism_xyz(
+            prism: Pin<&mut ExtractPolygonalPrismData_PointXYZ>,
+            height_min: f64,
+            height_max: f64,
+        );
+        fn segment_polygonal_prism_xyz(
+            prism: Pin<&mut ExtractPolygonalPrismData_PointXYZ>,
+        ) -> Vec<i32>;
+
+        // Progressive Morphological Filter - PointXYZ
+        fn new_progressive_morphological_filter_xyz()
+        -> UniquePtr<ProgressiveMorphologicalFilter_PointXYZ>;
+        fn set_input_cloud_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_max_window_size_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            max_window_size: i32,
+        );
+        fn get_max_window_size_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+        ) -> i32;
+        fn set_slope_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>, slope: f32);
+        fn get_slope_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>) -> f32;
+        fn set_max_distance_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            max_distance: f32,
+        );
+        fn get_max_distance_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>) -> f32;
+        fn set_initial_distance_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            initial_distance: f32,
+        );
+        fn get_initial_distance_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+        ) -> f32;
+        fn set_cell_size_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            cell_size: f32,
+        );
+        fn get_cell_size_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>) -> f32;
+        fn set_base_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>, base: f32);
+        fn get_base_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>) -> f32;
+        fn set_exponential_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            exponential: bool,
+        );
+        fn get_exponential_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>) -> bool;
+        fn extract_ground_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+        ) -> Vec<i32>;
+
+        // Conditional Euclidean Clustering - PointXYZ
+        fn new_conditional_euclidean_clustering_xyz()
+        -> UniquePtr<ConditionalEuclideanClustering_PointXYZ>;
+        fn set_input_cloud_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_cluster_tolerance_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+            tolerance: f32,
+        );
+        fn get_cluster_tolerance_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+        ) -> f32;
+        fn set_min_cluster_size_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+            min_size: i32,
+        );
+        fn get_min_cluster_size_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+        ) -> i32;
+        fn set_max_cluster_size_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+            max_size: i32,
+        );
+        fn get_max_cluster_size_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+        ) -> i32;
+        fn extract_conditional_euclidean_clusters_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+        ) -> Vec<i32>;
+
         // Features functions
         // Normal estimation - PointXYZ
         fn new_normal_estimation_xyz() -> UniquePtr<NormalEstimation_PointXYZ_Normal>;
@@ -1270,6 +1393,10 @@ pub type RegionGrowingXYZ = ffi::RegionGrowing_PointXYZ_Normal;
 pub type RegionGrowingRgbXYZRGB = ffi::RegionGrowingRGB_PointXYZRGB;
 pub type EuclideanClusterExtractionXYZ = ffi::EuclideanClusterExtraction_PointXYZ;
 pub type SacSegmentationXYZ = ffi::SACSegmentation_PointXYZ;
+pub type MinCutSegmentationXYZ = ffi::MinCutSegmentation_PointXYZ;
+pub type ExtractPolygonalPrismDataXYZ = ffi::ExtractPolygonalPrismData_PointXYZ;
+pub type ProgressiveMorphologicalFilterXYZ = ffi::ProgressiveMorphologicalFilter_PointXYZ;
+pub type ConditionalEuclideanClusteringXYZ = ffi::ConditionalEuclideanClustering_PointXYZ;
 pub type Normal = ffi::Normal;
 pub type FpfhSignature33 = ffi::FPFHSignature33;
 pub type PfhSignature125 = ffi::PFHSignature125;
