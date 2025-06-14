@@ -10,7 +10,7 @@
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
 use crate::error::PclResult;
 use crate::filters::{FilterXYZ, FilterXYZRGB};
-use pcl_sys::{ffi, UniquePtr};
+use pcl_sys::{UniquePtr, ffi};
 use std::pin::Pin;
 
 /// StatisticalOutlierRemoval filter for PointXYZ clouds
@@ -128,17 +128,17 @@ impl StatisticalOutlierRemovalXYZBuilder {
     /// Build the StatisticalOutlierRemoval filter
     pub fn build(self) -> PclResult<StatisticalOutlierRemovalXYZ> {
         let mut filter = StatisticalOutlierRemovalXYZ::new()?;
-        
+
         if let Some(k) = self.mean_k {
             filter.set_mean_k(k)?;
         }
-        
+
         if let Some(stddev_mult) = self.stddev_mult {
             filter.set_std_dev_mul_thresh(stddev_mult)?;
         }
-        
+
         filter.set_negative(self.negative);
-        
+
         Ok(filter)
     }
 }
@@ -261,17 +261,17 @@ impl StatisticalOutlierRemovalXYZRGBBuilder {
     /// Build the StatisticalOutlierRemoval filter
     pub fn build(self) -> PclResult<StatisticalOutlierRemovalXYZRGB> {
         let mut filter = StatisticalOutlierRemovalXYZRGB::new()?;
-        
+
         if let Some(k) = self.mean_k {
             filter.set_mean_k(k)?;
         }
-        
+
         if let Some(stddev_mult) = self.stddev_mult {
             filter.set_std_dev_mul_thresh(stddev_mult)?;
         }
-        
+
         filter.set_negative(self.negative);
-        
+
         Ok(filter)
     }
 }

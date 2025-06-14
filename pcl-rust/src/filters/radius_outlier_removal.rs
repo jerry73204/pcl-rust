@@ -7,7 +7,7 @@
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
 use crate::error::PclResult;
 use crate::filters::{FilterXYZ, FilterXYZRGB};
-use pcl_sys::{ffi, UniquePtr};
+use pcl_sys::{UniquePtr, ffi};
 use std::pin::Pin;
 
 /// RadiusOutlierRemoval filter for PointXYZ clouds
@@ -124,17 +124,17 @@ impl RadiusOutlierRemovalXYZBuilder {
     /// Build the RadiusOutlierRemoval filter
     pub fn build(self) -> PclResult<RadiusOutlierRemovalXYZ> {
         let mut filter = RadiusOutlierRemovalXYZ::new()?;
-        
+
         if let Some(radius) = self.radius_search {
             filter.set_radius_search(radius)?;
         }
-        
+
         if let Some(min_neighbors) = self.min_neighbors {
             filter.set_min_neighbors_in_radius(min_neighbors)?;
         }
-        
+
         filter.set_negative(self.negative);
-        
+
         Ok(filter)
     }
 }
@@ -257,17 +257,17 @@ impl RadiusOutlierRemovalXYZRGBBuilder {
     /// Build the RadiusOutlierRemoval filter
     pub fn build(self) -> PclResult<RadiusOutlierRemovalXYZRGB> {
         let mut filter = RadiusOutlierRemovalXYZRGB::new()?;
-        
+
         if let Some(radius) = self.radius_search {
             filter.set_radius_search(radius)?;
         }
-        
+
         if let Some(min_neighbors) = self.min_neighbors {
             filter.set_min_neighbors_in_radius(min_neighbors)?;
         }
-        
+
         filter.set_negative(self.negative);
-        
+
         Ok(filter)
     }
 }

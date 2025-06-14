@@ -6,7 +6,9 @@
 pub mod traits;
 pub mod unified;
 
-use crate::common::{PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB};
+use crate::common::{
+    PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB,
+};
 use crate::error::{PclError, PclResult};
 use cxx::UniquePtr;
 use pcl_sys::ffi;

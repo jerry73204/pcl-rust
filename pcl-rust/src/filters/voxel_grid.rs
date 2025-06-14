@@ -7,7 +7,7 @@
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
 use crate::error::PclResult;
 use crate::filters::{FilterXYZ, FilterXYZRGB};
-use pcl_sys::{ffi, UniquePtr};
+use pcl_sys::{UniquePtr, ffi};
 use std::pin::Pin;
 
 /// VoxelGrid filter for PointXYZ clouds
@@ -88,11 +88,11 @@ impl VoxelGridXYZBuilder {
     /// Build the VoxelGrid filter
     pub fn build(self) -> PclResult<VoxelGridXYZ> {
         let mut filter = VoxelGridXYZ::new()?;
-        
+
         if let Some((lx, ly, lz)) = self.leaf_size {
             filter.set_leaf_size(lx, ly, lz)?;
         }
-        
+
         Ok(filter)
     }
 }
@@ -181,11 +181,11 @@ impl VoxelGridXYZRGBBuilder {
     /// Build the VoxelGrid filter
     pub fn build(self) -> PclResult<VoxelGridXYZRGB> {
         let mut filter = VoxelGridXYZRGB::new()?;
-        
+
         if let Some((lx, ly, lz)) = self.leaf_size {
             filter.set_leaf_size(lx, ly, lz)?;
         }
-        
+
         Ok(filter)
     }
 }

@@ -20,9 +20,7 @@ pub use statistical_outlier_removal::{
     StatisticalOutlierRemovalXYZ, StatisticalOutlierRemovalXYZBuilder,
     StatisticalOutlierRemovalXYZRGB, StatisticalOutlierRemovalXYZRGBBuilder,
 };
-pub use voxel_grid::{
-    VoxelGridXYZ, VoxelGridXYZBuilder, VoxelGridXYZRGB, VoxelGridXYZRGBBuilder,
-};
+pub use voxel_grid::{VoxelGridXYZ, VoxelGridXYZBuilder, VoxelGridXYZRGB, VoxelGridXYZRGBBuilder};
 
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
 use crate::error::PclResult;
