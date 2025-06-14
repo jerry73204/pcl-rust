@@ -325,7 +325,85 @@ double get_fitness_score_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp)
 rust::Vec<float> get_final_transformation_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
 // clang-format on
 
-                            
+// Segmentation functions (implemented in segmentation.cpp)
+// clang-format off
+// Region Growing segmentation - PointXYZ with Normal
+std::unique_ptr<pcl::RegionGrowing_PointXYZ_Normal> new_region_growing_xyz();
+void set_input_cloud_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg,
+                                         const pcl::PointCloud_PointXYZ &cloud);
+void set_input_normals_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg,
+                                          const pcl::PointCloud_Normal &normals);
+void set_min_cluster_size_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg,
+                                             int32_t min_size);
+int32_t get_min_cluster_size_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg);
+void set_max_cluster_size_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg,
+                                             int32_t max_size);
+int32_t get_max_cluster_size_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg);
+void set_smoothness_threshold_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg,
+                                                 float threshold);
+float get_smoothness_threshold_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg);
+void set_curvature_threshold_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg,
+                                                float threshold);
+float get_curvature_threshold_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg);
+void set_number_of_neighbours_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg,
+                                                 int32_t k);
+int32_t get_number_of_neighbours_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg);
+rust::Vec<int32_t> extract_region_growing_xyz(pcl::RegionGrowing_PointXYZ_Normal &rg);
 
-    
+// Region Growing RGB segmentation - PointXYZRGB
+std::unique_ptr<pcl::RegionGrowingRGB_PointXYZRGB> new_region_growing_rgb_xyzrgb();
+void set_input_cloud_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg,
+                                               const pcl::PointCloud_PointXYZRGB &cloud);
+void set_distance_threshold_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg,
+                                                      float threshold);
+float get_distance_threshold_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg);
+void set_point_color_threshold_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg,
+                                                         float threshold);
+float get_point_color_threshold_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg);
+void set_region_color_threshold_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg,
+                                                          float threshold);
+float get_region_color_threshold_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg);
+void set_min_cluster_size_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg,
+                                                    int32_t min_size);
+int32_t get_min_cluster_size_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg);
+rust::Vec<int32_t> extract_region_growing_rgb_xyzrgb(pcl::RegionGrowingRGB_PointXYZRGB &rg);
+
+// Euclidean Cluster Extraction - PointXYZ
+std::unique_ptr<pcl::EuclideanClusterExtraction_PointXYZ> new_euclidean_cluster_extraction_xyz();
+void set_input_cloud_euclidean_xyz(pcl::EuclideanClusterExtraction_PointXYZ &ece,
+                                   const pcl::PointCloud_PointXYZ &cloud);
+void set_cluster_tolerance_euclidean_xyz(pcl::EuclideanClusterExtraction_PointXYZ &ece,
+                                        double tolerance);
+double get_cluster_tolerance_euclidean_xyz(pcl::EuclideanClusterExtraction_PointXYZ &ece);
+void set_min_cluster_size_euclidean_xyz(pcl::EuclideanClusterExtraction_PointXYZ &ece,
+                                       int32_t min_size);
+int32_t get_min_cluster_size_euclidean_xyz(pcl::EuclideanClusterExtraction_PointXYZ &ece);
+void set_max_cluster_size_euclidean_xyz(pcl::EuclideanClusterExtraction_PointXYZ &ece,
+                                       int32_t max_size);
+int32_t get_max_cluster_size_euclidean_xyz(pcl::EuclideanClusterExtraction_PointXYZ &ece);
+rust::Vec<int32_t> extract_euclidean_clusters_xyz(pcl::EuclideanClusterExtraction_PointXYZ &ece);
+
+// SAC Segmentation - PointXYZ
+std::unique_ptr<pcl::SACSegmentation_PointXYZ> new_sac_segmentation_xyz();
+void set_input_cloud_sac_xyz(pcl::SACSegmentation_PointXYZ &sac,
+                             const pcl::PointCloud_PointXYZ &cloud);
+void set_model_type_sac_xyz(pcl::SACSegmentation_PointXYZ &sac, int32_t model_type);
+int32_t get_model_type_sac_xyz(pcl::SACSegmentation_PointXYZ &sac);
+void set_method_type_sac_xyz(pcl::SACSegmentation_PointXYZ &sac, int32_t method_type);
+int32_t get_method_type_sac_xyz(pcl::SACSegmentation_PointXYZ &sac);
+void set_distance_threshold_sac_xyz(pcl::SACSegmentation_PointXYZ &sac, double threshold);
+double get_distance_threshold_sac_xyz(pcl::SACSegmentation_PointXYZ &sac);
+void set_max_iterations_sac_xyz(pcl::SACSegmentation_PointXYZ &sac, int32_t max_iterations);
+int32_t get_max_iterations_sac_xyz(pcl::SACSegmentation_PointXYZ &sac);
+void set_optimize_coefficients_sac_xyz(pcl::SACSegmentation_PointXYZ &sac, bool optimize);
+bool get_optimize_coefficients_sac_xyz(pcl::SACSegmentation_PointXYZ &sac);
+bool segment_sac_xyz(pcl::SACSegmentation_PointXYZ &sac,
+                     rust::Vec<int32_t> &inliers,
+                     rust::Vec<float> &coefficients);
+
+// Normal estimation helper
+std::unique_ptr<pcl::PointCloud_Normal> estimate_normals_xyz(const pcl::PointCloud_PointXYZ &cloud,
+                                                             double radius);
+// clang-format on
+
 

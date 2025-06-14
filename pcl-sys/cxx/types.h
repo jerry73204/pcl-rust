@@ -11,6 +11,10 @@
 #include "pcl/sample_consensus/sac_model_plane.h"
 #include "pcl/sample_consensus/sac_model_sphere.h"
 #include "pcl/search/kdtree.h"
+#include "pcl/segmentation/extract_clusters.h"
+#include "pcl/segmentation/region_growing.h"
+#include "pcl/segmentation/region_growing_rgb.h"
+#include "pcl/segmentation/sac_segmentation.h"
 
 // Type aliases to match cxx bridge expectations
 namespace pcl {
@@ -49,4 +53,12 @@ using IterativeClosestPoint_PointXYZ =
     IterativeClosestPoint<PointXYZ, PointXYZ>;
 using IterativeClosestPoint_PointXYZRGB =
     IterativeClosestPoint<PointXYZRGB, PointXYZRGB>;
+
+// Segmentation type aliases
+using PointCloud_Normal = PointCloud<Normal>;
+using RegionGrowing_PointXYZ_Normal = RegionGrowing<PointXYZ, Normal>;
+using RegionGrowingRGB_PointXYZRGB = RegionGrowingRGB<PointXYZRGB>;
+using EuclideanClusterExtraction_PointXYZ =
+    EuclideanClusterExtraction<PointXYZ>;
+using SACSegmentation_PointXYZ = SACSegmentation<PointXYZ>;
 } // namespace pcl

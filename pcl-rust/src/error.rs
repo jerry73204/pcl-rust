@@ -97,6 +97,18 @@ pub enum PclError {
     /// Filter operation errors
     #[error("Filter error: {0}")]
     FilterError(String),
+
+    /// Object creation failed
+    #[error("Failed to create {typename}")]
+    CreationFailed { typename: String },
+
+    /// Invalid parameter value
+    #[error("Invalid parameter '{param}': {message}")]
+    InvalidParameter { param: String, message: String },
+
+    /// Processing operation failed
+    #[error("Processing failed: {message}")]
+    ProcessingFailed { message: String },
 }
 
 /// Types of search operations that can fail

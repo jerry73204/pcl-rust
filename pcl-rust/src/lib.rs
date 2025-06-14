@@ -20,6 +20,7 @@ pub mod octree;
 pub mod registration;
 pub mod sample_consensus;
 pub mod search;
+pub mod segmentation;
 
 #[cfg(test)]
 mod error_tests;
@@ -36,6 +37,11 @@ pub use io::{
 pub use registration::{IcpXYZ, IcpXYZRGB, Transform3D, TransformationMatrix};
 pub use sample_consensus::{
     RansacPlaneXYZ, RansacPlaneXYZRGB, RansacSphereXYZ, RansacSphereXYZRGB,
+};
+pub use segmentation::sac_segmentation::SegmentationResult;
+pub use segmentation::{
+    ClusteringXYZ, EuclideanClusterExtractionXYZ, MethodType, ModelType, RegionGrowingRgbXYZRGB,
+    RegionGrowingXYZ, SacSegmentationXYZ, Segmentation, SegmentationXYZ, SegmentationXYZRGB,
 };
 
 #[cfg(test)]

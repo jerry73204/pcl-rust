@@ -10,6 +10,7 @@ pub mod octree;
 pub mod registration;
 pub mod sample_consensus;
 pub mod search;
+pub mod segmentation;
 
 // Re-export cxx types that may be useful
 pub use cxx::{SharedPtr, UniquePtr};
@@ -72,6 +73,18 @@ pub mod ffi {
         type IterativeClosestPoint_PointXYZ;
         #[namespace = "pcl"]
         type IterativeClosestPoint_PointXYZRGB;
+
+        // Segmentation types
+        #[namespace = "pcl"]
+        type PointCloud_Normal;
+        #[namespace = "pcl"]
+        type RegionGrowing_PointXYZ_Normal;
+        #[namespace = "pcl"]
+        type RegionGrowingRGB_PointXYZRGB;
+        #[namespace = "pcl"]
+        type EuclideanClusterExtraction_PointXYZ;
+        #[namespace = "pcl"]
+        type SACSegmentation_PointXYZ;
 
         // Point cloud functions
         fn new_point_cloud_xyz() -> UniquePtr<PointCloud_PointXYZ>;
@@ -449,6 +462,154 @@ pub mod ffi {
         fn get_final_transformation_icp_xyzrgb(
             icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
         ) -> Vec<f32>;
+
+        // Segmentation functions
+        // Region Growing segmentation - PointXYZ with Normal
+        fn new_region_growing_xyz() -> UniquePtr<RegionGrowing_PointXYZ_Normal>;
+        fn set_input_cloud_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_normals_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            normals: &PointCloud_Normal,
+        );
+        fn set_min_cluster_size_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            min_size: i32,
+        );
+        fn get_min_cluster_size_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+        ) -> i32;
+        fn set_max_cluster_size_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            max_size: i32,
+        );
+        fn get_max_cluster_size_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+        ) -> i32;
+        fn set_smoothness_threshold_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            threshold: f32,
+        );
+        fn get_smoothness_threshold_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+        ) -> f32;
+        fn set_curvature_threshold_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            threshold: f32,
+        );
+        fn get_curvature_threshold_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+        ) -> f32;
+        fn set_number_of_neighbours_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            k: i32,
+        );
+        fn get_number_of_neighbours_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+        ) -> i32;
+        fn extract_region_growing_xyz(rg: Pin<&mut RegionGrowing_PointXYZ_Normal>) -> Vec<i32>;
+
+        // Region Growing RGB segmentation - PointXYZRGB
+        fn new_region_growing_rgb_xyzrgb() -> UniquePtr<RegionGrowingRGB_PointXYZRGB>;
+        fn set_input_cloud_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_distance_threshold_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            threshold: f32,
+        );
+        fn get_distance_threshold_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+        ) -> f32;
+        fn set_point_color_threshold_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            threshold: f32,
+        );
+        fn get_point_color_threshold_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+        ) -> f32;
+        fn set_region_color_threshold_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            threshold: f32,
+        );
+        fn get_region_color_threshold_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+        ) -> f32;
+        fn set_min_cluster_size_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            min_size: i32,
+        );
+        fn get_min_cluster_size_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+        ) -> i32;
+        fn extract_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+        ) -> Vec<i32>;
+
+        // Euclidean Cluster Extraction - PointXYZ
+        fn new_euclidean_cluster_extraction_xyz() -> UniquePtr<EuclideanClusterExtraction_PointXYZ>;
+        fn set_input_cloud_euclidean_xyz(
+            ece: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_cluster_tolerance_euclidean_xyz(
+            ece: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+            tolerance: f64,
+        );
+        fn get_cluster_tolerance_euclidean_xyz(
+            ece: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+        ) -> f64;
+        fn set_min_cluster_size_euclidean_xyz(
+            ece: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+            min_size: i32,
+        );
+        fn get_min_cluster_size_euclidean_xyz(
+            ece: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+        ) -> i32;
+        fn set_max_cluster_size_euclidean_xyz(
+            ece: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+            max_size: i32,
+        );
+        fn get_max_cluster_size_euclidean_xyz(
+            ece: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+        ) -> i32;
+        fn extract_euclidean_clusters_xyz(
+            ece: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+        ) -> Vec<i32>;
+
+        // SAC Segmentation - PointXYZ
+        fn new_sac_segmentation_xyz() -> UniquePtr<SACSegmentation_PointXYZ>;
+        fn set_input_cloud_sac_xyz(
+            sac: Pin<&mut SACSegmentation_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_model_type_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>, model_type: i32);
+        fn get_model_type_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>) -> i32;
+        fn set_method_type_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>, method_type: i32);
+        fn get_method_type_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>) -> i32;
+        fn set_distance_threshold_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>, threshold: f64);
+        fn get_distance_threshold_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>) -> f64;
+        fn set_max_iterations_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>, max_iterations: i32);
+        fn get_max_iterations_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>) -> i32;
+        fn set_optimize_coefficients_sac_xyz(
+            sac: Pin<&mut SACSegmentation_PointXYZ>,
+            optimize: bool,
+        );
+        fn get_optimize_coefficients_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>) -> bool;
+        fn segment_sac_xyz(
+            sac: Pin<&mut SACSegmentation_PointXYZ>,
+            inliers: &mut Vec<i32>,
+            coefficients: &mut Vec<f32>,
+        ) -> bool;
+
+        // Normal estimation helper
+        fn estimate_normals_xyz(
+            cloud: &PointCloud_PointXYZ,
+            radius: f64,
+        ) -> UniquePtr<PointCloud_Normal>;
     }
 }
 
@@ -473,3 +634,8 @@ pub type PassThroughXYZ = ffi::PassThrough_PointXYZ;
 pub type PassThroughXYZRGB = ffi::PassThrough_PointXYZRGB;
 pub type IcpXYZ = ffi::IterativeClosestPoint_PointXYZ;
 pub type IcpXYZRGB = ffi::IterativeClosestPoint_PointXYZRGB;
+pub type PointCloudNormal = ffi::PointCloud_Normal;
+pub type RegionGrowingXYZ = ffi::RegionGrowing_PointXYZ_Normal;
+pub type RegionGrowingRgbXYZRGB = ffi::RegionGrowingRGB_PointXYZRGB;
+pub type EuclideanClusterExtractionXYZ = ffi::EuclideanClusterExtraction_PointXYZ;
+pub type SacSegmentationXYZ = ffi::SACSegmentation_PointXYZ;
