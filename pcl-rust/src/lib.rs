@@ -14,13 +14,13 @@
 
 pub mod common;
 pub mod error;
+pub mod io;
 pub mod octree;
 pub mod search;
 
 // Temporarily commented out modules until FFI is fully implemented
 // pub mod features;
 // pub mod filters;
-// pub mod io;
 // pub mod registration;
 // pub mod sample_consensus;
 // pub mod segmentation;
@@ -33,6 +33,9 @@ pub use common::{
     PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB,
 };
 pub use error::{PclError, PclResult};
+pub use io::{
+    BinaryFormat, FileFormat, PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB, PlyIoXYZ, PlyIoXYZI, PlyIoXYZRGB,
+};
 pub use octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
 pub use search::{KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB, SearchMethod};
 
@@ -42,9 +45,6 @@ pub use search::{KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB, SearchMethod};
 //     NormalEstimationOmp, PfhEstimation, PfhSignature,
 // };
 // pub use filters::{FilterXYZ, FilterXYZRGB, PassThroughXYZ, PassThroughXYZRGB};
-// pub use io::{
-//     BinaryFormat, FileFormat, PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB, PlyIoXYZ, PlyIoXYZI, PlyIoXYZRGB,
-// };
 // pub use registration::{IcpXYZ, IcpXYZRGB, Transform3D, TransformationMatrix};
 // pub use sample_consensus::{
 //     RansacPlaneXYZ, RansacPlaneXYZRGB, RansacSphereXYZ, RansacSphereXYZRGB,
