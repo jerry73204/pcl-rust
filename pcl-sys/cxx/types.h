@@ -15,6 +15,11 @@
 #include "pcl/segmentation/region_growing.h"
 #include "pcl/segmentation/region_growing_rgb.h"
 #include "pcl/segmentation/sac_segmentation.h"
+#include "pcl/features/normal_3d.h"
+#include "pcl/features/normal_3d_omp.h"
+#include "pcl/features/fpfh.h"
+#include "pcl/features/fpfh_omp.h"
+#include "pcl/features/pfh.h"
 
 // Type aliases to match cxx bridge expectations
 namespace pcl {
@@ -61,4 +66,13 @@ using RegionGrowingRGB_PointXYZRGB = RegionGrowingRGB<PointXYZRGB>;
 using EuclideanClusterExtraction_PointXYZ =
     EuclideanClusterExtraction<PointXYZ>;
 using SACSegmentation_PointXYZ = SACSegmentation<PointXYZ>;
+
+// Features type aliases
+using NormalEstimation_PointXYZ_Normal = NormalEstimation<PointXYZ, Normal>;
+using NormalEstimationOMP_PointXYZ_Normal = NormalEstimationOMP<PointXYZ, Normal>;
+using FPFHEstimation_PointXYZ_Normal_FPFHSignature33 = FPFHEstimation<PointXYZ, Normal, FPFHSignature33>;
+using FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33 = FPFHEstimationOMP<PointXYZ, Normal, FPFHSignature33>;
+using PFHEstimation_PointXYZ_Normal_PFHSignature125 = PFHEstimation<PointXYZ, Normal, PFHSignature125>;
+using PointCloud_FPFHSignature33 = PointCloud<FPFHSignature33>;
+using PointCloud_PFHSignature125 = PointCloud<PFHSignature125>;
 } // namespace pcl

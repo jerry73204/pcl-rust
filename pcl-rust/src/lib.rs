@@ -14,6 +14,7 @@
 
 pub mod common;
 pub mod error;
+pub mod features;
 pub mod filters;
 pub mod io;
 pub mod octree;
@@ -30,6 +31,10 @@ pub use common::{
     PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB,
 };
 pub use error::{PclError, PclResult};
+pub use features::{
+    FpfhEstimation, FpfhEstimationOmp, FpfhSignature, Normal, NormalCloud, NormalEstimation,
+    NormalEstimationOmp, PfhEstimation, PfhSignature,
+};
 pub use filters::{FilterXYZ, FilterXYZRGB, PassThroughXYZ, PassThroughXYZRGB};
 pub use io::{
     BinaryFormat, FileFormat, PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB, PlyIoXYZ, PlyIoXYZI, PlyIoXYZRGB,

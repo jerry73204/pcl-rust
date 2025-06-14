@@ -32,6 +32,7 @@ fn main() {
     // Add PCL include paths and source files
     build
         .file("cxx/common.cpp")
+        .file("cxx/features.cpp")
         .file("cxx/filters.cpp")
         .file("cxx/io.cpp")
         .file("cxx/registration.cpp")

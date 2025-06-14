@@ -4,6 +4,7 @@
 //! For safe, idiomatic Rust APIs, use the `pcl` crate instead.
 
 pub mod common;
+pub mod features;
 pub mod filters;
 pub mod io;
 pub mod octree;
@@ -85,6 +86,28 @@ pub mod ffi {
         type EuclideanClusterExtraction_PointXYZ;
         #[namespace = "pcl"]
         type SACSegmentation_PointXYZ;
+
+        // Features types
+        #[namespace = "pcl"]
+        type Normal;
+        #[namespace = "pcl"]
+        type FPFHSignature33;
+        #[namespace = "pcl"]
+        type PFHSignature125;
+        #[namespace = "pcl"]
+        type NormalEstimation_PointXYZ_Normal;
+        #[namespace = "pcl"]
+        type NormalEstimationOMP_PointXYZ_Normal;
+        #[namespace = "pcl"]
+        type FPFHEstimation_PointXYZ_Normal_FPFHSignature33;
+        #[namespace = "pcl"]
+        type FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33;
+        #[namespace = "pcl"]
+        type PFHEstimation_PointXYZ_Normal_PFHSignature125;
+        #[namespace = "pcl"]
+        type PointCloud_FPFHSignature33;
+        #[namespace = "pcl"]
+        type PointCloud_PFHSignature125;
 
         // Point cloud functions
         fn new_point_cloud_xyz() -> UniquePtr<PointCloud_PointXYZ>;
@@ -610,6 +633,149 @@ pub mod ffi {
             cloud: &PointCloud_PointXYZ,
             radius: f64,
         ) -> UniquePtr<PointCloud_Normal>;
+
+        // Features functions
+        // Normal estimation - PointXYZ
+        fn new_normal_estimation_xyz() -> UniquePtr<NormalEstimation_PointXYZ_Normal>;
+        fn set_input_cloud_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_search_method_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            tree: &KdTree_PointXYZ,
+        );
+        fn set_radius_search_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            radius: f64,
+        );
+        fn get_radius_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>) -> f64;
+        fn set_k_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>, k: i32);
+        fn get_k_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>) -> i32;
+        fn set_view_point_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            vpx: f32,
+            vpy: f32,
+            vpz: f32,
+        );
+        fn get_view_point_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>) -> Vec<f32>;
+        fn set_use_sensor_origin_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            use_sensor_origin: bool,
+        );
+        fn compute_normals_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+        ) -> UniquePtr<PointCloud_Normal>;
+
+        // Normal estimation OMP - PointXYZ
+        fn new_normal_estimation_omp_xyz() -> UniquePtr<NormalEstimationOMP_PointXYZ_Normal>;
+        fn set_input_cloud_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_search_method_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+            tree: &KdTree_PointXYZ,
+        );
+        fn set_radius_search_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+            radius: f64,
+        );
+        fn set_k_search_normal_omp_xyz(ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>, k: i32);
+        fn set_number_of_threads_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+            threads: i32,
+        );
+        fn get_number_of_threads_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+        ) -> i32;
+        fn compute_normals_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+        ) -> UniquePtr<PointCloud_Normal>;
+
+        // FPFH feature estimation - PointXYZ
+        fn new_fpfh_estimation_xyz() -> UniquePtr<FPFHEstimation_PointXYZ_Normal_FPFHSignature33>;
+        fn set_input_cloud_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_normals_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            normals: &PointCloud_Normal,
+        );
+        fn set_search_method_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            tree: &KdTree_PointXYZ,
+        );
+        fn set_radius_search_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            radius: f64,
+        );
+        fn set_k_search_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            k: i32,
+        );
+        fn compute_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+        ) -> UniquePtr<PointCloud_FPFHSignature33>;
+
+        // FPFH OMP feature estimation - PointXYZ
+        fn new_fpfh_estimation_omp_xyz()
+        -> UniquePtr<FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>;
+        fn set_input_cloud_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_normals_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            normals: &PointCloud_Normal,
+        );
+        fn set_search_method_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            tree: &KdTree_PointXYZ,
+        );
+        fn set_radius_search_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            radius: f64,
+        );
+        fn set_number_of_threads_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            threads: i32,
+        );
+        fn compute_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+        ) -> UniquePtr<PointCloud_FPFHSignature33>;
+
+        // PFH feature estimation - PointXYZ
+        fn new_pfh_estimation_xyz() -> UniquePtr<PFHEstimation_PointXYZ_Normal_PFHSignature125>;
+        fn set_input_cloud_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_normals_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            normals: &PointCloud_Normal,
+        );
+        fn set_search_method_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            tree: &KdTree_PointXYZ,
+        );
+        fn set_radius_search_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            radius: f64,
+        );
+        fn set_k_search_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            k: i32,
+        );
+        fn compute_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+        ) -> UniquePtr<PointCloud_PFHSignature125>;
+
+        // Helper functions for features
+        fn get_fpfh_histogram(signature: &FPFHSignature33) -> Vec<f32>;
+        fn get_pfh_histogram(signature: &PFHSignature125) -> Vec<f32>;
+        fn get_normal_vector(normal: &Normal) -> Vec<f32>;
     }
 }
 
@@ -639,3 +805,13 @@ pub type RegionGrowingXYZ = ffi::RegionGrowing_PointXYZ_Normal;
 pub type RegionGrowingRgbXYZRGB = ffi::RegionGrowingRGB_PointXYZRGB;
 pub type EuclideanClusterExtractionXYZ = ffi::EuclideanClusterExtraction_PointXYZ;
 pub type SacSegmentationXYZ = ffi::SACSegmentation_PointXYZ;
+pub type Normal = ffi::Normal;
+pub type FpfhSignature33 = ffi::FPFHSignature33;
+pub type PfhSignature125 = ffi::PFHSignature125;
+pub type NormalEstimationXYZ = ffi::NormalEstimation_PointXYZ_Normal;
+pub type NormalEstimationOmpXYZ = ffi::NormalEstimationOMP_PointXYZ_Normal;
+pub type FpfhEstimationXYZ = ffi::FPFHEstimation_PointXYZ_Normal_FPFHSignature33;
+pub type FpfhEstimationOmpXYZ = ffi::FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33;
+pub type PfhEstimationXYZ = ffi::PFHEstimation_PointXYZ_Normal_PFHSignature125;
+pub type PointCloudFpfh33 = ffi::PointCloud_FPFHSignature33;
+pub type PointCloudPfh125 = ffi::PointCloud_PFHSignature125;
