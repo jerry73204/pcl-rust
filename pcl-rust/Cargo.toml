@@ -2,5 +2,11 @@
 name = "pcl"
 version = "0.1.0"
 edition = "2024"
+description = "Safe Rust bindings for Point Cloud Library (PCL)"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/your-username/pcl-rust"
 
 [dependencies]
+pcl-sys = { path = "../pcl-sys" }
+thiserror = "1.0"
+cxx = "1.0"
