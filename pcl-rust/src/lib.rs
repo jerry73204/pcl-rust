@@ -14,9 +14,13 @@
 
 pub mod common;
 pub mod error;
+#[cfg(feature = "filters")]
 pub mod filters;
+#[cfg(feature = "io")]
 pub mod io;
+#[cfg(feature = "octree")]
 pub mod octree;
+#[cfg(feature = "search")]
 pub mod search;
 
 // Temporarily commented out modules until FFI is fully implemented
@@ -33,12 +37,16 @@ pub use common::{
     PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB,
 };
 pub use error::{PclError, PclResult};
+#[cfg(feature = "io")]
 pub use io::{
     BinaryFormat, FileFormat, PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB, PlyIoXYZ, PlyIoXYZI, PlyIoXYZRGB,
 };
+#[cfg(feature = "octree")]
 pub use octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
+#[cfg(feature = "search")]
 pub use search::{KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB, SearchMethod};
 
+#[cfg(feature = "filters")]
 pub use filters::{
     PassThroughXYZ, PassThroughXYZRGB, RadiusOutlierRemovalXYZ, RadiusOutlierRemovalXYZRGB,
     StatisticalOutlierRemovalXYZ, StatisticalOutlierRemovalXYZRGB, VoxelGridXYZ, VoxelGridXYZRGB,
@@ -62,7 +70,9 @@ pub use filters::{
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[cfg(feature = "octree")]
     use crate::octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
+    #[cfg(feature = "search")]
     use crate::search::{KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB};
 
     // Note: Point creation tests are disabled since point creation
@@ -141,6 +151,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "search")]
     fn test_kdtree_creation() {
         use crate::search::SearchInputCloud;
 
@@ -158,6 +169,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "search")]
     fn test_kdtree_configuration() {
         use crate::search::SearchConfiguration;
 
@@ -176,6 +188,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(all(feature = "search"))]
     fn test_search_input_cloud() {
         use crate::search::SearchInputCloud;
 
@@ -188,6 +201,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "search")]
     fn test_search_method() {
         // Test that SearchMethod enum exists and can be used
         let _method = SearchMethod::KdTree;
@@ -196,6 +210,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "search")]
     fn test_search_traits() {
         use crate::search::{NearestNeighborSearch, SearchConfiguration};
 
@@ -210,6 +225,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "octree")]
     fn test_octree_creation() {
         let octree = OctreeSearchXYZ::new(0.1).unwrap();
         drop(octree);
@@ -220,6 +236,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "octree")]
     fn test_octree_voxel_centroid_creation() {
         let octree = OctreeVoxelCentroidXYZ::new(0.1).unwrap();
         drop(octree);
@@ -230,6 +247,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "search")]
     fn test_error_handling() {
         // Test parameter validation
         let kdtree = KdTreeXYZ::new().unwrap();

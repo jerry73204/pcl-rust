@@ -6,8 +6,31 @@ description = "Safe Rust bindings for Point Cloud Library (PCL)"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/your-username/pcl-rust"
 
+[features]
+default = ["search", "io", "filters"]
+full = [
+    "search", "io", "filters", "surface", "octree",
+    "features", "keypoints", "registration", "segmentation", "sample_consensus"
+]
+
+# Core modules
+search = ["pcl-sys/search"]
+io = ["pcl-sys/io"]
+octree = ["pcl-sys/octree"]
+
+# Processing modules
+filters = ["pcl-sys/filters"]
+surface = ["pcl-sys/surface"]
+
+# Advanced modules
+features = ["pcl-sys/features"]
+keypoints = ["pcl-sys/keypoints"]
+registration = ["pcl-sys/registration"]
+segmentation = ["pcl-sys/segmentation"]
+sample_consensus = ["pcl-sys/sample_consensus"]
+
 [dependencies]
-pcl-sys = { path = "../pcl-sys" }
+pcl-sys = { path = "../pcl-sys", default-features = false }
 thiserror = "1.0"
 cxx = "1.0"
 

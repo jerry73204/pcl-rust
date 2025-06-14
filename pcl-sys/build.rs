@@ -2,7 +2,7 @@ fn main() {
     println!("cargo:rerun-if-changed=src/");
     println!("cargo:rerun-if-changed=cxx/");
 
-    // Link PCL libraries
+    // Always link PCL common as it's needed for basic point types
     if let Ok(library) = pkg_config::probe_library("pcl_common-1.12") {
         for include_path in &library.include_paths {
             println!("cargo:include={}", include_path.display());
@@ -16,37 +16,99 @@ fn main() {
         println!("cargo:include=/usr/include");
     }
 
-    // Link additional PCL libraries needed for search, octree, I/O, sample consensus, filters, registration, segmentation, features, keypoints, and surface functionality
-    println!("cargo:rustc-link-lib=pcl_search");
-    println!("cargo:rustc-link-lib=pcl_kdtree");
-    println!("cargo:rustc-link-lib=pcl_octree");
-    println!("cargo:rustc-link-lib=pcl_io");
-    println!("cargo:rustc-link-lib=pcl_sample_consensus");
-    println!("cargo:rustc-link-lib=pcl_filters");
-    println!("cargo:rustc-link-lib=pcl_registration");
-    println!("cargo:rustc-link-lib=pcl_segmentation");
-    println!("cargo:rustc-link-lib=pcl_features");
-    println!("cargo:rustc-link-lib=pcl_keypoints");
-    println!("cargo:rustc-link-lib=pcl_surface");
+    // Helper function to check if a feature is enabled
+    fn is_feature_enabled(feature: &str) -> bool {
+        std::env::var(&format!("CARGO_FEATURE_{}", feature.to_uppercase())).is_ok()
+    }
+
+    // Conditionally link PCL libraries based on enabled features
+    if is_feature_enabled("search") {
+        println!("cargo:rustc-link-lib=pcl_search");
+        println!("cargo:rustc-link-lib=pcl_kdtree");
+    }
+
+    if is_feature_enabled("octree") {
+        println!("cargo:rustc-link-lib=pcl_octree");
+    }
+
+    if is_feature_enabled("io") {
+        println!("cargo:rustc-link-lib=pcl_io");
+    }
+
+    if is_feature_enabled("sample_consensus") {
+        println!("cargo:rustc-link-lib=pcl_sample_consensus");
+    }
+
+    if is_feature_enabled("filters") {
+        println!("cargo:rustc-link-lib=pcl_filters");
+    }
+
+    if is_feature_enabled("registration") {
+        println!("cargo:rustc-link-lib=pcl_registration");
+    }
+
+    if is_feature_enabled("segmentation") {
+        println!("cargo:rustc-link-lib=pcl_segmentation");
+    }
+
+    if is_feature_enabled("features") {
+        println!("cargo:rustc-link-lib=pcl_features");
+    }
+
+    if is_feature_enabled("keypoints") {
+        println!("cargo:rustc-link-lib=pcl_keypoints");
+    }
+
+    if is_feature_enabled("surface") {
+        println!("cargo:rustc-link-lib=pcl_surface");
+    }
 
     // Build cxx bridge
     let mut build = cxx_build::bridge("src/lib.rs");
 
-    // Add PCL include paths and source files
+    // Add PCL include paths
     build
-        .file("cxx/common.cpp")
-        .file("cxx/features.cpp")
-        .file("cxx/filters.cpp")
-        .file("cxx/io.cpp")
-        .file("cxx/keypoints.cpp")
-        .file("cxx/registration.cpp")
-        .file("cxx/sample_consensus.cpp")
-        .file("cxx/segmentation.cpp")
-        .file("cxx/surface.cpp")
         .include(".") // For our cxx/types.h
         .include("/usr/include/pcl-1.12")
         .include("/usr/include/eigen3")
         .std("c++14");
+
+    // Always add common source file since it's always required
+    build.file("cxx/common.cpp");
+
+    // Conditionally add source files based on enabled features
+
+    if is_feature_enabled("features") {
+        build.file("cxx/features.cpp");
+    }
+
+    if is_feature_enabled("filters") {
+        build.file("cxx/filters.cpp");
+    }
+
+    if is_feature_enabled("io") {
+        build.file("cxx/io.cpp");
+    }
+
+    if is_feature_enabled("keypoints") {
+        build.file("cxx/keypoints.cpp");
+    }
+
+    if is_feature_enabled("registration") {
+        build.file("cxx/registration.cpp");
+    }
+
+    if is_feature_enabled("sample_consensus") {
+        build.file("cxx/sample_consensus.cpp");
+    }
+
+    if is_feature_enabled("segmentation") {
+        build.file("cxx/segmentation.cpp");
+    }
+
+    if is_feature_enabled("surface") {
+        build.file("cxx/surface.cpp");
+    }
 
     // Enable ccache if available
     if std::process::Command::new("ccache")

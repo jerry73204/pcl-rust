@@ -6,6 +6,29 @@ description = "Low-level FFI bindings for Point Cloud Library (PCL)"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/your-username/pcl-rust"
 
+[features]
+default = ["search", "io", "filters"]
+full = [
+    "search", "io", "filters", "surface", "octree", 
+    "features", "keypoints", "registration", "segmentation", "sample_consensus"
+]
+
+# Core modules (always safe to enable)
+search = []
+io = []
+octree = []
+
+# Processing modules
+filters = []
+surface = []
+
+# Advanced modules
+features = []
+keypoints = []
+registration = []
+segmentation = []
+sample_consensus = []
+
 [dependencies]
 cxx = "1.0"
 

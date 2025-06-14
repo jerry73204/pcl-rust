@@ -2,8 +2,14 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::error::{OctreeOperation, PclError, SearchOperation};
+    use crate::error::{PclError};
+    #[cfg(feature = "octree")]
+    use crate::error::OctreeOperation;
+    #[cfg(feature = "search")]
+    use crate::error::SearchOperation;
+    #[cfg(feature = "octree")]
     use crate::octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
+    #[cfg(feature = "search")]
     use crate::search::{KdTreeXYZ, SearchConfiguration};
 
     #[test]
@@ -80,6 +86,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "search")]
     fn test_search_failed_error() {
         let err =
             PclError::search_failed("search operation failed", SearchOperation::NearestKSearch);
@@ -96,6 +103,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "octree")]
     fn test_octree_failed_error() {
         let err =
             PclError::octree_failed("octree construction failed", OctreeOperation::Construction);
@@ -112,6 +120,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "octree")]
     fn test_octree_invalid_resolution() {
         let result = OctreeSearchXYZ::new(-1.0);
         assert!(result.is_err());
@@ -135,6 +144,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "octree")]
     fn test_octree_voxel_centroid_invalid_resolution() {
         let result = OctreeVoxelCentroidXYZ::new(0.0);
         assert!(result.is_err());
@@ -152,6 +162,7 @@ mod tests {
     // Points must be created and managed by PCL C++ code
 
     #[test]
+    #[cfg(feature = "octree")]
     fn test_voxel_centroid_operations_without_cloud() {
         let mut octree = OctreeVoxelCentroidXYZ::new(0.1).unwrap();
 
@@ -174,6 +185,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "search")]
     fn test_search_configuration_invalid_epsilon() {
         let mut searcher = KdTreeXYZ::new().unwrap();
 
@@ -229,6 +241,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "search")]
     fn test_search_set_input_cloud_suggestion() {
         let err =
             PclError::search_failed("failed to set input cloud", SearchOperation::SetInputCloud);
