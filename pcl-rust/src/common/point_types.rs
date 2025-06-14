@@ -31,6 +31,43 @@ impl PointXYZ {
     }
 }
 
+/// A 3D point with x, y, z coordinates and intensity
+pub struct PointXYZI {
+    pub(crate) inner: ffi::PointXYZI,
+}
+
+impl PointXYZI {
+    /// Get the x coordinate
+    pub fn x(&self) -> f32 {
+        ffi::get_x_xyzi(&self.inner)
+    }
+
+    /// Get the y coordinate
+    pub fn y(&self) -> f32 {
+        ffi::get_y_xyzi(&self.inner)
+    }
+
+    /// Get the z coordinate
+    pub fn z(&self) -> f32 {
+        ffi::get_z_xyzi(&self.inner)
+    }
+
+    /// Get the intensity value
+    pub fn intensity(&self) -> f32 {
+        ffi::get_intensity(&self.inner)
+    }
+
+    /// Get coordinates as a tuple
+    pub fn xyz(&self) -> (f32, f32, f32) {
+        (self.x(), self.y(), self.z())
+    }
+
+    /// Get all components as a tuple
+    pub fn xyzi(&self) -> (f32, f32, f32, f32) {
+        (self.x(), self.y(), self.z(), self.intensity())
+    }
+}
+
 // Note: Point creation is not currently supported due to cxx limitations
 // Points must be created and managed by PCL C++ code
 

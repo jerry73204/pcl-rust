@@ -37,9 +37,23 @@ fn demonstrate_point_clouds() -> PclResult<()> {
     // PointXYZ cloud
     let mut cloud_xyz = PointCloudXYZ::new()?;
     println!(
-        "  Created PointXYZ cloud: {} points, empty: {}",
+        "  Created PointXYZ cloud: {} points, empty: {}, organized: {}",
         cloud_xyz.size(),
-        cloud_xyz.empty()
+        cloud_xyz.empty(),
+        cloud_xyz.is_organized()
+    );
+
+    // Demonstrate new operations
+    cloud_xyz.reserve(1000)?;
+    println!("  Reserved capacity for 1000 points");
+
+    cloud_xyz.resize(100)?;
+    println!(
+        "  After resize(100): {} points, width: {}, height: {}, dense: {}",
+        cloud_xyz.size(),
+        cloud_xyz.width(),
+        cloud_xyz.height(),
+        cloud_xyz.is_dense()
     );
 
     cloud_xyz.clear()?;
@@ -55,6 +69,21 @@ fn demonstrate_point_clouds() -> PclResult<()> {
         "  Created PointXYZRGB cloud: {} points, empty: {}",
         cloud_xyzrgb.size(),
         cloud_xyzrgb.empty()
+    );
+
+    // Demonstrate builder pattern
+    println!("\n📦 Using Builder Pattern:");
+    use pcl::common::PointCloudXYZBuilder;
+
+    let cloud_from_builder = PointCloudXYZBuilder::new()
+        .add_point(1.0, 2.0, 3.0)
+        .add_point(4.0, 5.0, 6.0)
+        .add_points(vec![(7.0, 8.0, 9.0), (10.0, 11.0, 12.0)])
+        .build()?;
+
+    println!(
+        "  Built cloud with {} points (note: values are default-initialized due to FFI limitations)",
+        cloud_from_builder.size()
     );
 
     Ok(())

@@ -18,7 +18,7 @@ pub mod octree;
 pub mod search;
 
 // Re-export common types for convenience
-pub use common::{PointCloudXYZ, PointCloudXYZRGB, PointXYZ, PointXYZRGB};
+pub use common::{PointCloudXYZ, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB};
 pub use error::{PclError, PclResult};
 
 #[cfg(test)]
@@ -35,6 +35,9 @@ mod tests {
         let cloud = PointCloudXYZ::new().unwrap();
         assert!(cloud.empty());
         assert_eq!(cloud.size(), 0);
+        assert_eq!(cloud.width(), 0);
+        assert_eq!(cloud.height(), 0);
+        assert!(!cloud.is_organized());
     }
 
     #[test]
@@ -42,6 +45,9 @@ mod tests {
         let cloud = PointCloudXYZRGB::new().unwrap();
         assert!(cloud.empty());
         assert_eq!(cloud.size(), 0);
+        assert_eq!(cloud.width(), 0);
+        assert_eq!(cloud.height(), 0);
+        assert!(!cloud.is_organized());
     }
 
     #[test]
@@ -52,10 +58,48 @@ mod tests {
         assert!(cloud.empty());
         assert_eq!(cloud.size(), 0);
 
+        // Test reserve
+        cloud.reserve(100).unwrap();
+        assert!(cloud.empty()); // Still empty after reserve
+
+        // Test resize
+        cloud.resize(50).unwrap();
+        assert!(!cloud.empty());
+        assert_eq!(cloud.size(), 50);
+
         // Test clear operation
         cloud.clear().unwrap();
         assert!(cloud.empty());
         assert_eq!(cloud.size(), 0);
+    }
+
+    #[test]
+    fn test_point_cloud_builders() {
+        use crate::common::PointCloudXYZBuilder;
+
+        // Test XYZ builder
+        let cloud = PointCloudXYZBuilder::new()
+            .add_point(1.0, 2.0, 3.0)
+            .add_points(vec![(4.0, 5.0, 6.0), (7.0, 8.0, 9.0)])
+            .build()
+            .unwrap();
+        assert_eq!(cloud.size(), 3);
+
+        // Test empty builder
+        let empty_cloud = PointCloudXYZBuilder::new().build().unwrap();
+        assert!(empty_cloud.empty());
+    }
+
+    #[test]
+    fn test_point_xyzi() {
+        // Since we can't create points directly, this test is limited
+        // but ensures the type exists and can be used
+        use crate::PointXYZI;
+
+        // The type should be available
+        fn _accept_point(_point: &PointXYZI) {
+            // This function just checks that the type exists
+        }
     }
 
     #[test]

@@ -7,6 +7,11 @@ float get_x(const pcl::PointXYZ &point) { return point.x; }
 float get_y(const pcl::PointXYZ &point) { return point.y; }
 float get_z(const pcl::PointXYZ &point) { return point.z; }
 
+float get_x_xyzi(const pcl::PointXYZI &point) { return point.x; }
+float get_y_xyzi(const pcl::PointXYZI &point) { return point.y; }
+float get_z_xyzi(const pcl::PointXYZI &point) { return point.z; }
+float get_intensity(const pcl::PointXYZI &point) { return point.intensity; }
+
 float get_x_xyzrgb(const pcl::PointXYZRGB &point) { return point.x; }
 float get_y_xyzrgb(const pcl::PointXYZRGB &point) { return point.y; }
 float get_z_xyzrgb(const pcl::PointXYZRGB &point) { return point.z; }
@@ -41,6 +46,46 @@ bool empty(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
 
 bool empty_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
   return cloud.empty();
+}
+
+void reserve_xyz(pcl::PointCloud<pcl::PointXYZ> &cloud, size_t n) {
+  cloud.reserve(n);
+}
+
+void reserve_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud, size_t n) {
+  cloud.reserve(n);
+}
+
+void resize_xyz(pcl::PointCloud<pcl::PointXYZ> &cloud, size_t n) {
+  cloud.resize(n);
+}
+
+void resize_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud, size_t n) {
+  cloud.resize(n);
+}
+
+uint32_t width(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  return cloud.width;
+}
+
+uint32_t height(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  return cloud.height;
+}
+
+uint32_t width_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
+  return cloud.width;
+}
+
+uint32_t height_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
+  return cloud.height;
+}
+
+bool is_dense(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  return cloud.is_dense;
+}
+
+bool is_dense_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
+  return cloud.is_dense;
 }
 
 // Search functions

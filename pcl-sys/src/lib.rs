@@ -50,11 +50,25 @@ pub mod ffi {
         fn clear_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>);
         fn empty(cloud: &PointCloud_PointXYZ) -> bool;
         fn empty_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> bool;
+        fn reserve_xyz(cloud: Pin<&mut PointCloud_PointXYZ>, n: usize);
+        fn reserve_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>, n: usize);
+        fn resize_xyz(cloud: Pin<&mut PointCloud_PointXYZ>, n: usize);
+        fn resize_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>, n: usize);
+        fn width(cloud: &PointCloud_PointXYZ) -> u32;
+        fn height(cloud: &PointCloud_PointXYZ) -> u32;
+        fn width_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> u32;
+        fn height_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> u32;
+        fn is_dense(cloud: &PointCloud_PointXYZ) -> bool;
+        fn is_dense_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> bool;
 
         // Point field access functions
         fn get_x(point: &PointXYZ) -> f32;
         fn get_y(point: &PointXYZ) -> f32;
         fn get_z(point: &PointXYZ) -> f32;
+        fn get_x_xyzi(point: &PointXYZI) -> f32;
+        fn get_y_xyzi(point: &PointXYZI) -> f32;
+        fn get_z_xyzi(point: &PointXYZI) -> f32;
+        fn get_intensity(point: &PointXYZI) -> f32;
         fn get_x_xyzrgb(point: &PointXYZRGB) -> f32;
         fn get_y_xyzrgb(point: &PointXYZRGB) -> f32;
         fn get_z_xyzrgb(point: &PointXYZRGB) -> f32;

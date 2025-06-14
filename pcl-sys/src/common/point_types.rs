@@ -19,6 +19,24 @@ impl PointXYZ {
     }
 }
 
+impl PointXYZI {
+    pub fn x(&self) -> f32 {
+        ffi::get_x_xyzi(self)
+    }
+
+    pub fn y(&self) -> f32 {
+        ffi::get_y_xyzi(self)
+    }
+
+    pub fn z(&self) -> f32 {
+        ffi::get_z_xyzi(self)
+    }
+
+    pub fn intensity(&self) -> f32 {
+        ffi::get_intensity(self)
+    }
+}
+
 impl PointXYZRGB {
     pub fn x(&self) -> f32 {
         ffi::get_x_xyzrgb(self)

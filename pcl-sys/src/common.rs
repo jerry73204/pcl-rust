@@ -6,9 +6,6 @@
 pub mod point_cloud;
 pub mod point_types;
 
-pub use point_cloud::*;
-pub use point_types::*;
-
 // Re-export types from the main FFI module
 pub use crate::ffi::{
     PointCloud_PointXYZ as PointCloudXYZ, PointCloud_PointXYZRGB as PointCloudXYZRGB, PointXYZ,

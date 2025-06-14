@@ -12,11 +12,25 @@ void clear(pcl::PointCloud_PointXYZ &cloud);
 void clear_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud);
 bool empty(const pcl::PointCloud_PointXYZ &cloud);
 bool empty_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+void reserve_xyz(pcl::PointCloud_PointXYZ &cloud, size_t n);
+void reserve_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud, size_t n);
+void resize_xyz(pcl::PointCloud_PointXYZ &cloud, size_t n);
+void resize_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud, size_t n);
+uint32_t width(const pcl::PointCloud_PointXYZ &cloud);
+uint32_t height(const pcl::PointCloud_PointXYZ &cloud);
+uint32_t width_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+uint32_t height_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+bool is_dense(const pcl::PointCloud_PointXYZ &cloud);
+bool is_dense_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
 
 // Point functions
 float get_x(const pcl::PointXYZ &point);
 float get_y(const pcl::PointXYZ &point);
 float get_z(const pcl::PointXYZ &point);
+float get_x_xyzi(const pcl::PointXYZI &point);
+float get_y_xyzi(const pcl::PointXYZI &point);
+float get_z_xyzi(const pcl::PointXYZI &point);
+float get_intensity(const pcl::PointXYZI &point);
 float get_x_xyzrgb(const pcl::PointXYZRGB &point);
 float get_y_xyzrgb(const pcl::PointXYZRGB &point);
 float get_z_xyzrgb(const pcl::PointXYZRGB &point);

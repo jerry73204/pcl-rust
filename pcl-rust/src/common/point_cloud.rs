@@ -34,6 +34,38 @@ impl PointCloudXYZ {
         Ok(())
     }
 
+    /// Reserve capacity for at least n points
+    pub fn reserve(&mut self, n: usize) -> PclResult<()> {
+        ffi::reserve_xyz(self.inner.pin_mut(), n);
+        Ok(())
+    }
+
+    /// Resize the point cloud to contain n points
+    pub fn resize(&mut self, n: usize) -> PclResult<()> {
+        ffi::resize_xyz(self.inner.pin_mut(), n);
+        Ok(())
+    }
+
+    /// Get the width of the point cloud (for organized clouds)
+    pub fn width(&self) -> u32 {
+        ffi::width(&self.inner)
+    }
+
+    /// Get the height of the point cloud (for organized clouds)
+    pub fn height(&self) -> u32 {
+        ffi::height(&self.inner)
+    }
+
+    /// Check if the point cloud is dense (no invalid points)
+    pub fn is_dense(&self) -> bool {
+        ffi::is_dense(&self.inner)
+    }
+
+    /// Check if the point cloud is organized (2D structure)
+    pub fn is_organized(&self) -> bool {
+        self.height() > 1
+    }
+
     /// Get a reference to the underlying pcl-sys point cloud
     pub fn as_raw(&self) -> &ffi::PointCloud_PointXYZ {
         &self.inner
@@ -81,6 +113,38 @@ impl PointCloudXYZRGB {
     pub fn clear(&mut self) -> PclResult<()> {
         ffi::clear_xyzrgb(self.inner.pin_mut());
         Ok(())
+    }
+
+    /// Reserve capacity for at least n points
+    pub fn reserve(&mut self, n: usize) -> PclResult<()> {
+        ffi::reserve_xyzrgb(self.inner.pin_mut(), n);
+        Ok(())
+    }
+
+    /// Resize the point cloud to contain n points
+    pub fn resize(&mut self, n: usize) -> PclResult<()> {
+        ffi::resize_xyzrgb(self.inner.pin_mut(), n);
+        Ok(())
+    }
+
+    /// Get the width of the point cloud (for organized clouds)
+    pub fn width(&self) -> u32 {
+        ffi::width_xyzrgb(&self.inner)
+    }
+
+    /// Get the height of the point cloud (for organized clouds)
+    pub fn height(&self) -> u32 {
+        ffi::height_xyzrgb(&self.inner)
+    }
+
+    /// Check if the point cloud is dense (no invalid points)
+    pub fn is_dense(&self) -> bool {
+        ffi::is_dense_xyzrgb(&self.inner)
+    }
+
+    /// Check if the point cloud is organized (2D structure)
+    pub fn is_organized(&self) -> bool {
+        self.height() > 1
     }
 
     /// Get a reference to the underlying pcl-sys point cloud
