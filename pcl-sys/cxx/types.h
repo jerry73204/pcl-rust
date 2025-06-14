@@ -1,6 +1,14 @@
 #pragma once
 
+#include "pcl/features/fpfh.h"
+#include "pcl/features/fpfh_omp.h"
+#include "pcl/features/normal_3d.h"
+#include "pcl/features/normal_3d_omp.h"
+#include "pcl/features/pfh.h"
 #include "pcl/filters/passthrough.h"
+#include "pcl/keypoints/harris_3d.h"
+#include "pcl/keypoints/iss_3d.h"
+#include "pcl/keypoints/sift_keypoint.h"
 #include "pcl/octree/octree_pointcloud.h"
 #include "pcl/octree/octree_pointcloud_voxelcentroid.h"
 #include "pcl/octree/octree_search.h"
@@ -15,11 +23,6 @@
 #include "pcl/segmentation/region_growing.h"
 #include "pcl/segmentation/region_growing_rgb.h"
 #include "pcl/segmentation/sac_segmentation.h"
-#include "pcl/features/normal_3d.h"
-#include "pcl/features/normal_3d_omp.h"
-#include "pcl/features/fpfh.h"
-#include "pcl/features/fpfh_omp.h"
-#include "pcl/features/pfh.h"
 
 // Type aliases to match cxx bridge expectations
 namespace pcl {
@@ -29,6 +32,7 @@ using PointCloud_PointXYZRGB = PointCloud<PointXYZRGB>;
 
 namespace search {
 using KdTree_PointXYZ = KdTree<PointXYZ>;
+using KdTree_PointXYZI = KdTree<PointXYZI>;
 using KdTree_PointXYZRGB = KdTree<PointXYZRGB>;
 } // namespace search
 
@@ -69,10 +73,23 @@ using SACSegmentation_PointXYZ = SACSegmentation<PointXYZ>;
 
 // Features type aliases
 using NormalEstimation_PointXYZ_Normal = NormalEstimation<PointXYZ, Normal>;
-using NormalEstimationOMP_PointXYZ_Normal = NormalEstimationOMP<PointXYZ, Normal>;
-using FPFHEstimation_PointXYZ_Normal_FPFHSignature33 = FPFHEstimation<PointXYZ, Normal, FPFHSignature33>;
-using FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33 = FPFHEstimationOMP<PointXYZ, Normal, FPFHSignature33>;
-using PFHEstimation_PointXYZ_Normal_PFHSignature125 = PFHEstimation<PointXYZ, Normal, PFHSignature125>;
+using NormalEstimationOMP_PointXYZ_Normal =
+    NormalEstimationOMP<PointXYZ, Normal>;
+using FPFHEstimation_PointXYZ_Normal_FPFHSignature33 =
+    FPFHEstimation<PointXYZ, Normal, FPFHSignature33>;
+using FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33 =
+    FPFHEstimationOMP<PointXYZ, Normal, FPFHSignature33>;
+using PFHEstimation_PointXYZ_Normal_PFHSignature125 =
+    PFHEstimation<PointXYZ, Normal, PFHSignature125>;
 using PointCloud_FPFHSignature33 = PointCloud<FPFHSignature33>;
 using PointCloud_PFHSignature125 = PointCloud<PFHSignature125>;
+
+// Keypoints type aliases
+using HarrisKeypoint3D_PointXYZ_PointXYZI =
+    HarrisKeypoint3D<PointXYZ, PointXYZI>;
+using ISSKeypoint3D_PointXYZ_PointXYZ = ISSKeypoint3D<PointXYZ, PointXYZ>;
+using SIFTKeypoint_PointXYZI_PointWithScale =
+    SIFTKeypoint<PointXYZI, PointWithScale>;
+using PointCloud_PointXYZI = PointCloud<PointXYZI>;
+using PointCloud_PointWithScale = PointCloud<PointWithScale>;
 } // namespace pcl

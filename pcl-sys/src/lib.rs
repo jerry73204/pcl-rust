@@ -7,6 +7,7 @@ pub mod common;
 pub mod features;
 pub mod filters;
 pub mod io;
+pub mod keypoints;
 pub mod octree;
 pub mod registration;
 pub mod sample_consensus;
@@ -40,6 +41,8 @@ pub mod ffi {
         // Search types
         #[namespace = "pcl::search"]
         type KdTree_PointXYZ;
+        #[namespace = "pcl::search"]
+        type KdTree_PointXYZI;
         #[namespace = "pcl::search"]
         type KdTree_PointXYZRGB;
 
@@ -108,6 +111,18 @@ pub mod ffi {
         type PointCloud_FPFHSignature33;
         #[namespace = "pcl"]
         type PointCloud_PFHSignature125;
+
+        // Keypoints types
+        #[namespace = "pcl"]
+        type PointWithScale;
+        #[namespace = "pcl"]
+        type HarrisKeypoint3D_PointXYZ_PointXYZI;
+        #[namespace = "pcl"]
+        type ISSKeypoint3D_PointXYZ_PointXYZ;
+        #[namespace = "pcl"]
+        type SIFTKeypoint_PointXYZI_PointWithScale;
+        #[namespace = "pcl"]
+        type PointCloud_PointWithScale;
 
         // Point cloud functions
         fn new_point_cloud_xyz() -> UniquePtr<PointCloud_PointXYZ>;
@@ -776,6 +791,99 @@ pub mod ffi {
         fn get_fpfh_histogram(signature: &FPFHSignature33) -> Vec<f32>;
         fn get_pfh_histogram(signature: &PFHSignature125) -> Vec<f32>;
         fn get_normal_vector(normal: &Normal) -> Vec<f32>;
+
+        // Keypoints functions
+        // Harris 3D keypoint detector
+        fn new_harris_3d_xyz() -> UniquePtr<HarrisKeypoint3D_PointXYZ_PointXYZI>;
+        fn set_input_cloud_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_search_method_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            tree: &KdTree_PointXYZ,
+        );
+        fn set_radius_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            radius: f64,
+        );
+        fn set_threshold_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            threshold: f32,
+        );
+        fn set_non_max_suppression_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            suppress: bool,
+        );
+        fn set_refine_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            refine: bool,
+        );
+        fn compute_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+        ) -> UniquePtr<PointCloud_PointXYZI>;
+
+        // ISS 3D keypoint detector
+        fn new_iss_3d_xyz() -> UniquePtr<ISSKeypoint3D_PointXYZ_PointXYZ>;
+        fn set_input_cloud_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_search_method_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            tree: &KdTree_PointXYZ,
+        );
+        fn set_salient_radius_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            radius: f64,
+        );
+        fn set_non_max_radius_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            radius: f64,
+        );
+        fn set_threshold21_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            threshold: f64,
+        );
+        fn set_threshold32_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            threshold: f64,
+        );
+        fn set_min_neighbors_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            min_neighbors: i32,
+        );
+        fn compute_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // SIFT keypoint detector - PointXYZI (SIFT requires intensity field)
+        fn new_sift_keypoint_xyzi() -> UniquePtr<SIFTKeypoint_PointXYZI_PointWithScale>;
+        fn set_input_cloud_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+            cloud: &PointCloud_PointXYZI,
+        );
+        fn set_search_method_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+            tree: &KdTree_PointXYZI,
+        );
+        fn set_scales_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+            min_scale: f32,
+            nr_octaves: f32,
+            nr_scales_per_octave: i32,
+        );
+        fn set_minimum_contrast_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+            min_contrast: f32,
+        );
+        fn compute_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+        ) -> UniquePtr<PointCloud_PointWithScale>;
+
+        // Helper functions for keypoints
+        fn get_point_with_scale_coords(point: &PointWithScale) -> Vec<f32>;
+        fn get_point_xyzi_coords(point: &PointXYZI) -> Vec<f32>;
     }
 }
 
@@ -787,6 +895,7 @@ pub type PointCloudXYZ = ffi::PointCloud_PointXYZ;
 pub type PointCloudXYZI = ffi::PointCloud_PointXYZI;
 pub type PointCloudXYZRGB = ffi::PointCloud_PointXYZRGB;
 pub type KdTreeXYZ = ffi::KdTree_PointXYZ;
+pub type KdTreeXYZI = ffi::KdTree_PointXYZI;
 pub type KdTreeXYZRGB = ffi::KdTree_PointXYZRGB;
 pub type OctreeSearchXYZ = ffi::OctreePointCloudSearch_PointXYZ;
 pub type OctreeVoxelCentroidXYZ = ffi::OctreePointCloudVoxelCentroid_PointXYZ;
@@ -815,3 +924,8 @@ pub type FpfhEstimationOmpXYZ = ffi::FPFHEstimationOMP_PointXYZ_Normal_FPFHSigna
 pub type PfhEstimationXYZ = ffi::PFHEstimation_PointXYZ_Normal_PFHSignature125;
 pub type PointCloudFpfh33 = ffi::PointCloud_FPFHSignature33;
 pub type PointCloudPfh125 = ffi::PointCloud_PFHSignature125;
+pub type PointWithScale = ffi::PointWithScale;
+pub type HarrisKeypoint3DXYZ = ffi::HarrisKeypoint3D_PointXYZ_PointXYZI;
+pub type IssKeypoint3DXYZ = ffi::ISSKeypoint3D_PointXYZ_PointXYZ;
+pub type SiftKeypointXYZI = ffi::SIFTKeypoint_PointXYZI_PointWithScale;
+pub type PointCloudWithScale = ffi::PointCloud_PointWithScale;
