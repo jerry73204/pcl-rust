@@ -89,6 +89,10 @@ pub mod ffi {
         type IterativeClosestPoint_PointXYZ;
         #[namespace = "pcl"]
         type IterativeClosestPoint_PointXYZRGB;
+        #[namespace = "pcl"]
+        type NormalDistributionsTransform_PointXYZ;
+        #[namespace = "pcl"]
+        type NormalDistributionsTransform_PointXYZRGB;
 
         // Segmentation types
         #[namespace = "pcl"]
@@ -617,6 +621,111 @@ pub mod ffi {
             icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
         ) -> Vec<f32>;
 
+        // NDT functions - PointXYZ
+        fn new_ndt_xyz() -> UniquePtr<NormalDistributionsTransform_PointXYZ>;
+        fn set_input_source_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_target_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_resolution_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+            resolution: f64,
+        );
+        fn get_resolution_ndt_xyz(ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>) -> f64;
+        fn set_max_iterations_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+            iterations: i32,
+        );
+        fn get_max_iterations_ndt_xyz(ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>) -> i32;
+        fn set_transformation_epsilon_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+            epsilon: f64,
+        );
+        fn get_transformation_epsilon_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+        ) -> f64;
+        fn set_step_size_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+            step_size: f64,
+        );
+        fn get_step_size_ndt_xyz(ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>) -> f64;
+        fn align_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+        fn align_with_guess_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+            guess: &Vec<f32>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+        fn has_converged_ndt_xyz(ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>) -> bool;
+        fn get_fitness_score_ndt_xyz(ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>) -> f64;
+        fn get_final_transformation_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+        ) -> Vec<f32>;
+        fn get_transformation_probability_ndt_xyz(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZ>,
+        ) -> f64;
+
+        // NDT functions - PointXYZRGB
+        fn new_ndt_xyzrgb() -> UniquePtr<NormalDistributionsTransform_PointXYZRGB>;
+        fn set_input_source_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_input_target_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_resolution_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+            resolution: f64,
+        );
+        fn get_resolution_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+        ) -> f64;
+        fn set_max_iterations_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+            iterations: i32,
+        );
+        fn get_max_iterations_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+        ) -> i32;
+        fn set_transformation_epsilon_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+            epsilon: f64,
+        );
+        fn get_transformation_epsilon_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+        ) -> f64;
+        fn set_step_size_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+            step_size: f64,
+        );
+        fn get_step_size_ndt_xyzrgb(ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>)
+        -> f64;
+        fn align_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+        fn align_with_guess_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+            guess: &Vec<f32>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+        fn has_converged_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+        ) -> bool;
+        fn get_fitness_score_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+        ) -> f64;
+        fn get_final_transformation_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+        ) -> Vec<f32>;
+        fn get_transformation_probability_ndt_xyzrgb(
+            ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
+        ) -> f64;
+
         // Segmentation functions
         // Region Growing segmentation - PointXYZ with Normal
         fn new_region_growing_xyz() -> UniquePtr<RegionGrowing_PointXYZ_Normal>;
@@ -1031,6 +1140,8 @@ pub type RadiusOutlierRemovalXYZ = ffi::RadiusOutlierRemoval_PointXYZ;
 pub type RadiusOutlierRemovalXYZRGB = ffi::RadiusOutlierRemoval_PointXYZRGB;
 pub type IcpXYZ = ffi::IterativeClosestPoint_PointXYZ;
 pub type IcpXYZRGB = ffi::IterativeClosestPoint_PointXYZRGB;
+pub type NdtXYZ = ffi::NormalDistributionsTransform_PointXYZ;
+pub type NdtXYZRGB = ffi::NormalDistributionsTransform_PointXYZRGB;
 pub type PointCloudNormal = ffi::PointCloud_Normal;
 pub type RegionGrowingXYZ = ffi::RegionGrowing_PointXYZ_Normal;
 pub type RegionGrowingRgbXYZRGB = ffi::RegionGrowingRGB_PointXYZRGB;

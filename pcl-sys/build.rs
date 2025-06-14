@@ -18,6 +18,7 @@ fn main() {
 
     // Link additional PCL libraries needed for search, octree, I/O, sample consensus, filters, registration, segmentation, features, and keypoints functionality
     println!("cargo:rustc-link-lib=pcl_search");
+    println!("cargo:rustc-link-lib=pcl_kdtree");
     println!("cargo:rustc-link-lib=pcl_octree");
     println!("cargo:rustc-link-lib=pcl_io");
     println!("cargo:rustc-link-lib=pcl_sample_consensus");

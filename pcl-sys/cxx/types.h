@@ -18,6 +18,7 @@
 #include "pcl/point_cloud.h"
 #include "pcl/point_types.h"
 #include "pcl/registration/icp.h"
+#include "pcl/registration/ndt.h"
 #include "pcl/sample_consensus/ransac.h"
 #include "pcl/sample_consensus/sac_model_plane.h"
 #include "pcl/sample_consensus/sac_model_sphere.h"
@@ -72,6 +73,10 @@ using IterativeClosestPoint_PointXYZ =
     IterativeClosestPoint<PointXYZ, PointXYZ>;
 using IterativeClosestPoint_PointXYZRGB =
     IterativeClosestPoint<PointXYZRGB, PointXYZRGB>;
+using NormalDistributionsTransform_PointXYZ =
+    NormalDistributionsTransform<PointXYZ, PointXYZ>;
+using NormalDistributionsTransform_PointXYZRGB =
+    NormalDistributionsTransform<PointXYZRGB, PointXYZRGB>;
 
 // Segmentation type aliases
 using PointCloud_Normal = PointCloud<Normal>;

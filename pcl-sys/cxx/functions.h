@@ -367,6 +367,62 @@ align_with_guess_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp,
 bool has_converged_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
 double get_fitness_score_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
 rust::Vec<float> get_final_transformation_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
+
+// NDT functions - PointXYZ
+std::unique_ptr<pcl::NormalDistributionsTransform_PointXYZ> new_ndt_xyz();
+void set_input_source_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt,
+                               const pcl::PointCloud_PointXYZ &cloud);
+void set_input_target_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt,
+                               const pcl::PointCloud_PointXYZ &cloud);
+void set_resolution_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt,
+                            double resolution);
+double get_resolution_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt);
+void set_max_iterations_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt,
+                                 int32_t iterations);
+int32_t get_max_iterations_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt);
+void set_transformation_epsilon_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt,
+                                        double epsilon);
+double get_transformation_epsilon_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt);
+void set_step_size_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt,
+                           double step_size);
+double get_step_size_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt);
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+align_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt);
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+align_with_guess_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt,
+                         const rust::Vec<float> &guess);
+bool has_converged_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt);
+double get_fitness_score_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt);
+rust::Vec<float> get_final_transformation_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt);
+double get_transformation_probability_ndt_xyz(pcl::NormalDistributionsTransform_PointXYZ &ndt);
+
+// NDT functions - PointXYZRGB
+std::unique_ptr<pcl::NormalDistributionsTransform_PointXYZRGB> new_ndt_xyzrgb();
+void set_input_source_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt,
+                                  const pcl::PointCloud_PointXYZRGB &cloud);
+void set_input_target_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt,
+                                  const pcl::PointCloud_PointXYZRGB &cloud);
+void set_resolution_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt,
+                               double resolution);
+double get_resolution_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
+void set_max_iterations_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt,
+                                    int32_t iterations);
+int32_t get_max_iterations_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
+void set_transformation_epsilon_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt,
+                                           double epsilon);
+double get_transformation_epsilon_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
+void set_step_size_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt,
+                              double step_size);
+double get_step_size_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB>
+align_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB>
+align_with_guess_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt,
+                             const rust::Vec<float> &guess);
+bool has_converged_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
+double get_fitness_score_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
+rust::Vec<float> get_final_transformation_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
+double get_transformation_probability_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
 // clang-format on
 
 // Segmentation functions (implemented in segmentation.cpp)
