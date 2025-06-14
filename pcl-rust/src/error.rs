@@ -89,6 +89,10 @@ pub enum PclError {
         expected_state: String,
         actual_state: String,
     },
+
+    /// RANSAC algorithm errors
+    #[error("RANSAC error: {0}")]
+    RansacError(String),
 }
 
 /// Types of search operations that can fail

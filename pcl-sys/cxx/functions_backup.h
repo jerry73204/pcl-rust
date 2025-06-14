@@ -230,4 +230,88 @@ rust::Vec<float> get_model_coefficients_xyzrgb(
 size_t get_inliers_count_xyzrgb(
     const pcl::RandomSampleConsensus<pcl::PointXYZRGB> &ransac);
 
-// Note: Model functions temporarily removed to simplify the implementation
+// Model creation functions - PointXYZ
+std::unique_ptr<pcl::SampleConsensusModelPlane<pcl::PointXYZ>>
+new_plane_model_xyz(const pcl::PointCloud_PointXYZ &cloud);
+std::unique_ptr<pcl::SampleConsensusModelSphere<pcl::PointXYZ>>
+new_sphere_model_xyz(const pcl::PointCloud_PointXYZ &cloud);
+
+// Model creation functions - PointXYZRGB
+std::unique_ptr<pcl::SampleConsensusModelPlane<pcl::PointXYZRGB>>
+new_plane_model_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+std::unique_ptr<pcl::SampleConsensusModelSphere<pcl::PointXYZRGB>>
+new_sphere_model_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+
+// Plane model methods - PointXYZ
+rust::Vec<float> plane_compute_model_coefficients_xyz(
+    pcl::SampleConsensusModelPlane<pcl::PointXYZ> &model,
+    rust::Slice<const int32_t> samples);
+std::vector<double> plane_get_distances_to_model_xyz(
+    const pcl::SampleConsensusModelPlane<pcl::PointXYZ> &model,
+    rust::Slice<const float> coefficients);
+std::vector<int32_t> plane_select_within_distance_xyz(
+    pcl::SampleConsensusModelPlane<pcl::PointXYZ> &model,
+    rust::Slice<const float> coefficients, double threshold);
+size_t plane_count_within_distance_xyz(
+    const pcl::SampleConsensusModelPlane<pcl::PointXYZ> &model,
+    rust::Slice<const float> coefficients, double threshold);
+std::vector<float> plane_optimize_model_coefficients_xyz(
+    const pcl::SampleConsensusModelPlane<pcl::PointXYZ> &model,
+    rust::Slice<const int32_t> inliers, rust::Slice<const float> coefficients);
+
+// Sphere model methods - PointXYZ
+std::vector<float> sphere_compute_model_coefficients_xyz(
+    pcl::SampleConsensusModelSphere<pcl::PointXYZ> &model,
+    rust::Slice<const int32_t> samples);
+std::vector<double> sphere_get_distances_to_model_xyz(
+    const pcl::SampleConsensusModelSphere<pcl::PointXYZ> &model,
+    rust::Slice<const float> coefficients);
+std::vector<int32_t> sphere_select_within_distance_xyz(
+    pcl::SampleConsensusModelSphere<pcl::PointXYZ> &model,
+    rust::Slice<const float> coefficients, double threshold);
+size_t sphere_count_within_distance_xyz(
+    const pcl::SampleConsensusModelSphere<pcl::PointXYZ> &model,
+    rust::Slice<const float> coefficients, double threshold);
+std::vector<float> sphere_optimize_model_coefficients_xyz(
+    const pcl::SampleConsensusModelSphere<pcl::PointXYZ> &model,
+    rust::Slice<const int32_t> inliers, rust::Slice<const float> coefficients);
+void sphere_set_radius_limits_xyz(
+    pcl::SampleConsensusModelSphere<pcl::PointXYZ> &model, double min_radius,
+    double max_radius);
+
+// Plane model methods - PointXYZRGB
+std::vector<float> plane_compute_model_coefficients_xyzrgb(
+    pcl::SampleConsensusModelPlane<pcl::PointXYZRGB> &model,
+    rust::Slice<const int32_t> samples);
+std::vector<double> plane_get_distances_to_model_xyzrgb(
+    const pcl::SampleConsensusModelPlane<pcl::PointXYZRGB> &model,
+    rust::Slice<const float> coefficients);
+std::vector<int32_t> plane_select_within_distance_xyzrgb(
+    pcl::SampleConsensusModelPlane<pcl::PointXYZRGB> &model,
+    rust::Slice<const float> coefficients, double threshold);
+size_t plane_count_within_distance_xyzrgb(
+    const pcl::SampleConsensusModelPlane<pcl::PointXYZRGB> &model,
+    rust::Slice<const float> coefficients, double threshold);
+std::vector<float> plane_optimize_model_coefficients_xyzrgb(
+    const pcl::SampleConsensusModelPlane<pcl::PointXYZRGB> &model,
+    rust::Slice<const int32_t> inliers, rust::Slice<const float> coefficients);
+
+// Sphere model methods - PointXYZRGB
+std::vector<float> sphere_compute_model_coefficients_xyzrgb(
+    pcl::SampleConsensusModelSphere<pcl::PointXYZRGB> &model,
+    rust::Slice<const int32_t> samples);
+std::vector<double> sphere_get_distances_to_model_xyzrgb(
+    const pcl::SampleConsensusModelSphere<pcl::PointXYZRGB> &model,
+    rust::Slice<const float> coefficients);
+std::vector<int32_t> sphere_select_within_distance_xyzrgb(
+    pcl::SampleConsensusModelSphere<pcl::PointXYZRGB> &model,
+    rust::Slice<const float> coefficients, double threshold);
+size_t sphere_count_within_distance_xyzrgb(
+    const pcl::SampleConsensusModelSphere<pcl::PointXYZRGB> &model,
+    rust::Slice<const float> coefficients, double threshold);
+std::vector<float> sphere_optimize_model_coefficients_xyzrgb(
+    pcl::SampleConsensusModelSphere<pcl::PointXYZRGB> &model,
+    rust::Slice<const int32_t> inliers, rust::Slice<const float> coefficients);
+void sphere_set_radius_limits_xyzrgb(
+    pcl::SampleConsensusModelSphere<pcl::PointXYZRGB> &model, double min_radius,
+    double max_radius);

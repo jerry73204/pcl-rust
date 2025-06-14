@@ -6,6 +6,7 @@
 pub mod common;
 pub mod io;
 pub mod octree;
+pub mod sample_consensus;
 pub mod search;
 
 // Re-export cxx types that may be useful
@@ -43,6 +44,20 @@ pub mod ffi {
         type OctreePointCloudSearch_PointXYZ;
         #[namespace = "pcl::octree"]
         type OctreePointCloudVoxelCentroid_PointXYZ;
+
+        // Sample consensus types
+        #[namespace = "pcl"]
+        type RandomSampleConsensus_PointXYZ;
+        #[namespace = "pcl"]
+        type RandomSampleConsensus_PointXYZRGB;
+        #[namespace = "pcl"]
+        type SampleConsensusModelPlane_PointXYZ;
+        #[namespace = "pcl"]
+        type SampleConsensusModelSphere_PointXYZ;
+        #[namespace = "pcl"]
+        type SampleConsensusModelPlane_PointXYZRGB;
+        #[namespace = "pcl"]
+        type SampleConsensusModelSphere_PointXYZRGB;
 
         // Point cloud functions
         fn new_point_cloud_xyz() -> UniquePtr<PointCloud_PointXYZ>;
@@ -216,6 +231,68 @@ pub mod ffi {
         ) -> i32;
         fn save_ply_file_ascii_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
         fn save_ply_file_binary_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
+
+        // Sample consensus functions
+        // RANSAC creation and configuration - PointXYZ
+        fn new_ransac_plane_xyz(
+            cloud: &PointCloud_PointXYZ,
+        ) -> UniquePtr<RandomSampleConsensus_PointXYZ>;
+        fn new_ransac_sphere_xyz(
+            cloud: &PointCloud_PointXYZ,
+        ) -> UniquePtr<RandomSampleConsensus_PointXYZ>;
+        fn set_distance_threshold_xyz(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZ>,
+            threshold: f64,
+        );
+        fn get_distance_threshold_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> f64;
+        fn set_max_iterations_xyz(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZ>,
+            max_iterations: i32,
+        );
+        fn get_max_iterations_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> i32;
+        fn set_probability_xyz(ransac: Pin<&mut RandomSampleConsensus_PointXYZ>, probability: f64);
+        fn get_probability_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> f64;
+        fn compute_model_xyz(ransac: Pin<&mut RandomSampleConsensus_PointXYZ>) -> bool;
+        fn refine_model_xyz(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZ>,
+            sigma: f64,
+            max_iterations: u32,
+        ) -> bool;
+        fn get_inliers_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> Vec<i32>;
+        fn get_model_coefficients_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> Vec<f32>;
+        fn get_inliers_count_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> usize;
+
+        // RANSAC creation and configuration - PointXYZRGB
+        fn new_ransac_plane_xyzrgb(
+            cloud: &PointCloud_PointXYZRGB,
+        ) -> UniquePtr<RandomSampleConsensus_PointXYZRGB>;
+        fn new_ransac_sphere_xyzrgb(
+            cloud: &PointCloud_PointXYZRGB,
+        ) -> UniquePtr<RandomSampleConsensus_PointXYZRGB>;
+        fn set_distance_threshold_xyzrgb(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>,
+            threshold: f64,
+        );
+        fn get_distance_threshold_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> f64;
+        fn set_max_iterations_xyzrgb(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>,
+            max_iterations: i32,
+        );
+        fn get_max_iterations_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> i32;
+        fn set_probability_xyzrgb(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>,
+            probability: f64,
+        );
+        fn get_probability_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> f64;
+        fn compute_model_xyzrgb(ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>) -> bool;
+        fn refine_model_xyzrgb(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>,
+            sigma: f64,
+            max_iterations: u32,
+        ) -> bool;
+        fn get_inliers_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> Vec<i32>;
+        fn get_model_coefficients_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> Vec<f32>;
+        fn get_inliers_count_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> usize;
     }
 }
 
@@ -230,3 +307,9 @@ pub type KdTreeXYZ = ffi::KdTree_PointXYZ;
 pub type KdTreeXYZRGB = ffi::KdTree_PointXYZRGB;
 pub type OctreeSearchXYZ = ffi::OctreePointCloudSearch_PointXYZ;
 pub type OctreeVoxelCentroidXYZ = ffi::OctreePointCloudVoxelCentroid_PointXYZ;
+pub type RansacXYZ = ffi::RandomSampleConsensus_PointXYZ;
+pub type RansacXYZRGB = ffi::RandomSampleConsensus_PointXYZRGB;
+pub type PlaneModelXYZ = ffi::SampleConsensusModelPlane_PointXYZ;
+pub type SphereModelXYZ = ffi::SampleConsensusModelSphere_PointXYZ;
+pub type PlaneModelXYZRGB = ffi::SampleConsensusModelPlane_PointXYZRGB;
+pub type SphereModelXYZRGB = ffi::SampleConsensusModelSphere_PointXYZRGB;

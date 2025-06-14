@@ -10,3 +10,6 @@ repository = "https://github.com/your-username/pcl-rust"
 pcl-sys = { path = "../pcl-sys" }
 thiserror = "1.0"
 cxx = "1.0"
+
+[dev-dependencies]
+tempfile = "3.0"

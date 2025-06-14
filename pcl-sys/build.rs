@@ -16,10 +16,11 @@ fn main() {
         println!("cargo:include=/usr/include");
     }
 
-    // Link additional PCL libraries needed for search, octree, and I/O functionality
+    // Link additional PCL libraries needed for search, octree, I/O, and sample consensus functionality
     println!("cargo:rustc-link-lib=pcl_search");
     println!("cargo:rustc-link-lib=pcl_octree");
     println!("cargo:rustc-link-lib=pcl_io");
+    println!("cargo:rustc-link-lib=pcl_sample_consensus");
 
     // Build cxx bridge
     let mut build = cxx_build::bridge("src/lib.rs");
@@ -28,6 +29,7 @@ fn main() {
     build
         .file("cxx/common.cpp")
         .file("cxx/io.cpp")
+        .file("cxx/sample_consensus.cpp")
         .include(".") // For our cxx/types.h
         .include("/usr/include/pcl-1.12")
         .include("/usr/include/eigen3")

@@ -16,6 +16,7 @@ pub mod common;
 pub mod error;
 pub mod io;
 pub mod octree;
+pub mod sample_consensus;
 pub mod search;
 
 #[cfg(test)]
@@ -28,6 +29,9 @@ pub use common::{
 pub use error::{PclError, PclResult};
 pub use io::{
     BinaryFormat, FileFormat, PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB, PlyIoXYZ, PlyIoXYZI, PlyIoXYZRGB,
+};
+pub use sample_consensus::{
+    RansacPlaneXYZ, RansacPlaneXYZRGB, RansacSphereXYZ, RansacSphereXYZRGB,
 };
 
 #[cfg(test)]
