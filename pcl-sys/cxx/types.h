@@ -6,6 +6,9 @@
 #include "pcl/features/normal_3d_omp.h"
 #include "pcl/features/pfh.h"
 #include "pcl/filters/passthrough.h"
+#include "pcl/filters/radius_outlier_removal.h"
+#include "pcl/filters/statistical_outlier_removal.h"
+#include "pcl/filters/voxel_grid.h"
 #include "pcl/keypoints/harris_3d.h"
 #include "pcl/keypoints/iss_3d.h"
 #include "pcl/keypoints/sift_keypoint.h"
@@ -56,6 +59,13 @@ using SampleConsensusModelSphere_PointXYZRGB =
 // Filter type aliases
 using PassThrough_PointXYZ = PassThrough<PointXYZ>;
 using PassThrough_PointXYZRGB = PassThrough<PointXYZRGB>;
+using VoxelGrid_PointXYZ = VoxelGrid<PointXYZ>;
+using VoxelGrid_PointXYZRGB = VoxelGrid<PointXYZRGB>;
+using StatisticalOutlierRemoval_PointXYZ = StatisticalOutlierRemoval<PointXYZ>;
+using StatisticalOutlierRemoval_PointXYZRGB =
+    StatisticalOutlierRemoval<PointXYZRGB>;
+using RadiusOutlierRemoval_PointXYZ = RadiusOutlierRemoval<PointXYZ>;
+using RadiusOutlierRemoval_PointXYZRGB = RadiusOutlierRemoval<PointXYZRGB>;
 
 // Registration type aliases
 using IterativeClosestPoint_PointXYZ =

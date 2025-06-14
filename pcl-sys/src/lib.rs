@@ -71,6 +71,18 @@ pub mod ffi {
         type PassThrough_PointXYZ;
         #[namespace = "pcl"]
         type PassThrough_PointXYZRGB;
+        #[namespace = "pcl"]
+        type VoxelGrid_PointXYZ;
+        #[namespace = "pcl"]
+        type VoxelGrid_PointXYZRGB;
+        #[namespace = "pcl"]
+        type StatisticalOutlierRemoval_PointXYZ;
+        #[namespace = "pcl"]
+        type StatisticalOutlierRemoval_PointXYZRGB;
+        #[namespace = "pcl"]
+        type RadiusOutlierRemoval_PointXYZ;
+        #[namespace = "pcl"]
+        type RadiusOutlierRemoval_PointXYZRGB;
 
         // Registration types
         #[namespace = "pcl"]
@@ -401,6 +413,110 @@ pub mod ffi {
         fn get_keep_organized_xyzrgb(filter: &PassThrough_PointXYZRGB) -> bool;
         fn filter_pass_xyzrgb(
             filter: Pin<&mut PassThrough_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // VoxelGrid filter functions - PointXYZ
+        fn new_voxel_grid_xyz() -> UniquePtr<VoxelGrid_PointXYZ>;
+        fn set_input_cloud_voxel_xyz(
+            filter: Pin<&mut VoxelGrid_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_leaf_size_xyz(filter: Pin<&mut VoxelGrid_PointXYZ>, lx: f32, ly: f32, lz: f32);
+        fn filter_voxel_xyz(filter: Pin<&mut VoxelGrid_PointXYZ>)
+        -> UniquePtr<PointCloud_PointXYZ>;
+
+        // VoxelGrid filter functions - PointXYZRGB
+        fn new_voxel_grid_xyzrgb() -> UniquePtr<VoxelGrid_PointXYZRGB>;
+        fn set_input_cloud_voxel_xyzrgb(
+            filter: Pin<&mut VoxelGrid_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_leaf_size_xyzrgb(filter: Pin<&mut VoxelGrid_PointXYZRGB>, lx: f32, ly: f32, lz: f32);
+        fn filter_voxel_xyzrgb(
+            filter: Pin<&mut VoxelGrid_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // StatisticalOutlierRemoval filter functions - PointXYZ
+        fn new_statistical_outlier_removal_xyz() -> UniquePtr<StatisticalOutlierRemoval_PointXYZ>;
+        fn set_input_cloud_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_mean_k_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+            mean_k: i32,
+        );
+        fn set_std_dev_mul_thresh_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+            stddev_mult: f64,
+        );
+        fn set_negative_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+            negative: bool,
+        );
+        fn filter_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // StatisticalOutlierRemoval filter functions - PointXYZRGB
+        fn new_statistical_outlier_removal_xyzrgb()
+        -> UniquePtr<StatisticalOutlierRemoval_PointXYZRGB>;
+        fn set_input_cloud_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_mean_k_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+            mean_k: i32,
+        );
+        fn set_std_dev_mul_thresh_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+            stddev_mult: f64,
+        );
+        fn set_negative_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+            negative: bool,
+        );
+        fn filter_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // RadiusOutlierRemoval filter functions - PointXYZ
+        fn new_radius_outlier_removal_xyz() -> UniquePtr<RadiusOutlierRemoval_PointXYZ>;
+        fn set_input_cloud_radius_xyz(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_radius_search_xyz(filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>, radius: f64);
+        fn set_min_neighbors_in_radius_xyz(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>,
+            min_neighbors: i32,
+        );
+        fn set_negative_radius_xyz(filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>, negative: bool);
+        fn filter_radius_xyz(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // RadiusOutlierRemoval filter functions - PointXYZRGB
+        fn new_radius_outlier_removal_xyzrgb() -> UniquePtr<RadiusOutlierRemoval_PointXYZRGB>;
+        fn set_input_cloud_radius_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_radius_search_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
+            radius: f64,
+        );
+        fn set_min_neighbors_in_radius_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
+            min_neighbors: i32,
+        );
+        fn set_negative_radius_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
+            negative: bool,
+        );
+        fn filter_radius_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
         ) -> UniquePtr<PointCloud_PointXYZRGB>;
 
         // Registration functions
@@ -907,6 +1023,12 @@ pub type PlaneModelXYZRGB = ffi::SampleConsensusModelPlane_PointXYZRGB;
 pub type SphereModelXYZRGB = ffi::SampleConsensusModelSphere_PointXYZRGB;
 pub type PassThroughXYZ = ffi::PassThrough_PointXYZ;
 pub type PassThroughXYZRGB = ffi::PassThrough_PointXYZRGB;
+pub type VoxelGridXYZ = ffi::VoxelGrid_PointXYZ;
+pub type VoxelGridXYZRGB = ffi::VoxelGrid_PointXYZRGB;
+pub type StatisticalOutlierRemovalXYZ = ffi::StatisticalOutlierRemoval_PointXYZ;
+pub type StatisticalOutlierRemovalXYZRGB = ffi::StatisticalOutlierRemoval_PointXYZRGB;
+pub type RadiusOutlierRemovalXYZ = ffi::RadiusOutlierRemoval_PointXYZ;
+pub type RadiusOutlierRemovalXYZRGB = ffi::RadiusOutlierRemoval_PointXYZRGB;
 pub type IcpXYZ = ffi::IterativeClosestPoint_PointXYZ;
 pub type IcpXYZRGB = ffi::IterativeClosestPoint_PointXYZRGB;
 pub type PointCloudNormal = ffi::PointCloud_Normal;

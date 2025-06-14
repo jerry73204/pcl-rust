@@ -267,6 +267,50 @@ void set_keep_organized_xyzrgb(pcl::PassThrough<pcl::PointXYZRGB> &filter,
 bool get_keep_organized_xyzrgb(const pcl::PassThrough<pcl::PointXYZRGB> &filter);
 std::unique_ptr<pcl::PointCloud_PointXYZRGB>
 filter_pass_xyzrgb(pcl::PassThrough<pcl::PointXYZRGB> &filter);
+
+// VoxelGrid filter functions - PointXYZ
+std::unique_ptr<pcl::VoxelGrid_PointXYZ> new_voxel_grid_xyz();
+void set_input_cloud_voxel_xyz(pcl::VoxelGrid_PointXYZ &filter, const pcl::PointCloud_PointXYZ &cloud);
+void set_leaf_size_xyz(pcl::VoxelGrid_PointXYZ &filter, float lx, float ly, float lz);
+std::unique_ptr<pcl::PointCloud_PointXYZ> filter_voxel_xyz(pcl::VoxelGrid_PointXYZ &filter);
+
+// VoxelGrid filter functions - PointXYZRGB  
+std::unique_ptr<pcl::VoxelGrid_PointXYZRGB> new_voxel_grid_xyzrgb();
+void set_input_cloud_voxel_xyzrgb(pcl::VoxelGrid_PointXYZRGB &filter, const pcl::PointCloud_PointXYZRGB &cloud);
+void set_leaf_size_xyzrgb(pcl::VoxelGrid_PointXYZRGB &filter, float lx, float ly, float lz);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB> filter_voxel_xyzrgb(pcl::VoxelGrid_PointXYZRGB &filter);
+
+// StatisticalOutlierRemoval filter functions - PointXYZ
+std::unique_ptr<pcl::StatisticalOutlierRemoval_PointXYZ> new_statistical_outlier_removal_xyz();
+void set_input_cloud_statistical_xyz(pcl::StatisticalOutlierRemoval_PointXYZ &filter, const pcl::PointCloud_PointXYZ &cloud);
+void set_mean_k_statistical_xyz(pcl::StatisticalOutlierRemoval_PointXYZ &filter, int mean_k);
+void set_std_dev_mul_thresh_statistical_xyz(pcl::StatisticalOutlierRemoval_PointXYZ &filter, double stddev_mult);
+void set_negative_statistical_xyz(pcl::StatisticalOutlierRemoval_PointXYZ &filter, bool negative);
+std::unique_ptr<pcl::PointCloud_PointXYZ> filter_statistical_xyz(pcl::StatisticalOutlierRemoval_PointXYZ &filter);
+
+// StatisticalOutlierRemoval filter functions - PointXYZRGB
+std::unique_ptr<pcl::StatisticalOutlierRemoval_PointXYZRGB> new_statistical_outlier_removal_xyzrgb();
+void set_input_cloud_statistical_xyzrgb(pcl::StatisticalOutlierRemoval_PointXYZRGB &filter, const pcl::PointCloud_PointXYZRGB &cloud);
+void set_mean_k_statistical_xyzrgb(pcl::StatisticalOutlierRemoval_PointXYZRGB &filter, int mean_k);
+void set_std_dev_mul_thresh_statistical_xyzrgb(pcl::StatisticalOutlierRemoval_PointXYZRGB &filter, double stddev_mult);
+void set_negative_statistical_xyzrgb(pcl::StatisticalOutlierRemoval_PointXYZRGB &filter, bool negative);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB> filter_statistical_xyzrgb(pcl::StatisticalOutlierRemoval_PointXYZRGB &filter);
+
+// RadiusOutlierRemoval filter functions - PointXYZ
+std::unique_ptr<pcl::RadiusOutlierRemoval_PointXYZ> new_radius_outlier_removal_xyz();
+void set_input_cloud_radius_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter, const pcl::PointCloud_PointXYZ &cloud);
+void set_radius_search_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter, double radius);
+void set_min_neighbors_in_radius_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter, int min_neighbors);
+void set_negative_radius_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter, bool negative);
+std::unique_ptr<pcl::PointCloud_PointXYZ> filter_radius_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter);
+
+// RadiusOutlierRemoval filter functions - PointXYZRGB
+std::unique_ptr<pcl::RadiusOutlierRemoval_PointXYZRGB> new_radius_outlier_removal_xyzrgb();
+void set_input_cloud_radius_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter, const pcl::PointCloud_PointXYZRGB &cloud);
+void set_radius_search_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter, double radius);
+void set_min_neighbors_in_radius_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter, int min_neighbors);
+void set_negative_radius_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter, bool negative);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB> filter_radius_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter);
 // clang-format on
 // Registration functions (implemented in registration.cpp)
 // clang-format off
@@ -519,6 +563,8 @@ std::unique_ptr<pcl::PointCloud_PointWithScale> compute_sift_xyzi(pcl::SIFTKeypo
 rust::Vec<float> get_point_with_scale_coords(const pcl::PointWithScale &point);
 rust::Vec<float> get_point_xyzi_coords(const pcl::PointXYZI &point);
 // clang-format on
+
+
 
 
 
