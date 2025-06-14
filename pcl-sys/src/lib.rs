@@ -80,13 +80,27 @@ pub mod ffi {
         fn new_kdtree_xyz() -> UniquePtr<KdTree_PointXYZ>;
         fn new_kdtree_xyzrgb() -> UniquePtr<KdTree_PointXYZRGB>;
         fn nearest_k_search_xyz(searcher: &KdTree_PointXYZ, point: &PointXYZ, k: i32) -> Vec<i32>;
+        fn nearest_k_search_xyzrgb(
+            searcher: &KdTree_PointXYZRGB,
+            point: &PointXYZRGB,
+            k: i32,
+        ) -> Vec<i32>;
         fn radius_search_xyz(searcher: &KdTree_PointXYZ, point: &PointXYZ, radius: f64)
         -> Vec<i32>;
+        fn radius_search_xyzrgb(
+            searcher: &KdTree_PointXYZRGB,
+            point: &PointXYZRGB,
+            radius: f64,
+        ) -> Vec<i32>;
         fn set_input_cloud_xyz(searcher: Pin<&mut KdTree_PointXYZ>, cloud: &PointCloud_PointXYZ);
         fn set_input_cloud_xyzrgb(
             searcher: Pin<&mut KdTree_PointXYZRGB>,
             cloud: &PointCloud_PointXYZRGB,
         );
+        fn get_epsilon_xyz(searcher: &KdTree_PointXYZ) -> f32;
+        fn set_epsilon_xyz(searcher: Pin<&mut KdTree_PointXYZ>, epsilon: f32);
+        fn get_epsilon_xyzrgb(searcher: &KdTree_PointXYZRGB) -> f32;
+        fn set_epsilon_xyzrgb(searcher: Pin<&mut KdTree_PointXYZRGB>, epsilon: f32);
 
         // Octree functions
         fn new_octree_search_xyz(resolution: f64) -> UniquePtr<OctreePointCloudSearch_PointXYZ>;

@@ -104,9 +104,76 @@ mod tests {
 
     #[test]
     fn test_kdtree_creation() {
+        use crate::search::{KdTreeXYZ, KdTreeXYZRGB, SearchInputCloud};
+
         let kdtree = KdTreeXYZ::new().unwrap();
-        // Basic creation test - more functionality would require points
+        assert!(!kdtree.has_input_cloud());
         drop(kdtree);
+
+        let kdtree_rgb = KdTreeXYZRGB::new().unwrap();
+        assert!(!kdtree_rgb.has_input_cloud());
+        drop(kdtree_rgb);
+    }
+
+    #[test]
+    fn test_kdtree_configuration() {
+        use crate::search::SearchConfiguration;
+
+        let mut kdtree = KdTreeXYZ::new().unwrap();
+
+        // Test epsilon configuration
+        let initial_epsilon = kdtree.epsilon();
+        assert!(initial_epsilon >= 0.0);
+
+        kdtree.set_epsilon(0.5).unwrap();
+        assert_eq!(kdtree.epsilon(), 0.5);
+
+        // Test invalid epsilon
+        let result = kdtree.set_epsilon(-1.0);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_search_input_cloud() {
+        use crate::search::SearchInputCloud;
+
+        let mut kdtree = KdTreeXYZ::new().unwrap();
+        let cloud = PointCloudXYZ::new().unwrap();
+
+        assert!(!kdtree.has_input_cloud());
+        kdtree.set_input_cloud(&cloud).unwrap();
+        assert!(kdtree.has_input_cloud());
+    }
+
+    #[test]
+    fn test_unified_search_interface() {
+        use crate::search::{SearchMethod, SearchXYZ, SearchXYZRGB};
+
+        // Test XYZ search
+        let search_xyz = SearchXYZ::new(SearchMethod::KdTree).unwrap();
+        assert_eq!(search_xyz.method(), SearchMethod::KdTree);
+
+        // Test XYZRGB search
+        let search_xyzrgb = SearchXYZRGB::new(SearchMethod::KdTree).unwrap();
+        assert_eq!(search_xyzrgb.method(), SearchMethod::KdTree);
+
+        // Test unsupported method
+        let result = SearchXYZ::new(SearchMethod::Octree);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_search_traits() {
+        use crate::search::{NearestNeighborSearch, SearchConfiguration};
+
+        let kdtree = KdTreeXYZ::new().unwrap();
+
+        // Test trait implementation
+        fn accept_search<T: NearestNeighborSearch<PointXYZ> + SearchConfiguration>(_search: &T) {
+            // This just tests that the traits are implemented
+        }
+
+        accept_search(&kdtree);
     }
 
     #[test]

@@ -93,11 +93,42 @@ fn demonstrate_search_structures() -> PclResult<()> {
     println!("\n🔍 Search Structures:");
 
     // KdTree for PointXYZ
-    let kdtree = KdTreeXYZ::new()?;
-    println!("  Created KdTreeXYZ successfully");
+    use pcl::search::{SearchConfiguration, SearchInputCloud};
 
-    // Note: Setting input cloud and performing searches would require
-    // points to be added to the cloud first, which is not yet supported
+    let mut kdtree = KdTreeXYZ::new()?;
+    println!("  Created KdTreeXYZ successfully");
+    println!("  Initial epsilon: {:.3}", kdtree.epsilon());
+
+    // Configure search parameters
+    kdtree.set_epsilon(0.1)?;
+    println!("  Set epsilon to: {:.3}", kdtree.epsilon());
+
+    // Create a point cloud and set it as input
+    let mut cloud = PointCloudXYZ::new()?;
+    cloud.resize(10)?; // Create 10 default points
+    kdtree.set_input_cloud(&cloud)?;
+    println!("  Set input cloud with {} points", cloud.size());
+
+    // Demonstrate unified search interface
+    use pcl::search::{SearchMethod, SearchXYZ};
+
+    let mut unified_search = SearchXYZ::new(SearchMethod::KdTree)?;
+    println!(
+        "\n  Using unified search interface: {:?}",
+        unified_search.method()
+    );
+    unified_search.set_input_cloud(&cloud)?;
+
+    // Test KdTree for PointXYZRGB
+    let mut kdtree_rgb = pcl::search::KdTreeXYZRGB::new()?;
+    println!("\n  Created KdTreeXYZRGB successfully");
+
+    let cloud_rgb = PointCloudXYZRGB::new()?;
+    kdtree_rgb.set_input_cloud(&cloud_rgb)?;
+    println!("  RGB KdTree configured with empty cloud");
+
+    // Note: Actual search operations would require points with real data
+    // which is not possible due to FFI limitations
 
     Ok(())
 }

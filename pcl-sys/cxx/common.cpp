@@ -133,6 +133,50 @@ void set_input_cloud_xyzrgb(pcl::search::KdTree<pcl::PointXYZRGB> &searcher,
   searcher.setInputCloud(cloud.makeShared());
 }
 
+rust::Vec<int32_t>
+nearest_k_search_xyzrgb(const pcl::search::KdTree<pcl::PointXYZRGB> &searcher,
+                        const pcl::PointXYZRGB &point, int32_t k) {
+  std::vector<int> indices;
+  std::vector<float> distances;
+  searcher.nearestKSearch(point, k, indices, distances);
+  rust::Vec<int32_t> result;
+  for (int idx : indices) {
+    result.push_back(static_cast<int32_t>(idx));
+  }
+  return result;
+}
+
+rust::Vec<int32_t>
+radius_search_xyzrgb(const pcl::search::KdTree<pcl::PointXYZRGB> &searcher,
+                     const pcl::PointXYZRGB &point, double radius) {
+  std::vector<int> indices;
+  std::vector<float> distances;
+  searcher.radiusSearch(point, radius, indices, distances);
+  rust::Vec<int32_t> result;
+  for (int idx : indices) {
+    result.push_back(static_cast<int32_t>(idx));
+  }
+  return result;
+}
+
+float get_epsilon_xyz(const pcl::search::KdTree<pcl::PointXYZ> &searcher) {
+  return searcher.getEpsilon();
+}
+
+void set_epsilon_xyz(pcl::search::KdTree<pcl::PointXYZ> &searcher,
+                     float epsilon) {
+  searcher.setEpsilon(epsilon);
+}
+
+float get_epsilon_xyzrgb(const pcl::search::KdTree<pcl::PointXYZRGB> &searcher) {
+  return searcher.getEpsilon();
+}
+
+void set_epsilon_xyzrgb(pcl::search::KdTree<pcl::PointXYZRGB> &searcher,
+                        float epsilon) {
+  searcher.setEpsilon(epsilon);
+}
+
 // Octree functions
 std::unique_ptr<pcl::octree::OctreePointCloudSearch<pcl::PointXYZ>>
 new_octree_search_xyz(double resolution) {

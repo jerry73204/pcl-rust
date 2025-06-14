@@ -45,12 +45,23 @@ rust::Vec<int32_t>
 nearest_k_search_xyz(const pcl::search::KdTree_PointXYZ &searcher,
                      const pcl::PointXYZ &point, int32_t k);
 rust::Vec<int32_t>
+nearest_k_search_xyzrgb(const pcl::search::KdTree_PointXYZRGB &searcher,
+                        const pcl::PointXYZRGB &point, int32_t k);
+rust::Vec<int32_t>
 radius_search_xyz(const pcl::search::KdTree_PointXYZ &searcher,
                   const pcl::PointXYZ &point, double radius);
+rust::Vec<int32_t>
+radius_search_xyzrgb(const pcl::search::KdTree_PointXYZRGB &searcher,
+                     const pcl::PointXYZRGB &point, double radius);
 void set_input_cloud_xyz(pcl::search::KdTree_PointXYZ &searcher,
                          const pcl::PointCloud_PointXYZ &cloud);
 void set_input_cloud_xyzrgb(pcl::search::KdTree_PointXYZRGB &searcher,
                             const pcl::PointCloud_PointXYZRGB &cloud);
+float get_epsilon_xyz(const pcl::search::KdTree_PointXYZ &searcher);
+void set_epsilon_xyz(pcl::search::KdTree_PointXYZ &searcher, float epsilon);
+float get_epsilon_xyzrgb(const pcl::search::KdTree_PointXYZRGB &searcher);
+void set_epsilon_xyzrgb(pcl::search::KdTree_PointXYZRGB &searcher,
+                        float epsilon);
 
 // Octree functions
 std::unique_ptr<pcl::octree::OctreePointCloudSearch_PointXYZ>
