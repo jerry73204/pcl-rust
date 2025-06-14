@@ -423,6 +423,88 @@ bool has_converged_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt
 double get_fitness_score_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
 rust::Vec<float> get_final_transformation_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
 double get_transformation_probability_ndt_xyzrgb(pcl::NormalDistributionsTransform_PointXYZRGB &ndt);
+
+// Feature-based registration functions - Correspondence Estimation
+std::unique_ptr<pcl::registration::CorrespondenceEstimation_PointXYZ>
+new_correspondence_estimation_xyz();
+void set_input_source_correspondence_xyz(
+    pcl::registration::CorrespondenceEstimation_PointXYZ &ce,
+    const pcl::PointCloud_PointXYZ &cloud);
+void set_input_target_correspondence_xyz(
+    pcl::registration::CorrespondenceEstimation_PointXYZ &ce,
+    const pcl::PointCloud_PointXYZ &cloud);
+std::unique_ptr<pcl::Correspondences> determine_correspondences_xyz(
+    pcl::registration::CorrespondenceEstimation_PointXYZ &ce);
+std::unique_ptr<pcl::Correspondences> determine_reciprocal_correspondences_xyz(
+    pcl::registration::CorrespondenceEstimation_PointXYZ &ce);
+
+// Feature-based registration functions - Correspondence Rejection RANSAC
+std::unique_ptr<pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ>
+new_correspondence_rejection_ransac_xyz();
+void set_input_source_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    const pcl::PointCloud_PointXYZ &cloud);
+void set_input_target_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    const pcl::PointCloud_PointXYZ &cloud);
+void set_inlier_threshold_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    double threshold);
+double get_inlier_threshold_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector);
+void set_max_iterations_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    int iterations);
+int get_max_iterations_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector);
+std::unique_ptr<pcl::Correspondences> get_remaining_correspondences_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    const pcl::Correspondences &original_correspondences);
+rust::Vec<float> get_best_transformation_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector);
+
+// Feature-based registration functions - SAC-IA
+std::unique_ptr<pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH> new_sac_ia_xyz();
+void set_input_source_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia,
+    const pcl::PointCloud_PointXYZ &cloud);
+void set_input_target_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia,
+    const pcl::PointCloud_PointXYZ &cloud);
+void set_source_features_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia,
+    const pcl::PointCloud_FPFHSignature33 &features);
+void set_target_features_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia,
+    const pcl::PointCloud_FPFHSignature33 &features);
+void set_min_sample_distance_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia,
+    float distance);
+float get_min_sample_distance_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia);
+void set_number_of_samples_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia,
+    int nr_samples);
+int get_number_of_samples_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia);
+void set_correspondence_randomness_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia,
+    int k);
+int get_correspondence_randomness_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia);
+void set_max_iterations_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia,
+    int iterations);
+int get_max_iterations_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia);
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+align_sac_ia_xyz(pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia);
+bool has_converged_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia);
+double get_fitness_score_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia);
+rust::Vec<float> get_final_transformation_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment_PointXYZ_FPFH &sac_ia);
 // clang-format on
 
 // Segmentation functions (implemented in segmentation.cpp)

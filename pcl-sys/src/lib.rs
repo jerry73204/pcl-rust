@@ -94,6 +94,16 @@ pub mod ffi {
         #[namespace = "pcl"]
         type NormalDistributionsTransform_PointXYZRGB;
 
+        // Feature-based registration types
+        #[namespace = "pcl"]
+        type Correspondences;
+        #[namespace = "pcl::registration"]
+        type CorrespondenceEstimation_PointXYZ;
+        #[namespace = "pcl::registration"]
+        type CorrespondenceRejectorSampleConsensus_PointXYZ;
+        #[namespace = "pcl"]
+        type SampleConsensusInitialAlignment_PointXYZ_FPFH;
+
         // Segmentation types
         #[namespace = "pcl"]
         type PointCloud_Normal;
@@ -726,6 +736,115 @@ pub mod ffi {
             ndt: Pin<&mut NormalDistributionsTransform_PointXYZRGB>,
         ) -> f64;
 
+        // Feature-based registration functions - Correspondence Estimation
+        fn new_correspondence_estimation_xyz() -> UniquePtr<CorrespondenceEstimation_PointXYZ>;
+        fn set_input_source_correspondence_xyz(
+            ce: Pin<&mut CorrespondenceEstimation_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_target_correspondence_xyz(
+            ce: Pin<&mut CorrespondenceEstimation_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn determine_correspondences_xyz(
+            ce: Pin<&mut CorrespondenceEstimation_PointXYZ>,
+        ) -> UniquePtr<Correspondences>;
+        fn determine_reciprocal_correspondences_xyz(
+            ce: Pin<&mut CorrespondenceEstimation_PointXYZ>,
+        ) -> UniquePtr<Correspondences>;
+
+        // Feature-based registration functions - Correspondence Rejection RANSAC
+        fn new_correspondence_rejection_ransac_xyz()
+        -> UniquePtr<CorrespondenceRejectorSampleConsensus_PointXYZ>;
+        fn set_input_source_rejection_xyz(
+            rejector: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_target_rejection_xyz(
+            rejector: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_inlier_threshold_rejection_xyz(
+            rejector: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+            threshold: f64,
+        );
+        fn get_inlier_threshold_rejection_xyz(
+            rejector: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+        ) -> f64;
+        fn set_max_iterations_rejection_xyz(
+            rejector: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+            iterations: i32,
+        );
+        fn get_max_iterations_rejection_xyz(
+            rejector: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+        ) -> i32;
+        fn get_remaining_correspondences_xyz(
+            rejector: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+            original_correspondences: &Correspondences,
+        ) -> UniquePtr<Correspondences>;
+        fn get_best_transformation_rejection_xyz(
+            rejector: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+        ) -> Vec<f32>;
+
+        // Feature-based registration functions - SAC-IA
+        fn new_sac_ia_xyz() -> UniquePtr<SampleConsensusInitialAlignment_PointXYZ_FPFH>;
+        fn set_input_source_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_target_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_source_features_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+            features: &PointCloud_FPFHSignature33,
+        );
+        fn set_target_features_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+            features: &PointCloud_FPFHSignature33,
+        );
+        fn set_min_sample_distance_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+            distance: f32,
+        );
+        fn get_min_sample_distance_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+        ) -> f32;
+        fn set_number_of_samples_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+            nr_samples: i32,
+        );
+        fn get_number_of_samples_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+        ) -> i32;
+        fn set_correspondence_randomness_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+            k: i32,
+        );
+        fn get_correspondence_randomness_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+        ) -> i32;
+        fn set_max_iterations_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+            iterations: i32,
+        );
+        fn get_max_iterations_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+        ) -> i32;
+        fn align_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+        fn has_converged_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+        ) -> bool;
+        fn get_fitness_score_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+        ) -> f64;
+        fn get_final_transformation_sac_ia_xyz(
+            sac_ia: Pin<&mut SampleConsensusInitialAlignment_PointXYZ_FPFH>,
+        ) -> Vec<f32>;
+
         // Segmentation functions
         // Region Growing segmentation - PointXYZ with Normal
         fn new_region_growing_xyz() -> UniquePtr<RegionGrowing_PointXYZ_Normal>;
@@ -1142,6 +1261,10 @@ pub type IcpXYZ = ffi::IterativeClosestPoint_PointXYZ;
 pub type IcpXYZRGB = ffi::IterativeClosestPoint_PointXYZRGB;
 pub type NdtXYZ = ffi::NormalDistributionsTransform_PointXYZ;
 pub type NdtXYZRGB = ffi::NormalDistributionsTransform_PointXYZRGB;
+pub type Correspondences = ffi::Correspondences;
+pub type CorrespondenceEstimationXYZ = ffi::CorrespondenceEstimation_PointXYZ;
+pub type CorrespondenceRejectorRansacXYZ = ffi::CorrespondenceRejectorSampleConsensus_PointXYZ;
+pub type SacIaXYZ = ffi::SampleConsensusInitialAlignment_PointXYZ_FPFH;
 pub type PointCloudNormal = ffi::PointCloud_Normal;
 pub type RegionGrowingXYZ = ffi::RegionGrowing_PointXYZ_Normal;
 pub type RegionGrowingRgbXYZRGB = ffi::RegionGrowingRGB_PointXYZRGB;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pcl/correspondence.h"
 #include "pcl/features/fpfh.h"
 #include "pcl/features/fpfh_omp.h"
 #include "pcl/features/normal_3d.h"
@@ -17,6 +18,9 @@
 #include "pcl/octree/octree_search.h"
 #include "pcl/point_cloud.h"
 #include "pcl/point_types.h"
+#include "pcl/registration/correspondence_estimation.h"
+#include "pcl/registration/correspondence_rejection_sample_consensus.h"
+#include "pcl/registration/ia_ransac.h"
 #include "pcl/registration/icp.h"
 #include "pcl/registration/ndt.h"
 #include "pcl/sample_consensus/ransac.h"
@@ -77,6 +81,17 @@ using NormalDistributionsTransform_PointXYZ =
     NormalDistributionsTransform<PointXYZ, PointXYZ>;
 using NormalDistributionsTransform_PointXYZRGB =
     NormalDistributionsTransform<PointXYZRGB, PointXYZRGB>;
+
+// Feature-based registration type aliases
+namespace registration {
+using CorrespondenceEstimation_PointXYZ =
+    CorrespondenceEstimation<PointXYZ, PointXYZ>;
+using CorrespondenceRejectorSampleConsensus_PointXYZ =
+    CorrespondenceRejectorSampleConsensus<PointXYZ>;
+} // namespace registration
+
+using SampleConsensusInitialAlignment_PointXYZ_FPFH =
+    SampleConsensusInitialAlignment<PointXYZ, PointXYZ, FPFHSignature33>;
 
 // Segmentation type aliases
 using PointCloud_Normal = PointCloud<Normal>;

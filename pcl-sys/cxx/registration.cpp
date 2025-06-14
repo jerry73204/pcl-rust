@@ -3,8 +3,12 @@
 #include <memory>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+#include <pcl/registration/correspondence_estimation.h>
+#include <pcl/registration/correspondence_rejection_sample_consensus.h>
+#include <pcl/registration/ia_ransac.h>
 #include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
+#include <pcl/registration/transformation_estimation_svd.h>
 
 // NDT functions - PointXYZ
 std::unique_ptr<pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>>
@@ -73,8 +77,8 @@ double get_step_size_ndt_xyz(
   return ndt.getStepSize();
 }
 
-std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>
-align_ndt_xyz(pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> &ndt) {
+std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>> align_ndt_xyz(
+    pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> &ndt) {
   try {
     auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
     ndt.align(*output);
@@ -390,11 +394,12 @@ rust::Vec<float> get_final_transformation_icp_xyzrgb(
 }
 
 // NDT functions - PointXYZRGB
-std::unique_ptr<pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>>
+std::unique_ptr<
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>>
 new_ndt_xyzrgb() {
   try {
-    return std::make_unique<
-        pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>>();
+    return std::make_unique<pcl::NormalDistributionsTransform<
+        pcl::PointXYZRGB, pcl::PointXYZRGB>>();
   } catch (const std::exception &e) {
     return nullptr;
   }
@@ -419,7 +424,8 @@ void set_resolution_ndt_xyzrgb(
 }
 
 double get_resolution_ndt_xyzrgb(
-    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB> &ndt) {
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>
+        &ndt) {
   return ndt.getResolution();
 }
 
@@ -430,7 +436,8 @@ void set_max_iterations_ndt_xyzrgb(
 }
 
 int32_t get_max_iterations_ndt_xyzrgb(
-    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB> &ndt) {
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>
+        &ndt) {
   return ndt.getMaximumIterations();
 }
 
@@ -441,7 +448,8 @@ void set_transformation_epsilon_ndt_xyzrgb(
 }
 
 double get_transformation_epsilon_ndt_xyzrgb(
-    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB> &ndt) {
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>
+        &ndt) {
   return ndt.getTransformationEpsilon();
 }
 
@@ -452,12 +460,14 @@ void set_step_size_ndt_xyzrgb(
 }
 
 double get_step_size_ndt_xyzrgb(
-    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB> &ndt) {
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>
+        &ndt) {
   return ndt.getStepSize();
 }
 
-std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>
-align_ndt_xyzrgb(pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB> &ndt) {
+std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>> align_ndt_xyzrgb(
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>
+        &ndt) {
   try {
     auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZRGB>>();
     ndt.align(*output);
@@ -491,17 +501,20 @@ std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>> align_with_guess_ndt_xyzrgb(
 }
 
 bool has_converged_ndt_xyzrgb(
-    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB> &ndt) {
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>
+        &ndt) {
   return ndt.hasConverged();
 }
 
 double get_fitness_score_ndt_xyzrgb(
-    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB> &ndt) {
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>
+        &ndt) {
   return ndt.getFitnessScore();
 }
 
 rust::Vec<float> get_final_transformation_ndt_xyzrgb(
-    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB> &ndt) {
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>
+        &ndt) {
   Eigen::Matrix4f transform = ndt.getFinalTransformation();
   rust::Vec<float> result;
   result.reserve(16);
@@ -516,6 +529,273 @@ rust::Vec<float> get_final_transformation_ndt_xyzrgb(
 }
 
 double get_transformation_probability_ndt_xyzrgb(
-    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB> &ndt) {
+    pcl::NormalDistributionsTransform<pcl::PointXYZRGB, pcl::PointXYZRGB>
+        &ndt) {
   return ndt.getTransformationProbability();
+}
+
+// Correspondence Estimation functions - PointXYZ
+std::unique_ptr<
+    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>>
+new_correspondence_estimation_xyz() {
+  try {
+    return std::make_unique<pcl::registration::CorrespondenceEstimation<
+        pcl::PointXYZ, pcl::PointXYZ>>();
+  } catch (const std::exception &e) {
+    return nullptr;
+  }
+}
+
+void set_input_source_correspondence_xyz(
+    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>
+        &ce,
+    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  ce.setInputSource(cloud.makeShared());
+}
+
+void set_input_target_correspondence_xyz(
+    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>
+        &ce,
+    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  ce.setInputTarget(cloud.makeShared());
+}
+
+std::unique_ptr<pcl::Correspondences> determine_correspondences_xyz(
+    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>
+        &ce) {
+  try {
+    auto correspondences = std::make_unique<pcl::Correspondences>();
+    ce.determineCorrespondences(*correspondences);
+    return correspondences;
+  } catch (const std::exception &e) {
+    return nullptr;
+  }
+}
+
+std::unique_ptr<pcl::Correspondences> determine_reciprocal_correspondences_xyz(
+    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>
+        &ce) {
+  try {
+    auto correspondences = std::make_unique<pcl::Correspondences>();
+    ce.determineReciprocalCorrespondences(*correspondences);
+    return correspondences;
+  } catch (const std::exception &e) {
+    return nullptr;
+  }
+}
+
+// Correspondence Rejection RANSAC functions - PointXYZ
+std::unique_ptr<
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>>
+new_correspondence_rejection_ransac_xyz() {
+  try {
+    return std::make_unique<
+        pcl::registration::CorrespondenceRejectorSampleConsensus<
+            pcl::PointXYZ>>();
+  } catch (const std::exception &e) {
+    return nullptr;
+  }
+}
+
+void set_input_source_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
+        &rejector,
+    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  rejector.setInputSource(cloud.makeShared());
+}
+
+void set_input_target_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
+        &rejector,
+    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  rejector.setInputTarget(cloud.makeShared());
+}
+
+void set_inlier_threshold_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
+        &rejector,
+    double threshold) {
+  rejector.setInlierThreshold(threshold);
+}
+
+double get_inlier_threshold_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
+        &rejector) {
+  return rejector.getInlierThreshold();
+}
+
+void set_max_iterations_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
+        &rejector,
+    int iterations) {
+  rejector.setMaximumIterations(iterations);
+}
+
+int get_max_iterations_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
+        &rejector) {
+  return rejector.getMaximumIterations();
+}
+
+std::unique_ptr<pcl::Correspondences> get_remaining_correspondences_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
+        &rejector,
+    const pcl::Correspondences &original_correspondences) {
+  try {
+    auto remaining = std::make_unique<pcl::Correspondences>();
+    rejector.setInputCorrespondences(
+        std::make_shared<const pcl::Correspondences>(original_correspondences));
+    rejector.getCorrespondences(*remaining);
+    return remaining;
+  } catch (const std::exception &e) {
+    return nullptr;
+  }
+}
+
+rust::Vec<float> get_best_transformation_rejection_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
+        &rejector) {
+  Eigen::Matrix4f transform = rejector.getBestTransformation();
+  rust::Vec<float> result;
+  result.reserve(16);
+
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      result.push_back(transform(i, j));
+    }
+  }
+
+  return result;
+}
+
+// Sample Consensus Initial Alignment (SAC-IA) functions - PointXYZ with FPFH
+std::unique_ptr<pcl::SampleConsensusInitialAlignment<
+    pcl::PointXYZ, pcl::PointXYZ, pcl::FPFHSignature33>>
+new_sac_ia_xyz() {
+  try {
+    return std::make_unique<pcl::SampleConsensusInitialAlignment<
+        pcl::PointXYZ, pcl::PointXYZ, pcl::FPFHSignature33>>();
+  } catch (const std::exception &e) {
+    return nullptr;
+  }
+}
+
+void set_input_source_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia,
+    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  sac_ia.setInputSource(cloud.makeShared());
+}
+
+void set_input_target_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia,
+    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  sac_ia.setInputTarget(cloud.makeShared());
+}
+
+void set_source_features_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia,
+    const pcl::PointCloud<pcl::FPFHSignature33> &features) {
+  sac_ia.setSourceFeatures(features.makeShared());
+}
+
+void set_target_features_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia,
+    const pcl::PointCloud<pcl::FPFHSignature33> &features) {
+  sac_ia.setTargetFeatures(features.makeShared());
+}
+
+void set_min_sample_distance_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia,
+    float distance) {
+  sac_ia.setMinSampleDistance(distance);
+}
+
+float get_min_sample_distance_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia) {
+  return sac_ia.getMinSampleDistance();
+}
+
+void set_number_of_samples_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia,
+    int nr_samples) {
+  sac_ia.setNumberOfSamples(nr_samples);
+}
+
+int get_number_of_samples_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia) {
+  return sac_ia.getNumberOfSamples();
+}
+
+void set_correspondence_randomness_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia,
+    int k) {
+  sac_ia.setCorrespondenceRandomness(k);
+}
+
+int get_correspondence_randomness_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia) {
+  return sac_ia.getCorrespondenceRandomness();
+}
+
+void set_max_iterations_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia,
+    int iterations) {
+  sac_ia.setMaximumIterations(iterations);
+}
+
+int get_max_iterations_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia) {
+  return sac_ia.getMaximumIterations();
+}
+
+std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>> align_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia) {
+  try {
+    auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
+    sac_ia.align(*output);
+    return output;
+  } catch (const std::exception &e) {
+    return nullptr;
+  }
+}
+
+bool has_converged_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia) {
+  return sac_ia.hasConverged();
+}
+
+double get_fitness_score_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia) {
+  return sac_ia.getFitnessScore();
+}
+
+rust::Vec<float> get_final_transformation_sac_ia_xyz(
+    pcl::SampleConsensusInitialAlignment<pcl::PointXYZ, pcl::PointXYZ,
+                                         pcl::FPFHSignature33> &sac_ia) {
+  Eigen::Matrix4f transform = sac_ia.getFinalTransformation();
+  rust::Vec<float> result;
+  result.reserve(16);
+
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      result.push_back(transform(i, j));
+    }
+  }
+
+  return result;
 }
