@@ -35,12 +35,20 @@
 #include "pcl/segmentation/region_growing.h"
 #include "pcl/segmentation/region_growing_rgb.h"
 #include "pcl/segmentation/sac_segmentation.h"
+#include "pcl/surface/marching_cubes_hoppe.h"
+#include "pcl/surface/marching_cubes_rbf.h"
+#include "pcl/surface/poisson.h"
+#include "pcl/surface/gp3.h"
+#include "pcl/surface/organized_fast_mesh.h"
+#include "pcl/surface/bilateral_upsampling.h"
+#include "pcl/PolygonMesh.h"
 
 // Type aliases to match cxx bridge expectations
 namespace pcl {
 using PointCloud_PointXYZ = PointCloud<PointXYZ>;
 using PointCloud_PointXYZI = PointCloud<PointXYZI>;
 using PointCloud_PointXYZRGB = PointCloud<PointXYZRGB>;
+using PointCloud_PointXYZRGBA = PointCloud<PointXYZRGBA>;
 
 namespace search {
 using KdTree_PointXYZ = KdTree<PointXYZ>;
@@ -130,4 +138,9 @@ using SIFTKeypoint_PointXYZI_PointWithScale =
     SIFTKeypoint<PointXYZI, PointWithScale>;
 using PointCloud_PointXYZI = PointCloud<PointXYZI>;
 using PointCloud_PointWithScale = PointCloud<PointWithScale>;
+
+// Surface reconstruction type aliases
+using MarchingCubesHoppe_PointXYZ = MarchingCubesHoppe<PointXYZ>;
+using MarchingCubesRBF_PointXYZ = MarchingCubesRBF<PointXYZ>;
+using OrganizedFastMesh_PointXYZ = OrganizedFastMesh<PointXYZ>;
 } // namespace pcl

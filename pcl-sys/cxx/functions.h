@@ -24,6 +24,7 @@ uint8_t get_b(const pcl::PointXYZRGB &point);
 std::unique_ptr<pcl::PointCloud_PointXYZ> new_point_cloud_xyz();
 std::unique_ptr<pcl::PointCloud_PointXYZI> new_point_cloud_xyzi();
 std::unique_ptr<pcl::PointCloud_PointXYZRGB> new_point_cloud_xyzrgb();
+std::unique_ptr<pcl::PointCloud_PointXYZRGBA> new_point_cloud_xyzrgba();
 
 size_t size(const pcl::PointCloud_PointXYZ &cloud);
 size_t size_xyzi(const pcl::PointCloud_PointXYZI &cloud);
@@ -722,3 +723,57 @@ void set_negative_radius_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter,
                                 bool negative);
 std::unique_ptr<pcl::PointCloud_PointXYZRGB>
 filter_radius_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter);
+
+// Surface reconstruction functions (implemented in surface.cpp)
+
+// Marching Cubes Hoppe reconstruction
+std::unique_ptr<pcl::MarchingCubesHoppe_PointXYZ>
+new_marching_cubes_hoppe_xyz();
+void set_iso_level_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
+                             float iso_level);
+float get_iso_level_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc);
+void set_grid_resolution_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
+                                   int32_t res_x, int32_t res_y, int32_t res_z);
+void set_percentage_extend_grid_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
+                                          float percentage);
+void set_input_cloud_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
+                               const pcl::PointCloud_PointXYZ &cloud);
+int32_t perform_reconstruction_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
+                                         pcl::PolygonMesh &mesh);
+
+// Marching Cubes RBF reconstruction
+std::unique_ptr<pcl::MarchingCubesRBF_PointXYZ> new_marching_cubes_rbf_xyz();
+void set_iso_level_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc, float iso_level);
+float get_iso_level_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc);
+void set_grid_resolution_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
+                                 int32_t res_x, int32_t res_y, int32_t res_z);
+void set_percentage_extend_grid_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
+                                        float percentage);
+void set_off_surface_displacement_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
+                                          float displacement);
+void set_input_cloud_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
+                             const pcl::PointCloud_PointXYZ &cloud);
+int32_t perform_reconstruction_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
+                                       pcl::PolygonMesh &mesh);
+
+// Organized Fast Mesh
+std::unique_ptr<pcl::OrganizedFastMesh_PointXYZ> new_organized_fast_mesh_xyz();
+void set_triangle_pixel_size_xyz(pcl::OrganizedFastMesh_PointXYZ &ofm,
+                                 int32_t triangle_size);
+int32_t get_triangle_pixel_size_xyz(const pcl::OrganizedFastMesh_PointXYZ &ofm);
+void set_triangulation_type_xyz(pcl::OrganizedFastMesh_PointXYZ &ofm,
+                                int32_t type);
+int32_t get_triangulation_type_xyz(const pcl::OrganizedFastMesh_PointXYZ &ofm);
+void set_input_cloud_ofm_xyz(pcl::OrganizedFastMesh_PointXYZ &ofm,
+                             const pcl::PointCloud_PointXYZ &cloud);
+int32_t perform_reconstruction_ofm_xyz(pcl::OrganizedFastMesh_PointXYZ &ofm,
+                                       pcl::PolygonMesh &mesh);
+
+// Polygon mesh utility functions
+std::unique_ptr<pcl::PolygonMesh> new_polygon_mesh();
+size_t get_polygon_count(const pcl::PolygonMesh &mesh);
+size_t get_vertex_count(const pcl::PolygonMesh &mesh);
+bool is_valid_mesh(const pcl::PolygonMesh &mesh);
+int32_t save_polygon_mesh_ply(const pcl::PolygonMesh &mesh, rust::Str filename);
+int32_t save_polygon_mesh_obj(const pcl::PolygonMesh &mesh, rust::Str filename);
+int32_t save_polygon_mesh_vtk(const pcl::PolygonMesh &mesh, rust::Str filename);

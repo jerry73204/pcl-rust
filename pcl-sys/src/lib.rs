@@ -14,6 +14,7 @@ pub mod registration;
 pub mod sample_consensus;
 pub mod search;
 pub mod segmentation;
+pub mod surface;
 
 // Re-export cxx types that may be useful
 pub use cxx::{SharedPtr, UniquePtr};
@@ -30,6 +31,10 @@ pub mod ffi {
         type PointXYZI;
         #[namespace = "pcl"]
         type PointXYZRGB;
+        #[namespace = "pcl"]
+        type PointNormal;
+        #[namespace = "pcl"]
+        type PointXYZRGBA;
 
         // PointCloud template instantiations
         #[namespace = "pcl"]
@@ -38,6 +43,8 @@ pub mod ffi {
         type PointCloud_PointXYZI;
         #[namespace = "pcl"]
         type PointCloud_PointXYZRGB;
+        #[namespace = "pcl"]
+        type PointCloud_PointXYZRGBA;
 
         // Search types
         #[namespace = "pcl::search"]
@@ -57,6 +64,7 @@ pub mod ffi {
         fn new_point_cloud_xyz() -> UniquePtr<PointCloud_PointXYZ>;
         fn new_point_cloud_xyzi() -> UniquePtr<PointCloud_PointXYZI>;
         fn new_point_cloud_xyzrgb() -> UniquePtr<PointCloud_PointXYZRGB>;
+        fn new_point_cloud_xyzrgba() -> UniquePtr<PointCloud_PointXYZRGBA>;
         fn size(cloud: &PointCloud_PointXYZ) -> usize;
         fn size_xyzi(cloud: &PointCloud_PointXYZI) -> usize;
         fn size_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> usize;
@@ -443,5 +451,95 @@ pub mod ffi {
         fn filter_radius_xyzrgb(
             filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
         ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // Surface reconstruction types
+        #[namespace = "pcl"]
+        type MarchingCubesHoppe_PointXYZ;
+        #[namespace = "pcl"]
+        type MarchingCubesRBF_PointXYZ;
+        #[namespace = "pcl"]
+        type OrganizedFastMesh_PointXYZ;
+        #[namespace = "pcl"]
+        type PolygonMesh;
+
+        // Marching Cubes Hoppe reconstruction functions
+        fn new_marching_cubes_hoppe_xyz() -> UniquePtr<MarchingCubesHoppe_PointXYZ>;
+        fn set_iso_level_hoppe_xyz(mc: Pin<&mut MarchingCubesHoppe_PointXYZ>, iso_level: f32);
+        fn get_iso_level_hoppe_xyz(mc: Pin<&mut MarchingCubesHoppe_PointXYZ>) -> f32;
+        fn set_grid_resolution_hoppe_xyz(
+            mc: Pin<&mut MarchingCubesHoppe_PointXYZ>,
+            res_x: i32,
+            res_y: i32,
+            res_z: i32,
+        );
+        fn set_percentage_extend_grid_hoppe_xyz(
+            mc: Pin<&mut MarchingCubesHoppe_PointXYZ>,
+            percentage: f32,
+        );
+        fn set_input_cloud_hoppe_xyz(
+            mc: Pin<&mut MarchingCubesHoppe_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn perform_reconstruction_hoppe_xyz(
+            mc: Pin<&mut MarchingCubesHoppe_PointXYZ>,
+            mesh: Pin<&mut PolygonMesh>,
+        ) -> i32;
+
+        // Marching Cubes RBF reconstruction functions
+        fn new_marching_cubes_rbf_xyz() -> UniquePtr<MarchingCubesRBF_PointXYZ>;
+        fn set_iso_level_rbf_xyz(mc: Pin<&mut MarchingCubesRBF_PointXYZ>, iso_level: f32);
+        fn get_iso_level_rbf_xyz(mc: Pin<&mut MarchingCubesRBF_PointXYZ>) -> f32;
+        fn set_grid_resolution_rbf_xyz(
+            mc: Pin<&mut MarchingCubesRBF_PointXYZ>,
+            res_x: i32,
+            res_y: i32,
+            res_z: i32,
+        );
+        fn set_percentage_extend_grid_rbf_xyz(
+            mc: Pin<&mut MarchingCubesRBF_PointXYZ>,
+            percentage: f32,
+        );
+        fn set_off_surface_displacement_rbf_xyz(
+            mc: Pin<&mut MarchingCubesRBF_PointXYZ>,
+            displacement: f32,
+        );
+        fn set_input_cloud_rbf_xyz(
+            mc: Pin<&mut MarchingCubesRBF_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn perform_reconstruction_rbf_xyz(
+            mc: Pin<&mut MarchingCubesRBF_PointXYZ>,
+            mesh: Pin<&mut PolygonMesh>,
+        ) -> i32;
+
+        // Organized Fast Mesh functions
+        fn new_organized_fast_mesh_xyz() -> UniquePtr<OrganizedFastMesh_PointXYZ>;
+        fn set_triangle_pixel_size_xyz(
+            ofm: Pin<&mut OrganizedFastMesh_PointXYZ>,
+            triangle_size: i32,
+        );
+        fn get_triangle_pixel_size_xyz(ofm: &OrganizedFastMesh_PointXYZ) -> i32;
+        fn set_triangulation_type_xyz(
+            ofm: Pin<&mut OrganizedFastMesh_PointXYZ>,
+            triangle_type: i32,
+        );
+        fn get_triangulation_type_xyz(ofm: &OrganizedFastMesh_PointXYZ) -> i32;
+        fn set_input_cloud_ofm_xyz(
+            ofm: Pin<&mut OrganizedFastMesh_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn perform_reconstruction_ofm_xyz(
+            ofm: Pin<&mut OrganizedFastMesh_PointXYZ>,
+            mesh: Pin<&mut PolygonMesh>,
+        ) -> i32;
+
+        // Polygon mesh utility functions
+        fn new_polygon_mesh() -> UniquePtr<PolygonMesh>;
+        fn get_polygon_count(mesh: &PolygonMesh) -> usize;
+        fn get_vertex_count(mesh: &PolygonMesh) -> usize;
+        fn is_valid_mesh(mesh: &PolygonMesh) -> bool;
+        fn save_polygon_mesh_ply(mesh: &PolygonMesh, filename: &str) -> i32;
+        fn save_polygon_mesh_obj(mesh: &PolygonMesh, filename: &str) -> i32;
+        fn save_polygon_mesh_vtk(mesh: &PolygonMesh, filename: &str) -> i32;
     }
 }

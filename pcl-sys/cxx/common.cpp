@@ -32,6 +32,10 @@ std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>> new_point_cloud_xyzrgb() {
   return std::make_unique<pcl::PointCloud<pcl::PointXYZRGB>>();
 }
 
+std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGBA>> new_point_cloud_xyzrgba() {
+  return std::make_unique<pcl::PointCloud<pcl::PointXYZRGBA>>();
+}
+
 size_t size(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
   return cloud.size();
 }

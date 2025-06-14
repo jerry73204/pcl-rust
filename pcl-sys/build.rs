@@ -16,7 +16,7 @@ fn main() {
         println!("cargo:include=/usr/include");
     }
 
-    // Link additional PCL libraries needed for search, octree, I/O, sample consensus, filters, registration, segmentation, features, and keypoints functionality
+    // Link additional PCL libraries needed for search, octree, I/O, sample consensus, filters, registration, segmentation, features, keypoints, and surface functionality
     println!("cargo:rustc-link-lib=pcl_search");
     println!("cargo:rustc-link-lib=pcl_kdtree");
     println!("cargo:rustc-link-lib=pcl_octree");
@@ -27,6 +27,7 @@ fn main() {
     println!("cargo:rustc-link-lib=pcl_segmentation");
     println!("cargo:rustc-link-lib=pcl_features");
     println!("cargo:rustc-link-lib=pcl_keypoints");
+    println!("cargo:rustc-link-lib=pcl_surface");
 
     // Build cxx bridge
     let mut build = cxx_build::bridge("src/lib.rs");
@@ -41,6 +42,7 @@ fn main() {
         .file("cxx/registration.cpp")
         .file("cxx/sample_consensus.cpp")
         .file("cxx/segmentation.cpp")
+        .file("cxx/surface.cpp")
         .include(".") // For our cxx/types.h
         .include("/usr/include/pcl-1.12")
         .include("/usr/include/eigen3")
