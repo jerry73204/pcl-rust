@@ -35,3 +35,77 @@ impl Default for BinaryFormat {
         BinaryFormat::Ascii
     }
 }
+
+/// Auto-detection functionality for point cloud file formats
+pub mod auto_detect {
+    use super::FileFormat;
+    use crate::error::{PclError, Result};
+    use crate::common::PointCloudXYZ;
+    use pcl_sys::io::{
+        detect_format_from_extension, detect_format_from_content, detect_file_format,
+        load_point_cloud_auto_xyz,
+    };
+    use std::path::Path;
+    use std::pin::Pin;
+
+    /// Detect file format from file extension
+    pub fn detect_format_from_ext<P: AsRef<Path>>(path: P) -> Result<FileFormat> {
+        let path_str = path.as_ref().to_string_lossy();
+        let format_code = detect_format_from_extension(&path_str);
+        
+        match format_code {
+            1 => Ok(FileFormat::Pcd),
+            2 => Ok(FileFormat::Ply),
+            -1 => Err(PclError::IoFailed(format!("Cannot access file: {}", path_str))),
+            _ => Err(PclError::UnsupportedFormat(format!("Unknown format for file: {}", path_str))),
+        }
+    }
+
+    /// Detect file format from file content
+    pub fn detect_format_from_file_content<P: AsRef<Path>>(path: P) -> Result<FileFormat> {
+        let path_str = path.as_ref().to_string_lossy();
+        let format_code = detect_format_from_content(&path_str);
+        
+        match format_code {
+            1 => Ok(FileFormat::Pcd),
+            2 => Ok(FileFormat::Ply),
+            -1 => Err(PclError::IoFailed(format!("Cannot access file: {}", path_str))),
+            _ => Err(PclError::UnsupportedFormat(format!("Unknown format for file: {}", path_str))),
+        }
+    }
+
+    /// Auto-detect file format (tries extension first, then content)
+    pub fn detect_format<P: AsRef<Path>>(path: P) -> Result<FileFormat> {
+        let path_str = path.as_ref().to_string_lossy();
+        let format_code = detect_file_format(&path_str);
+        
+        match format_code {
+            1 => Ok(FileFormat::Pcd),
+            2 => Ok(FileFormat::Ply),
+            -1 => Err(PclError::IoFailed(format!("Cannot access file: {}", path_str))),
+            _ => Err(PclError::UnsupportedFormat(format!("Unknown format for file: {}", path_str))),
+        }
+    }
+
+    /// Load point cloud with automatic format detection for PointXYZ
+    pub fn load_xyz<P: AsRef<Path>>(path: P) -> Result<PointCloudXYZ> {
+        let path_str = path.as_ref().to_string_lossy();
+        let mut cloud = PointCloudXYZ::new()?;
+        
+        let result = load_point_cloud_auto_xyz(&path_str, cloud.inner.pin_mut());
+        
+        if result == 0 {
+            Ok(cloud)
+        } else {
+            Err(PclError::IoFailed(format!("Failed to load point cloud from: {}", path_str)))
+        }
+    }
+}
+
+// Re-export auto-detection functions for convenience
+pub use auto_detect::{detect_format, detect_format_from_ext, detect_format_from_file_content};
+
+/// Load point cloud with automatic format detection for PointXYZ
+pub fn load_xyz<P: AsRef<std::path::Path>>(path: P) -> crate::error::Result<crate::common::PointCloudXYZ> {
+    auto_detect::load_xyz(path)
+}

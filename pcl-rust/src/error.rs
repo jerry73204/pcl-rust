@@ -6,7 +6,10 @@ use std::fmt;
 use thiserror::Error;
 
 /// Result type for PCL operations
-pub type PclResult<T> = Result<T, PclError>;
+pub type PclResult<T> = std::result::Result<T, PclError>;
+
+/// Convenient Result type alias
+pub type Result<T> = std::result::Result<T, PclError>;
 
 /// Errors that can occur in PCL operations
 #[derive(Error, Debug)]
@@ -109,6 +112,14 @@ pub enum PclError {
     /// Processing operation failed
     #[error("Processing failed: {message}")]
     ProcessingFailed { message: String },
+
+    /// Unsupported file format
+    #[error("Unsupported format: {0}")]
+    UnsupportedFormat(String),
+
+    /// I/O operation failed
+    #[error("I/O failed: {0}")]
+    IoFailed(String),
 }
 
 /// Types of search operations that can fail
@@ -282,19 +293,19 @@ impl From<std::io::Error> for PclError {
 /// Extension trait for Result types to add context
 pub trait ResultExt<T> {
     /// Add context to an error
-    fn context(self, msg: &str) -> Result<T, PclError>;
+    fn context(self, msg: &str) -> Result<T>;
 
     /// Add context with a lazily evaluated message
-    fn with_context<F>(self, f: F) -> Result<T, PclError>
+    fn with_context<F>(self, f: F) -> Result<T>
     where
         F: FnOnce() -> String;
 }
 
-impl<T, E> ResultExt<T> for Result<T, E>
+impl<T, E> ResultExt<T> for std::result::Result<T, E>
 where
     E: Into<PclError>,
 {
-    fn context(self, msg: &str) -> Result<T, PclError> {
+    fn context(self, msg: &str) -> Result<T> {
         self.map_err(|e| {
             let mut err = e.into();
             match &mut err {
@@ -310,7 +321,7 @@ where
         })
     }
 
-    fn with_context<F>(self, f: F) -> Result<T, PclError>
+    fn with_context<F>(self, f: F) -> Result<T>
     where
         F: FnOnce() -> String,
     {

@@ -236,6 +236,19 @@ int32_t save_ply_file_ascii_xyzrgb(rust::Str file_name,
 int32_t save_ply_file_binary_xyzrgb(rust::Str file_name,
                                     const pcl::PointCloud_PointXYZRGB &cloud);
 
+// Format auto-detection functions
+int32_t detect_format_from_extension(rust::Str file_name);
+int32_t detect_format_from_content(rust::Str file_name);
+int32_t detect_file_format(rust::Str file_name);
+
+// Auto-loading functions that detect format automatically
+int32_t load_point_cloud_auto_xyz(rust::Str file_name,
+                                  pcl::PointCloud_PointXYZ &cloud);
+int32_t load_point_cloud_auto_xyzi(rust::Str file_name,
+                                   pcl::PointCloud_PointXYZI &cloud);
+int32_t load_point_cloud_auto_xyzrgb(rust::Str file_name,
+                                     pcl::PointCloud_PointXYZRGB &cloud);
+
 // Sample consensus functions (implemented in sample_consensus.cpp)
 std::unique_ptr<pcl::RandomSampleConsensus_PointXYZ>
 new_ransac_plane_xyz(const pcl::PointCloud_PointXYZ &cloud);

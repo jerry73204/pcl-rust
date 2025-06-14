@@ -5,6 +5,10 @@
 
 // Re-export I/O functions from the main FFI module
 pub use crate::ffi::{
+    detect_file_format,
+    detect_format_from_content,
+    // Format auto-detection functions
+    detect_format_from_extension,
     // PCD I/O functions for PointXYZ
     load_pcd_file_xyz,
     // PCD I/O functions for PointXYZI
@@ -17,6 +21,10 @@ pub use crate::ffi::{
     load_ply_file_xyzi,
     // PLY I/O functions for PointXYZRGB
     load_ply_file_xyzrgb,
+    // Auto-loading functions
+    load_point_cloud_auto_xyz,
+    load_point_cloud_auto_xyzi,
+    load_point_cloud_auto_xyzrgb,
     save_pcd_file_ascii_xyz,
     save_pcd_file_ascii_xyzi,
     save_pcd_file_ascii_xyzrgb,

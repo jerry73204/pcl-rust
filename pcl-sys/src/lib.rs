@@ -263,6 +263,22 @@ pub mod ffi {
         fn save_ply_file_ascii_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
         fn save_ply_file_binary_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
 
+        // Format auto-detection functions
+        fn detect_format_from_extension(file_name: &str) -> i32;
+        fn detect_format_from_content(file_name: &str) -> i32;
+        fn detect_file_format(file_name: &str) -> i32;
+
+        // Auto-loading functions that detect format automatically
+        fn load_point_cloud_auto_xyz(file_name: &str, cloud: Pin<&mut PointCloud_PointXYZ>) -> i32;
+        fn load_point_cloud_auto_xyzi(
+            file_name: &str,
+            cloud: Pin<&mut PointCloud_PointXYZI>,
+        ) -> i32;
+        fn load_point_cloud_auto_xyzrgb(
+            file_name: &str,
+            cloud: Pin<&mut PointCloud_PointXYZRGB>,
+        ) -> i32;
+
         // Filter types
         #[namespace = "pcl"]
         type PassThrough_PointXYZ;
