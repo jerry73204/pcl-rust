@@ -231,6 +231,7 @@ size_t get_inliers_count_xyzrgb(
     const pcl::RandomSampleConsensus<pcl::PointXYZRGB> &ransac);
 
 // Filter functions (implemented in filters.cpp)
+// clang-format off
 // PassThrough filter functions - PointXYZ
 std::unique_ptr<pcl::PassThrough<pcl::PointXYZ>> new_pass_through_xyz();
 void set_input_cloud_pass_xyz(pcl::PassThrough<pcl::PointXYZ> &filter,
@@ -241,7 +242,7 @@ rust::String get_filter_field_name_xyz(const pcl::PassThrough<pcl::PointXYZ> &fi
 void set_filter_limits_xyz(pcl::PassThrough<pcl::PointXYZ> &filter, float min,
                            float max);
 void set_filter_limits_negative_xyz(pcl::PassThrough<pcl::PointXYZ> &filter,
-                                     bool negative);
+                                    bool negative);
 bool get_filter_limits_negative_xyz(const pcl::PassThrough<pcl::PointXYZ> &filter);
 void set_keep_organized_xyz(pcl::PassThrough<pcl::PointXYZ> &filter,
                             bool keep_organized);
@@ -259,10 +260,72 @@ rust::String get_filter_field_name_xyzrgb(const pcl::PassThrough<pcl::PointXYZRG
 void set_filter_limits_xyzrgb(pcl::PassThrough<pcl::PointXYZRGB> &filter,
                                float min, float max);
 void set_filter_limits_negative_xyzrgb(pcl::PassThrough<pcl::PointXYZRGB> &filter,
-                                        bool negative);
+                                       bool negative);
 bool get_filter_limits_negative_xyzrgb(const pcl::PassThrough<pcl::PointXYZRGB> &filter);
 void set_keep_organized_xyzrgb(pcl::PassThrough<pcl::PointXYZRGB> &filter,
-                                bool keep_organized);
+                               bool keep_organized);
 bool get_keep_organized_xyzrgb(const pcl::PassThrough<pcl::PointXYZRGB> &filter);
 std::unique_ptr<pcl::PointCloud_PointXYZRGB>
 filter_pass_xyzrgb(pcl::PassThrough<pcl::PointXYZRGB> &filter);
+// clang-format on
+// Registration functions (implemented in registration.cpp)
+// clang-format off
+// ICP functions - PointXYZ
+std::unique_ptr<pcl::IterativeClosestPoint_PointXYZ> new_icp_xyz();
+void set_input_source_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp,
+                               const pcl::PointCloud_PointXYZ &cloud);
+void set_input_target_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp,
+                               const pcl::PointCloud_PointXYZ &cloud);
+void set_max_iterations_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp,
+                                 int32_t iterations);
+int32_t get_max_iterations_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp);
+void set_transformation_epsilon_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp,
+                                        double epsilon);
+double get_transformation_epsilon_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp);
+void set_euclidean_fitness_epsilon_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp,
+                                            double epsilon);
+double get_euclidean_fitness_epsilon_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp);
+void set_max_correspondence_distance_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp,
+                                             double distance);
+double get_max_correspondence_distance_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp);
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+align_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp);
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+align_with_guess_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp,
+                         const rust::Vec<float> &guess);
+bool has_converged_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp);
+double get_fitness_score_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp);
+rust::Vec<float> get_final_transformation_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp);
+
+// ICP functions - PointXYZRGB
+std::unique_ptr<pcl::IterativeClosestPoint_PointXYZRGB> new_icp_xyzrgb();
+void set_input_source_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp,
+                                  const pcl::PointCloud_PointXYZRGB &cloud);
+void set_input_target_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp,
+                                  const pcl::PointCloud_PointXYZRGB &cloud);
+void set_max_iterations_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp,
+                                    int32_t iterations);
+int32_t get_max_iterations_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
+void set_transformation_epsilon_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp,
+                                           double epsilon);
+double get_transformation_epsilon_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
+void set_euclidean_fitness_epsilon_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp,
+                                               double epsilon);
+double get_euclidean_fitness_epsilon_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
+void set_max_correspondence_distance_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp,
+                                                double distance);
+double get_max_correspondence_distance_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB>
+align_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB>
+align_with_guess_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp,
+                             const rust::Vec<float> &guess);
+bool has_converged_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
+double get_fitness_score_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
+rust::Vec<float> get_final_transformation_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
+// clang-format on
+
+                            
+
+    
+

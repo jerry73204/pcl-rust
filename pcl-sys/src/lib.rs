@@ -7,6 +7,7 @@ pub mod common;
 pub mod filters;
 pub mod io;
 pub mod octree;
+pub mod registration;
 pub mod sample_consensus;
 pub mod search;
 
@@ -65,6 +66,12 @@ pub mod ffi {
         type PassThrough_PointXYZ;
         #[namespace = "pcl"]
         type PassThrough_PointXYZRGB;
+
+        // Registration types
+        #[namespace = "pcl"]
+        type IterativeClosestPoint_PointXYZ;
+        #[namespace = "pcl"]
+        type IterativeClosestPoint_PointXYZRGB;
 
         // Point cloud functions
         fn new_point_cloud_xyz() -> UniquePtr<PointCloud_PointXYZ>;
@@ -344,6 +351,104 @@ pub mod ffi {
         fn filter_pass_xyzrgb(
             filter: Pin<&mut PassThrough_PointXYZRGB>,
         ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // Registration functions
+        // ICP functions - PointXYZ
+        fn new_icp_xyz() -> UniquePtr<IterativeClosestPoint_PointXYZ>;
+        fn set_input_source_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_input_target_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_max_iterations_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            iterations: i32,
+        );
+        fn get_max_iterations_icp_xyz(icp: Pin<&mut IterativeClosestPoint_PointXYZ>) -> i32;
+        fn set_transformation_epsilon_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            epsilon: f64,
+        );
+        fn get_transformation_epsilon_icp_xyz(icp: Pin<&mut IterativeClosestPoint_PointXYZ>)
+        -> f64;
+        fn set_euclidean_fitness_epsilon_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            epsilon: f64,
+        );
+        fn get_euclidean_fitness_epsilon_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+        ) -> f64;
+        fn set_max_correspondence_distance_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            distance: f64,
+        );
+        fn get_max_correspondence_distance_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+        ) -> f64;
+        fn align_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+        fn align_with_guess_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            guess: &Vec<f32>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+        fn has_converged_icp_xyz(icp: Pin<&mut IterativeClosestPoint_PointXYZ>) -> bool;
+        fn get_fitness_score_icp_xyz(icp: Pin<&mut IterativeClosestPoint_PointXYZ>) -> f64;
+        fn get_final_transformation_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+        ) -> Vec<f32>;
+
+        // ICP functions - PointXYZRGB
+        fn new_icp_xyzrgb() -> UniquePtr<IterativeClosestPoint_PointXYZRGB>;
+        fn set_input_source_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_input_target_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_max_iterations_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            iterations: i32,
+        );
+        fn get_max_iterations_icp_xyzrgb(icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>) -> i32;
+        fn set_transformation_epsilon_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            epsilon: f64,
+        );
+        fn get_transformation_epsilon_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> f64;
+        fn set_euclidean_fitness_epsilon_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            epsilon: f64,
+        );
+        fn get_euclidean_fitness_epsilon_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> f64;
+        fn set_max_correspondence_distance_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            distance: f64,
+        );
+        fn get_max_correspondence_distance_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> f64;
+        fn align_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+        fn align_with_guess_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            guess: &Vec<f32>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+        fn has_converged_icp_xyzrgb(icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>) -> bool;
+        fn get_fitness_score_icp_xyzrgb(icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>) -> f64;
+        fn get_final_transformation_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> Vec<f32>;
     }
 }
 
@@ -366,3 +471,5 @@ pub type PlaneModelXYZRGB = ffi::SampleConsensusModelPlane_PointXYZRGB;
 pub type SphereModelXYZRGB = ffi::SampleConsensusModelSphere_PointXYZRGB;
 pub type PassThroughXYZ = ffi::PassThrough_PointXYZ;
 pub type PassThroughXYZRGB = ffi::PassThrough_PointXYZRGB;
+pub type IcpXYZ = ffi::IterativeClosestPoint_PointXYZ;
+pub type IcpXYZRGB = ffi::IterativeClosestPoint_PointXYZRGB;

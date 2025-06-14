@@ -17,6 +17,7 @@ pub mod error;
 pub mod filters;
 pub mod io;
 pub mod octree;
+pub mod registration;
 pub mod sample_consensus;
 pub mod search;
 
@@ -32,6 +33,7 @@ pub use filters::{FilterXYZ, FilterXYZRGB, PassThroughXYZ, PassThroughXYZRGB};
 pub use io::{
     BinaryFormat, FileFormat, PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB, PlyIoXYZ, PlyIoXYZI, PlyIoXYZRGB,
 };
+pub use registration::{IcpXYZ, IcpXYZRGB, Transform3D, TransformationMatrix};
 pub use sample_consensus::{
     RansacPlaneXYZ, RansacPlaneXYZRGB, RansacSphereXYZ, RansacSphereXYZRGB,
 };

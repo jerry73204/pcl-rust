@@ -6,6 +6,7 @@
 #include "pcl/octree/octree_search.h"
 #include "pcl/point_cloud.h"
 #include "pcl/point_types.h"
+#include "pcl/registration/icp.h"
 #include "pcl/sample_consensus/ransac.h"
 #include "pcl/sample_consensus/sac_model_plane.h"
 #include "pcl/sample_consensus/sac_model_sphere.h"
@@ -42,4 +43,10 @@ using SampleConsensusModelSphere_PointXYZRGB =
 // Filter type aliases
 using PassThrough_PointXYZ = PassThrough<PointXYZ>;
 using PassThrough_PointXYZRGB = PassThrough<PointXYZRGB>;
+
+// Registration type aliases
+using IterativeClosestPoint_PointXYZ =
+    IterativeClosestPoint<PointXYZ, PointXYZ>;
+using IterativeClosestPoint_PointXYZRGB =
+    IterativeClosestPoint<PointXYZRGB, PointXYZRGB>;
 } // namespace pcl
