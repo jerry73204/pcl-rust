@@ -24,11 +24,19 @@ std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>> new_point_cloud_xyz() {
   return std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
 }
 
+std::unique_ptr<pcl::PointCloud<pcl::PointXYZI>> new_point_cloud_xyzi() {
+  return std::make_unique<pcl::PointCloud<pcl::PointXYZI>>();
+}
+
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>> new_point_cloud_xyzrgb() {
   return std::make_unique<pcl::PointCloud<pcl::PointXYZRGB>>();
 }
 
 size_t size(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  return cloud.size();
+}
+
+size_t size_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud) {
   return cloud.size();
 }
 
@@ -38,9 +46,15 @@ size_t size_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
 
 void clear(pcl::PointCloud<pcl::PointXYZ> &cloud) { cloud.clear(); }
 
+void clear_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud) { cloud.clear(); }
+
 void clear_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud) { cloud.clear(); }
 
 bool empty(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  return cloud.empty();
+}
+
+bool empty_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud) {
   return cloud.empty();
 }
 
@@ -52,11 +66,19 @@ void reserve_xyz(pcl::PointCloud<pcl::PointXYZ> &cloud, size_t n) {
   cloud.reserve(n);
 }
 
+void reserve_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud, size_t n) {
+  cloud.reserve(n);
+}
+
 void reserve_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud, size_t n) {
   cloud.reserve(n);
 }
 
 void resize_xyz(pcl::PointCloud<pcl::PointXYZ> &cloud, size_t n) {
+  cloud.resize(n);
+}
+
+void resize_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud, size_t n) {
   cloud.resize(n);
 }
 
@@ -72,6 +94,14 @@ uint32_t height(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
   return cloud.height;
 }
 
+uint32_t width_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud) {
+  return cloud.width;
+}
+
+uint32_t height_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud) {
+  return cloud.height;
+}
+
 uint32_t width_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
   return cloud.width;
 }
@@ -81,6 +111,10 @@ uint32_t height_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
 }
 
 bool is_dense(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  return cloud.is_dense;
+}
+
+bool is_dense_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud) {
   return cloud.is_dense;
 }
 

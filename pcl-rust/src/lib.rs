@@ -14,6 +14,7 @@
 
 pub mod common;
 pub mod error;
+pub mod io;
 pub mod octree;
 pub mod search;
 
@@ -21,8 +22,13 @@ pub mod search;
 mod error_tests;
 
 // Re-export common types for convenience
-pub use common::{PointCloudXYZ, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB};
+pub use common::{
+    PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB,
+};
 pub use error::{PclError, PclResult};
+pub use io::{
+    BinaryFormat, FileFormat, PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB, PlyIoXYZ, PlyIoXYZI, PlyIoXYZRGB,
+};
 
 #[cfg(test)]
 mod tests {

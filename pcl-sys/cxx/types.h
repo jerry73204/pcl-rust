@@ -10,6 +10,7 @@
 // Type aliases to match cxx bridge expectations
 namespace pcl {
 using PointCloud_PointXYZ = PointCloud<PointXYZ>;
+using PointCloud_PointXYZI = PointCloud<PointXYZI>;
 using PointCloud_PointXYZRGB = PointCloud<PointXYZRGB>;
 
 namespace search {

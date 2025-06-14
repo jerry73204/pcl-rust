@@ -5,22 +5,31 @@
 
 // Function forward declarations (implemented in common.cpp)
 std::unique_ptr<pcl::PointCloud_PointXYZ> new_point_cloud_xyz();
+std::unique_ptr<pcl::PointCloud_PointXYZI> new_point_cloud_xyzi();
 std::unique_ptr<pcl::PointCloud_PointXYZRGB> new_point_cloud_xyzrgb();
 size_t size(const pcl::PointCloud_PointXYZ &cloud);
+size_t size_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 size_t size_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
 void clear(pcl::PointCloud_PointXYZ &cloud);
+void clear_xyzi(pcl::PointCloud_PointXYZI &cloud);
 void clear_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud);
 bool empty(const pcl::PointCloud_PointXYZ &cloud);
+bool empty_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 bool empty_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
 void reserve_xyz(pcl::PointCloud_PointXYZ &cloud, size_t n);
+void reserve_xyzi(pcl::PointCloud_PointXYZI &cloud, size_t n);
 void reserve_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud, size_t n);
 void resize_xyz(pcl::PointCloud_PointXYZ &cloud, size_t n);
+void resize_xyzi(pcl::PointCloud_PointXYZI &cloud, size_t n);
 void resize_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud, size_t n);
 uint32_t width(const pcl::PointCloud_PointXYZ &cloud);
 uint32_t height(const pcl::PointCloud_PointXYZ &cloud);
+uint32_t width_xyzi(const pcl::PointCloud_PointXYZI &cloud);
+uint32_t height_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 uint32_t width_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
 uint32_t height_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
 bool is_dense(const pcl::PointCloud_PointXYZ &cloud);
+bool is_dense_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 bool is_dense_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
 
 // Point functions
@@ -101,3 +110,43 @@ uint32_t get_tree_depth_voxel_xyz(
     pcl::octree::OctreePointCloudVoxelCentroid_PointXYZ &octree);
 void delete_tree_voxel_xyz(
     pcl::octree::OctreePointCloudVoxelCentroid_PointXYZ &octree);
+
+// I/O functions
+// PCD I/O functions for PointXYZ
+int load_pcd_file_xyz(rust::Str file_name, pcl::PointCloud_PointXYZ &cloud);
+int save_pcd_file_xyz(rust::Str file_name, const pcl::PointCloud_PointXYZ &cloud, bool binary);
+int save_pcd_file_ascii_xyz(rust::Str file_name, const pcl::PointCloud_PointXYZ &cloud);
+int save_pcd_file_binary_xyz(rust::Str file_name, const pcl::PointCloud_PointXYZ &cloud);
+int save_pcd_file_binary_compressed_xyz(rust::Str file_name, const pcl::PointCloud_PointXYZ &cloud);
+
+// PCD I/O functions for PointXYZI
+int load_pcd_file_xyzi(rust::Str file_name, pcl::PointCloud_PointXYZI &cloud);
+int save_pcd_file_xyzi(rust::Str file_name, const pcl::PointCloud_PointXYZI &cloud, bool binary);
+int save_pcd_file_ascii_xyzi(rust::Str file_name, const pcl::PointCloud_PointXYZI &cloud);
+int save_pcd_file_binary_xyzi(rust::Str file_name, const pcl::PointCloud_PointXYZI &cloud);
+int save_pcd_file_binary_compressed_xyzi(rust::Str file_name, const pcl::PointCloud_PointXYZI &cloud);
+
+// PCD I/O functions for PointXYZRGB
+int load_pcd_file_xyzrgb(rust::Str file_name, pcl::PointCloud_PointXYZRGB &cloud);
+int save_pcd_file_xyzrgb(rust::Str file_name, const pcl::PointCloud_PointXYZRGB &cloud, bool binary);
+int save_pcd_file_ascii_xyzrgb(rust::Str file_name, const pcl::PointCloud_PointXYZRGB &cloud);
+int save_pcd_file_binary_xyzrgb(rust::Str file_name, const pcl::PointCloud_PointXYZRGB &cloud);
+int save_pcd_file_binary_compressed_xyzrgb(rust::Str file_name, const pcl::PointCloud_PointXYZRGB &cloud);
+
+// PLY I/O functions for PointXYZ
+int load_ply_file_xyz(rust::Str file_name, pcl::PointCloud_PointXYZ &cloud);
+int save_ply_file_xyz(rust::Str file_name, const pcl::PointCloud_PointXYZ &cloud, bool binary);
+int save_ply_file_ascii_xyz(rust::Str file_name, const pcl::PointCloud_PointXYZ &cloud);
+int save_ply_file_binary_xyz(rust::Str file_name, const pcl::PointCloud_PointXYZ &cloud);
+
+// PLY I/O functions for PointXYZI
+int load_ply_file_xyzi(rust::Str file_name, pcl::PointCloud_PointXYZI &cloud);
+int save_ply_file_xyzi(rust::Str file_name, const pcl::PointCloud_PointXYZI &cloud, bool binary);
+int save_ply_file_ascii_xyzi(rust::Str file_name, const pcl::PointCloud_PointXYZI &cloud);
+int save_ply_file_binary_xyzi(rust::Str file_name, const pcl::PointCloud_PointXYZI &cloud);
+
+// PLY I/O functions for PointXYZRGB
+int load_ply_file_xyzrgb(rust::Str file_name, pcl::PointCloud_PointXYZRGB &cloud);
+int save_ply_file_xyzrgb(rust::Str file_name, const pcl::PointCloud_PointXYZRGB &cloud, bool binary);
+int save_ply_file_ascii_xyzrgb(rust::Str file_name, const pcl::PointCloud_PointXYZRGB &cloud);
+int save_ply_file_binary_xyzrgb(rust::Str file_name, const pcl::PointCloud_PointXYZRGB &cloud);

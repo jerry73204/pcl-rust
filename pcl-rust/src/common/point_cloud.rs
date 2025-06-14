@@ -8,7 +8,7 @@ use pcl_sys::ffi;
 
 /// A container for 3D points with XYZ coordinates
 pub struct PointCloudXYZ {
-    inner: UniquePtr<ffi::PointCloud_PointXYZ>,
+    pub(crate) inner: UniquePtr<ffi::PointCloud_PointXYZ>,
 }
 
 impl PointCloudXYZ {
@@ -94,7 +94,7 @@ impl std::fmt::Debug for PointCloudXYZ {
 
 /// A container for 3D points with XYZ coordinates and RGB color
 pub struct PointCloudXYZRGB {
-    inner: UniquePtr<ffi::PointCloud_PointXYZRGB>,
+    pub(crate) inner: UniquePtr<ffi::PointCloud_PointXYZRGB>,
 }
 
 impl PointCloudXYZRGB {
@@ -167,6 +167,92 @@ impl Default for PointCloudXYZRGB {
 impl std::fmt::Debug for PointCloudXYZRGB {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("PointCloudXYZRGB")
+            .field("size", &self.size())
+            .field("empty", &self.empty())
+            .finish()
+    }
+}
+
+/// A container for 3D points with XYZ coordinates and intensity
+pub struct PointCloudXYZI {
+    pub(crate) inner: UniquePtr<ffi::PointCloud_PointXYZI>,
+}
+
+impl PointCloudXYZI {
+    /// Create a new empty point cloud
+    pub fn new() -> PclResult<Self> {
+        let inner = ffi::new_point_cloud_xyzi();
+        Ok(Self { inner })
+    }
+
+    /// Get the number of points in the cloud
+    pub fn size(&self) -> usize {
+        ffi::size_xyzi(&self.inner)
+    }
+
+    /// Check if the cloud is empty
+    pub fn empty(&self) -> bool {
+        ffi::empty_xyzi(&self.inner)
+    }
+
+    /// Clear all points from the cloud
+    pub fn clear(&mut self) -> PclResult<()> {
+        ffi::clear_xyzi(self.inner.pin_mut());
+        Ok(())
+    }
+
+    /// Reserve capacity for at least n points
+    pub fn reserve(&mut self, n: usize) -> PclResult<()> {
+        ffi::reserve_xyzi(self.inner.pin_mut(), n);
+        Ok(())
+    }
+
+    /// Resize the point cloud to contain n points
+    pub fn resize(&mut self, n: usize) -> PclResult<()> {
+        ffi::resize_xyzi(self.inner.pin_mut(), n);
+        Ok(())
+    }
+
+    /// Get the width of the point cloud (for organized clouds)
+    pub fn width(&self) -> u32 {
+        ffi::width_xyzi(&self.inner)
+    }
+
+    /// Get the height of the point cloud (for organized clouds)
+    pub fn height(&self) -> u32 {
+        ffi::height_xyzi(&self.inner)
+    }
+
+    /// Check if the point cloud is dense (no invalid points)
+    pub fn is_dense(&self) -> bool {
+        ffi::is_dense_xyzi(&self.inner)
+    }
+
+    /// Check if the point cloud is organized (2D structure)
+    pub fn is_organized(&self) -> bool {
+        self.height() > 1
+    }
+
+    /// Get a reference to the underlying pcl-sys point cloud
+    pub fn as_raw(&self) -> &ffi::PointCloud_PointXYZI {
+        &self.inner
+    }
+
+    /// Create from a UniquePtr (internal use)
+    pub(crate) fn from_unique_ptr(inner: UniquePtr<ffi::PointCloud_PointXYZI>) -> Self {
+        Self { inner }
+    }
+}
+
+impl Default for PointCloudXYZI {
+    fn default() -> Self {
+        Self::new().expect("Failed to create default PointCloudXYZI")
+    }
+}
+
+impl std::fmt::Debug for PointCloudXYZI {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("PointCloudXYZI")
             .field("size", &self.size())
             .field("empty", &self.empty())
             .finish()

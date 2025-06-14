@@ -4,6 +4,7 @@
 //! For safe, idiomatic Rust APIs, use the `pcl` crate instead.
 
 pub mod common;
+pub mod io;
 pub mod octree;
 pub mod search;
 
@@ -27,6 +28,8 @@ pub mod ffi {
         #[namespace = "pcl"]
         type PointCloud_PointXYZ;
         #[namespace = "pcl"]
+        type PointCloud_PointXYZI;
+        #[namespace = "pcl"]
         type PointCloud_PointXYZRGB;
 
         // Search types
@@ -43,22 +46,31 @@ pub mod ffi {
 
         // Point cloud functions
         fn new_point_cloud_xyz() -> UniquePtr<PointCloud_PointXYZ>;
+        fn new_point_cloud_xyzi() -> UniquePtr<PointCloud_PointXYZI>;
         fn new_point_cloud_xyzrgb() -> UniquePtr<PointCloud_PointXYZRGB>;
         fn size(cloud: &PointCloud_PointXYZ) -> usize;
+        fn size_xyzi(cloud: &PointCloud_PointXYZI) -> usize;
         fn size_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> usize;
         fn clear(cloud: Pin<&mut PointCloud_PointXYZ>);
+        fn clear_xyzi(cloud: Pin<&mut PointCloud_PointXYZI>);
         fn clear_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>);
         fn empty(cloud: &PointCloud_PointXYZ) -> bool;
+        fn empty_xyzi(cloud: &PointCloud_PointXYZI) -> bool;
         fn empty_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> bool;
         fn reserve_xyz(cloud: Pin<&mut PointCloud_PointXYZ>, n: usize);
+        fn reserve_xyzi(cloud: Pin<&mut PointCloud_PointXYZI>, n: usize);
         fn reserve_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>, n: usize);
         fn resize_xyz(cloud: Pin<&mut PointCloud_PointXYZ>, n: usize);
+        fn resize_xyzi(cloud: Pin<&mut PointCloud_PointXYZI>, n: usize);
         fn resize_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>, n: usize);
         fn width(cloud: &PointCloud_PointXYZ) -> u32;
         fn height(cloud: &PointCloud_PointXYZ) -> u32;
+        fn width_xyzi(cloud: &PointCloud_PointXYZI) -> u32;
+        fn height_xyzi(cloud: &PointCloud_PointXYZI) -> u32;
         fn width_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> u32;
         fn height_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> u32;
         fn is_dense(cloud: &PointCloud_PointXYZ) -> bool;
+        fn is_dense_xyzi(cloud: &PointCloud_PointXYZI) -> bool;
         fn is_dense_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> bool;
 
         // Point field access functions
@@ -149,6 +161,61 @@ pub mod ffi {
             octree: Pin<&mut OctreePointCloudVoxelCentroid_PointXYZ>,
         ) -> u32;
         fn delete_tree_voxel_xyz(octree: Pin<&mut OctreePointCloudVoxelCentroid_PointXYZ>);
+
+        // I/O functions
+        // PCD I/O functions for PointXYZ
+        fn load_pcd_file_xyz(file_name: &str, cloud: Pin<&mut PointCloud_PointXYZ>) -> i32;
+        fn save_pcd_file_xyz(file_name: &str, cloud: &PointCloud_PointXYZ, binary: bool) -> i32;
+        fn save_pcd_file_ascii_xyz(file_name: &str, cloud: &PointCloud_PointXYZ) -> i32;
+        fn save_pcd_file_binary_xyz(file_name: &str, cloud: &PointCloud_PointXYZ) -> i32;
+        fn save_pcd_file_binary_compressed_xyz(file_name: &str, cloud: &PointCloud_PointXYZ)
+        -> i32;
+
+        // PCD I/O functions for PointXYZI
+        fn load_pcd_file_xyzi(file_name: &str, cloud: Pin<&mut PointCloud_PointXYZI>) -> i32;
+        fn save_pcd_file_xyzi(file_name: &str, cloud: &PointCloud_PointXYZI, binary: bool) -> i32;
+        fn save_pcd_file_ascii_xyzi(file_name: &str, cloud: &PointCloud_PointXYZI) -> i32;
+        fn save_pcd_file_binary_xyzi(file_name: &str, cloud: &PointCloud_PointXYZI) -> i32;
+        fn save_pcd_file_binary_compressed_xyzi(
+            file_name: &str,
+            cloud: &PointCloud_PointXYZI,
+        ) -> i32;
+
+        // PCD I/O functions for PointXYZRGB
+        fn load_pcd_file_xyzrgb(file_name: &str, cloud: Pin<&mut PointCloud_PointXYZRGB>) -> i32;
+        fn save_pcd_file_xyzrgb(
+            file_name: &str,
+            cloud: &PointCloud_PointXYZRGB,
+            binary: bool,
+        ) -> i32;
+        fn save_pcd_file_ascii_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
+        fn save_pcd_file_binary_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
+        fn save_pcd_file_binary_compressed_xyzrgb(
+            file_name: &str,
+            cloud: &PointCloud_PointXYZRGB,
+        ) -> i32;
+
+        // PLY I/O functions for PointXYZ
+        fn load_ply_file_xyz(file_name: &str, cloud: Pin<&mut PointCloud_PointXYZ>) -> i32;
+        fn save_ply_file_xyz(file_name: &str, cloud: &PointCloud_PointXYZ, binary: bool) -> i32;
+        fn save_ply_file_ascii_xyz(file_name: &str, cloud: &PointCloud_PointXYZ) -> i32;
+        fn save_ply_file_binary_xyz(file_name: &str, cloud: &PointCloud_PointXYZ) -> i32;
+
+        // PLY I/O functions for PointXYZI
+        fn load_ply_file_xyzi(file_name: &str, cloud: Pin<&mut PointCloud_PointXYZI>) -> i32;
+        fn save_ply_file_xyzi(file_name: &str, cloud: &PointCloud_PointXYZI, binary: bool) -> i32;
+        fn save_ply_file_ascii_xyzi(file_name: &str, cloud: &PointCloud_PointXYZI) -> i32;
+        fn save_ply_file_binary_xyzi(file_name: &str, cloud: &PointCloud_PointXYZI) -> i32;
+
+        // PLY I/O functions for PointXYZRGB
+        fn load_ply_file_xyzrgb(file_name: &str, cloud: Pin<&mut PointCloud_PointXYZRGB>) -> i32;
+        fn save_ply_file_xyzrgb(
+            file_name: &str,
+            cloud: &PointCloud_PointXYZRGB,
+            binary: bool,
+        ) -> i32;
+        fn save_ply_file_ascii_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
+        fn save_ply_file_binary_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
     }
 }
 
@@ -157,6 +224,7 @@ pub type PointXYZ = ffi::PointXYZ;
 pub type PointXYZI = ffi::PointXYZI;
 pub type PointXYZRGB = ffi::PointXYZRGB;
 pub type PointCloudXYZ = ffi::PointCloud_PointXYZ;
+pub type PointCloudXYZI = ffi::PointCloud_PointXYZI;
 pub type PointCloudXYZRGB = ffi::PointCloud_PointXYZRGB;
 pub type KdTreeXYZ = ffi::KdTree_PointXYZ;
 pub type KdTreeXYZRGB = ffi::KdTree_PointXYZRGB;

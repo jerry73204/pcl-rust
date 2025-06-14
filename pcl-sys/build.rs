@@ -16,16 +16,18 @@ fn main() {
         println!("cargo:include=/usr/include");
     }
 
-    // Link additional PCL libraries needed for search and octree functionality
+    // Link additional PCL libraries needed for search, octree, and I/O functionality
     println!("cargo:rustc-link-lib=pcl_search");
     println!("cargo:rustc-link-lib=pcl_octree");
+    println!("cargo:rustc-link-lib=pcl_io");
 
     // Build cxx bridge
     let mut build = cxx_build::bridge("src/lib.rs");
 
-    // Add PCL include paths
+    // Add PCL include paths and source files
     build
         .file("cxx/common.cpp")
+        .file("cxx/io.cpp")
         .include(".") // For our cxx/types.h
         .include("/usr/include/pcl-1.12")
         .include("/usr/include/eigen3")
