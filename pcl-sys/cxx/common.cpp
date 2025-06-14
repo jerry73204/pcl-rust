@@ -168,7 +168,8 @@ void set_epsilon_xyz(pcl::search::KdTree<pcl::PointXYZ> &searcher,
   searcher.setEpsilon(epsilon);
 }
 
-float get_epsilon_xyzrgb(const pcl::search::KdTree<pcl::PointXYZRGB> &searcher) {
+float get_epsilon_xyzrgb(
+    const pcl::search::KdTree<pcl::PointXYZRGB> &searcher) {
   return searcher.getEpsilon();
 }
 
@@ -269,4 +270,52 @@ get_leaf_count(pcl::octree::OctreePointCloudSearch<pcl::PointXYZ> &octree) {
 size_t
 get_branch_count(pcl::octree::OctreePointCloudSearch<pcl::PointXYZ> &octree) {
   return octree.getBranchCount();
+}
+
+// OctreeVoxelCentroid functions
+void set_input_cloud_voxel_centroid_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid<pcl::PointXYZ> &octree,
+    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  octree.setInputCloud(cloud.makeShared());
+}
+
+void add_points_from_input_cloud_voxel_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid<pcl::PointXYZ> &octree) {
+  octree.addPointsFromInputCloud();
+}
+
+std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>> get_voxel_centroids_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid<pcl::PointXYZ> &octree) {
+  auto cloud = std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
+
+  // Get voxel centroids
+  pcl::octree::OctreePointCloudVoxelCentroid<pcl::PointXYZ>::AlignedPointTVector
+      centroids;
+  octree.getVoxelCentroids(centroids);
+
+  // Convert to point cloud
+  cloud->points.resize(centroids.size());
+  for (size_t i = 0; i < centroids.size(); ++i) {
+    cloud->points[i] = centroids[i];
+  }
+  cloud->width = centroids.size();
+  cloud->height = 1;
+  cloud->is_dense = true;
+
+  return cloud;
+}
+
+double get_resolution_voxel_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid<pcl::PointXYZ> &octree) {
+  return octree.getResolution();
+}
+
+uint32_t get_tree_depth_voxel_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid<pcl::PointXYZ> &octree) {
+  return octree.getTreeDepth();
+}
+
+void delete_tree_voxel_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid<pcl::PointXYZ> &octree) {
+  octree.deleteTree();
 }

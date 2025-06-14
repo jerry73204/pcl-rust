@@ -70,6 +70,11 @@ impl PointCloudXYZ {
     pub fn as_raw(&self) -> &ffi::PointCloud_PointXYZ {
         &self.inner
     }
+
+    /// Create from a UniquePtr (internal use)
+    pub(crate) fn from_unique_ptr(inner: UniquePtr<ffi::PointCloud_PointXYZ>) -> Self {
+        Self { inner }
+    }
 }
 
 impl Default for PointCloudXYZ {

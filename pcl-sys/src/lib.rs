@@ -130,6 +130,25 @@ pub mod ffi {
         fn get_tree_depth(octree: Pin<&mut OctreePointCloudSearch_PointXYZ>) -> u32;
         fn get_leaf_count(octree: Pin<&mut OctreePointCloudSearch_PointXYZ>) -> usize;
         fn get_branch_count(octree: Pin<&mut OctreePointCloudSearch_PointXYZ>) -> usize;
+
+        // OctreeVoxelCentroid functions
+        fn set_input_cloud_voxel_centroid_xyz(
+            octree: Pin<&mut OctreePointCloudVoxelCentroid_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn add_points_from_input_cloud_voxel_xyz(
+            octree: Pin<&mut OctreePointCloudVoxelCentroid_PointXYZ>,
+        );
+        fn get_voxel_centroids_xyz(
+            octree: Pin<&mut OctreePointCloudVoxelCentroid_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+        fn get_resolution_voxel_xyz(
+            octree: Pin<&mut OctreePointCloudVoxelCentroid_PointXYZ>,
+        ) -> f64;
+        fn get_tree_depth_voxel_xyz(
+            octree: Pin<&mut OctreePointCloudVoxelCentroid_PointXYZ>,
+        ) -> u32;
+        fn delete_tree_voxel_xyz(octree: Pin<&mut OctreePointCloudVoxelCentroid_PointXYZ>);
     }
 }
 

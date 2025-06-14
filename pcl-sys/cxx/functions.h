@@ -86,3 +86,18 @@ double get_resolution(pcl::octree::OctreePointCloudSearch_PointXYZ &octree);
 uint32_t get_tree_depth(pcl::octree::OctreePointCloudSearch_PointXYZ &octree);
 size_t get_leaf_count(pcl::octree::OctreePointCloudSearch_PointXYZ &octree);
 size_t get_branch_count(pcl::octree::OctreePointCloudSearch_PointXYZ &octree);
+
+// OctreeVoxelCentroid functions
+void set_input_cloud_voxel_centroid_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid_PointXYZ &octree,
+    const pcl::PointCloud_PointXYZ &cloud);
+void add_points_from_input_cloud_voxel_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid_PointXYZ &octree);
+std::unique_ptr<pcl::PointCloud_PointXYZ> get_voxel_centroids_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid_PointXYZ &octree);
+double get_resolution_voxel_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid_PointXYZ &octree);
+uint32_t get_tree_depth_voxel_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid_PointXYZ &octree);
+void delete_tree_voxel_xyz(
+    pcl::octree::OctreePointCloudVoxelCentroid_PointXYZ &octree);
