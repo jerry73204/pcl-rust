@@ -14,13 +14,13 @@
 
 pub mod common;
 pub mod error;
+pub mod filters;
 pub mod io;
 pub mod octree;
 pub mod search;
 
 // Temporarily commented out modules until FFI is fully implemented
 // pub mod features;
-// pub mod filters;
 // pub mod registration;
 // pub mod sample_consensus;
 // pub mod segmentation;
@@ -39,12 +39,16 @@ pub use io::{
 pub use octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
 pub use search::{KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB, SearchMethod};
 
+pub use filters::{
+    PassThroughXYZ, PassThroughXYZRGB, RadiusOutlierRemovalXYZ, RadiusOutlierRemovalXYZRGB,
+    StatisticalOutlierRemovalXYZ, StatisticalOutlierRemovalXYZRGB, VoxelGridXYZ, VoxelGridXYZRGB,
+};
+
 // Temporarily commented out re-exports until FFI is fully implemented
 // pub use features::{
 //     FpfhEstimation, FpfhEstimationOmp, FpfhSignature, Normal, NormalCloud, NormalEstimation,
 //     NormalEstimationOmp, PfhEstimation, PfhSignature,
 // };
-// pub use filters::{FilterXYZ, FilterXYZRGB, PassThroughXYZ, PassThroughXYZRGB};
 // pub use registration::{IcpXYZ, IcpXYZRGB, Transform3D, TransformationMatrix};
 // pub use sample_consensus::{
 //     RansacPlaneXYZ, RansacPlaneXYZRGB, RansacSphereXYZ, RansacSphereXYZRGB,

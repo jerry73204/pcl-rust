@@ -5,9 +5,23 @@
 //! error handling.
 
 pub mod pass_through;
+pub mod radius_outlier_removal;
+pub mod statistical_outlier_removal;
+pub mod voxel_grid;
 
 pub use pass_through::{
     PassThroughXYZ, PassThroughXYZBuilder, PassThroughXYZRGB, PassThroughXYZRGBBuilder,
+};
+pub use radius_outlier_removal::{
+    RadiusOutlierRemovalXYZ, RadiusOutlierRemovalXYZBuilder, RadiusOutlierRemovalXYZRGB,
+    RadiusOutlierRemovalXYZRGBBuilder,
+};
+pub use statistical_outlier_removal::{
+    StatisticalOutlierRemovalXYZ, StatisticalOutlierRemovalXYZBuilder,
+    StatisticalOutlierRemovalXYZRGB, StatisticalOutlierRemovalXYZRGBBuilder,
+};
+pub use voxel_grid::{
+    VoxelGridXYZ, VoxelGridXYZBuilder, VoxelGridXYZRGB, VoxelGridXYZRGBBuilder,
 };
 
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB};

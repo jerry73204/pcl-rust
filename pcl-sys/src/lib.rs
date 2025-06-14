@@ -262,5 +262,170 @@ pub mod ffi {
         ) -> i32;
         fn save_ply_file_ascii_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
         fn save_ply_file_binary_xyzrgb(file_name: &str, cloud: &PointCloud_PointXYZRGB) -> i32;
+
+        // Filter types
+        #[namespace = "pcl"]
+        type PassThrough_PointXYZ;
+        #[namespace = "pcl"]
+        type PassThrough_PointXYZRGB;
+        #[namespace = "pcl"]
+        type VoxelGrid_PointXYZ;
+        #[namespace = "pcl"]
+        type VoxelGrid_PointXYZRGB;
+        #[namespace = "pcl"]
+        type StatisticalOutlierRemoval_PointXYZ;
+        #[namespace = "pcl"]
+        type StatisticalOutlierRemoval_PointXYZRGB;
+        #[namespace = "pcl"]
+        type RadiusOutlierRemoval_PointXYZ;
+        #[namespace = "pcl"]
+        type RadiusOutlierRemoval_PointXYZRGB;
+
+        // Filter functions - PassThrough PointXYZ
+        fn new_pass_through_xyz() -> UniquePtr<PassThrough_PointXYZ>;
+        fn set_input_cloud_pass_xyz(
+            filter: Pin<&mut PassThrough_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_filter_field_name_xyz(filter: Pin<&mut PassThrough_PointXYZ>, field_name: &str);
+        fn get_filter_field_name_xyz(filter: &PassThrough_PointXYZ) -> String;
+        fn set_filter_limits_xyz(filter: Pin<&mut PassThrough_PointXYZ>, min: f32, max: f32);
+        fn set_filter_limits_negative_xyz(filter: Pin<&mut PassThrough_PointXYZ>, negative: bool);
+        fn get_filter_limits_negative_xyz(filter: &PassThrough_PointXYZ) -> bool;
+        fn set_keep_organized_xyz(filter: Pin<&mut PassThrough_PointXYZ>, keep_organized: bool);
+        fn get_keep_organized_xyz(filter: &PassThrough_PointXYZ) -> bool;
+        fn filter_pass_xyz(
+            filter: Pin<&mut PassThrough_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // Filter functions - PassThrough PointXYZRGB
+        fn new_pass_through_xyzrgb() -> UniquePtr<PassThrough_PointXYZRGB>;
+        fn set_input_cloud_pass_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_filter_field_name_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+            field_name: &str,
+        );
+        fn get_filter_field_name_xyzrgb(filter: &PassThrough_PointXYZRGB) -> String;
+        fn set_filter_limits_xyzrgb(filter: Pin<&mut PassThrough_PointXYZRGB>, min: f32, max: f32);
+        fn set_filter_limits_negative_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+            negative: bool,
+        );
+        fn get_filter_limits_negative_xyzrgb(filter: &PassThrough_PointXYZRGB) -> bool;
+        fn set_keep_organized_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+            keep_organized: bool,
+        );
+        fn get_keep_organized_xyzrgb(filter: &PassThrough_PointXYZRGB) -> bool;
+        fn filter_pass_xyzrgb(
+            filter: Pin<&mut PassThrough_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // Filter functions - VoxelGrid PointXYZ
+        fn new_voxel_grid_xyz() -> UniquePtr<VoxelGrid_PointXYZ>;
+        fn set_input_cloud_voxel_xyz(
+            filter: Pin<&mut VoxelGrid_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_leaf_size_xyz(filter: Pin<&mut VoxelGrid_PointXYZ>, lx: f32, ly: f32, lz: f32);
+        fn filter_voxel_xyz(filter: Pin<&mut VoxelGrid_PointXYZ>)
+        -> UniquePtr<PointCloud_PointXYZ>;
+
+        // Filter functions - VoxelGrid PointXYZRGB
+        fn new_voxel_grid_xyzrgb() -> UniquePtr<VoxelGrid_PointXYZRGB>;
+        fn set_input_cloud_voxel_xyzrgb(
+            filter: Pin<&mut VoxelGrid_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_leaf_size_xyzrgb(filter: Pin<&mut VoxelGrid_PointXYZRGB>, lx: f32, ly: f32, lz: f32);
+        fn filter_voxel_xyzrgb(
+            filter: Pin<&mut VoxelGrid_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // Filter functions - StatisticalOutlierRemoval PointXYZ
+        fn new_statistical_outlier_removal_xyz() -> UniquePtr<StatisticalOutlierRemoval_PointXYZ>;
+        fn set_input_cloud_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_mean_k_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+            mean_k: i32,
+        );
+        fn set_std_dev_mul_thresh_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+            stddev_mult: f64,
+        );
+        fn set_negative_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+            negative: bool,
+        );
+        fn filter_statistical_xyz(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // Filter functions - StatisticalOutlierRemoval PointXYZRGB
+        fn new_statistical_outlier_removal_xyzrgb()
+        -> UniquePtr<StatisticalOutlierRemoval_PointXYZRGB>;
+        fn set_input_cloud_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_mean_k_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+            mean_k: i32,
+        );
+        fn set_std_dev_mul_thresh_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+            stddev_mult: f64,
+        );
+        fn set_negative_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+            negative: bool,
+        );
+        fn filter_statistical_xyzrgb(
+            filter: Pin<&mut StatisticalOutlierRemoval_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // Filter functions - RadiusOutlierRemoval PointXYZ
+        fn new_radius_outlier_removal_xyz() -> UniquePtr<RadiusOutlierRemoval_PointXYZ>;
+        fn set_input_cloud_radius_xyz(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        fn set_radius_search_xyz(filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>, radius: f64);
+        fn set_min_neighbors_in_radius_xyz(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>,
+            min_neighbors: i32,
+        );
+        fn set_negative_radius_xyz(filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>, negative: bool);
+        fn filter_radius_xyz(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // Filter functions - RadiusOutlierRemoval PointXYZRGB
+        fn new_radius_outlier_removal_xyzrgb() -> UniquePtr<RadiusOutlierRemoval_PointXYZRGB>;
+        fn set_input_cloud_radius_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        fn set_radius_search_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
+            radius: f64,
+        );
+        fn set_min_neighbors_in_radius_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
+            min_neighbors: i32,
+        );
+        fn set_negative_radius_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
+            negative: bool,
+        );
+        fn filter_radius_xyzrgb(
+            filter: Pin<&mut RadiusOutlierRemoval_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
     }
 }

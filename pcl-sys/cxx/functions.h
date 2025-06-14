@@ -594,3 +594,118 @@ int32_t get_max_cluster_size_conditional_euclidean_xyz(
     pcl::ConditionalEuclideanClustering_PointXYZ &cec);
 rust::Vec<int32_t> extract_conditional_euclidean_clusters_xyz(
     pcl::ConditionalEuclideanClustering_PointXYZ &cec);
+
+// Filter functions - PassThrough PointXYZ
+std::unique_ptr<pcl::PassThrough_PointXYZ> new_pass_through_xyz();
+void set_input_cloud_pass_xyz(pcl::PassThrough_PointXYZ &filter,
+                              const pcl::PointCloud_PointXYZ &cloud);
+void set_filter_field_name_xyz(pcl::PassThrough_PointXYZ &filter,
+                               rust::Str field_name);
+rust::String get_filter_field_name_xyz(const pcl::PassThrough_PointXYZ &filter);
+void set_filter_limits_xyz(pcl::PassThrough_PointXYZ &filter, float min,
+                           float max);
+void set_filter_limits_negative_xyz(pcl::PassThrough_PointXYZ &filter,
+                                    bool negative);
+bool get_filter_limits_negative_xyz(const pcl::PassThrough_PointXYZ &filter);
+void set_keep_organized_xyz(pcl::PassThrough_PointXYZ &filter,
+                            bool keep_organized);
+bool get_keep_organized_xyz(const pcl::PassThrough_PointXYZ &filter);
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+filter_pass_xyz(pcl::PassThrough_PointXYZ &filter);
+
+// Filter functions - PassThrough PointXYZRGB
+std::unique_ptr<pcl::PassThrough_PointXYZRGB> new_pass_through_xyzrgb();
+void set_input_cloud_pass_xyzrgb(pcl::PassThrough_PointXYZRGB &filter,
+                                 const pcl::PointCloud_PointXYZRGB &cloud);
+void set_filter_field_name_xyzrgb(pcl::PassThrough_PointXYZRGB &filter,
+                                  rust::Str field_name);
+rust::String
+get_filter_field_name_xyzrgb(const pcl::PassThrough_PointXYZRGB &filter);
+void set_filter_limits_xyzrgb(pcl::PassThrough_PointXYZRGB &filter, float min,
+                              float max);
+void set_filter_limits_negative_xyzrgb(pcl::PassThrough_PointXYZRGB &filter,
+                                       bool negative);
+bool get_filter_limits_negative_xyzrgb(
+    const pcl::PassThrough_PointXYZRGB &filter);
+void set_keep_organized_xyzrgb(pcl::PassThrough_PointXYZRGB &filter,
+                               bool keep_organized);
+bool get_keep_organized_xyzrgb(const pcl::PassThrough_PointXYZRGB &filter);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB>
+filter_pass_xyzrgb(pcl::PassThrough_PointXYZRGB &filter);
+
+// Filter functions - VoxelGrid PointXYZ
+std::unique_ptr<pcl::VoxelGrid_PointXYZ> new_voxel_grid_xyz();
+void set_input_cloud_voxel_xyz(pcl::VoxelGrid_PointXYZ &filter,
+                               const pcl::PointCloud_PointXYZ &cloud);
+void set_leaf_size_xyz(pcl::VoxelGrid_PointXYZ &filter, float lx, float ly,
+                       float lz);
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+filter_voxel_xyz(pcl::VoxelGrid_PointXYZ &filter);
+
+// Filter functions - VoxelGrid PointXYZRGB
+std::unique_ptr<pcl::VoxelGrid_PointXYZRGB> new_voxel_grid_xyzrgb();
+void set_input_cloud_voxel_xyzrgb(pcl::VoxelGrid_PointXYZRGB &filter,
+                                  const pcl::PointCloud_PointXYZRGB &cloud);
+void set_leaf_size_xyzrgb(pcl::VoxelGrid_PointXYZRGB &filter, float lx,
+                          float ly, float lz);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB>
+filter_voxel_xyzrgb(pcl::VoxelGrid_PointXYZRGB &filter);
+
+// Filter functions - StatisticalOutlierRemoval PointXYZ
+std::unique_ptr<pcl::StatisticalOutlierRemoval_PointXYZ>
+new_statistical_outlier_removal_xyz();
+void set_input_cloud_statistical_xyz(
+    pcl::StatisticalOutlierRemoval_PointXYZ &filter,
+    const pcl::PointCloud_PointXYZ &cloud);
+void set_mean_k_statistical_xyz(pcl::StatisticalOutlierRemoval_PointXYZ &filter,
+                                int mean_k);
+void set_std_dev_mul_thresh_statistical_xyz(
+    pcl::StatisticalOutlierRemoval_PointXYZ &filter, double stddev_mult);
+void set_negative_statistical_xyz(
+    pcl::StatisticalOutlierRemoval_PointXYZ &filter, bool negative);
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+filter_statistical_xyz(pcl::StatisticalOutlierRemoval_PointXYZ &filter);
+
+// Filter functions - StatisticalOutlierRemoval PointXYZRGB
+std::unique_ptr<pcl::StatisticalOutlierRemoval_PointXYZRGB>
+new_statistical_outlier_removal_xyzrgb();
+void set_input_cloud_statistical_xyzrgb(
+    pcl::StatisticalOutlierRemoval_PointXYZRGB &filter,
+    const pcl::PointCloud_PointXYZRGB &cloud);
+void set_mean_k_statistical_xyzrgb(
+    pcl::StatisticalOutlierRemoval_PointXYZRGB &filter, int mean_k);
+void set_std_dev_mul_thresh_statistical_xyzrgb(
+    pcl::StatisticalOutlierRemoval_PointXYZRGB &filter, double stddev_mult);
+void set_negative_statistical_xyzrgb(
+    pcl::StatisticalOutlierRemoval_PointXYZRGB &filter, bool negative);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB>
+filter_statistical_xyzrgb(pcl::StatisticalOutlierRemoval_PointXYZRGB &filter);
+
+// Filter functions - RadiusOutlierRemoval PointXYZ
+std::unique_ptr<pcl::RadiusOutlierRemoval_PointXYZ>
+new_radius_outlier_removal_xyz();
+void set_input_cloud_radius_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter,
+                                const pcl::PointCloud_PointXYZ &cloud);
+void set_radius_search_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter,
+                           double radius);
+void set_min_neighbors_in_radius_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter,
+                                     int min_neighbors);
+void set_negative_radius_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter,
+                             bool negative);
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+filter_radius_xyz(pcl::RadiusOutlierRemoval_PointXYZ &filter);
+
+// Filter functions - RadiusOutlierRemoval PointXYZRGB
+std::unique_ptr<pcl::RadiusOutlierRemoval_PointXYZRGB>
+new_radius_outlier_removal_xyzrgb();
+void set_input_cloud_radius_xyzrgb(
+    pcl::RadiusOutlierRemoval_PointXYZRGB &filter,
+    const pcl::PointCloud_PointXYZRGB &cloud);
+void set_radius_search_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter,
+                              double radius);
+void set_min_neighbors_in_radius_xyzrgb(
+    pcl::RadiusOutlierRemoval_PointXYZRGB &filter, int min_neighbors);
+void set_negative_radius_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter,
+                                bool negative);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB>
+filter_radius_xyzrgb(pcl::RadiusOutlierRemoval_PointXYZRGB &filter);
