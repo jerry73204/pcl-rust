@@ -46,6 +46,42 @@ fn main() {
         .include("/usr/include/eigen3")
         .std("c++14");
 
+    // Enable ccache if available
+    if std::process::Command::new("ccache")
+        .arg("--version")
+        .output()
+        .is_ok()
+    {
+        unsafe {
+            std::env::set_var("CC", "ccache cc");
+            std::env::set_var("CXX", "ccache c++");
+        }
+        println!("cargo:warning=Using ccache for compilation caching");
+    }
+
+    // Enable parallel compilation
+    let num_cpus = std::thread::available_parallelism()
+        .map(|n| n.get())
+        .unwrap_or(1);
+
+    // Configure for parallel build
+    println!(
+        "cargo:warning=Using {} parallel jobs for compilation",
+        num_cpus
+    );
+
+    // Optimization flags for faster compilation
+    build
+        .flag_if_supported("-O2") // Optimize for speed
+        .flag_if_supported("-march=native") // Use native CPU features
+        .flag_if_supported("-pipe") // Use pipes instead of temp files
+        .flag_if_supported("-fno-semantic-interposition") // Better optimization
+        .warnings(false); // Disable warnings for faster compilation
+
+    // Note: Precompiled headers (pch.h) exist but are not currently used
+    // because cxx-build doesn't easily support PCH compilation.
+    // The ccache and parallel compilation provide the main speed benefits.
+
     // Compile the bridge
     build.compile("pcl-sys");
 }
