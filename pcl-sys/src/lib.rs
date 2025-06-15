@@ -641,6 +641,14 @@ pub mod ffi {
         type OrganizedFastMesh_PointXYZ;
         #[namespace = "pcl"]
         type PolygonMesh;
+        #[namespace = "pcl"]
+        type PointCloud_PointNormal;
+        #[namespace = "pcl"]
+        type Poisson_PointNormal;
+        #[namespace = "pcl"]
+        type GreedyProjectionTriangulation_PointNormal;
+        #[namespace = "pcl"]
+        type MovingLeastSquares_PointXYZ_PointNormal;
 
         // Marching Cubes Hoppe reconstruction functions
         #[cfg(feature = "surface")]
@@ -750,6 +758,220 @@ pub mod ffi {
         fn save_polygon_mesh_obj(mesh: &PolygonMesh, filename: &str) -> i32;
         #[cfg(feature = "surface")]
         fn save_polygon_mesh_vtk(mesh: &PolygonMesh, filename: &str) -> i32;
+
+        // Poisson Surface Reconstruction
+        #[cfg(feature = "surface")]
+        fn new_poisson() -> UniquePtr<Poisson_PointNormal>;
+        #[cfg(feature = "surface")]
+        fn set_depth_poisson(poisson: Pin<&mut Poisson_PointNormal>, depth: i32);
+        #[cfg(feature = "surface")]
+        fn get_depth_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> i32;
+        #[cfg(feature = "surface")]
+        fn set_min_depth_poisson(poisson: Pin<&mut Poisson_PointNormal>, min_depth: i32);
+        #[cfg(feature = "surface")]
+        fn get_min_depth_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> i32;
+        #[cfg(feature = "surface")]
+        fn set_point_weight_poisson(poisson: Pin<&mut Poisson_PointNormal>, weight: f32);
+        #[cfg(feature = "surface")]
+        fn get_point_weight_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> f32;
+        #[cfg(feature = "surface")]
+        fn set_scale_poisson(poisson: Pin<&mut Poisson_PointNormal>, scale: f32);
+        #[cfg(feature = "surface")]
+        fn get_scale_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> f32;
+        #[cfg(feature = "surface")]
+        fn set_solver_divide_poisson(poisson: Pin<&mut Poisson_PointNormal>, solver_divide: i32);
+        #[cfg(feature = "surface")]
+        fn get_solver_divide_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> i32;
+        #[cfg(feature = "surface")]
+        fn set_iso_divide_poisson(poisson: Pin<&mut Poisson_PointNormal>, iso_divide: i32);
+        #[cfg(feature = "surface")]
+        fn get_iso_divide_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> i32;
+        #[cfg(feature = "surface")]
+        fn set_samples_per_node_poisson(
+            poisson: Pin<&mut Poisson_PointNormal>,
+            samples_per_node: f32,
+        );
+        #[cfg(feature = "surface")]
+        fn get_samples_per_node_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> f32;
+        #[cfg(feature = "surface")]
+        fn set_confidence_poisson(poisson: Pin<&mut Poisson_PointNormal>, confidence: bool);
+        #[cfg(feature = "surface")]
+        fn get_confidence_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> bool;
+        #[cfg(feature = "surface")]
+        fn set_output_polygons_poisson(
+            poisson: Pin<&mut Poisson_PointNormal>,
+            output_polygons: bool,
+        );
+        #[cfg(feature = "surface")]
+        fn get_output_polygons_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> bool;
+        #[cfg(feature = "surface")]
+        fn set_degree_poisson(poisson: Pin<&mut Poisson_PointNormal>, degree: i32);
+        #[cfg(feature = "surface")]
+        fn get_degree_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> i32;
+        #[cfg(feature = "surface")]
+        fn set_manifold_poisson(poisson: Pin<&mut Poisson_PointNormal>, manifold: bool);
+        #[cfg(feature = "surface")]
+        fn get_manifold_poisson(poisson: Pin<&mut Poisson_PointNormal>) -> bool;
+        #[cfg(feature = "surface")]
+        fn set_input_cloud_poisson(
+            poisson: Pin<&mut Poisson_PointNormal>,
+            cloud: &PointCloud_PointNormal,
+        );
+        #[cfg(feature = "surface")]
+        fn reconstruct_mesh_poisson(
+            poisson: Pin<&mut Poisson_PointNormal>,
+            mesh: Pin<&mut PolygonMesh>,
+        ) -> i32;
+
+        // Greedy Projection Triangulation
+        #[cfg(feature = "surface")]
+        fn new_greedy_projection_triangulation()
+        -> UniquePtr<GreedyProjectionTriangulation_PointNormal>;
+        #[cfg(feature = "surface")]
+        fn set_mu_greedy(gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>, mu: f64);
+        #[cfg(feature = "surface")]
+        fn get_mu_greedy(gpt: &GreedyProjectionTriangulation_PointNormal) -> f64;
+        #[cfg(feature = "surface")]
+        fn set_search_radius_greedy(
+            gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>,
+            radius: f64,
+        );
+        #[cfg(feature = "surface")]
+        fn get_search_radius_greedy(gpt: &GreedyProjectionTriangulation_PointNormal) -> f64;
+        #[cfg(feature = "surface")]
+        fn set_minimum_angle_greedy(
+            gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>,
+            angle: f64,
+        );
+        #[cfg(feature = "surface")]
+        fn get_minimum_angle_greedy(gpt: &GreedyProjectionTriangulation_PointNormal) -> f64;
+        #[cfg(feature = "surface")]
+        fn set_maximum_angle_greedy(
+            gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>,
+            angle: f64,
+        );
+        #[cfg(feature = "surface")]
+        fn get_maximum_angle_greedy(gpt: &GreedyProjectionTriangulation_PointNormal) -> f64;
+        #[cfg(feature = "surface")]
+        fn set_maximum_nearest_neighbors_greedy(
+            gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>,
+            max_nn: i32,
+        );
+        #[cfg(feature = "surface")]
+        fn get_maximum_nearest_neighbors_greedy(
+            gpt: &GreedyProjectionTriangulation_PointNormal,
+        ) -> i32;
+        #[cfg(feature = "surface")]
+        fn set_maximum_surface_angle_greedy(
+            gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>,
+            angle: f64,
+        );
+        #[cfg(feature = "surface")]
+        fn get_maximum_surface_angle_greedy(gpt: &GreedyProjectionTriangulation_PointNormal)
+        -> f64;
+        #[cfg(feature = "surface")]
+        fn set_normal_consistency_greedy(
+            gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>,
+            consistent: bool,
+        );
+        #[cfg(feature = "surface")]
+        fn get_normal_consistency_greedy(gpt: &GreedyProjectionTriangulation_PointNormal) -> bool;
+        #[cfg(feature = "surface")]
+        fn set_consistent_vertex_ordering_greedy(
+            gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>,
+            consistent: bool,
+        );
+        #[cfg(feature = "surface")]
+        fn get_consistent_vertex_ordering_greedy(
+            gpt: &GreedyProjectionTriangulation_PointNormal,
+        ) -> bool;
+        #[cfg(feature = "surface")]
+        fn set_input_cloud_greedy(
+            gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>,
+            cloud: &PointCloud_PointNormal,
+        );
+        #[cfg(feature = "surface")]
+        fn reconstruct_mesh_greedy(
+            gpt: Pin<&mut GreedyProjectionTriangulation_PointNormal>,
+            mesh: Pin<&mut PolygonMesh>,
+        ) -> i32;
+
+        // Moving Least Squares
+        #[cfg(feature = "surface")]
+        fn new_moving_least_squares() -> UniquePtr<MovingLeastSquares_PointXYZ_PointNormal>;
+        #[cfg(feature = "surface")]
+        fn set_search_radius_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            radius: f64,
+        );
+        #[cfg(feature = "surface")]
+        fn get_search_radius_mls(mls: &MovingLeastSquares_PointXYZ_PointNormal) -> f64;
+        #[cfg(feature = "surface")]
+        fn set_polynomial_order_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            order: i32,
+        );
+        #[cfg(feature = "surface")]
+        fn get_polynomial_order_mls(mls: &MovingLeastSquares_PointXYZ_PointNormal) -> i32;
+        #[cfg(feature = "surface")]
+        fn set_sqr_gauss_param_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            sqr_gauss_param: f64,
+        );
+        #[cfg(feature = "surface")]
+        fn get_sqr_gauss_param_mls(mls: &MovingLeastSquares_PointXYZ_PointNormal) -> f64;
+        #[cfg(feature = "surface")]
+        fn set_compute_normals_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            compute_normals: bool,
+        );
+        #[cfg(feature = "surface")]
+        fn set_upsample_method_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            method: i32,
+        );
+        #[cfg(feature = "surface")]
+        fn set_upsampling_radius_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            radius: f64,
+        );
+        #[cfg(feature = "surface")]
+        fn get_upsampling_radius_mls(mls: &MovingLeastSquares_PointXYZ_PointNormal) -> f64;
+        #[cfg(feature = "surface")]
+        fn set_upsampling_step_size_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            step_size: f64,
+        );
+        #[cfg(feature = "surface")]
+        fn get_upsampling_step_size_mls(mls: &MovingLeastSquares_PointXYZ_PointNormal) -> f64;
+        #[cfg(feature = "surface")]
+        fn set_desired_num_points_in_radius_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            num_points: i32,
+        );
+        #[cfg(feature = "surface")]
+        fn set_dilation_voxel_size_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            voxel_size: f32,
+        );
+        #[cfg(feature = "surface")]
+        fn get_dilation_voxel_size_mls(mls: &MovingLeastSquares_PointXYZ_PointNormal) -> f32;
+        #[cfg(feature = "surface")]
+        fn set_dilation_iterations_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            iterations: i32,
+        );
+        #[cfg(feature = "surface")]
+        fn get_dilation_iterations_mls(mls: &MovingLeastSquares_PointXYZ_PointNormal) -> i32;
+        #[cfg(feature = "surface")]
+        fn set_input_cloud_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "surface")]
+        fn process_mls(
+            mls: Pin<&mut MovingLeastSquares_PointXYZ_PointNormal>,
+        ) -> UniquePtr<PointCloud_PointNormal>;
 
         // Visualization types - always available but functions conditionally compiled
         #[namespace = "pcl::visualization"]

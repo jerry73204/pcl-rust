@@ -791,6 +791,122 @@ int32_t save_polygon_mesh_ply(const pcl::PolygonMesh &mesh, rust::Str filename);
 int32_t save_polygon_mesh_obj(const pcl::PolygonMesh &mesh, rust::Str filename);
 int32_t save_polygon_mesh_vtk(const pcl::PolygonMesh &mesh, rust::Str filename);
 
+// Poisson Surface Reconstruction
+std::unique_ptr<pcl::Poisson_PointNormal> new_poisson();
+void set_depth_poisson(pcl::Poisson_PointNormal &poisson, int32_t depth);
+int32_t get_depth_poisson(pcl::Poisson_PointNormal &poisson);
+void set_min_depth_poisson(pcl::Poisson_PointNormal &poisson,
+                           int32_t min_depth);
+int32_t get_min_depth_poisson(pcl::Poisson_PointNormal &poisson);
+void set_point_weight_poisson(pcl::Poisson_PointNormal &poisson, float weight);
+float get_point_weight_poisson(pcl::Poisson_PointNormal &poisson);
+void set_scale_poisson(pcl::Poisson_PointNormal &poisson, float scale);
+float get_scale_poisson(pcl::Poisson_PointNormal &poisson);
+void set_solver_divide_poisson(pcl::Poisson_PointNormal &poisson,
+                               int32_t solver_divide);
+int32_t get_solver_divide_poisson(pcl::Poisson_PointNormal &poisson);
+void set_iso_divide_poisson(pcl::Poisson_PointNormal &poisson,
+                            int32_t iso_divide);
+int32_t get_iso_divide_poisson(pcl::Poisson_PointNormal &poisson);
+void set_samples_per_node_poisson(pcl::Poisson_PointNormal &poisson,
+                                  float samples_per_node);
+float get_samples_per_node_poisson(pcl::Poisson_PointNormal &poisson);
+void set_confidence_poisson(pcl::Poisson_PointNormal &poisson, bool confidence);
+bool get_confidence_poisson(pcl::Poisson_PointNormal &poisson);
+void set_output_polygons_poisson(pcl::Poisson_PointNormal &poisson,
+                                 bool output_polygons);
+bool get_output_polygons_poisson(pcl::Poisson_PointNormal &poisson);
+void set_degree_poisson(pcl::Poisson_PointNormal &poisson, int32_t degree);
+int32_t get_degree_poisson(pcl::Poisson_PointNormal &poisson);
+void set_manifold_poisson(pcl::Poisson_PointNormal &poisson, bool manifold);
+bool get_manifold_poisson(pcl::Poisson_PointNormal &poisson);
+void set_input_cloud_poisson(pcl::Poisson_PointNormal &poisson,
+                             const pcl::PointCloud_PointNormal &cloud);
+int32_t reconstruct_mesh_poisson(pcl::Poisson_PointNormal &poisson,
+                                 pcl::PolygonMesh &mesh);
+
+// Greedy Projection Triangulation
+std::unique_ptr<pcl::GreedyProjectionTriangulation_PointNormal>
+new_greedy_projection_triangulation();
+void set_mu_greedy(pcl::GreedyProjectionTriangulation_PointNormal &gpt,
+                   double mu);
+double get_mu_greedy(const pcl::GreedyProjectionTriangulation_PointNormal &gpt);
+void set_search_radius_greedy(
+    pcl::GreedyProjectionTriangulation_PointNormal &gpt, double radius);
+double get_search_radius_greedy(
+    const pcl::GreedyProjectionTriangulation_PointNormal &gpt);
+void set_minimum_angle_greedy(
+    pcl::GreedyProjectionTriangulation_PointNormal &gpt, double angle);
+double get_minimum_angle_greedy(
+    const pcl::GreedyProjectionTriangulation_PointNormal &gpt);
+void set_maximum_angle_greedy(
+    pcl::GreedyProjectionTriangulation_PointNormal &gpt, double angle);
+double get_maximum_angle_greedy(
+    const pcl::GreedyProjectionTriangulation_PointNormal &gpt);
+void set_maximum_nearest_neighbors_greedy(
+    pcl::GreedyProjectionTriangulation_PointNormal &gpt, int32_t max_nn);
+int32_t get_maximum_nearest_neighbors_greedy(
+    const pcl::GreedyProjectionTriangulation_PointNormal &gpt);
+void set_maximum_surface_angle_greedy(
+    pcl::GreedyProjectionTriangulation_PointNormal &gpt, double angle);
+double get_maximum_surface_angle_greedy(
+    const pcl::GreedyProjectionTriangulation_PointNormal &gpt);
+void set_normal_consistency_greedy(
+    pcl::GreedyProjectionTriangulation_PointNormal &gpt, bool consistent);
+bool get_normal_consistency_greedy(
+    const pcl::GreedyProjectionTriangulation_PointNormal &gpt);
+void set_consistent_vertex_ordering_greedy(
+    pcl::GreedyProjectionTriangulation_PointNormal &gpt, bool consistent);
+bool get_consistent_vertex_ordering_greedy(
+    const pcl::GreedyProjectionTriangulation_PointNormal &gpt);
+void set_input_cloud_greedy(pcl::GreedyProjectionTriangulation_PointNormal &gpt,
+                            const pcl::PointCloud_PointNormal &cloud);
+int32_t
+reconstruct_mesh_greedy(pcl::GreedyProjectionTriangulation_PointNormal &gpt,
+                        pcl::PolygonMesh &mesh);
+
+// Moving Least Squares
+std::unique_ptr<pcl::MovingLeastSquares_PointXYZ_PointNormal>
+new_moving_least_squares();
+void set_search_radius_mls(pcl::MovingLeastSquares_PointXYZ_PointNormal &mls,
+                           double radius);
+double
+get_search_radius_mls(const pcl::MovingLeastSquares_PointXYZ_PointNormal &mls);
+void set_polynomial_order_mls(pcl::MovingLeastSquares_PointXYZ_PointNormal &mls,
+                              int32_t order);
+int32_t get_polynomial_order_mls(
+    const pcl::MovingLeastSquares_PointXYZ_PointNormal &mls);
+void set_sqr_gauss_param_mls(pcl::MovingLeastSquares_PointXYZ_PointNormal &mls,
+                             double sqr_gauss_param);
+double get_sqr_gauss_param_mls(
+    const pcl::MovingLeastSquares_PointXYZ_PointNormal &mls);
+void set_compute_normals_mls(pcl::MovingLeastSquares_PointXYZ_PointNormal &mls,
+                             bool compute_normals);
+void set_upsample_method_mls(pcl::MovingLeastSquares_PointXYZ_PointNormal &mls,
+                             int32_t method);
+void set_upsampling_radius_mls(
+    pcl::MovingLeastSquares_PointXYZ_PointNormal &mls, double radius);
+double get_upsampling_radius_mls(
+    const pcl::MovingLeastSquares_PointXYZ_PointNormal &mls);
+void set_upsampling_step_size_mls(
+    pcl::MovingLeastSquares_PointXYZ_PointNormal &mls, double step_size);
+double get_upsampling_step_size_mls(
+    const pcl::MovingLeastSquares_PointXYZ_PointNormal &mls);
+void set_desired_num_points_in_radius_mls(
+    pcl::MovingLeastSquares_PointXYZ_PointNormal &mls, int32_t num_points);
+void set_dilation_voxel_size_mls(
+    pcl::MovingLeastSquares_PointXYZ_PointNormal &mls, float voxel_size);
+float get_dilation_voxel_size_mls(
+    const pcl::MovingLeastSquares_PointXYZ_PointNormal &mls);
+void set_dilation_iterations_mls(
+    pcl::MovingLeastSquares_PointXYZ_PointNormal &mls, int32_t iterations);
+int32_t get_dilation_iterations_mls(
+    const pcl::MovingLeastSquares_PointXYZ_PointNormal &mls);
+void set_input_cloud_mls(pcl::MovingLeastSquares_PointXYZ_PointNormal &mls,
+                         const pcl::PointCloud_PointXYZ &cloud);
+std::unique_ptr<pcl::PointCloud_PointNormal>
+process_mls(pcl::MovingLeastSquares_PointXYZ_PointNormal &mls);
+
 // Visualization functions - only available when VTK is present
 #ifdef VTK_MAJOR_VERSION
 

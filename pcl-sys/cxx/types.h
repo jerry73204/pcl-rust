@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pcl/PolygonMesh.h"
 #include "pcl/correspondence.h"
 #include "pcl/features/fpfh.h"
 #include "pcl/features/fpfh_omp.h"
@@ -35,13 +36,13 @@
 #include "pcl/segmentation/region_growing.h"
 #include "pcl/segmentation/region_growing_rgb.h"
 #include "pcl/segmentation/sac_segmentation.h"
+#include "pcl/surface/bilateral_upsampling.h"
+#include "pcl/surface/gp3.h"
 #include "pcl/surface/marching_cubes_hoppe.h"
 #include "pcl/surface/marching_cubes_rbf.h"
-#include "pcl/surface/poisson.h"
-#include "pcl/surface/gp3.h"
+#include "pcl/surface/mls.h"
 #include "pcl/surface/organized_fast_mesh.h"
-#include "pcl/surface/bilateral_upsampling.h"
-#include "pcl/PolygonMesh.h"
+#include "pcl/surface/poisson.h"
 
 // Type aliases to match cxx bridge expectations
 namespace pcl {
@@ -114,8 +115,10 @@ using EuclideanClusterExtraction_PointXYZ =
 using SACSegmentation_PointXYZ = SACSegmentation<PointXYZ>;
 using MinCutSegmentation_PointXYZ = MinCutSegmentation<PointXYZ>;
 using ExtractPolygonalPrismData_PointXYZ = ExtractPolygonalPrismData<PointXYZ>;
-using ProgressiveMorphologicalFilter_PointXYZ = ProgressiveMorphologicalFilter<PointXYZ>;
-using ConditionalEuclideanClustering_PointXYZ = ConditionalEuclideanClustering<PointXYZ>;
+using ProgressiveMorphologicalFilter_PointXYZ =
+    ProgressiveMorphologicalFilter<PointXYZ>;
+using ConditionalEuclideanClustering_PointXYZ =
+    ConditionalEuclideanClustering<PointXYZ>;
 
 // Features type aliases
 using NormalEstimation_PointXYZ_Normal = NormalEstimation<PointXYZ, Normal>;
@@ -143,4 +146,10 @@ using PointCloud_PointWithScale = PointCloud<PointWithScale>;
 using MarchingCubesHoppe_PointXYZ = MarchingCubesHoppe<PointXYZ>;
 using MarchingCubesRBF_PointXYZ = MarchingCubesRBF<PointXYZ>;
 using OrganizedFastMesh_PointXYZ = OrganizedFastMesh<PointXYZ>;
+using PointCloud_PointNormal = PointCloud<PointNormal>;
+using Poisson_PointNormal = Poisson<PointNormal>;
+using GreedyProjectionTriangulation_PointNormal =
+    GreedyProjectionTriangulation<PointNormal>;
+using MovingLeastSquares_PointXYZ_PointNormal =
+    MovingLeastSquares<PointXYZ, PointNormal>;
 } // namespace pcl
