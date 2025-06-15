@@ -2,10 +2,13 @@ fn main() {
     println!("cargo:rerun-if-changed=src/");
     println!("cargo:rerun-if-changed=cxx/");
 
-    // Always link PCL common as it's needed for basic point types
+    // Probe PCL common library and collect include paths
+    let mut pcl_include_paths = Vec::new();
+
     if let Ok(library) = pkg_config::probe_library("pcl_common-1.12") {
         for include_path in &library.include_paths {
             println!("cargo:include={}", include_path.display());
+            pcl_include_paths.push(include_path.clone());
         }
     } else {
         // Fallback to system paths if pkg-config fails
@@ -99,6 +102,14 @@ fn main() {
     build.file("cxx/common.cpp");
 
     // Conditionally add source files based on enabled features
+
+    if is_feature_enabled("search") {
+        build.file("cxx/search.cpp");
+    }
+
+    if is_feature_enabled("octree") {
+        build.file("cxx/octree.cpp");
+    }
 
     if is_feature_enabled("features") {
         build.file("cxx/features.cpp");

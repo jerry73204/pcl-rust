@@ -16,17 +16,17 @@ full = [
 # Core modules
 search = ["pcl-sys/search"]
 io = ["pcl-sys/io"]
-octree = ["pcl-sys/octree"]
+octree = ["pcl-sys/octree", "search"]  # octree depends on search module
 
 # Processing modules
-filters = ["pcl-sys/filters"]
-surface = ["pcl-sys/surface"]
+filters = ["pcl-sys/filters", "search"]  # filters uses search functionality
+surface = ["pcl-sys/surface", "search"]  # surface uses search functionality
 visualization = ["pcl-sys/visualization"]
 
 # Advanced modules
-features = ["pcl-sys/features"]
-keypoints = ["pcl-sys/keypoints"]
-registration = ["pcl-sys/registration"]
+features = ["pcl-sys/features", "search"]  # features uses search for KdTree
+keypoints = ["pcl-sys/keypoints", "search"]  # keypoints likely uses search
+registration = ["pcl-sys/registration", "search"]  # registration likely uses search
 segmentation = ["pcl-sys/segmentation"]
 sample_consensus = ["pcl-sys/sample_consensus"]
 
@@ -37,3 +37,32 @@ cxx = "1.0"
 
 [dev-dependencies]
 tempfile = "3.0"
+
+# Examples with required features
+[[example]]
+name = "basic_usage"
+required-features = ["search", "octree"]
+
+[[example]]
+name = "features_showcase"
+required-features = ["features", "search", "octree"]
+
+[[example]]
+name = "test_features"
+required-features = ["features", "search", "octree"]
+
+[[example]]
+name = "io_example"
+required-features = ["io"]
+
+[[example]]
+name = "filter_example"
+required-features = ["filters"]
+
+[[example]]
+name = "filters_demo"
+required-features = ["filters"]
+
+[[example]]
+name = "auto_detection_example"
+required-features = ["search", "octree", "io"]
