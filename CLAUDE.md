@@ -89,3 +89,10 @@ The project uses the `cxx` crate for C++ interop:
 - Point types implement From traits for easy conversion from tuples/arrays
 - PointCloud containers provide Debug implementations and size/empty methods
 - Search algorithms validate parameters and return proper Result types
+
+### Additional Guidance
+- If there are FFI items missing in the Rust library, leave todo!() and comments instead of silent errors.
+
+### Project Memories
+- The FFI crate should only provide C++ interface and essential Rust type conversion items.
+- Use clang-format to format C/C++ code. It might break the source code. Use "// clang-format off ... // clang-format on" mark to protect lines that would be broken by clang-format.
