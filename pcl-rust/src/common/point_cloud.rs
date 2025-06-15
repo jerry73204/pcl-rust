@@ -66,6 +66,13 @@ impl PointCloudXYZ {
         self.height() > 1
     }
 
+    /// Add a point to the cloud
+    pub fn push(&mut self, x: f32, y: f32, z: f32) -> PclResult<()> {
+        let coords = [x, y, z];
+        ffi::push_back_xyz(self.inner.pin_mut(), &coords);
+        Ok(())
+    }
+
     /// Get a reference to the underlying pcl-sys point cloud
     pub fn as_raw(&self) -> &ffi::PointCloud_PointXYZ {
         &self.inner

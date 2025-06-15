@@ -124,6 +124,10 @@ pub enum PclError {
     /// Geometric model errors
     #[error("Model error: {0}")]
     ModelError(String),
+
+    /// Computation failed
+    #[error("Computation failed: {0}")]
+    ComputationFailed(String),
 }
 
 /// Types of search operations that can fail

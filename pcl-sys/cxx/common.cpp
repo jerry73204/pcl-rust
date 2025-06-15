@@ -1,6 +1,10 @@
 #include "pcl/common/common.h"
 #include "cxx/functions.h"
 #include <memory>
+#include <pcl/features/fpfh.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/features/pfh.h>
+#include <pcl/point_types.h>
 
 // Point field access functions
 float get_x(const pcl::PointXYZ &point) { return point.x; }
@@ -531,3 +535,84 @@ void delete_tree_voxel_xyz(
     pcl::octree::OctreePointCloudVoxelCentroid<pcl::PointXYZ> &octree) {
   octree.deleteTree();
 }
+
+// Feature cloud functions
+size_t size_normal(const pcl::PointCloud<pcl::Normal> &cloud) {
+  return cloud.size();
+}
+
+bool empty_normal(const pcl::PointCloud<pcl::Normal> &cloud) {
+  return cloud.empty();
+}
+
+size_t size_fpfh(const pcl::PointCloud<pcl::FPFHSignature33> &cloud) {
+  return cloud.size();
+}
+
+bool empty_fpfh(const pcl::PointCloud<pcl::FPFHSignature33> &cloud) {
+  return cloud.empty();
+}
+
+size_t size_pfh(const pcl::PointCloud<pcl::PFHSignature125> &cloud) {
+  return cloud.size();
+}
+
+bool empty_pfh(const pcl::PointCloud<pcl::PFHSignature125> &cloud) {
+  return cloud.empty();
+}
+
+// Individual feature access functions
+rust::Vec<float> get_normal_at(const pcl::PointCloud<pcl::Normal> &cloud,
+                               size_t index) {
+  rust::Vec<float> result;
+  if (index >= cloud.size()) {
+    return result; // Return empty vector for invalid index
+  }
+
+  const auto &normal = cloud.points[index];
+  result.reserve(4);
+  result.push_back(normal.normal_x);
+  result.push_back(normal.normal_y);
+  result.push_back(normal.normal_z);
+  result.push_back(normal.curvature);
+
+  return result;
+}
+
+rust::Vec<float>
+get_fpfh_signature_at(const pcl::PointCloud<pcl::FPFHSignature33> &cloud,
+                      size_t index) {
+  rust::Vec<float> result;
+  if (index >= cloud.size()) {
+    return result; // Return empty vector for invalid index
+  }
+
+  const auto &signature = cloud.points[index];
+  result.reserve(33);
+  for (int i = 0; i < 33; ++i) {
+    result.push_back(signature.histogram[i]);
+  }
+
+  return result;
+}
+
+rust::Vec<float>
+get_pfh_signature_at(const pcl::PointCloud<pcl::PFHSignature125> &cloud,
+                     size_t index) {
+  rust::Vec<float> result;
+  if (index >= cloud.size()) {
+    return result; // Return empty vector for invalid index
+  }
+
+  const auto &signature = cloud.points[index];
+  result.reserve(125);
+  for (int i = 0; i < 125; ++i) {
+    result.push_back(signature.histogram[i]);
+  }
+
+  return result;
+}
+
+// Note: Bulk histogram access functions removed due to cxx Vec<Vec<T>>
+// limitation Use individual access functions get_fpfh_signature_at and
+// get_pfh_signature_at instead

@@ -75,6 +75,11 @@ impl KdTreeXYZ {
         let indices = ffi::radius_search_xyz(&self.inner, &point.inner, radius);
         Ok(indices)
     }
+
+    /// Get a reference to the underlying pcl-sys KdTree
+    pub fn as_raw(&self) -> &ffi::KdTree_PointXYZ {
+        &self.inner
+    }
 }
 
 impl NearestNeighborSearch<PointXYZ> for KdTreeXYZ {

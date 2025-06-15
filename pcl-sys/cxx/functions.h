@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common_impl.h"
+#include "features_impl.h"
 #include "rust/cxx.h"
 #include "types.h"
 
@@ -1078,5 +1080,13 @@ compute_pfh_xyz(pcl::PFHEstimation_PointXYZ_Normal_PFHSignature125 &pfh);
 rust::Vec<float> get_fpfh_histogram(const pcl::FPFHSignature33 &signature);
 rust::Vec<float> get_pfh_histogram(const pcl::PFHSignature125 &signature);
 rust::Vec<float> get_normal_vector(const pcl::Normal &normal);
+
+// Feature cloud functions
+size_t size_normal(const pcl::PointCloud_Normal &cloud);
+bool empty_normal(const pcl::PointCloud_Normal &cloud);
+size_t size_fpfh(const pcl::PointCloud_FPFHSignature33 &cloud);
+bool empty_fpfh(const pcl::PointCloud_FPFHSignature33 &cloud);
+size_t size_pfh(const pcl::PointCloud_PFHSignature125 &cloud);
+bool empty_pfh(const pcl::PointCloud_PFHSignature125 &cloud);
 
 #endif

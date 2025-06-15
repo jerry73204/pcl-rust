@@ -1428,188 +1428,213 @@ pub mod ffi {
             copy_data_fields: bool,
         ) -> UniquePtr<PointCloud_PointXYZRGB>;
 
-        // Feature estimation functions - PointXYZ (minimal test - only one function)
+        // Feature estimation functions - Normal estimation PointXYZ
         #[cfg(feature = "features")]
         fn new_normal_estimation_xyz() -> UniquePtr<NormalEstimation_PointXYZ_Normal>;
-        // TEMPORARILY COMMENTED OUT FOR DEBUGGING
-        // #[cfg(feature = "features")]
-        // fn set_input_cloud_normal_xyz(
-        //     ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
-        //     cloud: &PointCloud_PointXYZ,
-        // );
-        // #[cfg(feature = "features")]
-        // fn set_search_method_normal_xyz(
-        //     ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
-        //     tree: &KdTree_PointXYZ,
-        // );
-        // #[cfg(feature = "features")]
-        // fn set_radius_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>, radius: f64);
-        // #[cfg(feature = "features")]
-        // fn get_radius_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>) -> f64;
-        // #[cfg(feature = "features")]
-        // fn set_k_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>, k: i32);
-        // #[cfg(feature = "features")]
-        // fn get_k_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>) -> i32;
-        // #[cfg(feature = "features")]
-        // fn set_view_point_normal_xyz(
-        //     ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
-        //     vpx: f32,
-        //     vpy: f32,
-        //     vpz: f32,
-        // );
-        // #[cfg(feature = "features")]
-        // fn get_view_point_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>) -> Vec<f32>;
-        // #[cfg(feature = "features")]
-        // fn set_use_sensor_origin_normal_xyz(
-        //     ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
-        //     use_sensor_origin: bool,
-        // );
-        // #[cfg(feature = "features")]
-        // fn compute_normals_xyz(
-        //     ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
-        // ) -> UniquePtr<PointCloud_Normal>;
+        #[cfg(feature = "features")]
+        fn set_input_cloud_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_search_method_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            tree: &KdTree_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_radius_search_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            radius: f64,
+        );
+        #[cfg(feature = "features")]
+        fn get_radius_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>) -> f64;
+        #[cfg(feature = "features")]
+        fn set_k_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>, k: i32);
+        #[cfg(feature = "features")]
+        fn get_k_search_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>) -> i32;
+        #[cfg(feature = "features")]
+        fn set_view_point_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            vpx: f32,
+            vpy: f32,
+            vpz: f32,
+        );
+        #[cfg(feature = "features")]
+        fn get_view_point_normal_xyz(ne: Pin<&mut NormalEstimation_PointXYZ_Normal>) -> Vec<f32>;
+        #[cfg(feature = "features")]
+        fn set_use_sensor_origin_normal_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+            use_sensor_origin: bool,
+        );
+        #[cfg(feature = "features")]
+        fn compute_normals_xyz(
+            ne: Pin<&mut NormalEstimation_PointXYZ_Normal>,
+        ) -> UniquePtr<PointCloud_Normal>;
 
-        // TEMPORARILY COMMENTED OUT FOR DEBUGGING
         // Normal estimation OMP functions
-        // #[cfg(feature = "features")]
-        // fn new_normal_estimation_omp_xyz() -> UniquePtr<NormalEstimationOMP_PointXYZ_Normal>;
-        // #[cfg(feature = "features")]
-        // fn set_input_cloud_normal_omp_xyz(
-        //     ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
-        //     cloud: &PointCloud_PointXYZ,
-        // );
-        // #[cfg(feature = "features")]
-        // fn set_search_method_normal_omp_xyz(
-        //     ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
-        //     tree: &KdTree_PointXYZ,
-        // );
-        // #[cfg(feature = "features")]
-        // fn set_radius_search_normal_omp_xyz(
-        //     ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
-        //     radius: f64,
-        // );
-        // #[cfg(feature = "features")]
-        // fn set_k_search_normal_omp_xyz(ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>, k: i32);
-        // #[cfg(feature = "features")]
-        // fn set_number_of_threads_normal_omp_xyz(
-        //     ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
-        //     threads: i32,
-        // );
-        // #[cfg(feature = "features")]
-        // fn get_number_of_threads_normal_omp_xyz(
-        //     ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
-        // ) -> i32;
-        // #[cfg(feature = "features")]
-        // fn compute_normals_omp_xyz(
-        //     ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
-        // ) -> UniquePtr<PointCloud_Normal>;
+        #[cfg(feature = "features")]
+        fn new_normal_estimation_omp_xyz() -> UniquePtr<NormalEstimationOMP_PointXYZ_Normal>;
+        #[cfg(feature = "features")]
+        fn set_input_cloud_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_search_method_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+            tree: &KdTree_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_radius_search_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+            radius: f64,
+        );
+        #[cfg(feature = "features")]
+        fn set_k_search_normal_omp_xyz(ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>, k: i32);
+        #[cfg(feature = "features")]
+        fn set_number_of_threads_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+            threads: i32,
+        );
+        #[cfg(feature = "features")]
+        fn get_number_of_threads_normal_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+        ) -> i32;
+        #[cfg(feature = "features")]
+        fn compute_normals_omp_xyz(
+            ne: Pin<&mut NormalEstimationOMP_PointXYZ_Normal>,
+        ) -> UniquePtr<PointCloud_Normal>;
 
-        //         // FPFH estimation functions
-        //         #[cfg(feature = "features")]
-        //         fn new_fpfh_estimation_xyz() -> UniquePtr<FPFHEstimation_PointXYZ_Normal_FPFHSignature33>;
-        //         #[cfg(feature = "features")]
-        //         fn set_input_cloud_fpfh_xyz(
-        //             fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
-        //             cloud: &PointCloud_PointXYZ,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_input_normals_fpfh_xyz(
-        //             fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
-        //             normals: &PointCloud_Normal,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_search_method_fpfh_xyz(
-        //             fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
-        //             tree: &KdTree_PointXYZ,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_radius_search_fpfh_xyz(
-        //             fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
-        //             radius: f64,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_k_search_fpfh_xyz(
-        //             fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
-        //             k: i32,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn compute_fpfh_xyz(
-        //             fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
-        //         ) -> UniquePtr<PointCloud_FPFHSignature33>;
-        //
-        //         // FPFH OMP estimation functions
-        //         #[cfg(feature = "features")]
-        //         fn new_fpfh_estimation_omp_xyz() -> UniquePtr<FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>;
-        //         #[cfg(feature = "features")]
-        //         fn set_input_cloud_fpfh_omp_xyz(
-        //             fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
-        //             cloud: &PointCloud_PointXYZ,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_input_normals_fpfh_omp_xyz(
-        //             fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
-        //             normals: &PointCloud_Normal,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_search_method_fpfh_omp_xyz(
-        //             fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
-        //             tree: &KdTree_PointXYZ,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_radius_search_fpfh_omp_xyz(
-        //             fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
-        //             radius: f64,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_number_of_threads_fpfh_omp_xyz(
-        //             fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
-        //             threads: i32,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn compute_fpfh_omp_xyz(
-        //             fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
-        //         ) -> UniquePtr<PointCloud_FPFHSignature33>;
-        //
-        //         // PFH estimation functions
-        //         #[cfg(feature = "features")]
-        //         fn new_pfh_estimation_xyz() -> UniquePtr<PFHEstimation_PointXYZ_Normal_PFHSignature125>;
-        //         #[cfg(feature = "features")]
-        //         fn set_input_cloud_pfh_xyz(
-        //             pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
-        //             cloud: &PointCloud_PointXYZ,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_input_normals_pfh_xyz(
-        //             pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
-        //             normals: &PointCloud_Normal,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_search_method_pfh_xyz(
-        //             pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
-        //             tree: &KdTree_PointXYZ,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_radius_search_pfh_xyz(
-        //             pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
-        //             radius: f64,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn set_k_search_pfh_xyz(
-        //             pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
-        //             k: i32,
-        //         );
-        //         #[cfg(feature = "features")]
-        //         fn compute_pfh_xyz(
-        //             pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
-        //         ) -> UniquePtr<PointCloud_PFHSignature125>;
-        //
-        //         // Helper functions
-        //         #[cfg(feature = "features")]
-        //         fn get_fpfh_histogram(signature: &FPFHSignature33) -> Vec<f32>;
-        //         #[cfg(feature = "features")]
-        //         fn get_pfh_histogram(signature: &PFHSignature125) -> Vec<f32>;
-        //         #[cfg(feature = "features")]
-        //         fn get_normal_vector(normal: &Normal) -> Vec<f32>;
+        // FPFH estimation functions
+        #[cfg(feature = "features")]
+        fn new_fpfh_estimation_xyz() -> UniquePtr<FPFHEstimation_PointXYZ_Normal_FPFHSignature33>;
+        #[cfg(feature = "features")]
+        fn set_input_cloud_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_input_normals_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            normals: &PointCloud_Normal,
+        );
+        #[cfg(feature = "features")]
+        fn set_search_method_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            tree: &KdTree_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_radius_search_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            radius: f64,
+        );
+        #[cfg(feature = "features")]
+        fn set_k_search_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+            k: i32,
+        );
+        #[cfg(feature = "features")]
+        fn compute_fpfh_xyz(
+            fpfh: Pin<&mut FPFHEstimation_PointXYZ_Normal_FPFHSignature33>,
+        ) -> UniquePtr<PointCloud_FPFHSignature33>;
+
+        // FPFH OMP estimation functions
+        #[cfg(feature = "features")]
+        fn new_fpfh_estimation_omp_xyz()
+        -> UniquePtr<FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>;
+        #[cfg(feature = "features")]
+        fn set_input_cloud_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_input_normals_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            normals: &PointCloud_Normal,
+        );
+        #[cfg(feature = "features")]
+        fn set_search_method_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            tree: &KdTree_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_radius_search_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            radius: f64,
+        );
+        #[cfg(feature = "features")]
+        fn set_number_of_threads_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+            threads: i32,
+        );
+        #[cfg(feature = "features")]
+        fn compute_fpfh_omp_xyz(
+            fpfh: Pin<&mut FPFHEstimationOMP_PointXYZ_Normal_FPFHSignature33>,
+        ) -> UniquePtr<PointCloud_FPFHSignature33>;
+        // PFH estimation functions
+        #[cfg(feature = "features")]
+        fn new_pfh_estimation_xyz() -> UniquePtr<PFHEstimation_PointXYZ_Normal_PFHSignature125>;
+        #[cfg(feature = "features")]
+        fn set_input_cloud_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_input_normals_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            normals: &PointCloud_Normal,
+        );
+        #[cfg(feature = "features")]
+        fn set_search_method_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            tree: &KdTree_PointXYZ,
+        );
+        #[cfg(feature = "features")]
+        fn set_radius_search_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            radius: f64,
+        );
+        #[cfg(feature = "features")]
+        fn set_k_search_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+            k: i32,
+        );
+        #[cfg(feature = "features")]
+        fn compute_pfh_xyz(
+            pfh: Pin<&mut PFHEstimation_PointXYZ_Normal_PFHSignature125>,
+        ) -> UniquePtr<PointCloud_PFHSignature125>;
+        // Helper functions for feature extraction
+        #[cfg(feature = "features")]
+        fn get_fpfh_histogram(signature: &FPFHSignature33) -> Vec<f32>;
+        #[cfg(feature = "features")]
+        fn get_pfh_histogram(signature: &PFHSignature125) -> Vec<f32>;
+        #[cfg(feature = "features")]
+        fn get_normal_vector(normal: &Normal) -> Vec<f32>;
+
+        // Feature cloud functions
+        #[cfg(feature = "features")]
+        fn size_normal(cloud: &PointCloud_Normal) -> usize;
+        #[cfg(feature = "features")]
+        fn empty_normal(cloud: &PointCloud_Normal) -> bool;
+        #[cfg(feature = "features")]
+        fn size_fpfh(cloud: &PointCloud_FPFHSignature33) -> usize;
+        #[cfg(feature = "features")]
+        fn empty_fpfh(cloud: &PointCloud_FPFHSignature33) -> bool;
+        #[cfg(feature = "features")]
+        fn size_pfh(cloud: &PointCloud_PFHSignature125) -> usize;
+        #[cfg(feature = "features")]
+        fn empty_pfh(cloud: &PointCloud_PFHSignature125) -> bool;
+
+        // Individual feature access functions
+        #[cfg(feature = "features")]
+        fn get_normal_at(cloud: &PointCloud_Normal, index: usize) -> Vec<f32>;
+        #[cfg(feature = "features")]
+        fn get_fpfh_signature_at(cloud: &PointCloud_FPFHSignature33, index: usize) -> Vec<f32>;
+        #[cfg(feature = "features")]
+        fn get_pfh_signature_at(cloud: &PointCloud_PFHSignature125, index: usize) -> Vec<f32>;
+
+        // Note: Bulk histogram access functions not supported due to cxx Vec<Vec<T>> limitation
+        // Individual access via get_fpfh_signature_at and get_pfh_signature_at should be used instead
 
     }
 }

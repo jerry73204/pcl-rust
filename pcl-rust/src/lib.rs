@@ -23,8 +23,8 @@ pub mod octree;
 #[cfg(feature = "search")]
 pub mod search;
 
-// Temporarily commented out modules until FFI is fully implemented
-// pub mod features;
+#[cfg(feature = "features")]
+pub mod features;
 // pub mod registration;
 #[cfg(feature = "sample_consensus")]
 pub mod sample_consensus;
@@ -53,11 +53,11 @@ pub use filters::{
     StatisticalOutlierRemovalXYZ, StatisticalOutlierRemovalXYZRGB, VoxelGridXYZ, VoxelGridXYZRGB,
 };
 
-// Temporarily commented out re-exports until FFI is fully implemented
-// pub use features::{
-//     FpfhEstimation, FpfhEstimationOmp, FpfhSignature, Normal, NormalCloud, NormalEstimation,
-//     NormalEstimationOmp, PfhEstimation, PfhSignature,
-// };
+#[cfg(feature = "features")]
+pub use features::{
+    FpfhEstimation, FpfhEstimationOmp, FpfhSignature, Normal, NormalCloud, NormalEstimation,
+    NormalEstimationOmp, PfhEstimation, PfhSignature,
+};
 // pub use registration::{IcpXYZ, IcpXYZRGB, Transform3D, TransformationMatrix};
 #[cfg(feature = "sample_consensus")]
 pub use sample_consensus::{

@@ -1,3 +1,4 @@
+#include "cxx/features_impl.h"
 #include "cxx/functions.h"
 #include <memory>
 #include <pcl/features/fpfh.h>
