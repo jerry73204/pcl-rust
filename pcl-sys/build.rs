@@ -63,6 +63,23 @@ fn main() {
         println!("cargo:rustc-link-lib=pcl_surface");
     }
 
+    if is_feature_enabled("visualization") {
+        println!("cargo:rustc-link-lib=pcl_visualization");
+        // VTK dependencies required for PCL visualization (with version suffix)
+        println!("cargo:rustc-link-lib=vtkCommonCore-9.1");
+        println!("cargo:rustc-link-lib=vtkCommonDataModel-9.1");
+        println!("cargo:rustc-link-lib=vtkCommonMath-9.1");
+        println!("cargo:rustc-link-lib=vtkRenderingCore-9.1");
+        println!("cargo:rustc-link-lib=vtkRenderingOpenGL2-9.1");
+        println!("cargo:rustc-link-lib=vtkInteractionStyle-9.1");
+        println!("cargo:rustc-link-lib=vtkFiltersSources-9.1");
+        println!("cargo:rustc-link-lib=vtkFiltersCore-9.1");
+        println!("cargo:rustc-link-lib=vtkCommonExecutionModel-9.1");
+        // Additional VTK libraries that might be needed
+        println!("cargo:rustc-link-lib=vtkRenderingAnnotation-9.1");
+        println!("cargo:rustc-link-lib=vtkRenderingLOD-9.1");
+    }
+
     // Build cxx bridge
     let mut build = cxx_build::bridge("src/lib.rs");
 
@@ -72,6 +89,11 @@ fn main() {
         .include("/usr/include/pcl-1.12")
         .include("/usr/include/eigen3")
         .std("c++14");
+
+    // Add VTK include path only when visualization feature is enabled
+    if is_feature_enabled("visualization") {
+        build.include("/usr/include/vtk-9.1");
+    }
 
     // Always add common source file since it's always required
     build.file("cxx/common.cpp");
@@ -108,6 +130,10 @@ fn main() {
 
     if is_feature_enabled("surface") {
         build.file("cxx/surface.cpp");
+    }
+
+    if is_feature_enabled("visualization") {
+        build.file("cxx/visualization.cpp");
     }
 
     // Enable ccache if available

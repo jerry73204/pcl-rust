@@ -26,6 +26,8 @@ pub mod search;
 pub mod segmentation;
 #[cfg(feature = "surface")]
 pub mod surface;
+#[cfg(feature = "visualization")]
+pub mod visualization;
 
 // Re-export cxx types that may be useful
 pub use cxx::{SharedPtr, UniquePtr};
@@ -34,6 +36,7 @@ pub use cxx::{SharedPtr, UniquePtr};
 pub mod ffi {
     unsafe extern "C++" {
         include!("cxx/functions.h");
+        include!("cxx/visualization_stubs.h");
 
         // Point types - always available as they're fundamental
         #[namespace = "pcl"]
@@ -747,5 +750,134 @@ pub mod ffi {
         fn save_polygon_mesh_obj(mesh: &PolygonMesh, filename: &str) -> i32;
         #[cfg(feature = "surface")]
         fn save_polygon_mesh_vtk(mesh: &PolygonMesh, filename: &str) -> i32;
+
+        // Visualization types - always available but functions conditionally compiled
+        #[namespace = "pcl::visualization"]
+        type PCLVisualizer;
+        #[namespace = "pcl::visualization"]
+        type CloudViewer;
+
+        // PCLVisualizer functions
+        #[cfg(feature = "visualization")]
+        fn new_pcl_visualizer(window_name: &str) -> UniquePtr<PCLVisualizer>;
+        #[cfg(feature = "visualization")]
+        fn add_point_cloud_xyz(
+            viewer: Pin<&mut PCLVisualizer>,
+            cloud: &PointCloud_PointXYZ,
+            id: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn add_point_cloud_xyzrgb(
+            viewer: Pin<&mut PCLVisualizer>,
+            cloud: &PointCloud_PointXYZRGB,
+            id: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn update_point_cloud_xyz(
+            viewer: Pin<&mut PCLVisualizer>,
+            cloud: &PointCloud_PointXYZ,
+            id: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn update_point_cloud_xyzrgb(
+            viewer: Pin<&mut PCLVisualizer>,
+            cloud: &PointCloud_PointXYZRGB,
+            id: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn remove_point_cloud(viewer: Pin<&mut PCLVisualizer>, id: &str) -> i32;
+        #[cfg(feature = "visualization")]
+        fn set_point_cloud_render_properties_xyz(
+            viewer: Pin<&mut PCLVisualizer>,
+            property: i32,
+            value: f64,
+            id: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn set_background_color(viewer: Pin<&mut PCLVisualizer>, r: f64, g: f64, b: f64) -> i32;
+        #[cfg(feature = "visualization")]
+        fn add_coordinate_system(viewer: Pin<&mut PCLVisualizer>, scale: f64, id: &str) -> i32;
+        #[cfg(feature = "visualization")]
+        fn spin_once(viewer: Pin<&mut PCLVisualizer>, time: i32) -> i32;
+        #[cfg(feature = "visualization")]
+        fn spin(viewer: Pin<&mut PCLVisualizer>);
+        #[cfg(feature = "visualization")]
+        fn was_stopped(viewer: &PCLVisualizer) -> bool;
+        #[cfg(feature = "visualization")]
+        fn close(viewer: Pin<&mut PCLVisualizer>);
+        #[cfg(feature = "visualization")]
+        fn reset_stopped_flag(viewer: Pin<&mut PCLVisualizer>);
+
+        // Camera control functions
+        #[cfg(feature = "visualization")]
+        fn set_camera_position(
+            viewer: Pin<&mut PCLVisualizer>,
+            pos_x: f64,
+            pos_y: f64,
+            pos_z: f64,
+            view_x: f64,
+            view_y: f64,
+            view_z: f64,
+            up_x: f64,
+            up_y: f64,
+            up_z: f64,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn reset_camera(viewer: Pin<&mut PCLVisualizer>) -> i32;
+
+        // CloudViewer functions (simpler interface)
+        #[cfg(feature = "visualization")]
+        fn new_cloud_viewer(window_name: &str) -> UniquePtr<CloudViewer>;
+        #[cfg(feature = "visualization")]
+        fn show_cloud_xyz(
+            viewer: Pin<&mut CloudViewer>,
+            cloud: &PointCloud_PointXYZ,
+            cloud_name: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn show_cloud_xyzrgb(
+            viewer: Pin<&mut CloudViewer>,
+            cloud: &PointCloud_PointXYZRGB,
+            cloud_name: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn cloud_viewer_was_stopped(viewer: &CloudViewer) -> bool;
+        #[cfg(feature = "visualization")]
+        fn wait_for_cloud_viewer(viewer: Pin<&mut CloudViewer>, time_ms: i32);
+
+        // Additional utility functions
+        #[cfg(feature = "visualization")]
+        fn set_point_cloud_color_xyz(
+            viewer: Pin<&mut PCLVisualizer>,
+            r: f64,
+            g: f64,
+            b: f64,
+            id: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn add_text(
+            viewer: Pin<&mut PCLVisualizer>,
+            text: &str,
+            xpos: i32,
+            ypos: i32,
+            r: f64,
+            g: f64,
+            b: f64,
+            id: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn add_sphere_xyz(
+            viewer: Pin<&mut PCLVisualizer>,
+            center: &PointXYZ,
+            radius: f64,
+            r: f64,
+            g: f64,
+            b: f64,
+            id: &str,
+        ) -> i32;
+        #[cfg(feature = "visualization")]
+        fn remove_shape(viewer: Pin<&mut PCLVisualizer>, id: &str) -> i32;
+        #[cfg(feature = "visualization")]
+        fn register_keyboard_callback(viewer: Pin<&mut PCLVisualizer>) -> i32;
     }
 }

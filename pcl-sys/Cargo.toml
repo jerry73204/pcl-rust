@@ -9,7 +9,7 @@ repository = "https://github.com/your-username/pcl-rust"
 [features]
 default = ["search", "io", "filters"]
 full = [
-    "search", "io", "filters", "surface", "octree", 
+    "search", "io", "filters", "surface", "octree", "visualization",
     "features", "keypoints", "registration", "segmentation", "sample_consensus"
 ]
 
@@ -21,6 +21,7 @@ octree = []
 # Processing modules
 filters = []
 surface = []
+visualization = []
 
 # Advanced modules
 features = []

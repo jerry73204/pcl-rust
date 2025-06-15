@@ -2,9 +2,9 @@
 
 #[cfg(test)]
 mod tests {
-    use crate::error::{PclError};
     #[cfg(feature = "octree")]
     use crate::error::OctreeOperation;
+    use crate::error::PclError;
     #[cfg(feature = "search")]
     use crate::error::SearchOperation;
     #[cfg(feature = "octree")]
