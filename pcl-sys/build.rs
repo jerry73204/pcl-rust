@@ -11,12 +11,30 @@ fn main() {
             pcl_include_paths.push(include_path.clone());
         }
     } else {
-        // Fallback to system paths if pkg-config fails
-        println!("cargo:warning=PCL not found via pkg-config, using system paths");
-        println!("cargo:rustc-link-lib=pcl_common");
-        println!("cargo:rustc-link-search=/usr/local/lib");
-        println!("cargo:include=/usr/local/include");
-        println!("cargo:include=/usr/include");
+        // Try alternative PCL version names
+        let pcl_variants = ["pcl_common-1.13", "pcl_common-1.11", "pcl_common"];
+        let mut found = false;
+
+        for variant in &pcl_variants {
+            if let Ok(library) = pkg_config::probe_library(variant) {
+                for include_path in &library.include_paths {
+                    println!("cargo:include={}", include_path.display());
+                    pcl_include_paths.push(include_path.clone());
+                }
+                found = true;
+                break;
+            }
+        }
+
+        if !found {
+            panic!(
+                "PCL (Point Cloud Library) not found via pkg-config.\n\
+                 Please install PCL development libraries:\n\
+                 - Ubuntu/Debian: sudo apt-get install libpcl-dev\n\
+                 - macOS: brew install pcl\n\
+                 - Or ensure pkg-config can find PCL libraries"
+            );
+        }
     }
 
     // Helper function to check if a feature is enabled
@@ -86,16 +104,83 @@ fn main() {
     // Build cxx bridge
     let mut build = cxx_build::bridge("src/lib.rs");
 
-    // Add PCL include paths
+    // Add PCL include paths (order matters for compilation speed)
     build
-        .include("/usr/include/pcl-1.12")
-        .include("/usr/include/eigen3")
         .include(".") // For our cxx/types.h (highest priority)
         .std("c++17"); // Use C++17 for better optimization
 
+    // Add dynamically discovered PCL include paths
+    for include_path in &pcl_include_paths {
+        build.include(include_path);
+    }
+
+    // Probe for Eigen3 include paths
+    if let Ok(eigen_lib) = pkg_config::probe_library("eigen3") {
+        for include_path in &eigen_lib.include_paths {
+            build.include(include_path);
+        }
+    } else {
+        panic!(
+            "Eigen3 library not found via pkg-config.\n\
+             Please install Eigen3 development libraries:\n\
+             - Ubuntu/Debian: sudo apt-get install libeigen3-dev\n\
+             - macOS: brew install eigen\n\
+             - Or ensure pkg-config can find Eigen3 libraries"
+        );
+    }
+
     // Add VTK include path only when visualization feature is enabled
     if is_feature_enabled("visualization") {
-        build.include("/usr/include/vtk-9.1");
+        // Try to find VTK via pkg-config first
+        let vtk_variants = ["vtk-9.3", "vtk-9.2", "vtk-9.1", "vtk-9.0", "vtk"];
+        let mut vtk_found = false;
+
+        for variant in &vtk_variants {
+            if let Ok(vtk_lib) = pkg_config::probe_library(variant) {
+                for include_path in &vtk_lib.include_paths {
+                    build.include(include_path);
+                }
+                vtk_found = true;
+                break;
+            }
+        }
+
+        if !vtk_found {
+            // VTK often doesn't provide pkg-config files, so try standard locations
+            // VTK is typically found via CMake config files, but we can use common include paths
+            let vtk_include_paths = [
+                "/usr/include/vtk-9.3",
+                "/usr/include/vtk-9.2",
+                "/usr/include/vtk-9.1",
+                "/usr/include/vtk-9.0",
+                "/usr/local/include/vtk-9.3",
+                "/usr/local/include/vtk-9.2",
+                "/usr/local/include/vtk-9.1",
+                "/usr/local/include/vtk-9.0",
+            ];
+
+            for vtk_path in &vtk_include_paths {
+                if std::path::Path::new(vtk_path).exists() {
+                    build.include(vtk_path);
+                    vtk_found = true;
+                    println!("cargo:warning=Found VTK headers at: {}", vtk_path);
+                    break;
+                }
+            }
+
+            if !vtk_found {
+                panic!(
+                    "VTK (Visualization Toolkit) not found.\n\
+                     VTK is required when the 'visualization' feature is enabled.\n\
+                     Please install VTK development libraries:\n\
+                     - Ubuntu/Debian: sudo apt-get install libvtk9-dev\n\
+                     - macOS: brew install vtk\n\
+                     - Or disable the visualization feature if not needed\n\
+                     Searched in: {:#?}",
+                    vtk_include_paths
+                );
+            }
+        }
     }
 
     // Always add common source file since it's always required
