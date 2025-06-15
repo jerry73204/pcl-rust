@@ -88,10 +88,10 @@ fn main() {
 
     // Add PCL include paths
     build
-        .include(".") // For our cxx/types.h
         .include("/usr/include/pcl-1.12")
         .include("/usr/include/eigen3")
-        .std("c++14");
+        .include(".") // For our cxx/types.h (highest priority)
+        .std("c++17"); // Use C++17 for better optimization
 
     // Add VTK include path only when visualization feature is enabled
     if is_feature_enabled("visualization") {
@@ -171,13 +171,22 @@ fn main() {
         num_cpus
     );
 
-    // Optimization flags for faster compilation
+    // Optimization flags for faster compilation and smaller binary
     build
         .flag_if_supported("-O2") // Optimize for speed
         .flag_if_supported("-march=native") // Use native CPU features
         .flag_if_supported("-pipe") // Use pipes instead of temp files
         .flag_if_supported("-fno-semantic-interposition") // Better optimization
+        .flag_if_supported("-ffunction-sections") // Separate function sections
+        .flag_if_supported("-fdata-sections") // Separate data sections
+        .flag_if_supported("-ffast-math") // Faster math operations
+        .flag_if_supported("-DNDEBUG") // Disable debug assertions
         .warnings(false); // Disable warnings for faster compilation
+
+    // Only add debug info in debug builds to speed up release builds
+    if std::env::var("PROFILE").unwrap_or_default() == "debug" {
+        build.flag_if_supported("-g1"); // Minimal debug info for debug builds
+    }
 
     // Note: Precompiled headers (pch.h) exist but are not currently used
     // because cxx-build doesn't easily support PCH compilation.
