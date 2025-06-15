@@ -1636,5 +1636,141 @@ pub mod ffi {
         // Note: Bulk histogram access functions not supported due to cxx Vec<Vec<T>> limitation
         // Individual access via get_fpfh_signature_at and get_pfh_signature_at should be used instead
 
+        // Registration types - always available but functions conditionally compiled
+        #[namespace = "pcl"]
+        type IterativeClosestPoint_PointXYZ;
+        #[namespace = "pcl"]
+        type IterativeClosestPoint_PointXYZRGB;
+        #[namespace = "pcl"]
+        type NormalDistributionsTransform_PointXYZ;
+        #[namespace = "pcl"]
+        type NormalDistributionsTransform_PointXYZRGB;
+
+        // Registration functions - ICP for PointXYZ
+        #[cfg(feature = "registration")]
+        fn new_icp_xyz() -> UniquePtr<IterativeClosestPoint_PointXYZ>;
+        #[cfg(feature = "registration")]
+        fn set_input_source_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "registration")]
+        fn set_input_target_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "registration")]
+        fn set_max_iterations_icp_xyz(icp: Pin<&mut IterativeClosestPoint_PointXYZ>, max_iter: i32);
+        #[cfg(feature = "registration")]
+        fn get_max_iterations_icp_xyz(icp: Pin<&mut IterativeClosestPoint_PointXYZ>) -> i32;
+        #[cfg(feature = "registration")]
+        fn set_transformation_epsilon_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            epsilon: f64,
+        );
+        #[cfg(feature = "registration")]
+        fn get_transformation_epsilon_icp_xyz(icp: Pin<&mut IterativeClosestPoint_PointXYZ>)
+        -> f64;
+        #[cfg(feature = "registration")]
+        fn set_euclidean_fitness_epsilon_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            epsilon: f64,
+        );
+        #[cfg(feature = "registration")]
+        fn get_euclidean_fitness_epsilon_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+        ) -> f64;
+        #[cfg(feature = "registration")]
+        fn set_max_correspondence_distance_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            distance: f64,
+        );
+        #[cfg(feature = "registration")]
+        fn get_max_correspondence_distance_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+        ) -> f64;
+        #[cfg(feature = "registration")]
+        fn align_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+        #[cfg(feature = "registration")]
+        fn align_with_guess_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+            guess: &Vec<f32>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+        #[cfg(feature = "registration")]
+        fn has_converged_icp_xyz(icp: Pin<&mut IterativeClosestPoint_PointXYZ>) -> bool;
+        #[cfg(feature = "registration")]
+        fn get_fitness_score_icp_xyz(icp: Pin<&mut IterativeClosestPoint_PointXYZ>) -> f64;
+        #[cfg(feature = "registration")]
+        fn get_final_transformation_icp_xyz(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZ>,
+        ) -> Vec<f32>;
+
+        // Registration functions - ICP for PointXYZRGB
+        #[cfg(feature = "registration")]
+        fn new_icp_xyzrgb() -> UniquePtr<IterativeClosestPoint_PointXYZRGB>;
+        #[cfg(feature = "registration")]
+        fn set_input_source_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        #[cfg(feature = "registration")]
+        fn set_input_target_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        #[cfg(feature = "registration")]
+        fn set_max_iterations_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            max_iter: i32,
+        );
+        #[cfg(feature = "registration")]
+        fn get_max_iterations_icp_xyzrgb(icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>) -> i32;
+        #[cfg(feature = "registration")]
+        fn set_transformation_epsilon_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            epsilon: f64,
+        );
+        #[cfg(feature = "registration")]
+        fn get_transformation_epsilon_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> f64;
+        #[cfg(feature = "registration")]
+        fn set_euclidean_fitness_epsilon_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            epsilon: f64,
+        );
+        #[cfg(feature = "registration")]
+        fn get_euclidean_fitness_epsilon_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> f64;
+        #[cfg(feature = "registration")]
+        fn set_max_correspondence_distance_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            distance: f64,
+        );
+        #[cfg(feature = "registration")]
+        fn get_max_correspondence_distance_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> f64;
+        #[cfg(feature = "registration")]
+        fn align_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+        #[cfg(feature = "registration")]
+        fn align_with_guess_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+            guess: &Vec<f32>,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+        #[cfg(feature = "registration")]
+        fn has_converged_icp_xyzrgb(icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>) -> bool;
+        #[cfg(feature = "registration")]
+        fn get_fitness_score_icp_xyzrgb(icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>) -> f64;
+        #[cfg(feature = "registration")]
+        fn get_final_transformation_icp_xyzrgb(
+            icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
+        ) -> Vec<f32>;
+
     }
 }

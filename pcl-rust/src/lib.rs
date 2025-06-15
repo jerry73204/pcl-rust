@@ -25,7 +25,8 @@ pub mod search;
 
 #[cfg(feature = "features")]
 pub mod features;
-// pub mod registration;
+#[cfg(feature = "registration")]
+pub mod registration;
 #[cfg(feature = "sample_consensus")]
 pub mod sample_consensus;
 // pub mod segmentation;
@@ -58,7 +59,10 @@ pub use features::{
     FpfhEstimation, FpfhEstimationOmp, FpfhSignature, Normal, NormalCloud, NormalEstimation,
     NormalEstimationOmp, PfhEstimation, PfhSignature,
 };
-// pub use registration::{IcpXYZ, IcpXYZRGB, Transform3D, TransformationMatrix};
+#[cfg(feature = "registration")]
+pub use registration::{
+    IcpXYZ, IcpXYZRGB, RegistrationXYZ, RegistrationXYZRGB, Transform3D, TransformationMatrix,
+};
 #[cfg(feature = "sample_consensus")]
 pub use sample_consensus::{
     PlaneModelXYZ, PlaneModelXYZRGB, RansacPlaneXYZ, RansacPlaneXYZRGB, RansacSphereXYZ,

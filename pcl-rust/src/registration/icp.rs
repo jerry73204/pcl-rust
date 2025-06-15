@@ -6,11 +6,12 @@
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
 use crate::error::{PclError, PclResult};
 use crate::registration::{RegistrationXYZ, RegistrationXYZRGB, TransformationMatrix};
-use pcl_sys::{IcpXYZ as FfiIcpXYZ, IcpXYZRGB as FfiIcpXYZRGB, UniquePtr, ffi};
+use cxx::UniquePtr;
+use pcl_sys::ffi;
 
 /// ICP algorithm for PointXYZ clouds
 pub struct IcpXYZ {
-    inner: UniquePtr<FfiIcpXYZ>,
+    inner: UniquePtr<ffi::IterativeClosestPoint_PointXYZ>,
 }
 
 impl IcpXYZ {
@@ -174,7 +175,7 @@ impl RegistrationXYZ for IcpXYZ {
 
 /// ICP algorithm for PointXYZRGB clouds
 pub struct IcpXYZRGB {
-    inner: UniquePtr<FfiIcpXYZRGB>,
+    inner: UniquePtr<ffi::IterativeClosestPoint_PointXYZRGB>,
 }
 
 impl IcpXYZRGB {
