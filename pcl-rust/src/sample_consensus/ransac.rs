@@ -2,11 +2,12 @@
 
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
 use crate::error::{PclError, PclResult};
-use pcl_sys::{RansacXYZ, RansacXYZRGB, ffi};
+use pcl_sys::UniquePtr;
+use pcl_sys::ffi;
 
 /// RANSAC algorithm for plane and sphere fitting with PointXYZ
 pub struct RansacPlaneXYZ {
-    inner: cxx::UniquePtr<RansacXYZ>,
+    inner: UniquePtr<ffi::RandomSampleConsensus_PointXYZ>,
 }
 
 impl RansacPlaneXYZ {
@@ -92,7 +93,7 @@ impl RansacPlaneXYZ {
 
 /// RANSAC algorithm for sphere fitting with PointXYZ
 pub struct RansacSphereXYZ {
-    inner: cxx::UniquePtr<RansacXYZ>,
+    inner: UniquePtr<ffi::RandomSampleConsensus_PointXYZ>,
 }
 
 impl RansacSphereXYZ {
@@ -178,7 +179,7 @@ impl RansacSphereXYZ {
 
 /// RANSAC algorithm for plane fitting with PointXYZRGB
 pub struct RansacPlaneXYZRGB {
-    inner: cxx::UniquePtr<RansacXYZRGB>,
+    inner: UniquePtr<ffi::RandomSampleConsensus_PointXYZRGB>,
 }
 
 impl RansacPlaneXYZRGB {
@@ -264,7 +265,7 @@ impl RansacPlaneXYZRGB {
 
 /// RANSAC algorithm for sphere fitting with PointXYZRGB
 pub struct RansacSphereXYZRGB {
-    inner: cxx::UniquePtr<RansacXYZRGB>,
+    inner: UniquePtr<ffi::RandomSampleConsensus_PointXYZRGB>,
 }
 
 impl RansacSphereXYZRGB {

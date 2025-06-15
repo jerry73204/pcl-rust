@@ -120,6 +120,10 @@ pub enum PclError {
     /// I/O operation failed
     #[error("I/O failed: {0}")]
     IoFailed(String),
+
+    /// Geometric model errors
+    #[error("Model error: {0}")]
+    ModelError(String),
 }
 
 /// Types of search operations that can fail

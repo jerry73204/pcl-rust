@@ -26,7 +26,8 @@ pub mod search;
 // Temporarily commented out modules until FFI is fully implemented
 // pub mod features;
 // pub mod registration;
-// pub mod sample_consensus;
+#[cfg(feature = "sample_consensus")]
+pub mod sample_consensus;
 // pub mod segmentation;
 
 #[cfg(test)]
@@ -58,9 +59,11 @@ pub use filters::{
 //     NormalEstimationOmp, PfhEstimation, PfhSignature,
 // };
 // pub use registration::{IcpXYZ, IcpXYZRGB, Transform3D, TransformationMatrix};
-// pub use sample_consensus::{
-//     RansacPlaneXYZ, RansacPlaneXYZRGB, RansacSphereXYZ, RansacSphereXYZRGB,
-// };
+#[cfg(feature = "sample_consensus")]
+pub use sample_consensus::{
+    PlaneModelXYZ, PlaneModelXYZRGB, RansacPlaneXYZ, RansacPlaneXYZRGB, RansacSphereXYZ,
+    RansacSphereXYZRGB, SphereModelXYZ, SphereModelXYZRGB,
+};
 // pub use segmentation::sac_segmentation::SegmentationResult;
 // pub use segmentation::{
 //     ClusteringXYZ, EuclideanClusterExtractionXYZ, MethodType, ModelType, RegionGrowingRgbXYZRGB,
