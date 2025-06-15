@@ -1101,5 +1101,312 @@ pub mod ffi {
         fn remove_shape(viewer: Pin<&mut PCLVisualizer>, id: &str) -> i32;
         #[cfg(feature = "visualization")]
         fn register_keyboard_callback(viewer: Pin<&mut PCLVisualizer>) -> i32;
+
+        // Sample consensus types - always available but functions conditionally compiled
+        #[namespace = "pcl"]
+        type RandomSampleConsensus_PointXYZ;
+        #[namespace = "pcl"]
+        type RandomSampleConsensus_PointXYZRGB;
+        #[namespace = "pcl"]
+        type SampleConsensusModelPlane_PointXYZ;
+        #[namespace = "pcl"]
+        type SampleConsensusModelSphere_PointXYZ;
+        #[namespace = "pcl"]
+        type SampleConsensusModelPlane_PointXYZRGB;
+        #[namespace = "pcl"]
+        type SampleConsensusModelSphere_PointXYZRGB;
+
+        // RANSAC functions - PointXYZ
+        #[cfg(feature = "sample_consensus")]
+        fn new_ransac_plane_xyz(
+            cloud: &PointCloud_PointXYZ,
+        ) -> UniquePtr<RandomSampleConsensus_PointXYZ>;
+        #[cfg(feature = "sample_consensus")]
+        fn new_ransac_sphere_xyz(
+            cloud: &PointCloud_PointXYZ,
+        ) -> UniquePtr<RandomSampleConsensus_PointXYZ>;
+        #[cfg(feature = "sample_consensus")]
+        fn set_distance_threshold_xyz(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZ>,
+            threshold: f64,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn get_distance_threshold_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> f64;
+        #[cfg(feature = "sample_consensus")]
+        fn set_max_iterations_xyz(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZ>,
+            max_iterations: i32,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn get_max_iterations_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> i32;
+        #[cfg(feature = "sample_consensus")]
+        fn set_probability_xyz(ransac: Pin<&mut RandomSampleConsensus_PointXYZ>, probability: f64);
+        #[cfg(feature = "sample_consensus")]
+        fn get_probability_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> f64;
+        #[cfg(feature = "sample_consensus")]
+        fn compute_model_xyz(ransac: Pin<&mut RandomSampleConsensus_PointXYZ>) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn refine_model_xyz(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZ>,
+            sigma: f64,
+            max_iterations: u32,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn get_inliers_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> Vec<i32>;
+        #[cfg(feature = "sample_consensus")]
+        fn get_model_coefficients_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> Vec<f32>;
+        #[cfg(feature = "sample_consensus")]
+        fn get_inliers_count_xyz(ransac: &RandomSampleConsensus_PointXYZ) -> usize;
+
+        // RANSAC functions - PointXYZRGB
+        #[cfg(feature = "sample_consensus")]
+        fn new_ransac_plane_xyzrgb(
+            cloud: &PointCloud_PointXYZRGB,
+        ) -> UniquePtr<RandomSampleConsensus_PointXYZRGB>;
+        #[cfg(feature = "sample_consensus")]
+        fn new_ransac_sphere_xyzrgb(
+            cloud: &PointCloud_PointXYZRGB,
+        ) -> UniquePtr<RandomSampleConsensus_PointXYZRGB>;
+        #[cfg(feature = "sample_consensus")]
+        fn set_distance_threshold_xyzrgb(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>,
+            threshold: f64,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn get_distance_threshold_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> f64;
+        #[cfg(feature = "sample_consensus")]
+        fn set_max_iterations_xyzrgb(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>,
+            max_iterations: i32,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn get_max_iterations_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> i32;
+        #[cfg(feature = "sample_consensus")]
+        fn set_probability_xyzrgb(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>,
+            probability: f64,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn get_probability_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> f64;
+        #[cfg(feature = "sample_consensus")]
+        fn compute_model_xyzrgb(ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn refine_model_xyzrgb(
+            ransac: Pin<&mut RandomSampleConsensus_PointXYZRGB>,
+            sigma: f64,
+            max_iterations: u32,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn get_inliers_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> Vec<i32>;
+        #[cfg(feature = "sample_consensus")]
+        fn get_model_coefficients_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> Vec<f32>;
+        #[cfg(feature = "sample_consensus")]
+        fn get_inliers_count_xyzrgb(ransac: &RandomSampleConsensus_PointXYZRGB) -> usize;
+
+        // Model functions - PointXYZ plane
+        #[cfg(feature = "sample_consensus")]
+        fn new_sac_model_plane_xyz(
+            cloud: &PointCloud_PointXYZ,
+        ) -> UniquePtr<SampleConsensusModelPlane_PointXYZ>;
+        #[cfg(feature = "sample_consensus")]
+        fn compute_model_coefficients_plane_xyz(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZ>,
+            sample_indices: &Vec<i32>,
+            coefficients: &mut Vec<f32>,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn get_distances_to_model_plane_xyz(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZ>,
+            model_coefficients: &Vec<f32>,
+            distances: &mut Vec<f64>,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn select_within_distance_plane_xyz(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZ>,
+            model_coefficients: &Vec<f32>,
+            threshold: f64,
+        ) -> Vec<i32>;
+        #[cfg(feature = "sample_consensus")]
+        fn count_within_distance_plane_xyz(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZ>,
+            model_coefficients: &Vec<f32>,
+            threshold: f64,
+        ) -> i32;
+        #[cfg(feature = "sample_consensus")]
+        fn optimize_model_coefficients_plane_xyz(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZ>,
+            inliers: &Vec<i32>,
+            model_coefficients: &Vec<f32>,
+            optimized_coefficients: &mut Vec<f32>,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn project_points_plane_xyz(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZ>,
+            inliers: &Vec<i32>,
+            model_coefficients: &Vec<f32>,
+            copy_data_fields: bool,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // Model functions - PointXYZ sphere
+        #[cfg(feature = "sample_consensus")]
+        fn new_sac_model_sphere_xyz(
+            cloud: &PointCloud_PointXYZ,
+        ) -> UniquePtr<SampleConsensusModelSphere_PointXYZ>;
+        #[cfg(feature = "sample_consensus")]
+        fn set_radius_limits_sphere_xyz(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZ>,
+            min_radius: f64,
+            max_radius: f64,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn get_radius_limits_sphere_xyz(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZ>,
+            min_radius: &mut f64,
+            max_radius: &mut f64,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn compute_model_coefficients_sphere_xyz(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZ>,
+            sample_indices: &Vec<i32>,
+            coefficients: &mut Vec<f32>,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn get_distances_to_model_sphere_xyz(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZ>,
+            model_coefficients: &Vec<f32>,
+            distances: &mut Vec<f64>,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn select_within_distance_sphere_xyz(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZ>,
+            model_coefficients: &Vec<f32>,
+            threshold: f64,
+        ) -> Vec<i32>;
+        #[cfg(feature = "sample_consensus")]
+        fn count_within_distance_sphere_xyz(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZ>,
+            model_coefficients: &Vec<f32>,
+            threshold: f64,
+        ) -> i32;
+        #[cfg(feature = "sample_consensus")]
+        fn optimize_model_coefficients_sphere_xyz(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZ>,
+            inliers: &Vec<i32>,
+            model_coefficients: &Vec<f32>,
+            optimized_coefficients: &mut Vec<f32>,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn project_points_sphere_xyz(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZ>,
+            inliers: &Vec<i32>,
+            model_coefficients: &Vec<f32>,
+            copy_data_fields: bool,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // Model functions - PointXYZRGB plane
+        #[cfg(feature = "sample_consensus")]
+        fn new_sac_model_plane_xyzrgb(
+            cloud: &PointCloud_PointXYZRGB,
+        ) -> UniquePtr<SampleConsensusModelPlane_PointXYZRGB>;
+        #[cfg(feature = "sample_consensus")]
+        fn compute_model_coefficients_plane_xyzrgb(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZRGB>,
+            sample_indices: &Vec<i32>,
+            coefficients: &mut Vec<f32>,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn get_distances_to_model_plane_xyzrgb(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZRGB>,
+            model_coefficients: &Vec<f32>,
+            distances: &mut Vec<f64>,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn select_within_distance_plane_xyzrgb(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZRGB>,
+            model_coefficients: &Vec<f32>,
+            threshold: f64,
+        ) -> Vec<i32>;
+        #[cfg(feature = "sample_consensus")]
+        fn count_within_distance_plane_xyzrgb(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZRGB>,
+            model_coefficients: &Vec<f32>,
+            threshold: f64,
+        ) -> i32;
+        #[cfg(feature = "sample_consensus")]
+        fn optimize_model_coefficients_plane_xyzrgb(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZRGB>,
+            inliers: &Vec<i32>,
+            model_coefficients: &Vec<f32>,
+            optimized_coefficients: &mut Vec<f32>,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn project_points_plane_xyzrgb(
+            model: Pin<&mut SampleConsensusModelPlane_PointXYZRGB>,
+            inliers: &Vec<i32>,
+            model_coefficients: &Vec<f32>,
+            copy_data_fields: bool,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // Model functions - PointXYZRGB sphere
+        #[cfg(feature = "sample_consensus")]
+        fn new_sac_model_sphere_xyzrgb(
+            cloud: &PointCloud_PointXYZRGB,
+        ) -> UniquePtr<SampleConsensusModelSphere_PointXYZRGB>;
+        #[cfg(feature = "sample_consensus")]
+        fn set_radius_limits_sphere_xyzrgb(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZRGB>,
+            min_radius: f64,
+            max_radius: f64,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn get_radius_limits_sphere_xyzrgb(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZRGB>,
+            min_radius: &mut f64,
+            max_radius: &mut f64,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn compute_model_coefficients_sphere_xyzrgb(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZRGB>,
+            sample_indices: &Vec<i32>,
+            coefficients: &mut Vec<f32>,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn get_distances_to_model_sphere_xyzrgb(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZRGB>,
+            model_coefficients: &Vec<f32>,
+            distances: &mut Vec<f64>,
+        );
+        #[cfg(feature = "sample_consensus")]
+        fn select_within_distance_sphere_xyzrgb(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZRGB>,
+            model_coefficients: &Vec<f32>,
+            threshold: f64,
+        ) -> Vec<i32>;
+        #[cfg(feature = "sample_consensus")]
+        fn count_within_distance_sphere_xyzrgb(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZRGB>,
+            model_coefficients: &Vec<f32>,
+            threshold: f64,
+        ) -> i32;
+        #[cfg(feature = "sample_consensus")]
+        fn optimize_model_coefficients_sphere_xyzrgb(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZRGB>,
+            inliers: &Vec<i32>,
+            model_coefficients: &Vec<f32>,
+            optimized_coefficients: &mut Vec<f32>,
+        ) -> bool;
+        #[cfg(feature = "sample_consensus")]
+        fn project_points_sphere_xyzrgb(
+            model: Pin<&mut SampleConsensusModelSphere_PointXYZRGB>,
+            inliers: &Vec<i32>,
+            model_coefficients: &Vec<f32>,
+            copy_data_fields: bool,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        // TODO: Add similar functions for PointXYZRGB models
+        // Currently commenting these out as they would require similar C++ implementations
+        // #[cfg(feature = "sample_consensus")]
+        // fn new_plane_model_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> UniquePtr<SampleConsensusModelPlane_PointXYZRGB>;
+        // ... (other PointXYZRGB model functions)
     }
 }
