@@ -93,6 +93,13 @@ fn main() {
 
     if is_feature_enabled("surface") {
         println!("cargo:rustc-link-lib=pcl_surface");
+        // Surface reconstruction depends on search functionality
+        println!("cargo:rustc-link-lib=pcl_search");
+        println!("cargo:rustc-link-lib=pcl_kdtree");
+        // Surface reconstruction may also depend on features for normals
+        println!("cargo:rustc-link-lib=pcl_features");
+        // Surface reconstruction may depend on filters for data preprocessing
+        println!("cargo:rustc-link-lib=pcl_filters");
     }
 
     if is_feature_enabled("visualization") {

@@ -33,6 +33,8 @@ pub mod registration;
 pub mod sample_consensus;
 #[cfg(feature = "segmentation")]
 pub mod segmentation;
+#[cfg(feature = "surface")]
+pub mod surface;
 
 #[cfg(test)]
 mod error_tests;
@@ -81,6 +83,12 @@ pub use segmentation::{
     ExtractPolygonalPrismDataXYZ, MethodType, MinCutSegmentationXYZ, ModelType,
     ProgressiveMorphologicalFilterXYZ, RegionGrowingRgbXYZRGB, RegionGrowingXYZ,
     SacSegmentationXYZ, Segmentation, SegmentationResult,
+};
+#[cfg(feature = "surface")]
+pub use surface::{
+    GreedyProjectionTriangulation, MarchingCubesHoppeXYZ, MarchingCubesRbfXYZ, MovingLeastSquares,
+    OrganizedFastMeshXYZ, PointCloudSmoothing, PoissonReconstruction, PolygonMesh,
+    SurfaceReconstruction, TriangulationType, UpsampleMethod,
 };
 
 #[cfg(test)]

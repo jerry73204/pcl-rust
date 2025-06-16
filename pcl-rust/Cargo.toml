@@ -71,3 +71,7 @@ required-features = ["search", "octree", "io"]
 [[example]]
 name = "segmentation_demo"
 required-features = ["segmentation"]
+
+[[example]]
+name = "surface_demo"
+required-features = ["surface"]
