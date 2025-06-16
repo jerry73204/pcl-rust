@@ -212,7 +212,7 @@ mod tests {
     }
 
     #[test]
-    #[cfg(all(feature = "search"))]
+    #[cfg(feature = "search")]
     fn test_search_input_cloud() {
         use crate::search::SearchInputCloud;
 

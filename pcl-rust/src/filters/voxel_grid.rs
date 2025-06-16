@@ -39,31 +39,25 @@ impl VoxelGridXYZ {
                 message: "must be positive".to_string(),
             });
         }
-        unsafe {
-            ffi::set_leaf_size_xyz(self.inner.pin_mut(), lx, ly, lz);
-        }
+        ffi::set_leaf_size_xyz(self.inner.pin_mut(), lx, ly, lz);
         Ok(())
     }
 }
 
 impl FilterXYZ for VoxelGridXYZ {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        unsafe {
-            ffi::set_input_cloud_voxel_xyz(self.inner.pin_mut(), cloud.as_raw());
-        }
+        ffi::set_input_cloud_voxel_xyz(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
 
     fn filter(&mut self) -> PclResult<PointCloudXYZ> {
-        unsafe {
-            let result = ffi::filter_voxel_xyz(self.inner.pin_mut());
-            if result.is_null() {
-                return Err(crate::error::PclError::ProcessingFailed {
-                    message: "VoxelGrid filter failed".to_string(),
-                });
-            }
-            Ok(PointCloudXYZ::from_unique_ptr(result))
+        let result = ffi::filter_voxel_xyz(self.inner.pin_mut());
+        if result.is_null() {
+            return Err(crate::error::PclError::ProcessingFailed {
+                message: "VoxelGrid filter failed".to_string(),
+            });
         }
+        Ok(PointCloudXYZ::from_unique_ptr(result))
     }
 }
 
@@ -132,31 +126,25 @@ impl VoxelGridXYZRGB {
                 message: "must be positive".to_string(),
             });
         }
-        unsafe {
-            ffi::set_leaf_size_xyzrgb(self.inner.pin_mut(), lx, ly, lz);
-        }
+        ffi::set_leaf_size_xyzrgb(self.inner.pin_mut(), lx, ly, lz);
         Ok(())
     }
 }
 
 impl FilterXYZRGB for VoxelGridXYZRGB {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
-        unsafe {
-            ffi::set_input_cloud_voxel_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
-        }
+        ffi::set_input_cloud_voxel_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
 
     fn filter(&mut self) -> PclResult<PointCloudXYZRGB> {
-        unsafe {
-            let result = ffi::filter_voxel_xyzrgb(self.inner.pin_mut());
-            if result.is_null() {
-                return Err(crate::error::PclError::ProcessingFailed {
-                    message: "VoxelGrid filter failed".to_string(),
-                });
-            }
-            Ok(PointCloudXYZRGB::from_unique_ptr(result))
+        let result = ffi::filter_voxel_xyzrgb(self.inner.pin_mut());
+        if result.is_null() {
+            return Err(crate::error::PclError::ProcessingFailed {
+                message: "VoxelGrid filter failed".to_string(),
+            });
         }
+        Ok(PointCloudXYZRGB::from_unique_ptr(result))
     }
 }
 

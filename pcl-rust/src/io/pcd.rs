@@ -83,10 +83,10 @@ impl PcdIoXYZ for PointCloudXYZ {
         })?;
 
         let result = match format {
-            BinaryFormat::Ascii => pcl_sys::ffi::save_pcd_file_ascii_xyz(path_str, &*self.inner),
-            BinaryFormat::Binary => pcl_sys::ffi::save_pcd_file_binary_xyz(path_str, &*self.inner),
+            BinaryFormat::Ascii => pcl_sys::ffi::save_pcd_file_ascii_xyz(path_str, &self.inner),
+            BinaryFormat::Binary => pcl_sys::ffi::save_pcd_file_binary_xyz(path_str, &self.inner),
             BinaryFormat::BinaryCompressed => {
-                pcl_sys::ffi::save_pcd_file_binary_compressed_xyz(path_str, &*self.inner)
+                pcl_sys::ffi::save_pcd_file_binary_compressed_xyz(path_str, &self.inner)
             }
         };
 
@@ -141,10 +141,10 @@ impl PcdIoXYZI for PointCloudXYZI {
         })?;
 
         let result = match format {
-            BinaryFormat::Ascii => pcl_sys::ffi::save_pcd_file_ascii_xyzi(path_str, &*self.inner),
-            BinaryFormat::Binary => pcl_sys::ffi::save_pcd_file_binary_xyzi(path_str, &*self.inner),
+            BinaryFormat::Ascii => pcl_sys::ffi::save_pcd_file_ascii_xyzi(path_str, &self.inner),
+            BinaryFormat::Binary => pcl_sys::ffi::save_pcd_file_binary_xyzi(path_str, &self.inner),
             BinaryFormat::BinaryCompressed => {
-                pcl_sys::ffi::save_pcd_file_binary_compressed_xyzi(path_str, &*self.inner)
+                pcl_sys::ffi::save_pcd_file_binary_compressed_xyzi(path_str, &self.inner)
             }
         };
 
@@ -199,12 +199,12 @@ impl PcdIoXYZRGB for PointCloudXYZRGB {
         })?;
 
         let result = match format {
-            BinaryFormat::Ascii => pcl_sys::ffi::save_pcd_file_ascii_xyzrgb(path_str, &*self.inner),
+            BinaryFormat::Ascii => pcl_sys::ffi::save_pcd_file_ascii_xyzrgb(path_str, &self.inner),
             BinaryFormat::Binary => {
-                pcl_sys::ffi::save_pcd_file_binary_xyzrgb(path_str, &*self.inner)
+                pcl_sys::ffi::save_pcd_file_binary_xyzrgb(path_str, &self.inner)
             }
             BinaryFormat::BinaryCompressed => {
-                pcl_sys::ffi::save_pcd_file_binary_compressed_xyzrgb(path_str, &*self.inner)
+                pcl_sys::ffi::save_pcd_file_binary_compressed_xyzrgb(path_str, &self.inner)
             }
         };
 

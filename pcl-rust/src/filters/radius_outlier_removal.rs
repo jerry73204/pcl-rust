@@ -34,9 +34,7 @@ impl RadiusOutlierRemovalXYZ {
                 message: "must be positive".to_string(),
             });
         }
-        unsafe {
-            ffi::set_radius_search_xyz(self.inner.pin_mut(), radius);
-        }
+        ffi::set_radius_search_xyz(self.inner.pin_mut(), radius);
         Ok(())
     }
 
@@ -50,38 +48,30 @@ impl RadiusOutlierRemovalXYZ {
                 message: "must be non-negative".to_string(),
             });
         }
-        unsafe {
-            ffi::set_min_neighbors_in_radius_xyz(self.inner.pin_mut(), min_neighbors);
-        }
+        ffi::set_min_neighbors_in_radius_xyz(self.inner.pin_mut(), min_neighbors);
         Ok(())
     }
 
     /// Set whether to return the outliers instead of the inliers
     pub fn set_negative(&mut self, negative: bool) {
-        unsafe {
-            ffi::set_negative_radius_xyz(self.inner.pin_mut(), negative);
-        }
+        ffi::set_negative_radius_xyz(self.inner.pin_mut(), negative);
     }
 }
 
 impl FilterXYZ for RadiusOutlierRemovalXYZ {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        unsafe {
-            ffi::set_input_cloud_radius_xyz(self.inner.pin_mut(), cloud.as_raw());
-        }
+        ffi::set_input_cloud_radius_xyz(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
 
     fn filter(&mut self) -> PclResult<PointCloudXYZ> {
-        unsafe {
-            let result = ffi::filter_radius_xyz(self.inner.pin_mut());
-            if result.is_null() {
-                return Err(crate::error::PclError::ProcessingFailed {
-                    message: "RadiusOutlierRemoval filter failed".to_string(),
-                });
-            }
-            Ok(PointCloudXYZ::from_unique_ptr(result))
+        let result = ffi::filter_radius_xyz(self.inner.pin_mut());
+        if result.is_null() {
+            return Err(crate::error::PclError::ProcessingFailed {
+                message: "RadiusOutlierRemoval filter failed".to_string(),
+            });
         }
+        Ok(PointCloudXYZ::from_unique_ptr(result))
     }
 }
 
@@ -169,9 +159,7 @@ impl RadiusOutlierRemovalXYZRGB {
                 message: "must be positive".to_string(),
             });
         }
-        unsafe {
-            ffi::set_radius_search_xyzrgb(self.inner.pin_mut(), radius);
-        }
+        ffi::set_radius_search_xyzrgb(self.inner.pin_mut(), radius);
         Ok(())
     }
 
@@ -183,38 +171,30 @@ impl RadiusOutlierRemovalXYZRGB {
                 message: "must be non-negative".to_string(),
             });
         }
-        unsafe {
-            ffi::set_min_neighbors_in_radius_xyzrgb(self.inner.pin_mut(), min_neighbors);
-        }
+        ffi::set_min_neighbors_in_radius_xyzrgb(self.inner.pin_mut(), min_neighbors);
         Ok(())
     }
 
     /// Set whether to return the outliers instead of the inliers
     pub fn set_negative(&mut self, negative: bool) {
-        unsafe {
-            ffi::set_negative_radius_xyzrgb(self.inner.pin_mut(), negative);
-        }
+        ffi::set_negative_radius_xyzrgb(self.inner.pin_mut(), negative);
     }
 }
 
 impl FilterXYZRGB for RadiusOutlierRemovalXYZRGB {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
-        unsafe {
-            ffi::set_input_cloud_radius_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
-        }
+        ffi::set_input_cloud_radius_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
 
     fn filter(&mut self) -> PclResult<PointCloudXYZRGB> {
-        unsafe {
-            let result = ffi::filter_radius_xyzrgb(self.inner.pin_mut());
-            if result.is_null() {
-                return Err(crate::error::PclError::ProcessingFailed {
-                    message: "RadiusOutlierRemoval filter failed".to_string(),
-                });
-            }
-            Ok(PointCloudXYZRGB::from_unique_ptr(result))
+        let result = ffi::filter_radius_xyzrgb(self.inner.pin_mut());
+        if result.is_null() {
+            return Err(crate::error::PclError::ProcessingFailed {
+                message: "RadiusOutlierRemoval filter failed".to_string(),
+            });
         }
+        Ok(PointCloudXYZRGB::from_unique_ptr(result))
     }
 }
 

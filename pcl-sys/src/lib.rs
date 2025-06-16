@@ -1057,6 +1057,7 @@ pub mod ffi {
 
         // Camera control functions
         #[cfg(feature = "visualization")]
+        #[allow(clippy::too_many_arguments)]
         fn set_camera_position(
             viewer: Pin<&mut PCLVisualizer>,
             pos_x: f64,
@@ -1102,6 +1103,7 @@ pub mod ffi {
             id: &str,
         ) -> i32;
         #[cfg(feature = "visualization")]
+        #[allow(clippy::too_many_arguments)]
         fn add_text(
             viewer: Pin<&mut PCLVisualizer>,
             text: &str,

@@ -161,6 +161,12 @@ pub struct NormalCloud {
     inner: cxx::UniquePtr<pcl_sys::ffi::PointCloud_Normal>,
 }
 
+impl Default for NormalCloud {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl NormalCloud {
     /// Create a new empty normal cloud
     /// Note: This creates a null pointer since we can't create empty clouds directly

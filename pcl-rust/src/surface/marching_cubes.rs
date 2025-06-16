@@ -22,10 +22,10 @@ impl MarchingCubesHoppeXYZ {
     ///
     /// Note: This will always fail as MarchingCubesHoppe requires point types with normals
     pub fn new() -> PclResult<Self> {
-        return Err(PclError::NotImplemented {
+        Err(PclError::NotImplemented {
             feature: "MarchingCubesHoppe for PointXYZ".to_string(),
             workaround: Some("Use point types with normals (e.g., PointNormal)".to_string()),
-        });
+        })
     }
 
     /// Set the iso level for surface extraction
@@ -107,10 +107,10 @@ impl MarchingCubesRbfXYZ {
     ///
     /// Note: This will always fail as MarchingCubesRBF requires point types with normals
     pub fn new() -> PclResult<Self> {
-        return Err(PclError::NotImplemented {
+        Err(PclError::NotImplemented {
             feature: "MarchingCubesRBF for PointXYZ".to_string(),
             workaround: Some("Use point types with normals (e.g., PointNormal)".to_string()),
-        });
+        })
     }
 
     /// Set the iso level for surface extraction

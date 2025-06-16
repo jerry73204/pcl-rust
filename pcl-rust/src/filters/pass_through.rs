@@ -38,7 +38,7 @@ impl PassThroughXYZ {
                 "Invalid filter limits",
                 "min/max",
                 "min <= max",
-                &format!("min={}, max={}", min, max),
+                format!("min={}, max={}", min, max),
             ));
         }
 
@@ -121,7 +121,7 @@ impl PassThroughXYZRGB {
                 "Invalid filter limits",
                 "min/max",
                 "min <= max",
-                &format!("min={}, max={}", min, max),
+                format!("min={}, max={}", min, max),
             ));
         }
 

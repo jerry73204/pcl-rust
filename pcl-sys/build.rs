@@ -39,7 +39,7 @@ fn main() {
 
     // Helper function to check if a feature is enabled
     fn is_feature_enabled(feature: &str) -> bool {
-        std::env::var(&format!("CARGO_FEATURE_{}", feature.to_uppercase())).is_ok()
+        std::env::var(format!("CARGO_FEATURE_{}", feature.to_uppercase())).is_ok()
     }
 
     // Conditionally link PCL libraries based on enabled features

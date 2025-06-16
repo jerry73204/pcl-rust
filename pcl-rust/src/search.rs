@@ -46,7 +46,7 @@ impl KdTreeXYZ {
                 "k must be positive",
                 "k",
                 "positive integer",
-                &format!("{}", k),
+                format!("{}", k),
             ));
         }
 
@@ -68,7 +68,7 @@ impl KdTreeXYZ {
                 "radius must be positive",
                 "radius",
                 "positive value",
-                &format!("{}", radius),
+                format!("{}", radius),
             ));
         }
 
@@ -127,7 +127,7 @@ impl SearchConfiguration for KdTreeXYZ {
                 "epsilon must be non-negative",
                 "epsilon",
                 "non-negative value",
-                &format!("{}", epsilon),
+                format!("{}", epsilon),
             ));
         }
         ffi::set_epsilon_xyz(self.inner.pin_mut(), epsilon);
@@ -189,7 +189,7 @@ impl KdTreeXYZI {
                 "k must be positive",
                 "k",
                 "positive integer",
-                &format!("{}", k),
+                format!("{}", k),
             ));
         }
 
@@ -211,7 +211,7 @@ impl KdTreeXYZI {
                 "radius must be positive",
                 "radius",
                 "positive value",
-                &format!("{}", radius),
+                format!("{}", radius),
             ));
         }
 
@@ -270,7 +270,7 @@ impl SearchConfiguration for KdTreeXYZI {
                 "epsilon must be non-negative",
                 "epsilon",
                 "non-negative value",
-                &format!("{}", epsilon),
+                format!("{}", epsilon),
             ));
         }
         ffi::set_epsilon_xyzi(self.inner.pin_mut(), epsilon);
@@ -332,7 +332,7 @@ impl KdTreeXYZRGB {
                 "k must be positive",
                 "k",
                 "positive integer",
-                &format!("{}", k),
+                format!("{}", k),
             ));
         }
 
@@ -354,7 +354,7 @@ impl KdTreeXYZRGB {
                 "radius must be positive",
                 "radius",
                 "positive value",
-                &format!("{}", radius),
+                format!("{}", radius),
             ));
         }
 
@@ -408,7 +408,7 @@ impl SearchConfiguration for KdTreeXYZRGB {
                 "epsilon must be non-negative",
                 "epsilon",
                 "non-negative value",
-                &format!("{}", epsilon),
+                format!("{}", epsilon),
             ));
         }
         ffi::set_epsilon_xyzrgb(self.inner.pin_mut(), epsilon);

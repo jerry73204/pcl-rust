@@ -29,7 +29,7 @@ impl OctreeSearchXYZ {
                 "resolution must be positive",
                 "resolution",
                 "positive value",
-                &format!("{}", resolution),
+                format!("{}", resolution),
             ));
         }
 
@@ -62,7 +62,7 @@ impl OctreeSearchXYZ {
                 "k must be positive",
                 "k",
                 "positive integer",
-                &format!("{}", k),
+                format!("{}", k),
             ));
         }
 
@@ -84,7 +84,7 @@ impl OctreeSearchXYZ {
                 "radius must be positive",
                 "radius",
                 "positive value",
-                &format!("{}", radius),
+                format!("{}", radius),
             ));
         }
 
@@ -238,7 +238,7 @@ impl OctreeVoxelCentroidXYZ {
                 "resolution must be positive",
                 "resolution",
                 "positive value",
-                &format!("{}", resolution),
+                format!("{}", resolution),
             ));
         }
 

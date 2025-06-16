@@ -158,7 +158,7 @@ impl PolygonMesh {
                     "Cannot determine file format",
                     "filename",
                     "file with recognized extension (.ply, .obj, .vtk)",
-                    &path.to_string_lossy().to_string(),
+                    path.to_string_lossy().as_ref(),
                 )
             })?;
 

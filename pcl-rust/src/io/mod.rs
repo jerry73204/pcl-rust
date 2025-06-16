@@ -20,20 +20,15 @@ pub enum FileFormat {
 }
 
 /// Binary format options for file output
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum BinaryFormat {
     /// ASCII text format
+    #[default]
     Ascii,
     /// Binary format
     Binary,
     /// Compressed binary format (PCD only)
     BinaryCompressed,
-}
-
-impl Default for BinaryFormat {
-    fn default() -> Self {
-        BinaryFormat::Ascii
-    }
 }
 
 /// Auto-detection functionality for point cloud file formats

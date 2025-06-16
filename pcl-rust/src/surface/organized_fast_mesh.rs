@@ -70,7 +70,7 @@ impl OrganizedFastMeshXYZ {
 
     /// Get the current triangle pixel size
     pub fn triangle_pixel_size(&self) -> i32 {
-        ffi::get_triangle_pixel_size_xyz(&*self.inner)
+        ffi::get_triangle_pixel_size_xyz(&self.inner)
     }
 
     /// Set the triangulation type
@@ -81,7 +81,7 @@ impl OrganizedFastMeshXYZ {
 
     /// Get the current triangulation type
     pub fn triangulation_type(&self) -> TriangulationType {
-        let value = ffi::get_triangulation_type_xyz(&*self.inner);
+        let value = ffi::get_triangulation_type_xyz(&self.inner);
         TriangulationType::from_i32(value).unwrap_or(TriangulationType::TriangleMesh)
     }
 }
