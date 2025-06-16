@@ -9,91 +9,110 @@
 #include <pcl/surface/organized_fast_mesh.h>
 #include <pcl/surface/poisson.h>
 
+// PCL surface implementation headers
+// Note: We only include implementations that work with our point types
+#include <pcl/surface/impl/gp3.hpp>
+#include <pcl/surface/impl/mls.hpp>
+#include <pcl/surface/impl/organized_fast_mesh.hpp>
+#include <pcl/surface/impl/poisson.hpp>
+
 // For mesh representations
 #include <pcl/PolygonMesh.h>
 
+// Explicit template instantiations for surface algorithms
+namespace pcl {
+// Note: MarchingCubesHoppe and MarchingCubesRBF require point types with
+// normals We skip their template instantiation since PointXYZ doesn't have
+// normals template class MarchingCubes<PointXYZ>; template class
+// MarchingCubesHoppe<PointXYZ>; template class MarchingCubesRBF<PointXYZ>;
+template class OrganizedFastMesh<PointXYZ>;
+template class GreedyProjectionTriangulation<PointNormal>;
+template class Poisson<PointNormal>;
+template class MovingLeastSquares<PointXYZ, PointNormal>;
+} // namespace pcl
+
 // Marching Cubes Hoppe reconstruction for PointXYZ
+// Note: MarchingCubesHoppe requires point types with normals, which PointXYZ
+// doesn't have These functions are placeholders and will return errors
 std::unique_ptr<pcl::MarchingCubesHoppe_PointXYZ>
 new_marching_cubes_hoppe_xyz() {
-  return std::make_unique<pcl::MarchingCubesHoppe_PointXYZ>();
+  // MarchingCubesHoppe requires normals, not available for PointXYZ
+  return nullptr;
 }
 
 void set_iso_level_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
                              float iso_level) {
-  mc.setIsoLevel(iso_level);
+  // Not implemented - requires point type with normals
 }
 
 float get_iso_level_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc) {
-  return mc.getIsoLevel();
+  // Not implemented - requires point type with normals
+  return 0.0f;
 }
 
 void set_grid_resolution_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
                                    int res_x, int res_y, int res_z) {
-  mc.setGridResolution(res_x, res_y, res_z);
+  // Not implemented - requires point type with normals
 }
 
 void set_percentage_extend_grid_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
                                           float percentage) {
-  mc.setPercentageExtendGrid(percentage);
+  // Not implemented - requires point type with normals
 }
 
 void set_input_cloud_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
                                const pcl::PointCloud_PointXYZ &cloud) {
-  mc.setInputCloud(std::make_shared<pcl::PointCloud_PointXYZ>(cloud));
+  // Not implemented - requires point type with normals
 }
 
 int32_t perform_reconstruction_hoppe_xyz(pcl::MarchingCubesHoppe_PointXYZ &mc,
                                          pcl::PolygonMesh &mesh) {
-  try {
-    mc.reconstruct(mesh);
-    return 0;
-  } catch (const std::exception &e) {
-    return -1;
-  }
+  // Not implemented - requires point type with normals
+  return -1;
 }
 
 // Marching Cubes RBF reconstruction for PointXYZ
+// Note: MarchingCubesRBF requires point types with normals, which PointXYZ
+// doesn't have These functions are placeholders and will return errors
 std::unique_ptr<pcl::MarchingCubesRBF_PointXYZ> new_marching_cubes_rbf_xyz() {
-  return std::make_unique<pcl::MarchingCubesRBF_PointXYZ>();
+  // MarchingCubesRBF requires normals, not available for PointXYZ
+  return nullptr;
 }
 
 void set_iso_level_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
                            float iso_level) {
-  mc.setIsoLevel(iso_level);
+  // Not implemented - requires point type with normals
 }
 
 float get_iso_level_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc) {
-  return mc.getIsoLevel();
+  // Not implemented - requires point type with normals
+  return 0.0f;
 }
 
 void set_grid_resolution_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc, int res_x,
                                  int res_y, int res_z) {
-  mc.setGridResolution(res_x, res_y, res_z);
+  // Not implemented - requires point type with normals
 }
 
 void set_percentage_extend_grid_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
                                         float percentage) {
-  mc.setPercentageExtendGrid(percentage);
+  // Not implemented - requires point type with normals
 }
 
 void set_off_surface_displacement_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
                                           float displacement) {
-  mc.setOffSurfaceDisplacement(displacement);
+  // Not implemented - requires point type with normals
 }
 
 void set_input_cloud_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
                              const pcl::PointCloud_PointXYZ &cloud) {
-  mc.setInputCloud(std::make_shared<pcl::PointCloud_PointXYZ>(cloud));
+  // Not implemented - requires point type with normals
 }
 
 int32_t perform_reconstruction_rbf_xyz(pcl::MarchingCubesRBF_PointXYZ &mc,
                                        pcl::PolygonMesh &mesh) {
-  try {
-    mc.reconstruct(mesh);
-    return 0;
-  } catch (const std::exception &e) {
-    return -1;
-  }
+  // Not implemented - requires point type with normals
+  return -1;
 }
 
 // Organized Fast Mesh for PointXYZ

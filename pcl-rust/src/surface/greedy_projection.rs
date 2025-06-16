@@ -4,8 +4,8 @@
 //! which performs triangulation on a set of points with normals.
 
 use crate::error::{PclError, PclResult};
+use crate::surface::PolygonMesh;
 use crate::surface::poisson::PointCloudWithNormals;
-use crate::surface::{PolygonMesh, SurfaceReconstruction};
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
@@ -41,8 +41,8 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Get the current mu parameter
-    pub fn mu(&self) -> f64 {
-        ffi::get_mu_greedy(self.inner.pin_mut())
+    pub fn mu(&mut self) -> f64 {
+        ffi::get_mu_greedy(&*self.inner)
     }
 
     /// Set the maximum distance between connected points
@@ -60,8 +60,8 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Get the current search radius
-    pub fn search_radius(&self) -> f64 {
-        ffi::get_search_radius_greedy(self.inner.pin_mut())
+    pub fn search_radius(&mut self) -> f64 {
+        ffi::get_search_radius_greedy(&*self.inner)
     }
 
     /// Set the minimum angle for each triangle
@@ -79,8 +79,8 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Get the current minimum angle
-    pub fn minimum_angle(&self) -> f64 {
-        ffi::get_minimum_angle_greedy(self.inner.pin_mut())
+    pub fn minimum_angle(&mut self) -> f64 {
+        ffi::get_minimum_angle_greedy(&*self.inner)
     }
 
     /// Set the maximum angle for each triangle
@@ -98,8 +98,8 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Get the current maximum angle
-    pub fn maximum_angle(&self) -> f64 {
-        ffi::get_maximum_angle_greedy(self.inner.pin_mut())
+    pub fn maximum_angle(&mut self) -> f64 {
+        ffi::get_maximum_angle_greedy(&*self.inner)
     }
 
     /// Set the maximum number of nearest neighbors to be searched
@@ -117,8 +117,8 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Get the current maximum nearest neighbors
-    pub fn maximum_nearest_neighbors(&self) -> i32 {
-        ffi::get_maximum_nearest_neighbors_greedy(self.inner.pin_mut())
+    pub fn maximum_nearest_neighbors(&mut self) -> i32 {
+        ffi::get_maximum_nearest_neighbors_greedy(&*self.inner)
     }
 
     /// Set the maximum surface angle
@@ -136,8 +136,8 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Get the current maximum surface angle
-    pub fn maximum_surface_angle(&self) -> f64 {
-        ffi::get_maximum_surface_angle_greedy(self.inner.pin_mut())
+    pub fn maximum_surface_angle(&mut self) -> f64 {
+        ffi::get_maximum_surface_angle_greedy(&*self.inner)
     }
 
     /// Set whether to use normal consistency check
@@ -146,8 +146,8 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Get whether normal consistency check is used
-    pub fn normal_consistency(&self) -> bool {
-        ffi::get_normal_consistency_greedy(self.inner.pin_mut())
+    pub fn normal_consistency(&mut self) -> bool {
+        ffi::get_normal_consistency_greedy(&*self.inner)
     }
 
     /// Set whether to use consistent vertex ordering
@@ -156,8 +156,8 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Get whether consistent vertex ordering is used
-    pub fn consistent_vertex_ordering(&self) -> bool {
-        ffi::get_consistent_vertex_ordering_greedy(self.inner.pin_mut())
+    pub fn consistent_vertex_ordering(&mut self) -> bool {
+        ffi::get_consistent_vertex_ordering_greedy(&*self.inner)
     }
 
     /// Set the input point cloud with normals
@@ -325,7 +325,7 @@ mod tests {
             .build();
 
         assert!(gp3.is_ok());
-        let gp3 = gp3.unwrap();
+        let mut gp3 = gp3.unwrap();
         assert_eq!(gp3.mu(), 2.5);
         assert_eq!(gp3.search_radius(), 0.025);
         assert!(!gp3.normal_consistency());

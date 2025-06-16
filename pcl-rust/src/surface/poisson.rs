@@ -4,7 +4,7 @@
 //! robust methods for reconstructing surfaces from oriented point sets.
 
 use crate::error::{PclError, PclResult};
-use crate::surface::{PolygonMesh, SurfaceReconstruction};
+use crate::surface::PolygonMesh;
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
@@ -51,7 +51,7 @@ impl PoissonReconstruction {
     }
 
     /// Get the current depth
-    pub fn depth(&self) -> i32 {
+    pub fn depth(&mut self) -> i32 {
         ffi::get_depth_poisson(self.inner.pin_mut())
     }
 
@@ -70,7 +70,7 @@ impl PoissonReconstruction {
     }
 
     /// Get the current minimum depth
-    pub fn min_depth(&self) -> i32 {
+    pub fn min_depth(&mut self) -> i32 {
         ffi::get_min_depth_poisson(self.inner.pin_mut())
     }
 
@@ -89,7 +89,7 @@ impl PoissonReconstruction {
     }
 
     /// Get the current point weight
-    pub fn point_weight(&self) -> f32 {
+    pub fn point_weight(&mut self) -> f32 {
         ffi::get_point_weight_poisson(self.inner.pin_mut())
     }
 
@@ -108,7 +108,7 @@ impl PoissonReconstruction {
     }
 
     /// Get the current scale
-    pub fn scale(&self) -> f32 {
+    pub fn scale(&mut self) -> f32 {
         ffi::get_scale_poisson(self.inner.pin_mut())
     }
 
@@ -127,7 +127,7 @@ impl PoissonReconstruction {
     }
 
     /// Get the current solver divide
-    pub fn solver_divide(&self) -> i32 {
+    pub fn solver_divide(&mut self) -> i32 {
         ffi::get_solver_divide_poisson(self.inner.pin_mut())
     }
 
@@ -146,7 +146,7 @@ impl PoissonReconstruction {
     }
 
     /// Get the current iso divide
-    pub fn iso_divide(&self) -> i32 {
+    pub fn iso_divide(&mut self) -> i32 {
         ffi::get_iso_divide_poisson(self.inner.pin_mut())
     }
 
@@ -165,7 +165,7 @@ impl PoissonReconstruction {
     }
 
     /// Get the current samples per node
-    pub fn samples_per_node(&self) -> f32 {
+    pub fn samples_per_node(&mut self) -> f32 {
         ffi::get_samples_per_node_poisson(self.inner.pin_mut())
     }
 
@@ -175,7 +175,7 @@ impl PoissonReconstruction {
     }
 
     /// Get whether confidence weights are used
-    pub fn confidence(&self) -> bool {
+    pub fn confidence(&mut self) -> bool {
         ffi::get_confidence_poisson(self.inner.pin_mut())
     }
 
@@ -185,7 +185,7 @@ impl PoissonReconstruction {
     }
 
     /// Get whether polygons are output
-    pub fn output_polygons(&self) -> bool {
+    pub fn output_polygons(&mut self) -> bool {
         ffi::get_output_polygons_poisson(self.inner.pin_mut())
     }
 
@@ -204,7 +204,7 @@ impl PoissonReconstruction {
     }
 
     /// Get the current B-spline degree
-    pub fn degree(&self) -> i32 {
+    pub fn degree(&mut self) -> i32 {
         ffi::get_degree_poisson(self.inner.pin_mut())
     }
 
@@ -214,7 +214,7 @@ impl PoissonReconstruction {
     }
 
     /// Get whether manifold polygons are added
-    pub fn manifold(&self) -> bool {
+    pub fn manifold(&mut self) -> bool {
         ffi::get_manifold_poisson(self.inner.pin_mut())
     }
 
@@ -414,7 +414,7 @@ mod tests {
             .build();
 
         assert!(poisson.is_ok());
-        let poisson = poisson.unwrap();
+        let mut poisson = poisson.unwrap();
         assert_eq!(poisson.depth(), 8);
         assert_eq!(poisson.min_depth(), 2);
         assert_eq!(poisson.point_weight(), 4.0);

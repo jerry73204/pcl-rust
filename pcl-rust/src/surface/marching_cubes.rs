@@ -10,20 +10,22 @@ use cxx::UniquePtr;
 use pcl_sys::ffi;
 
 /// Marching Cubes surface reconstruction using Hoppe's method
+///
+/// Note: This algorithm requires point clouds with normals.
+/// For PointXYZ, this is currently not supported.
 pub struct MarchingCubesHoppeXYZ {
     inner: UniquePtr<ffi::MarchingCubesHoppe_PointXYZ>,
 }
 
 impl MarchingCubesHoppeXYZ {
     /// Create a new Marching Cubes Hoppe reconstruction instance
+    ///
+    /// Note: This will always fail as MarchingCubesHoppe requires point types with normals
     pub fn new() -> PclResult<Self> {
-        let inner = ffi::new_marching_cubes_hoppe_xyz();
-        if inner.is_null() {
-            return Err(PclError::CreationFailed {
-                typename: "MarchingCubesHoppe".to_string(),
-            });
-        }
-        Ok(Self { inner })
+        return Err(PclError::NotImplemented {
+            feature: "MarchingCubesHoppe for PointXYZ".to_string(),
+            workaround: Some("Use point types with normals (e.g., PointNormal)".to_string()),
+        });
     }
 
     /// Set the iso level for surface extraction
@@ -33,7 +35,7 @@ impl MarchingCubesHoppeXYZ {
     }
 
     /// Get the current iso level
-    pub fn iso_level(&self) -> f32 {
+    pub fn iso_level(&mut self) -> f32 {
         ffi::get_iso_level_hoppe_xyz(self.inner.pin_mut())
     }
 
@@ -93,20 +95,22 @@ impl Default for MarchingCubesHoppeXYZ {
 }
 
 /// Marching Cubes surface reconstruction using RBF (Radial Basis Function) method
+///
+/// Note: This algorithm requires point clouds with normals.
+/// For PointXYZ, this is currently not supported.
 pub struct MarchingCubesRbfXYZ {
     inner: UniquePtr<ffi::MarchingCubesRBF_PointXYZ>,
 }
 
 impl MarchingCubesRbfXYZ {
     /// Create a new Marching Cubes RBF reconstruction instance
+    ///
+    /// Note: This will always fail as MarchingCubesRBF requires point types with normals
     pub fn new() -> PclResult<Self> {
-        let inner = ffi::new_marching_cubes_rbf_xyz();
-        if inner.is_null() {
-            return Err(PclError::CreationFailed {
-                typename: "MarchingCubesRBF".to_string(),
-            });
-        }
-        Ok(Self { inner })
+        return Err(PclError::NotImplemented {
+            feature: "MarchingCubesRBF for PointXYZ".to_string(),
+            workaround: Some("Use point types with normals (e.g., PointNormal)".to_string()),
+        });
     }
 
     /// Set the iso level for surface extraction
@@ -116,7 +120,7 @@ impl MarchingCubesRbfXYZ {
     }
 
     /// Get the current iso level
-    pub fn iso_level(&self) -> f32 {
+    pub fn iso_level(&mut self) -> f32 {
         ffi::get_iso_level_rbf_xyz(self.inner.pin_mut())
     }
 
@@ -317,13 +321,23 @@ mod tests {
     #[test]
     fn test_marching_cubes_hoppe_creation() {
         let mc = MarchingCubesHoppeXYZ::new();
-        assert!(mc.is_ok());
+        // Should fail as it requires normals
+        assert!(mc.is_err());
+        match mc {
+            Err(PclError::NotImplemented { .. }) => {}
+            _ => panic!("Expected NotImplemented error"),
+        }
     }
 
     #[test]
     fn test_marching_cubes_rbf_creation() {
         let mc = MarchingCubesRbfXYZ::new();
-        assert!(mc.is_ok());
+        // Should fail as it requires normals
+        assert!(mc.is_err());
+        match mc {
+            Err(PclError::NotImplemented { .. }) => {}
+            _ => panic!("Expected NotImplemented error"),
+        }
     }
 
     #[test]
@@ -334,9 +348,8 @@ mod tests {
             .percentage_extend_grid(0.1)
             .build();
 
-        assert!(mc.is_ok());
-        let mc = mc.unwrap();
-        assert_eq!(mc.iso_level(), 0.0);
+        // Should fail as it requires normals
+        assert!(mc.is_err());
     }
 
     #[test]
@@ -348,16 +361,13 @@ mod tests {
             .off_surface_displacement(0.01)
             .build();
 
-        assert!(mc.is_ok());
-        let mc = mc.unwrap();
-        assert_eq!(mc.iso_level(), 0.0);
+        // Should fail as it requires normals
+        assert!(mc.is_err());
     }
 
     #[test]
     fn test_invalid_parameters() {
-        let mut mc = MarchingCubesHoppeXYZ::new().unwrap();
-
-        assert!(mc.set_grid_resolution(-1, 50, 50).is_err());
-        assert!(mc.set_percentage_extend_grid(-1.0).is_err());
+        // Can't test parameter validation as creation fails
+        // This is expected behavior for algorithms requiring normals
     }
 }

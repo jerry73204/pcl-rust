@@ -52,6 +52,8 @@ impl PolygonMesh {
         if result < 0 {
             return Err(PclError::IoError {
                 message: format!("Failed to save PLY file: {}", filename_str),
+                path: Some(filename.as_ref().to_path_buf()),
+                source: None,
             });
         }
         Ok(())
@@ -64,6 +66,8 @@ impl PolygonMesh {
         if result < 0 {
             return Err(PclError::IoError {
                 message: format!("Failed to save OBJ file: {}", filename_str),
+                path: Some(filename.as_ref().to_path_buf()),
+                source: None,
             });
         }
         Ok(())
@@ -76,6 +80,8 @@ impl PolygonMesh {
         if result < 0 {
             return Err(PclError::IoError {
                 message: format!("Failed to save VTK file: {}", filename_str),
+                path: Some(filename.as_ref().to_path_buf()),
+                source: None,
             });
         }
         Ok(())
@@ -152,7 +158,7 @@ impl PolygonMesh {
                     "Cannot determine file format",
                     "filename",
                     "file with recognized extension (.ply, .obj, .vtk)",
-                    &path.to_string_lossy(),
+                    &path.to_string_lossy().to_string(),
                 )
             })?;
 

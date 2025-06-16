@@ -114,7 +114,7 @@ impl MovingLeastSquares {
 
     /// Get the current search radius
     pub fn search_radius(&self) -> f64 {
-        ffi::get_search_radius_mls(self.inner.pin_mut())
+        ffi::get_search_radius_mls(&*self.inner)
     }
 
     /// Set the polynomial order for the polynomial fitting
@@ -133,7 +133,7 @@ impl MovingLeastSquares {
 
     /// Get the current polynomial order
     pub fn polynomial_order(&self) -> i32 {
-        ffi::get_polynomial_order_mls(self.inner.pin_mut())
+        ffi::get_polynomial_order_mls(&*self.inner)
     }
 
     /// Set the parameter used for the Gaussian weight function
@@ -152,7 +152,7 @@ impl MovingLeastSquares {
 
     /// Get the current Gaussian parameter
     pub fn sqr_gauss_param(&self) -> f64 {
-        ffi::get_sqr_gauss_param_mls(self.inner.pin_mut())
+        ffi::get_sqr_gauss_param_mls(&*self.inner)
     }
 
     /// Set whether to compute normals for the output point cloud
@@ -181,7 +181,7 @@ impl MovingLeastSquares {
 
     /// Get the current upsampling radius
     pub fn upsampling_radius(&self) -> f64 {
-        ffi::get_upsampling_radius_mls(self.inner.pin_mut())
+        ffi::get_upsampling_radius_mls(&*self.inner)
     }
 
     /// Set the step size for upsampling (used with SampleLocalPlane method)
@@ -200,7 +200,7 @@ impl MovingLeastSquares {
 
     /// Get the current upsampling step size
     pub fn upsampling_step_size(&self) -> f64 {
-        ffi::get_upsampling_step_size_mls(self.inner.pin_mut())
+        ffi::get_upsampling_step_size_mls(&*self.inner)
     }
 
     /// Set the desired number of points in radius (used with RandomUniformDensity method)
@@ -233,7 +233,7 @@ impl MovingLeastSquares {
 
     /// Get the current dilation voxel size
     pub fn dilation_voxel_size(&self) -> f32 {
-        ffi::get_dilation_voxel_size_mls(self.inner.pin_mut())
+        ffi::get_dilation_voxel_size_mls(&*self.inner)
     }
 
     /// Set the number of dilation iterations (used with VoxelGridDilation method)
@@ -252,7 +252,7 @@ impl MovingLeastSquares {
 
     /// Get the current dilation iterations
     pub fn dilation_iterations(&self) -> i32 {
-        ffi::get_dilation_iterations_mls(self.inner.pin_mut())
+        ffi::get_dilation_iterations_mls(&*self.inner)
     }
 }
 
