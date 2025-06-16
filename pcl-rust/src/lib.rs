@@ -274,7 +274,7 @@ mod tests {
     #[cfg(feature = "search")]
     fn test_error_handling() {
         // Test parameter validation
-        let kdtree = KdTreeXYZ::new().unwrap();
+        let _kdtree = KdTreeXYZ::new().unwrap();
 
         // This would require actual points to test properly, but we can test parameter validation
         // KdTree search methods would need points to work with

@@ -11,7 +11,6 @@ use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
 use crate::error::PclResult;
 use crate::filters::{FilterXYZ, FilterXYZRGB};
 use pcl_sys::{UniquePtr, ffi};
-use std::pin::Pin;
 
 /// StatisticalOutlierRemoval filter for PointXYZ clouds
 pub struct StatisticalOutlierRemovalXYZ {

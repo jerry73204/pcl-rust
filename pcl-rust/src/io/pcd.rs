@@ -244,7 +244,6 @@ pub fn load_pcd_xyzrgb<P: AsRef<Path>>(path: P) -> PclResult<PointCloudXYZRGB> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fs;
     use tempfile::NamedTempFile;
 
     #[test]

@@ -5,10 +5,7 @@
 //! - Generate organized meshes using OrganizedFastMesh
 //! - Save meshes to various file formats
 
-use pcl::{
-    MarchingCubesHoppeXYZ, OrganizedFastMeshXYZ, PolygonMesh, SurfaceReconstruction,
-    TriangulationType, common::PointCloudXYZBuilder,
-};
+use pcl::{OrganizedFastMeshXYZ, PolygonMesh, TriangulationType, common::PointCloudXYZBuilder};
 
 fn main() -> pcl::PclResult<()> {
     println!("Surface Reconstruction Demo");
@@ -19,7 +16,8 @@ fn main() -> pcl::PclResult<()> {
     println!("Created sample cloud with {} points", cloud.size());
 
     // Demonstrate Marching Cubes surface reconstruction
-    marching_cubes_demo(&cloud)?;
+    // Note: Skipping as MarchingCubes requires point clouds with normals
+    println!("\nSkipping Marching Cubes demo - requires point clouds with normals");
 
     // Create an organized point cloud for OrganizedFastMesh demo
     let organized_cloud = create_organized_cloud()?;
@@ -113,34 +111,13 @@ fn create_organized_cloud() -> pcl::PclResult<pcl::PointCloudXYZ> {
 }
 
 /// Demonstrate Marching Cubes surface reconstruction
-fn marching_cubes_demo(cloud: &pcl::PointCloudXYZ) -> pcl::PclResult<()> {
+/// Note: This is currently not functional as MarchingCubes requires point clouds with normals
+#[allow(dead_code)]
+fn marching_cubes_demo(_cloud: &pcl::PointCloudXYZ) -> pcl::PclResult<()> {
     println!("\n1. Marching Cubes Hoppe Reconstruction");
     println!("-------------------------------------");
-
-    // Create and configure Marching Cubes Hoppe algorithm
-    let mut marching_cubes = MarchingCubesHoppeXYZ::new()?;
-    marching_cubes.set_iso_level(0.0)?;
-    marching_cubes.set_grid_resolution(50, 50, 50)?;
-    marching_cubes.set_percentage_extend_grid(0.1)?;
-
-    // Set input cloud
-    marching_cubes.set_input_cloud(cloud)?;
-
-    // Create output mesh
-    let mut mesh = PolygonMesh::new()?;
-
-    // Perform reconstruction
-    marching_cubes.reconstruct(&mut mesh)?;
-
-    println!("Reconstruction completed!");
-    println!("  Vertices: {}", mesh.vertex_count());
-    println!("  Polygons: {}", mesh.polygon_count());
-    println!("  Valid mesh: {}", mesh.is_valid());
-
-    // Save mesh to file (commented out to avoid file I/O in demo)
-    // mesh.save("marching_cubes_result.ply")?;
-    // println!("  Saved to: marching_cubes_result.ply");
-
+    println!("Note: MarchingCubes algorithms require point clouds with normals.");
+    println!("This demo is not functional for PointXYZ clouds.");
     Ok(())
 }
 

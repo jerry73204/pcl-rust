@@ -46,7 +46,6 @@ pub mod auto_detect {
         load_point_cloud_auto_xyz,
     };
     use std::path::Path;
-    use std::pin::Pin;
 
     /// Detect file format from file extension
     pub fn detect_format_from_ext<P: AsRef<Path>>(path: P) -> Result<FileFormat> {
