@@ -35,6 +35,8 @@ pub mod sample_consensus;
 pub mod segmentation;
 #[cfg(feature = "surface")]
 pub mod surface;
+#[cfg(feature = "visualization")]
+pub mod visualization;
 
 #[cfg(test)]
 mod error_tests;
@@ -89,6 +91,11 @@ pub use surface::{
     GreedyProjectionTriangulation, MarchingCubesHoppeXYZ, MarchingCubesRbfXYZ, MovingLeastSquares,
     OrganizedFastMeshXYZ, PointCloudSmoothing, PoissonReconstruction, PolygonMesh,
     SurfaceReconstruction, TriangulationType, UpsampleMethod,
+};
+#[cfg(feature = "visualization")]
+pub use visualization::{
+    CameraControl, CloudViewer, CloudViewerBuilder, PclVisualizer, PclVisualizerBuilder,
+    RenderingProperties, Representation, Shading, ViewerXYZ, ViewerXYZRGB, VisualizationControl,
 };
 
 #[cfg(test)]

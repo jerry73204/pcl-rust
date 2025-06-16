@@ -128,6 +128,10 @@ pub enum PclError {
     /// Computation failed
     #[error("Computation failed: {0}")]
     ComputationFailed(String),
+
+    /// Visualization operation error
+    #[error("Visualization error: {message}")]
+    VisualizationError { message: String, operation: String },
 }
 
 /// Types of search operations that can fail
