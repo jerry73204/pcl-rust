@@ -25,6 +25,8 @@ pub mod search;
 
 #[cfg(feature = "features")]
 pub mod features;
+#[cfg(feature = "keypoints")]
+pub mod keypoints;
 #[cfg(feature = "registration")]
 pub mod registration;
 #[cfg(feature = "sample_consensus")]
@@ -58,6 +60,10 @@ pub use filters::{
 pub use features::{
     FpfhEstimation, FpfhEstimationOmp, FpfhSignature, Normal, NormalCloud, NormalEstimation,
     NormalEstimationOmp, PfhEstimation, PfhSignature,
+};
+#[cfg(feature = "keypoints")]
+pub use keypoints::{
+    Harris3D, Iss3D, KeypointBuilder, KeypointDetector, PointWithScale, SiftKeypoint,
 };
 #[cfg(feature = "registration")]
 pub use registration::{

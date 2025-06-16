@@ -218,6 +218,11 @@ impl KdTreeXYZI {
         let indices = ffi::radius_search_xyzi(&self.inner, &point.inner, radius);
         Ok(indices)
     }
+
+    /// Get access to the raw FFI object
+    pub fn as_raw(&self) -> &ffi::KdTree_PointXYZI {
+        &self.inner
+    }
 }
 
 impl NearestNeighborSearch<PointXYZI> for KdTreeXYZI {

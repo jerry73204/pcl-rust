@@ -1772,5 +1772,134 @@ pub mod ffi {
             icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
         ) -> Vec<f32>;
 
+        // Keypoints types - always available but functions conditionally compiled
+        #[namespace = "pcl"]
+        type HarrisKeypoint3D_PointXYZ_PointXYZI;
+        #[namespace = "pcl"]
+        type ISSKeypoint3D_PointXYZ_PointXYZ;
+        #[namespace = "pcl"]
+        type SIFTKeypoint_PointXYZI_PointWithScale;
+        #[namespace = "pcl"]
+        type PointWithScale;
+        #[namespace = "pcl"]
+        type PointCloud_PointWithScale;
+
+        // Harris 3D keypoint detector functions
+        #[cfg(feature = "keypoints")]
+        fn new_harris_3d_xyz() -> UniquePtr<HarrisKeypoint3D_PointXYZ_PointXYZI>;
+        #[cfg(feature = "keypoints")]
+        fn set_input_cloud_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_search_method_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            tree: &KdTree_PointXYZ,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_radius_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            radius: f64,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_threshold_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            threshold: f32,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_non_max_suppression_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            suppress: bool,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_refine_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+            refine: bool,
+        );
+        #[cfg(feature = "keypoints")]
+        fn compute_harris_3d_xyz(
+            harris: Pin<&mut HarrisKeypoint3D_PointXYZ_PointXYZI>,
+        ) -> UniquePtr<PointCloud_PointXYZI>;
+
+        // ISS 3D keypoint detector functions
+        #[cfg(feature = "keypoints")]
+        fn new_iss_3d_xyz() -> UniquePtr<ISSKeypoint3D_PointXYZ_PointXYZ>;
+        #[cfg(feature = "keypoints")]
+        fn set_input_cloud_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_search_method_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            tree: &KdTree_PointXYZ,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_salient_radius_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            radius: f64,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_non_max_radius_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            radius: f64,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_threshold21_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            threshold: f64,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_threshold32_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            threshold: f64,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_min_neighbors_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+            min_neighbors: i32,
+        );
+        #[cfg(feature = "keypoints")]
+        fn compute_iss_3d_xyz(
+            iss: Pin<&mut ISSKeypoint3D_PointXYZ_PointXYZ>,
+        ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        // SIFT keypoint detector functions
+        #[cfg(feature = "keypoints")]
+        fn new_sift_keypoint_xyzi() -> UniquePtr<SIFTKeypoint_PointXYZI_PointWithScale>;
+        #[cfg(feature = "keypoints")]
+        fn set_input_cloud_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+            cloud: &PointCloud_PointXYZI,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_search_method_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+            tree: &KdTree_PointXYZI,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_scales_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+            min_scale: f32,
+            nr_octaves: f32,
+            nr_scales_per_octave: i32,
+        );
+        #[cfg(feature = "keypoints")]
+        fn set_minimum_contrast_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+            min_contrast: f32,
+        );
+        #[cfg(feature = "keypoints")]
+        fn compute_sift_xyzi(
+            sift: Pin<&mut SIFTKeypoint_PointXYZI_PointWithScale>,
+        ) -> UniquePtr<PointCloud_PointWithScale>;
+
+        // Helper functions for keypoint data access
+        #[cfg(feature = "keypoints")]
+        fn get_point_with_scale_coords(point: &PointWithScale) -> Vec<f32>;
+        #[cfg(feature = "keypoints")]
+        fn get_point_xyzi_coords(point: &PointXYZI) -> Vec<f32>;
+
     }
 }

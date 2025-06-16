@@ -78,6 +78,12 @@ fn main() {
 
     if is_feature_enabled("keypoints") {
         println!("cargo:rustc-link-lib=pcl_keypoints");
+        // Keypoints depend on search functionality
+        println!("cargo:rustc-link-lib=pcl_search");
+        println!("cargo:rustc-link-lib=pcl_kdtree");
+        // Keypoints also depend on features and filters
+        println!("cargo:rustc-link-lib=pcl_features");
+        println!("cargo:rustc-link-lib=pcl_filters");
     }
 
     if is_feature_enabled("surface") {
