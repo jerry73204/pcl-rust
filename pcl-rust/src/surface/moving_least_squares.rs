@@ -105,7 +105,7 @@ impl MovingLeastSquares {
                 "Invalid search radius",
                 "radius",
                 "positive value",
-                &radius.to_string(),
+                radius.to_string(),
             ));
         }
         ffi::set_search_radius_mls(self.inner.pin_mut(), radius);
@@ -124,7 +124,7 @@ impl MovingLeastSquares {
                 "Invalid polynomial order",
                 "order",
                 "non-negative value",
-                &order.to_string(),
+                order.to_string(),
             ));
         }
         ffi::set_polynomial_order_mls(self.inner.pin_mut(), order);
@@ -143,7 +143,7 @@ impl MovingLeastSquares {
                 "Invalid Gaussian parameter",
                 "param",
                 "positive value",
-                &param.to_string(),
+                param.to_string(),
             ));
         }
         ffi::set_sqr_gauss_param_mls(self.inner.pin_mut(), param);
@@ -172,7 +172,7 @@ impl MovingLeastSquares {
                 "Invalid upsampling radius",
                 "radius",
                 "positive value",
-                &radius.to_string(),
+                radius.to_string(),
             ));
         }
         ffi::set_upsampling_radius_mls(self.inner.pin_mut(), radius);
@@ -191,7 +191,7 @@ impl MovingLeastSquares {
                 "Invalid upsampling step size",
                 "step_size",
                 "positive value",
-                &step_size.to_string(),
+                step_size.to_string(),
             ));
         }
         ffi::set_upsampling_step_size_mls(self.inner.pin_mut(), step_size);
@@ -210,7 +210,7 @@ impl MovingLeastSquares {
                 "Invalid desired number of points",
                 "num_points",
                 "positive value",
-                &num_points.to_string(),
+                num_points.to_string(),
             ));
         }
         ffi::set_desired_num_points_in_radius_mls(self.inner.pin_mut(), num_points);
@@ -224,7 +224,7 @@ impl MovingLeastSquares {
                 "Invalid dilation voxel size",
                 "voxel_size",
                 "positive value",
-                &voxel_size.to_string(),
+                voxel_size.to_string(),
             ));
         }
         ffi::set_dilation_voxel_size_mls(self.inner.pin_mut(), voxel_size);
@@ -243,7 +243,7 @@ impl MovingLeastSquares {
                 "Invalid dilation iterations",
                 "iterations",
                 "non-negative value",
-                &iterations.to_string(),
+                iterations.to_string(),
             ));
         }
         ffi::set_dilation_iterations_mls(self.inner.pin_mut(), iterations);

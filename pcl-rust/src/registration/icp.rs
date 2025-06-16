@@ -36,7 +36,7 @@ impl IcpXYZ {
                 "Invalid iteration count",
                 "iterations",
                 "positive integer",
-                &iterations.to_string(),
+                iterations.to_string(),
             ));
         }
         ffi::set_max_iterations_icp_xyz(self.inner.pin_mut(), iterations);
@@ -55,7 +55,7 @@ impl IcpXYZ {
                 "Invalid transformation epsilon",
                 "epsilon",
                 "non-negative value",
-                &epsilon.to_string(),
+                epsilon.to_string(),
             ));
         }
         ffi::set_transformation_epsilon_icp_xyz(self.inner.pin_mut(), epsilon);
@@ -74,7 +74,7 @@ impl IcpXYZ {
                 "Invalid Euclidean fitness epsilon",
                 "epsilon",
                 "non-negative value",
-                &epsilon.to_string(),
+                epsilon.to_string(),
             ));
         }
         ffi::set_euclidean_fitness_epsilon_icp_xyz(self.inner.pin_mut(), epsilon);
@@ -93,7 +93,7 @@ impl IcpXYZ {
                 "Invalid correspondence distance",
                 "distance",
                 "positive value",
-                &distance.to_string(),
+                distance.to_string(),
             ));
         }
         ffi::set_max_correspondence_distance_icp_xyz(self.inner.pin_mut(), distance);
@@ -200,7 +200,7 @@ impl IcpXYZRGB {
                 "Invalid iteration count",
                 "iterations",
                 "positive integer",
-                &iterations.to_string(),
+                iterations.to_string(),
             ));
         }
         ffi::set_max_iterations_icp_xyzrgb(self.inner.pin_mut(), iterations);
@@ -219,7 +219,7 @@ impl IcpXYZRGB {
                 "Invalid transformation epsilon",
                 "epsilon",
                 "non-negative value",
-                &epsilon.to_string(),
+                epsilon.to_string(),
             ));
         }
         ffi::set_transformation_epsilon_icp_xyzrgb(self.inner.pin_mut(), epsilon);
@@ -238,7 +238,7 @@ impl IcpXYZRGB {
                 "Invalid Euclidean fitness epsilon",
                 "epsilon",
                 "non-negative value",
-                &epsilon.to_string(),
+                epsilon.to_string(),
             ));
         }
         ffi::set_euclidean_fitness_epsilon_icp_xyzrgb(self.inner.pin_mut(), epsilon);
@@ -257,7 +257,7 @@ impl IcpXYZRGB {
                 "Invalid correspondence distance",
                 "distance",
                 "positive value",
-                &distance.to_string(),
+                distance.to_string(),
             ));
         }
         ffi::set_max_correspondence_distance_icp_xyzrgb(self.inner.pin_mut(), distance);

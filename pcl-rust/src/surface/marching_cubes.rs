@@ -46,7 +46,7 @@ impl MarchingCubesHoppeXYZ {
                 "Invalid grid resolution",
                 "res_x, res_y, res_z",
                 "positive values",
-                &format!("({}, {}, {})", res_x, res_y, res_z),
+                format!("({}, {}, {})", res_x, res_y, res_z),
             ));
         }
         ffi::set_grid_resolution_hoppe_xyz(self.inner.pin_mut(), res_x, res_y, res_z);
@@ -60,7 +60,7 @@ impl MarchingCubesHoppeXYZ {
                 "Invalid grid extension percentage",
                 "percentage",
                 "non-negative value",
-                &percentage.to_string(),
+                percentage.to_string(),
             ));
         }
         ffi::set_percentage_extend_grid_hoppe_xyz(self.inner.pin_mut(), percentage);
@@ -131,7 +131,7 @@ impl MarchingCubesRbfXYZ {
                 "Invalid grid resolution",
                 "res_x, res_y, res_z",
                 "positive values",
-                &format!("({}, {}, {})", res_x, res_y, res_z),
+                format!("({}, {}, {})", res_x, res_y, res_z),
             ));
         }
         ffi::set_grid_resolution_rbf_xyz(self.inner.pin_mut(), res_x, res_y, res_z);
@@ -145,7 +145,7 @@ impl MarchingCubesRbfXYZ {
                 "Invalid grid extension percentage",
                 "percentage",
                 "non-negative value",
-                &percentage.to_string(),
+                percentage.to_string(),
             ));
         }
         ffi::set_percentage_extend_grid_rbf_xyz(self.inner.pin_mut(), percentage);

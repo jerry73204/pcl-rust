@@ -123,7 +123,7 @@ fn ransac_plane_demo(cloud: &PointCloudXYZ) -> pcl::PclResult<()> {
     println!("Found plane with {} inliers", result.inliers.len());
     println!(
         "Plane equation: {}x + {}y + {}z + {} = 0",
-        result.coefficients.get(0).unwrap_or(&0.0),
+        result.coefficients.first().unwrap_or(&0.0),
         result.coefficients.get(1).unwrap_or(&0.0),
         result.coefficients.get(2).unwrap_or(&0.0),
         result.coefficients.get(3).unwrap_or(&0.0)

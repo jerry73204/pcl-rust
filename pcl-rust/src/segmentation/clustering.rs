@@ -111,7 +111,7 @@ impl ClusteringXYZ for EuclideanClusterExtractionXYZ {
                 "Invalid cluster tolerance",
                 "cluster_tolerance",
                 "positive value",
-                &tolerance.to_string(),
+                tolerance.to_string(),
             ));
         }
         ffi::set_cluster_tolerance_euclidean_xyz(self.inner.pin_mut(), tolerance);
@@ -128,7 +128,7 @@ impl ClusteringXYZ for EuclideanClusterExtractionXYZ {
                 "Invalid minimum cluster size",
                 "min_cluster_size",
                 "positive value",
-                &min_size.to_string(),
+                min_size.to_string(),
             ));
         }
         ffi::set_min_cluster_size_euclidean_xyz(self.inner.pin_mut(), min_size);
@@ -145,7 +145,7 @@ impl ClusteringXYZ for EuclideanClusterExtractionXYZ {
                 "Invalid maximum cluster size",
                 "max_cluster_size",
                 "positive value",
-                &max_size.to_string(),
+                max_size.to_string(),
             ));
         }
         ffi::set_max_cluster_size_euclidean_xyz(self.inner.pin_mut(), max_size);
@@ -260,7 +260,7 @@ impl ConditionalEuclideanClusteringXYZ {
                 "Invalid cluster tolerance",
                 "tolerance",
                 "positive value",
-                &tolerance.to_string(),
+                tolerance.to_string(),
             ));
         }
         ffi::set_cluster_tolerance_conditional_euclidean_xyz(self.inner.pin_mut(), tolerance);
@@ -279,7 +279,7 @@ impl ConditionalEuclideanClusteringXYZ {
                 "Invalid minimum cluster size",
                 "min_size",
                 "positive value",
-                &min_size.to_string(),
+                min_size.to_string(),
             ));
         }
         ffi::set_min_cluster_size_conditional_euclidean_xyz(self.inner.pin_mut(), min_size);
@@ -298,7 +298,7 @@ impl ConditionalEuclideanClusteringXYZ {
                 "Invalid maximum cluster size",
                 "max_size",
                 "positive value",
-                &max_size.to_string(),
+                max_size.to_string(),
             ));
         }
         ffi::set_max_cluster_size_conditional_euclidean_xyz(self.inner.pin_mut(), max_size);

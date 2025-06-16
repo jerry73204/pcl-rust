@@ -50,7 +50,7 @@ impl Iss3D {
                 "Invalid salient radius",
                 "radius",
                 "positive value",
-                &radius.to_string(),
+                radius.to_string(),
             ));
         }
         ffi::set_salient_radius_iss_3d_xyz(self.inner.pin_mut(), radius);
@@ -66,7 +66,7 @@ impl Iss3D {
                 "Invalid non-max radius",
                 "radius",
                 "positive value",
-                &radius.to_string(),
+                radius.to_string(),
             ));
         }
         ffi::set_non_max_radius_iss_3d_xyz(self.inner.pin_mut(), radius);
@@ -82,7 +82,7 @@ impl Iss3D {
                 "Invalid threshold21",
                 "threshold",
                 "positive value",
-                &threshold.to_string(),
+                threshold.to_string(),
             ));
         }
         ffi::set_threshold21_iss_3d_xyz(self.inner.pin_mut(), threshold);
@@ -98,7 +98,7 @@ impl Iss3D {
                 "Invalid threshold32",
                 "threshold",
                 "positive value",
-                &threshold.to_string(),
+                threshold.to_string(),
             ));
         }
         ffi::set_threshold32_iss_3d_xyz(self.inner.pin_mut(), threshold);
@@ -112,7 +112,7 @@ impl Iss3D {
                 "Invalid minimum neighbors count",
                 "min_neighbors",
                 "positive integer",
-                &min_neighbors.to_string(),
+                min_neighbors.to_string(),
             ));
         }
         ffi::set_min_neighbors_iss_3d_xyz(self.inner.pin_mut(), min_neighbors);

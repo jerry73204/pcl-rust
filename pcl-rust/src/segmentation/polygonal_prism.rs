@@ -59,7 +59,7 @@ impl ExtractPolygonalPrismDataXYZ {
                 "Invalid height limits",
                 "min_height/max_height",
                 "min_height < max_height",
-                &format!("min: {}, max: {}", min_height, max_height),
+                format!("min: {}, max: {}", min_height, max_height),
             ));
         }
         ffi::set_height_limits_polygonal_prism_xyz(self.inner.pin_mut(), min_height, max_height);

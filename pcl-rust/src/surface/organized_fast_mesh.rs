@@ -61,7 +61,7 @@ impl OrganizedFastMeshXYZ {
                 "Invalid triangle pixel size",
                 "triangle_size",
                 "positive value",
-                &triangle_size.to_string(),
+                triangle_size.to_string(),
             ));
         }
         ffi::set_triangle_pixel_size_xyz(self.inner.pin_mut(), triangle_size);

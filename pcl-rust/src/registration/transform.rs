@@ -36,7 +36,7 @@ impl TransformationMatrix {
     }
 
     /// Create a transformation matrix from a Vec<f32> (row-major order)
-    pub fn from_vec(vec: &Vec<f32>) -> Option<Self> {
+    pub fn from_vec(vec: &[f32]) -> Option<Self> {
         if vec.len() != 16 {
             return None;
         }
@@ -144,8 +144,8 @@ impl TransformationMatrix {
         // Transpose of rotation matrix
         let mut result = Self::identity();
         for i in 0..3 {
-            for j in 0..3 {
-                result.data[i][j] = r[j][i];
+            for (j, row) in r.iter().enumerate() {
+                result.data[i][j] = row[i];
             }
         }
 

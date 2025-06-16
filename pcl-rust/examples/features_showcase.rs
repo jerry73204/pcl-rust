@@ -4,8 +4,7 @@ use pcl::common::PointCloudXYZ;
 use pcl::error::PclResult;
 use pcl::features::{
     FpfhEstimation, NormalEstimation, NormalEstimationOmp, PfhEstimation,
-    builders::{FpfhEstimationBuilder, NormalEstimationBuilder},
-    quick,
+    builders::NormalEstimationBuilder, quick,
 };
 
 fn main() -> PclResult<()> {

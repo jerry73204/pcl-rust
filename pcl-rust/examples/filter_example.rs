@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("==================");
 
     // Create a sample point cloud with some noise
-    let mut cloud = create_sample_cloud()?;
+    let cloud = create_sample_cloud()?;
     println!("\nOriginal cloud size: {} points", cloud.size());
 
     // Example 1: VoxelGrid Filter

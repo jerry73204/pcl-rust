@@ -33,7 +33,7 @@ impl GreedyProjectionTriangulation {
                 "Invalid mu parameter",
                 "mu",
                 "positive value",
-                &mu.to_string(),
+                mu.to_string(),
             ));
         }
         ffi::set_mu_greedy(self.inner.pin_mut(), mu);
@@ -52,7 +52,7 @@ impl GreedyProjectionTriangulation {
                 "Invalid search radius",
                 "radius",
                 "positive value",
-                &radius.to_string(),
+                radius.to_string(),
             ));
         }
         ffi::set_search_radius_greedy(self.inner.pin_mut(), radius);
@@ -66,12 +66,12 @@ impl GreedyProjectionTriangulation {
 
     /// Set the minimum angle for each triangle
     pub fn set_minimum_angle(&mut self, angle: f64) -> PclResult<()> {
-        if angle < 0.0 || angle >= std::f64::consts::PI {
+        if !(0.0..std::f64::consts::PI).contains(&angle) {
             return Err(PclError::invalid_parameters(
                 "Invalid minimum angle",
                 "angle",
                 "value between 0 and PI",
-                &angle.to_string(),
+                angle.to_string(),
             ));
         }
         ffi::set_minimum_angle_greedy(self.inner.pin_mut(), angle);
@@ -90,7 +90,7 @@ impl GreedyProjectionTriangulation {
                 "Invalid maximum angle",
                 "angle",
                 "value between 0 and PI",
-                &angle.to_string(),
+                angle.to_string(),
             ));
         }
         ffi::set_maximum_angle_greedy(self.inner.pin_mut(), angle);
@@ -109,7 +109,7 @@ impl GreedyProjectionTriangulation {
                 "Invalid maximum nearest neighbors",
                 "neighbors",
                 "positive value",
-                &neighbors.to_string(),
+                neighbors.to_string(),
             ));
         }
         ffi::set_maximum_nearest_neighbors_greedy(self.inner.pin_mut(), neighbors);
@@ -123,12 +123,12 @@ impl GreedyProjectionTriangulation {
 
     /// Set the maximum surface angle
     pub fn set_maximum_surface_angle(&mut self, angle: f64) -> PclResult<()> {
-        if angle < 0.0 || angle >= std::f64::consts::PI {
+        if !(0.0..std::f64::consts::PI).contains(&angle) {
             return Err(PclError::invalid_parameters(
                 "Invalid maximum surface angle",
                 "angle",
                 "value between 0 and PI",
-                &angle.to_string(),
+                angle.to_string(),
             ));
         }
         ffi::set_maximum_surface_angle_greedy(self.inner.pin_mut(), angle);

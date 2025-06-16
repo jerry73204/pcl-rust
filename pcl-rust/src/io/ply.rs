@@ -83,11 +83,11 @@ impl PlyIoXYZ for PointCloudXYZ {
         })?;
 
         let result = match format {
-            BinaryFormat::Ascii => pcl_sys::ffi::save_ply_file_ascii_xyz(path_str, &*self.inner),
-            BinaryFormat::Binary => pcl_sys::ffi::save_ply_file_binary_xyz(path_str, &*self.inner),
+            BinaryFormat::Ascii => pcl_sys::ffi::save_ply_file_ascii_xyz(path_str, &self.inner),
+            BinaryFormat::Binary => pcl_sys::ffi::save_ply_file_binary_xyz(path_str, &self.inner),
             BinaryFormat::BinaryCompressed => {
                 // PLY doesn't support compressed format, fall back to binary
-                pcl_sys::ffi::save_ply_file_binary_xyz(path_str, &*self.inner)
+                pcl_sys::ffi::save_ply_file_binary_xyz(path_str, &self.inner)
             }
         };
 
@@ -142,11 +142,11 @@ impl PlyIoXYZI for PointCloudXYZI {
         })?;
 
         let result = match format {
-            BinaryFormat::Ascii => pcl_sys::ffi::save_ply_file_ascii_xyzi(path_str, &*self.inner),
-            BinaryFormat::Binary => pcl_sys::ffi::save_ply_file_binary_xyzi(path_str, &*self.inner),
+            BinaryFormat::Ascii => pcl_sys::ffi::save_ply_file_ascii_xyzi(path_str, &self.inner),
+            BinaryFormat::Binary => pcl_sys::ffi::save_ply_file_binary_xyzi(path_str, &self.inner),
             BinaryFormat::BinaryCompressed => {
                 // PLY doesn't support compressed format, fall back to binary
-                pcl_sys::ffi::save_ply_file_binary_xyzi(path_str, &*self.inner)
+                pcl_sys::ffi::save_ply_file_binary_xyzi(path_str, &self.inner)
             }
         };
 
@@ -201,13 +201,13 @@ impl PlyIoXYZRGB for PointCloudXYZRGB {
         })?;
 
         let result = match format {
-            BinaryFormat::Ascii => pcl_sys::ffi::save_ply_file_ascii_xyzrgb(path_str, &*self.inner),
+            BinaryFormat::Ascii => pcl_sys::ffi::save_ply_file_ascii_xyzrgb(path_str, &self.inner),
             BinaryFormat::Binary => {
-                pcl_sys::ffi::save_ply_file_binary_xyzrgb(path_str, &*self.inner)
+                pcl_sys::ffi::save_ply_file_binary_xyzrgb(path_str, &self.inner)
             }
             BinaryFormat::BinaryCompressed => {
                 // PLY doesn't support compressed format, fall back to binary
-                pcl_sys::ffi::save_ply_file_binary_xyzrgb(path_str, &*self.inner)
+                pcl_sys::ffi::save_ply_file_binary_xyzrgb(path_str, &self.inner)
             }
         };
 

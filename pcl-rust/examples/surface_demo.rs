@@ -5,7 +5,7 @@
 //! - Generate organized meshes using OrganizedFastMesh
 //! - Save meshes to various file formats
 
-use pcl::{OrganizedFastMeshXYZ, PolygonMesh, TriangulationType, common::PointCloudXYZBuilder};
+use pcl::{OrganizedFastMeshXYZ, TriangulationType, common::PointCloudXYZBuilder};
 
 fn main() -> pcl::PclResult<()> {
     println!("Surface Reconstruction Demo");
@@ -101,7 +101,7 @@ fn create_organized_cloud() -> pcl::PclResult<pcl::PointCloudXYZ> {
     }
 
     // Create organized cloud by setting width and height explicitly
-    let mut cloud = PointCloudXYZBuilder::new().add_points(points).build()?;
+    let cloud = PointCloudXYZBuilder::new().add_points(points).build()?;
 
     // For now, we can't set width/height directly through the builder
     // This would need to be implemented when we have proper organized cloud support
@@ -122,7 +122,7 @@ fn marching_cubes_demo(_cloud: &pcl::PointCloudXYZ) -> pcl::PclResult<()> {
 }
 
 /// Demonstrate OrganizedFastMesh surface reconstruction
-fn organized_fast_mesh_demo(cloud: &pcl::PointCloudXYZ) -> pcl::PclResult<()> {
+fn organized_fast_mesh_demo(_cloud: &pcl::PointCloudXYZ) -> pcl::PclResult<()> {
     println!("\n2. Organized Fast Mesh Reconstruction");
     println!("------------------------------------");
 

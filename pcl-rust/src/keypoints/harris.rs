@@ -48,7 +48,7 @@ impl Harris3D {
                 "Invalid radius",
                 "radius",
                 "positive value",
-                &radius.to_string(),
+                radius.to_string(),
             ));
         }
         ffi::set_radius_harris_3d_xyz(self.inner.pin_mut(), radius);
@@ -64,7 +64,7 @@ impl Harris3D {
                 "Invalid threshold",
                 "threshold",
                 "non-negative value",
-                &threshold.to_string(),
+                threshold.to_string(),
             ));
         }
         ffi::set_threshold_harris_3d_xyz(self.inner.pin_mut(), threshold);

@@ -84,7 +84,7 @@ impl SiftKeypoint {
                 "Invalid minimum scale",
                 "min_scale",
                 "positive value",
-                &min_scale.to_string(),
+                min_scale.to_string(),
             ));
         }
 
@@ -93,7 +93,7 @@ impl SiftKeypoint {
                 "Invalid number of octaves",
                 "nr_octaves",
                 "positive value",
-                &nr_octaves.to_string(),
+                nr_octaves.to_string(),
             ));
         }
 
@@ -102,7 +102,7 @@ impl SiftKeypoint {
                 "Invalid scales per octave",
                 "nr_scales_per_octave",
                 "positive integer",
-                &nr_scales_per_octave.to_string(),
+                nr_scales_per_octave.to_string(),
             ));
         }
 
@@ -124,7 +124,7 @@ impl SiftKeypoint {
                 "Invalid minimum contrast",
                 "min_contrast",
                 "non-negative value",
-                &min_contrast.to_string(),
+                min_contrast.to_string(),
             ));
         }
         ffi::set_minimum_contrast_sift_xyzi(self.inner.pin_mut(), min_contrast);

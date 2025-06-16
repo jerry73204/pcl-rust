@@ -182,7 +182,7 @@ impl NormalCloud {
         if self.inner.is_null() {
             0
         } else {
-            unsafe { pcl_sys::ffi::size_normal(self.inner.as_ref().unwrap()) }
+            pcl_sys::ffi::size_normal(self.inner.as_ref().unwrap())
         }
     }
 
@@ -191,7 +191,7 @@ impl NormalCloud {
         if self.inner.is_null() {
             true
         } else {
-            unsafe { pcl_sys::ffi::empty_normal(self.inner.as_ref().unwrap()) }
+            pcl_sys::ffi::empty_normal(self.inner.as_ref().unwrap())
         }
     }
 
@@ -210,20 +210,18 @@ impl NormalCloud {
                 ),
             });
         }
-        unsafe {
-            let normal_data = pcl_sys::ffi::get_normal_at(self.inner.as_ref().unwrap(), index);
-            if normal_data.len() >= 4 {
-                Ok(Normal::new(
-                    normal_data[0],
-                    normal_data[1],
-                    normal_data[2],
-                    normal_data[3],
-                ))
-            } else {
-                Err(PclError::ComputationFailed(
-                    "Invalid normal data returned".into(),
-                ))
-            }
+        let normal_data = pcl_sys::ffi::get_normal_at(self.inner.as_ref().unwrap(), index);
+        if normal_data.len() >= 4 {
+            Ok(Normal::new(
+                normal_data[0],
+                normal_data[1],
+                normal_data[2],
+                normal_data[3],
+            ))
+        } else {
+            Err(PclError::ComputationFailed(
+                "Invalid normal data returned".into(),
+            ))
         }
     }
 }
@@ -259,6 +257,18 @@ pub struct FpfhCloud {
     inner: cxx::UniquePtr<pcl_sys::ffi::PointCloud_FPFHSignature33>,
 }
 
+impl Default for FpfhCloud {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl Default for PfhCloud {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl FpfhCloud {
     /// Create a new empty FPFH cloud
     /// Note: This creates a null pointer since we can't create empty clouds directly
@@ -274,7 +284,7 @@ impl FpfhCloud {
         if self.inner.is_null() {
             0
         } else {
-            unsafe { pcl_sys::ffi::size_fpfh(self.inner.as_ref().unwrap()) }
+            pcl_sys::ffi::size_fpfh(self.inner.as_ref().unwrap())
         }
     }
 
@@ -283,7 +293,7 @@ impl FpfhCloud {
         if self.inner.is_null() {
             true
         } else {
-            unsafe { pcl_sys::ffi::empty_fpfh(self.inner.as_ref().unwrap()) }
+            pcl_sys::ffi::empty_fpfh(self.inner.as_ref().unwrap())
         }
     }
 
@@ -302,18 +312,16 @@ impl FpfhCloud {
                 ),
             });
         }
-        unsafe {
-            let histogram_data =
-                pcl_sys::ffi::get_fpfh_signature_at(self.inner.as_ref().unwrap(), index);
-            if histogram_data.len() >= 33 {
-                let mut histogram = [0.0f32; 33];
-                histogram.copy_from_slice(&histogram_data[0..33]);
-                Ok(FpfhSignature { histogram })
-            } else {
-                Err(PclError::ComputationFailed(
-                    "Invalid FPFH signature data returned".into(),
-                ))
-            }
+        let histogram_data =
+            pcl_sys::ffi::get_fpfh_signature_at(self.inner.as_ref().unwrap(), index);
+        if histogram_data.len() >= 33 {
+            let mut histogram = [0.0f32; 33];
+            histogram.copy_from_slice(&histogram_data[0..33]);
+            Ok(FpfhSignature { histogram })
+        } else {
+            Err(PclError::ComputationFailed(
+                "Invalid FPFH signature data returned".into(),
+            ))
         }
     }
 
@@ -378,7 +386,7 @@ impl PfhCloud {
         if self.inner.is_null() {
             0
         } else {
-            unsafe { pcl_sys::ffi::size_pfh(self.inner.as_ref().unwrap()) }
+            pcl_sys::ffi::size_pfh(self.inner.as_ref().unwrap())
         }
     }
 
@@ -387,7 +395,7 @@ impl PfhCloud {
         if self.inner.is_null() {
             true
         } else {
-            unsafe { pcl_sys::ffi::empty_pfh(self.inner.as_ref().unwrap()) }
+            pcl_sys::ffi::empty_pfh(self.inner.as_ref().unwrap())
         }
     }
 
@@ -406,18 +414,16 @@ impl PfhCloud {
                 ),
             });
         }
-        unsafe {
-            let histogram_data =
-                pcl_sys::ffi::get_pfh_signature_at(self.inner.as_ref().unwrap(), index);
-            if histogram_data.len() >= 125 {
-                let mut histogram = [0.0f32; 125];
-                histogram.copy_from_slice(&histogram_data[0..125]);
-                Ok(PfhSignature { histogram })
-            } else {
-                Err(PclError::ComputationFailed(
-                    "Invalid PFH signature data returned".into(),
-                ))
-            }
+        let histogram_data =
+            pcl_sys::ffi::get_pfh_signature_at(self.inner.as_ref().unwrap(), index);
+        if histogram_data.len() >= 125 {
+            let mut histogram = [0.0f32; 125];
+            histogram.copy_from_slice(&histogram_data[0..125]);
+            Ok(PfhSignature { histogram })
+        } else {
+            Err(PclError::ComputationFailed(
+                "Invalid PFH signature data returned".into(),
+            ))
         }
     }
 
@@ -444,15 +450,13 @@ pub struct NormalEstimation {
 impl NormalEstimation {
     /// Create a new normal estimation instance
     pub fn new() -> PclResult<Self> {
-        unsafe {
-            let inner = pcl_sys::ffi::new_normal_estimation_xyz();
-            if inner.is_null() {
-                Err(PclError::CreationFailed {
-                    typename: "NormalEstimation".into(),
-                })
-            } else {
-                Ok(Self { inner })
-            }
+        let inner = pcl_sys::ffi::new_normal_estimation_xyz();
+        if inner.is_null() {
+            Err(PclError::CreationFailed {
+                typename: "NormalEstimation".into(),
+            })
+        } else {
+            Ok(Self { inner })
         }
     }
 
@@ -465,9 +469,7 @@ impl NormalEstimation {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_input_cloud_normal_xyz(self.inner.pin_mut(), cloud.as_raw());
-        }
+        pcl_sys::ffi::set_input_cloud_normal_xyz(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
 
@@ -480,18 +482,14 @@ impl NormalEstimation {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_search_method_normal_xyz(self.inner.pin_mut(), tree.as_raw());
-        }
+        pcl_sys::ffi::set_search_method_normal_xyz(self.inner.pin_mut(), tree.as_raw());
         Ok(())
     }
 
     /// Set the radius for neighborhood search
     pub fn set_radius_search(&mut self, radius: f64) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_radius_search_normal_xyz(self.inner.pin_mut(), radius);
-            }
+            pcl_sys::ffi::set_radius_search_normal_xyz(self.inner.pin_mut(), radius);
         }
     }
 
@@ -500,16 +498,14 @@ impl NormalEstimation {
         if self.inner.is_null() {
             0.0
         } else {
-            unsafe { pcl_sys::ffi::get_radius_search_normal_xyz(self.inner.pin_mut()) }
+            pcl_sys::ffi::get_radius_search_normal_xyz(self.inner.pin_mut())
         }
     }
 
     /// Set the number of nearest neighbors for search
     pub fn set_k_search(&mut self, k: i32) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_k_search_normal_xyz(self.inner.pin_mut(), k);
-            }
+            pcl_sys::ffi::set_k_search_normal_xyz(self.inner.pin_mut(), k);
         }
     }
 
@@ -518,16 +514,14 @@ impl NormalEstimation {
         if self.inner.is_null() {
             0
         } else {
-            unsafe { pcl_sys::ffi::get_k_search_normal_xyz(self.inner.pin_mut()) }
+            pcl_sys::ffi::get_k_search_normal_xyz(self.inner.pin_mut())
         }
     }
 
     /// Set the viewpoint for normal orientation
     pub fn set_view_point(&mut self, vpx: f32, vpy: f32, vpz: f32) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_view_point_normal_xyz(self.inner.pin_mut(), vpx, vpy, vpz);
-            }
+            pcl_sys::ffi::set_view_point_normal_xyz(self.inner.pin_mut(), vpx, vpy, vpz);
         }
     }
 
@@ -536,13 +530,11 @@ impl NormalEstimation {
         if self.inner.is_null() {
             [0.0, 0.0, 0.0]
         } else {
-            unsafe {
-                let view_point = pcl_sys::ffi::get_view_point_normal_xyz(self.inner.pin_mut());
-                if view_point.len() >= 3 {
-                    [view_point[0], view_point[1], view_point[2]]
-                } else {
-                    [0.0, 0.0, 0.0]
-                }
+            let view_point = pcl_sys::ffi::get_view_point_normal_xyz(self.inner.pin_mut());
+            if view_point.len() >= 3 {
+                [view_point[0], view_point[1], view_point[2]]
+            } else {
+                [0.0, 0.0, 0.0]
             }
         }
     }
@@ -550,12 +542,7 @@ impl NormalEstimation {
     /// Set whether to use sensor origin as viewpoint
     pub fn set_use_sensor_origin(&mut self, use_sensor_origin: bool) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_use_sensor_origin_normal_xyz(
-                    self.inner.pin_mut(),
-                    use_sensor_origin,
-                );
-            }
+            pcl_sys::ffi::set_use_sensor_origin_normal_xyz(self.inner.pin_mut(), use_sensor_origin);
         }
     }
 
@@ -568,15 +555,13 @@ impl NormalEstimation {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            let normals = pcl_sys::ffi::compute_normals_xyz(self.inner.pin_mut());
-            if normals.is_null() {
-                Err(PclError::ComputationFailed(
-                    "Failed to compute normals".into(),
-                ))
-            } else {
-                Ok(NormalCloud { inner: normals })
-            }
+        let normals = pcl_sys::ffi::compute_normals_xyz(self.inner.pin_mut());
+        if normals.is_null() {
+            Err(PclError::ComputationFailed(
+                "Failed to compute normals".into(),
+            ))
+        } else {
+            Ok(NormalCloud { inner: normals })
         }
     }
 }
@@ -592,15 +577,13 @@ pub struct NormalEstimationOmp {
 impl NormalEstimationOmp {
     /// Create a new OpenMP normal estimation instance
     pub fn new() -> PclResult<Self> {
-        unsafe {
-            let inner = pcl_sys::ffi::new_normal_estimation_omp_xyz();
-            if inner.is_null() {
-                Err(PclError::CreationFailed {
-                    typename: "NormalEstimationOMP".into(),
-                })
-            } else {
-                Ok(Self { inner })
-            }
+        let inner = pcl_sys::ffi::new_normal_estimation_omp_xyz();
+        if inner.is_null() {
+            Err(PclError::CreationFailed {
+                typename: "NormalEstimationOMP".into(),
+            })
+        } else {
+            Ok(Self { inner })
         }
     }
 
@@ -613,18 +596,14 @@ impl NormalEstimationOmp {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_input_cloud_normal_omp_xyz(self.inner.pin_mut(), cloud.as_raw());
-        }
+        pcl_sys::ffi::set_input_cloud_normal_omp_xyz(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
 
     /// Set the number of threads for parallel computation  
     pub fn set_number_of_threads(&mut self, threads: i32) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_number_of_threads_normal_omp_xyz(self.inner.pin_mut(), threads);
-            }
+            pcl_sys::ffi::set_number_of_threads_normal_omp_xyz(self.inner.pin_mut(), threads);
         }
     }
 
@@ -633,25 +612,21 @@ impl NormalEstimationOmp {
         if self.inner.is_null() {
             0
         } else {
-            unsafe { pcl_sys::ffi::get_number_of_threads_normal_omp_xyz(self.inner.pin_mut()) }
+            pcl_sys::ffi::get_number_of_threads_normal_omp_xyz(self.inner.pin_mut())
         }
     }
 
     /// Set the radius for neighborhood search
     pub fn set_radius_search(&mut self, radius: f64) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_radius_search_normal_omp_xyz(self.inner.pin_mut(), radius);
-            }
+            pcl_sys::ffi::set_radius_search_normal_omp_xyz(self.inner.pin_mut(), radius);
         }
     }
 
     /// Set the number of nearest neighbors for search
     pub fn set_k_search(&mut self, k: i32) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_k_search_normal_omp_xyz(self.inner.pin_mut(), k);
-            }
+            pcl_sys::ffi::set_k_search_normal_omp_xyz(self.inner.pin_mut(), k);
         }
     }
 
@@ -664,15 +639,13 @@ impl NormalEstimationOmp {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            let normals = pcl_sys::ffi::compute_normals_omp_xyz(self.inner.pin_mut());
-            if normals.is_null() {
-                Err(PclError::ComputationFailed(
-                    "Failed to compute normals with OpenMP".into(),
-                ))
-            } else {
-                Ok(NormalCloud { inner: normals })
-            }
+        let normals = pcl_sys::ffi::compute_normals_omp_xyz(self.inner.pin_mut());
+        if normals.is_null() {
+            Err(PclError::ComputationFailed(
+                "Failed to compute normals with OpenMP".into(),
+            ))
+        } else {
+            Ok(NormalCloud { inner: normals })
         }
     }
 }
@@ -693,33 +666,27 @@ pub struct FpfhEstimation {
 impl FpfhEstimation {
     /// Create a new FPFH estimation instance
     pub fn new() -> PclResult<Self> {
-        unsafe {
-            let inner = pcl_sys::ffi::new_fpfh_estimation_xyz();
-            if inner.is_null() {
-                Err(PclError::CreationFailed {
-                    typename: "FPFHEstimation".into(),
-                })
-            } else {
-                Ok(Self { inner })
-            }
+        let inner = pcl_sys::ffi::new_fpfh_estimation_xyz();
+        if inner.is_null() {
+            Err(PclError::CreationFailed {
+                typename: "FPFHEstimation".into(),
+            })
+        } else {
+            Ok(Self { inner })
         }
     }
 
     /// Set the radius for neighborhood search
     pub fn set_radius_search(&mut self, radius: f64) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_radius_search_fpfh_xyz(self.inner.pin_mut(), radius);
-            }
+            pcl_sys::ffi::set_radius_search_fpfh_xyz(self.inner.pin_mut(), radius);
         }
     }
 
     /// Set the number of nearest neighbors for search
     pub fn set_k_search(&mut self, k: i32) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_k_search_fpfh_xyz(self.inner.pin_mut(), k);
-            }
+            pcl_sys::ffi::set_k_search_fpfh_xyz(self.inner.pin_mut(), k);
         }
     }
 
@@ -738,12 +705,10 @@ impl FpfhEstimation {
                 message: "Normal cloud is null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_input_normals_fpfh_xyz(
-                self.inner.pin_mut(),
-                normals.inner.as_ref().unwrap(),
-            );
-        }
+        pcl_sys::ffi::set_input_normals_fpfh_xyz(
+            self.inner.pin_mut(),
+            normals.inner.as_ref().unwrap(),
+        );
         Ok(())
     }
 
@@ -756,9 +721,7 @@ impl FpfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_input_cloud_fpfh_xyz(self.inner.pin_mut(), cloud.as_raw());
-        }
+        pcl_sys::ffi::set_input_cloud_fpfh_xyz(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
 
@@ -771,9 +734,7 @@ impl FpfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_search_method_fpfh_xyz(self.inner.pin_mut(), tree.as_raw());
-        }
+        pcl_sys::ffi::set_search_method_fpfh_xyz(self.inner.pin_mut(), tree.as_raw());
         Ok(())
     }
 
@@ -786,15 +747,13 @@ impl FpfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            let features = pcl_sys::ffi::compute_fpfh_xyz(self.inner.pin_mut());
-            if features.is_null() {
-                Err(PclError::ComputationFailed(
-                    "Failed to compute FPFH features".into(),
-                ))
-            } else {
-                Ok(FpfhCloud { inner: features })
-            }
+        let features = pcl_sys::ffi::compute_fpfh_xyz(self.inner.pin_mut());
+        if features.is_null() {
+            Err(PclError::ComputationFailed(
+                "Failed to compute FPFH features".into(),
+            ))
+        } else {
+            Ok(FpfhCloud { inner: features })
         }
     }
 }
@@ -815,33 +774,27 @@ pub struct FpfhEstimationOmp {
 impl FpfhEstimationOmp {
     /// Create a new OpenMP FPFH estimation instance
     pub fn new() -> PclResult<Self> {
-        unsafe {
-            let inner = pcl_sys::ffi::new_fpfh_estimation_omp_xyz();
-            if inner.is_null() {
-                Err(PclError::CreationFailed {
-                    typename: "FPFHEstimationOMP".into(),
-                })
-            } else {
-                Ok(Self { inner })
-            }
+        let inner = pcl_sys::ffi::new_fpfh_estimation_omp_xyz();
+        if inner.is_null() {
+            Err(PclError::CreationFailed {
+                typename: "FPFHEstimationOMP".into(),
+            })
+        } else {
+            Ok(Self { inner })
         }
     }
 
     /// Set the number of threads for parallel computation
     pub fn set_number_of_threads(&mut self, threads: i32) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_number_of_threads_fpfh_omp_xyz(self.inner.pin_mut(), threads);
-            }
+            pcl_sys::ffi::set_number_of_threads_fpfh_omp_xyz(self.inner.pin_mut(), threads);
         }
     }
 
     /// Set the radius for neighborhood search
     pub fn set_radius_search(&mut self, radius: f64) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_radius_search_fpfh_omp_xyz(self.inner.pin_mut(), radius);
-            }
+            pcl_sys::ffi::set_radius_search_fpfh_omp_xyz(self.inner.pin_mut(), radius);
         }
     }
 
@@ -860,12 +813,10 @@ impl FpfhEstimationOmp {
                 message: "Normal cloud is null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_input_normals_fpfh_omp_xyz(
-                self.inner.pin_mut(),
-                normals.inner.as_ref().unwrap(),
-            );
-        }
+        pcl_sys::ffi::set_input_normals_fpfh_omp_xyz(
+            self.inner.pin_mut(),
+            normals.inner.as_ref().unwrap(),
+        );
         Ok(())
     }
 
@@ -878,9 +829,7 @@ impl FpfhEstimationOmp {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_input_cloud_fpfh_omp_xyz(self.inner.pin_mut(), cloud.as_raw());
-        }
+        pcl_sys::ffi::set_input_cloud_fpfh_omp_xyz(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
 
@@ -893,9 +842,7 @@ impl FpfhEstimationOmp {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_search_method_fpfh_omp_xyz(self.inner.pin_mut(), tree.as_raw());
-        }
+        pcl_sys::ffi::set_search_method_fpfh_omp_xyz(self.inner.pin_mut(), tree.as_raw());
         Ok(())
     }
 
@@ -908,15 +855,13 @@ impl FpfhEstimationOmp {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            let features = pcl_sys::ffi::compute_fpfh_omp_xyz(self.inner.pin_mut());
-            if features.is_null() {
-                Err(PclError::ComputationFailed(
-                    "Failed to compute FPFH features with OpenMP".into(),
-                ))
-            } else {
-                Ok(FpfhCloud { inner: features })
-            }
+        let features = pcl_sys::ffi::compute_fpfh_omp_xyz(self.inner.pin_mut());
+        if features.is_null() {
+            Err(PclError::ComputationFailed(
+                "Failed to compute FPFH features with OpenMP".into(),
+            ))
+        } else {
+            Ok(FpfhCloud { inner: features })
         }
     }
 }
@@ -937,33 +882,27 @@ pub struct PfhEstimation {
 impl PfhEstimation {
     /// Create a new PFH estimation instance
     pub fn new() -> PclResult<Self> {
-        unsafe {
-            let inner = pcl_sys::ffi::new_pfh_estimation_xyz();
-            if inner.is_null() {
-                Err(PclError::CreationFailed {
-                    typename: "PFHEstimation".into(),
-                })
-            } else {
-                Ok(Self { inner })
-            }
+        let inner = pcl_sys::ffi::new_pfh_estimation_xyz();
+        if inner.is_null() {
+            Err(PclError::CreationFailed {
+                typename: "PFHEstimation".into(),
+            })
+        } else {
+            Ok(Self { inner })
         }
     }
 
     /// Set the radius for neighborhood search
     pub fn set_radius_search(&mut self, radius: f64) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_radius_search_pfh_xyz(self.inner.pin_mut(), radius);
-            }
+            pcl_sys::ffi::set_radius_search_pfh_xyz(self.inner.pin_mut(), radius);
         }
     }
 
     /// Set the number of nearest neighbors for search
     pub fn set_k_search(&mut self, k: i32) {
         if !self.inner.is_null() {
-            unsafe {
-                pcl_sys::ffi::set_k_search_pfh_xyz(self.inner.pin_mut(), k);
-            }
+            pcl_sys::ffi::set_k_search_pfh_xyz(self.inner.pin_mut(), k);
         }
     }
 
@@ -982,12 +921,10 @@ impl PfhEstimation {
                 message: "Normal cloud is null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_input_normals_pfh_xyz(
-                self.inner.pin_mut(),
-                normals.inner.as_ref().unwrap(),
-            );
-        }
+        pcl_sys::ffi::set_input_normals_pfh_xyz(
+            self.inner.pin_mut(),
+            normals.inner.as_ref().unwrap(),
+        );
         Ok(())
     }
 
@@ -1000,9 +937,7 @@ impl PfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_input_cloud_pfh_xyz(self.inner.pin_mut(), cloud.as_raw());
-        }
+        pcl_sys::ffi::set_input_cloud_pfh_xyz(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
 
@@ -1015,9 +950,7 @@ impl PfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            pcl_sys::ffi::set_search_method_pfh_xyz(self.inner.pin_mut(), tree.as_raw());
-        }
+        pcl_sys::ffi::set_search_method_pfh_xyz(self.inner.pin_mut(), tree.as_raw());
         Ok(())
     }
 
@@ -1030,15 +963,13 @@ impl PfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        unsafe {
-            let features = pcl_sys::ffi::compute_pfh_xyz(self.inner.pin_mut());
-            if features.is_null() {
-                Err(PclError::ComputationFailed(
-                    "Failed to compute PFH features".into(),
-                ))
-            } else {
-                Ok(PfhCloud { inner: features })
-            }
+        let features = pcl_sys::ffi::compute_pfh_xyz(self.inner.pin_mut());
+        if features.is_null() {
+            Err(PclError::ComputationFailed(
+                "Failed to compute PFH features".into(),
+            ))
+        } else {
+            Ok(PfhCloud { inner: features })
         }
     }
 }
@@ -1067,7 +998,7 @@ pub mod helpers {
 
     /// Extract normal vector data
     pub fn extract_normal_vector(normal: &Normal) -> Normal {
-        normal.clone()
+        *normal
     }
 }
 

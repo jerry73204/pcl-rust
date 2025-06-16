@@ -93,6 +93,7 @@ impl PolygonMesh {
     }
 
     /// Get a reference to the underlying PCL PolygonMesh
+    /// TODO: This will be used when additional mesh operations are implemented
     pub(crate) fn as_raw(&self) -> &ffi::PolygonMesh {
         &self.inner
     }

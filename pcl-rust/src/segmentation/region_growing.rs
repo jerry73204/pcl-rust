@@ -56,7 +56,7 @@ impl RegionGrowingXYZ {
                 "Invalid minimum cluster size",
                 "min_size",
                 "positive value",
-                &min_size.to_string(),
+                min_size.to_string(),
             ));
         }
         ffi::set_min_cluster_size_region_growing_xyz(self.inner.pin_mut(), min_size);
@@ -75,7 +75,7 @@ impl RegionGrowingXYZ {
                 "Invalid maximum cluster size",
                 "max_size",
                 "positive value",
-                &max_size.to_string(),
+                max_size.to_string(),
             ));
         }
         ffi::set_max_cluster_size_region_growing_xyz(self.inner.pin_mut(), max_size);
@@ -94,7 +94,7 @@ impl RegionGrowingXYZ {
                 "Invalid smoothness threshold",
                 "threshold",
                 "non-negative value",
-                &threshold.to_string(),
+                threshold.to_string(),
             ));
         }
         ffi::set_smoothness_threshold_region_growing_xyz(self.inner.pin_mut(), threshold);
@@ -113,7 +113,7 @@ impl RegionGrowingXYZ {
                 "Invalid curvature threshold",
                 "threshold",
                 "non-negative value",
-                &threshold.to_string(),
+                threshold.to_string(),
             ));
         }
         ffi::set_curvature_threshold_region_growing_xyz(self.inner.pin_mut(), threshold);
@@ -132,7 +132,7 @@ impl RegionGrowingXYZ {
                 "Invalid number of neighbors",
                 "k",
                 "positive value",
-                &k.to_string(),
+                k.to_string(),
             ));
         }
         ffi::set_number_of_neighbours_region_growing_xyz(self.inner.pin_mut(), k);
@@ -226,7 +226,7 @@ impl RegionGrowingRgbXYZRGB {
                 "Invalid distance threshold",
                 "threshold",
                 "positive value",
-                &threshold.to_string(),
+                threshold.to_string(),
             ));
         }
         ffi::set_distance_threshold_region_growing_rgb_xyzrgb(self.inner.pin_mut(), threshold);
@@ -245,7 +245,7 @@ impl RegionGrowingRgbXYZRGB {
                 "Invalid point color threshold",
                 "threshold",
                 "non-negative value",
-                &threshold.to_string(),
+                threshold.to_string(),
             ));
         }
         ffi::set_point_color_threshold_region_growing_rgb_xyzrgb(self.inner.pin_mut(), threshold);
@@ -264,7 +264,7 @@ impl RegionGrowingRgbXYZRGB {
                 "Invalid region color threshold",
                 "threshold",
                 "non-negative value",
-                &threshold.to_string(),
+                threshold.to_string(),
             ));
         }
         ffi::set_region_color_threshold_region_growing_rgb_xyzrgb(self.inner.pin_mut(), threshold);
@@ -283,7 +283,7 @@ impl RegionGrowingRgbXYZRGB {
                 "Invalid minimum cluster size",
                 "min_size",
                 "positive value",
-                &min_size.to_string(),
+                min_size.to_string(),
             ));
         }
         ffi::set_min_cluster_size_region_growing_rgb_xyzrgb(self.inner.pin_mut(), min_size);

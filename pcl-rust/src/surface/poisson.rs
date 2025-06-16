@@ -43,7 +43,7 @@ impl PoissonReconstruction {
                 "Invalid depth",
                 "depth",
                 "positive value",
-                &depth.to_string(),
+                depth.to_string(),
             ));
         }
         ffi::set_depth_poisson(self.inner.pin_mut(), depth);
@@ -62,7 +62,7 @@ impl PoissonReconstruction {
                 "Invalid minimum depth",
                 "min_depth",
                 "non-negative value",
-                &min_depth.to_string(),
+                min_depth.to_string(),
             ));
         }
         ffi::set_min_depth_poisson(self.inner.pin_mut(), min_depth);
@@ -81,7 +81,7 @@ impl PoissonReconstruction {
                 "Invalid point weight",
                 "weight",
                 "non-negative value",
-                &weight.to_string(),
+                weight.to_string(),
             ));
         }
         ffi::set_point_weight_poisson(self.inner.pin_mut(), weight);
@@ -100,7 +100,7 @@ impl PoissonReconstruction {
                 "Invalid scale",
                 "scale",
                 "positive value",
-                &scale.to_string(),
+                scale.to_string(),
             ));
         }
         ffi::set_scale_poisson(self.inner.pin_mut(), scale);
@@ -119,7 +119,7 @@ impl PoissonReconstruction {
                 "Invalid solver divide",
                 "solver_divide",
                 "non-negative value",
-                &solver_divide.to_string(),
+                solver_divide.to_string(),
             ));
         }
         ffi::set_solver_divide_poisson(self.inner.pin_mut(), solver_divide);
@@ -138,7 +138,7 @@ impl PoissonReconstruction {
                 "Invalid iso divide",
                 "iso_divide",
                 "non-negative value",
-                &iso_divide.to_string(),
+                iso_divide.to_string(),
             ));
         }
         ffi::set_iso_divide_poisson(self.inner.pin_mut(), iso_divide);
@@ -157,7 +157,7 @@ impl PoissonReconstruction {
                 "Invalid samples per node",
                 "samples",
                 "positive value",
-                &samples.to_string(),
+                samples.to_string(),
             ));
         }
         ffi::set_samples_per_node_poisson(self.inner.pin_mut(), samples);
@@ -196,7 +196,7 @@ impl PoissonReconstruction {
                 "Invalid degree",
                 "degree",
                 "positive value",
-                &degree.to_string(),
+                degree.to_string(),
             ));
         }
         ffi::set_degree_poisson(self.inner.pin_mut(), degree);

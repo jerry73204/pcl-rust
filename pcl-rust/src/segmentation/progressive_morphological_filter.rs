@@ -45,7 +45,7 @@ impl ProgressiveMorphologicalFilterXYZ {
                 "Invalid maximum window size",
                 "size",
                 "positive value",
-                &size.to_string(),
+                size.to_string(),
             ));
         }
         ffi::set_max_window_size_pmf_xyz(self.inner.pin_mut(), size);
@@ -59,12 +59,12 @@ impl ProgressiveMorphologicalFilterXYZ {
 
     /// Set the slope value
     pub fn set_slope(&mut self, slope: f32) -> PclResult<()> {
-        if slope < 0.0 || slope > 1.0 {
+        if !(0.0..=1.0).contains(&slope) {
             return Err(PclError::invalid_parameters(
                 "Invalid slope",
                 "slope",
                 "value between 0 and 1",
-                &slope.to_string(),
+                slope.to_string(),
             ));
         }
         ffi::set_slope_pmf_xyz(self.inner.pin_mut(), slope);
@@ -83,7 +83,7 @@ impl ProgressiveMorphologicalFilterXYZ {
                 "Invalid maximum distance",
                 "distance",
                 "positive value",
-                &distance.to_string(),
+                distance.to_string(),
             ));
         }
         ffi::set_max_distance_pmf_xyz(self.inner.pin_mut(), distance);
@@ -102,7 +102,7 @@ impl ProgressiveMorphologicalFilterXYZ {
                 "Invalid initial distance",
                 "distance",
                 "non-negative value",
-                &distance.to_string(),
+                distance.to_string(),
             ));
         }
         ffi::set_initial_distance_pmf_xyz(self.inner.pin_mut(), distance);
@@ -121,7 +121,7 @@ impl ProgressiveMorphologicalFilterXYZ {
                 "Invalid cell size",
                 "size",
                 "positive value",
-                &size.to_string(),
+                size.to_string(),
             ));
         }
         ffi::set_cell_size_pmf_xyz(self.inner.pin_mut(), size);
@@ -140,7 +140,7 @@ impl ProgressiveMorphologicalFilterXYZ {
                 "Invalid base",
                 "base",
                 "value greater than 1",
-                &base.to_string(),
+                base.to_string(),
             ));
         }
         ffi::set_base_pmf_xyz(self.inner.pin_mut(), base);
@@ -309,7 +309,7 @@ mod tests {
         assert_eq!(pmf.initial_distance(), 0.15);
         assert_eq!(pmf.cell_size(), 1.0);
         assert_eq!(pmf.base(), 2.0);
-        assert_eq!(pmf.exponential(), true);
+        assert!(pmf.exponential());
     }
 
     #[test]

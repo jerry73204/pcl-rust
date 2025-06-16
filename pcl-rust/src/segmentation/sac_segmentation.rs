@@ -161,7 +161,7 @@ impl SacSegmentationXYZ {
                 "Invalid distance threshold",
                 "distance_threshold",
                 "positive value",
-                &threshold.to_string(),
+                threshold.to_string(),
             ));
         }
         ffi::set_distance_threshold_sac_xyz(self.inner.pin_mut(), threshold);
@@ -180,7 +180,7 @@ impl SacSegmentationXYZ {
                 "Invalid maximum iterations",
                 "max_iterations",
                 "positive value",
-                &max_iterations.to_string(),
+                max_iterations.to_string(),
             ));
         }
         ffi::set_max_iterations_sac_xyz(self.inner.pin_mut(), max_iterations);

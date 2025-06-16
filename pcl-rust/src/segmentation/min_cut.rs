@@ -53,7 +53,7 @@ impl MinCutSegmentationXYZ {
                 "Invalid sigma value",
                 "sigma",
                 "positive value",
-                &sigma.to_string(),
+                sigma.to_string(),
             ));
         }
         ffi::set_sigma_min_cut_xyz(self.inner.pin_mut(), sigma);
@@ -72,7 +72,7 @@ impl MinCutSegmentationXYZ {
                 "Invalid radius",
                 "radius",
                 "positive value",
-                &radius.to_string(),
+                radius.to_string(),
             ));
         }
         ffi::set_radius_min_cut_xyz(self.inner.pin_mut(), radius);
@@ -91,7 +91,7 @@ impl MinCutSegmentationXYZ {
                 "Invalid number of neighbors",
                 "k",
                 "positive value",
-                &k.to_string(),
+                k.to_string(),
             ));
         }
         ffi::set_number_of_neighbours_min_cut_xyz(self.inner.pin_mut(), k);
@@ -110,7 +110,7 @@ impl MinCutSegmentationXYZ {
                 "Invalid source weight",
                 "weight",
                 "non-negative value",
-                &weight.to_string(),
+                weight.to_string(),
             ));
         }
         ffi::set_source_weight_min_cut_xyz(self.inner.pin_mut(), weight);

@@ -364,8 +364,8 @@ mod tests {
         assert!(filter.is_ok());
         let filter = filter.unwrap();
         assert_eq!(filter.get_filter_field_name().unwrap(), "z");
-        assert_eq!(filter.get_negative().unwrap(), false);
-        assert_eq!(filter.get_keep_organized().unwrap(), true);
+        assert!(!filter.get_negative().unwrap());
+        assert!(filter.get_keep_organized().unwrap());
     }
 
     #[test]
@@ -380,7 +380,7 @@ mod tests {
         assert!(filter.is_ok());
         let filter = filter.unwrap();
         assert_eq!(filter.get_filter_field_name().unwrap(), "x");
-        assert_eq!(filter.get_negative().unwrap(), true);
-        assert_eq!(filter.get_keep_organized().unwrap(), false);
+        assert!(filter.get_negative().unwrap());
+        assert!(!filter.get_keep_organized().unwrap());
     }
 }
