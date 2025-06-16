@@ -91,26 +91,30 @@ fn test_icp_registration(source: &PointCloudXYZ, target: &PointCloudXYZ) -> PclR
     Ok(())
 }
 
-fn test_ndt_registration(_source: &PointCloudXYZ, _target: &PointCloudXYZ) -> PclResult<()> {
-    // Test with builder pattern - expect NotImplemented error
-    match NdtXYZBuilder::new()
+fn test_ndt_registration(source: &PointCloudXYZ, target: &PointCloudXYZ) -> PclResult<()> {
+    // Test with builder pattern
+    let mut ndt = NdtXYZBuilder::new()
         .transformation_epsilon(0.01)
         .step_size(0.1)
         .resolution(1.0)
         .max_iterations(35)
-        .build()
-    {
-        Ok(_) => {
-            println!("   ✗ Unexpected success - NDT should not be implemented yet");
-        }
-        Err(pcl::error::PclError::NotImplemented { feature, .. }) => {
-            println!("   ✓ NDT correctly returns NotImplemented: {}", feature);
-            println!("   ✓ NDT API structure is ready for future FFI implementation");
-        }
-        Err(e) => {
-            println!("   ✗ Unexpected error: {:?}", e);
-        }
-    }
+        .build()?;
+
+    ndt.set_input_source(source)?;
+    ndt.set_input_target(target)?;
+
+    let aligned_cloud = ndt.align()?;
+
+    println!("   ✓ NDT alignment completed");
+    println!("   ✓ Aligned cloud size: {}", aligned_cloud.size());
+    println!("   ✓ Converged: {}", ndt.has_converged());
+    println!("   ✓ Fitness score: {:.6}", ndt.get_fitness_score());
+
+    let transformation = ndt.get_final_transformation();
+    println!(
+        "   ✓ Final transformation matrix has {} elements",
+        transformation.to_vec().len()
+    );
 
     Ok(())
 }
