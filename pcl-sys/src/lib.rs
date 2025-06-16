@@ -1901,5 +1901,351 @@ pub mod ffi {
         #[cfg(feature = "keypoints")]
         fn get_point_xyzi_coords(point: &PointXYZI) -> Vec<f32>;
 
+        // Segmentation types - always available but functions conditionally compiled
+        #[namespace = "pcl"]
+        type RegionGrowing_PointXYZ_Normal;
+        #[namespace = "pcl"]
+        type RegionGrowingRGB_PointXYZRGB;
+        #[namespace = "pcl"]
+        type EuclideanClusterExtraction_PointXYZ;
+        #[namespace = "pcl"]
+        type SACSegmentation_PointXYZ;
+        #[namespace = "pcl"]
+        type MinCutSegmentation_PointXYZ;
+        #[namespace = "pcl"]
+        type ExtractPolygonalPrismData_PointXYZ;
+        #[namespace = "pcl"]
+        type ProgressiveMorphologicalFilter_PointXYZ;
+        #[namespace = "pcl"]
+        type ConditionalEuclideanClustering_PointXYZ;
+
+        // Region Growing segmentation functions - PointXYZ
+        #[cfg(feature = "segmentation")]
+        fn new_region_growing_xyz() -> UniquePtr<RegionGrowing_PointXYZ_Normal>;
+        #[cfg(feature = "segmentation")]
+        fn set_input_cloud_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_input_normals_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            normals: &PointCloud_Normal,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_min_cluster_size_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            min_size: i32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_min_cluster_size_region_growing_xyz(rg: &RegionGrowing_PointXYZ_Normal) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn set_max_cluster_size_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            max_size: i32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_max_cluster_size_region_growing_xyz(rg: &RegionGrowing_PointXYZ_Normal) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn set_smoothness_threshold_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            threshold: f32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_smoothness_threshold_region_growing_xyz(rg: &RegionGrowing_PointXYZ_Normal) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_curvature_threshold_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            threshold: f32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_curvature_threshold_region_growing_xyz(rg: &RegionGrowing_PointXYZ_Normal) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_number_of_neighbours_region_growing_xyz(
+            rg: Pin<&mut RegionGrowing_PointXYZ_Normal>,
+            k: i32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_number_of_neighbours_region_growing_xyz(rg: &RegionGrowing_PointXYZ_Normal) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn extract_region_growing_xyz(rg: Pin<&mut RegionGrowing_PointXYZ_Normal>) -> Vec<i32>;
+
+        // Region Growing RGB segmentation functions - PointXYZRGB
+        #[cfg(feature = "segmentation")]
+        fn new_region_growing_rgb_xyzrgb() -> UniquePtr<RegionGrowingRGB_PointXYZRGB>;
+        #[cfg(feature = "segmentation")]
+        fn set_input_cloud_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            cloud: &PointCloud_PointXYZRGB,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_distance_threshold_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            threshold: f32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_distance_threshold_region_growing_rgb_xyzrgb(
+            rg: &RegionGrowingRGB_PointXYZRGB,
+        ) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_point_color_threshold_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            threshold: f32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_point_color_threshold_region_growing_rgb_xyzrgb(
+            rg: &RegionGrowingRGB_PointXYZRGB,
+        ) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_region_color_threshold_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            threshold: f32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_region_color_threshold_region_growing_rgb_xyzrgb(
+            rg: &RegionGrowingRGB_PointXYZRGB,
+        ) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_min_cluster_size_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+            min_size: i32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_min_cluster_size_region_growing_rgb_xyzrgb(rg: &RegionGrowingRGB_PointXYZRGB)
+        -> i32;
+        #[cfg(feature = "segmentation")]
+        fn extract_region_growing_rgb_xyzrgb(
+            rg: Pin<&mut RegionGrowingRGB_PointXYZRGB>,
+        ) -> Vec<i32>;
+
+        // Euclidean Cluster Extraction functions - PointXYZ
+        #[cfg(feature = "segmentation")]
+        fn new_euclidean_cluster_extraction_xyz() -> UniquePtr<EuclideanClusterExtraction_PointXYZ>;
+        #[cfg(feature = "segmentation")]
+        fn set_input_cloud_euclidean_xyz(
+            ec: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_cluster_tolerance_euclidean_xyz(
+            ec: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+            tolerance: f64,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_cluster_tolerance_euclidean_xyz(
+            ec: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+        ) -> f64;
+        #[cfg(feature = "segmentation")]
+        fn set_min_cluster_size_euclidean_xyz(
+            ec: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+            min_size: i32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_min_cluster_size_euclidean_xyz(ec: &EuclideanClusterExtraction_PointXYZ) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn set_max_cluster_size_euclidean_xyz(
+            ec: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+            max_size: i32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_max_cluster_size_euclidean_xyz(ec: &EuclideanClusterExtraction_PointXYZ) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn extract_euclidean_clusters_xyz(
+            ec: Pin<&mut EuclideanClusterExtraction_PointXYZ>,
+        ) -> Vec<i32>;
+
+        // SAC Segmentation functions - PointXYZ
+        #[cfg(feature = "segmentation")]
+        fn new_sac_segmentation_xyz() -> UniquePtr<SACSegmentation_PointXYZ>;
+        #[cfg(feature = "segmentation")]
+        fn set_input_cloud_sac_xyz(
+            sac: Pin<&mut SACSegmentation_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_model_type_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>, model_type: i32);
+        #[cfg(feature = "segmentation")]
+        fn get_model_type_sac_xyz(sac: &SACSegmentation_PointXYZ) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn set_method_type_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>, method_type: i32);
+        #[cfg(feature = "segmentation")]
+        fn get_method_type_sac_xyz(sac: &SACSegmentation_PointXYZ) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn set_distance_threshold_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>, threshold: f64);
+        #[cfg(feature = "segmentation")]
+        fn get_distance_threshold_sac_xyz(sac: &SACSegmentation_PointXYZ) -> f64;
+        #[cfg(feature = "segmentation")]
+        fn set_max_iterations_sac_xyz(sac: Pin<&mut SACSegmentation_PointXYZ>, max_iter: i32);
+        #[cfg(feature = "segmentation")]
+        fn get_max_iterations_sac_xyz(sac: &SACSegmentation_PointXYZ) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn set_optimize_coefficients_sac_xyz(
+            sac: Pin<&mut SACSegmentation_PointXYZ>,
+            optimize: bool,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_optimize_coefficients_sac_xyz(sac: &SACSegmentation_PointXYZ) -> bool;
+        #[cfg(feature = "segmentation")]
+        fn segment_sac_xyz(
+            sac: Pin<&mut SACSegmentation_PointXYZ>,
+            inliers: &mut Vec<i32>,
+            coefficients: &mut Vec<f32>,
+        ) -> bool;
+
+        // Min-Cut Segmentation functions - PointXYZ
+        #[cfg(feature = "segmentation")]
+        fn new_min_cut_segmentation_xyz() -> UniquePtr<MinCutSegmentation_PointXYZ>;
+        #[cfg(feature = "segmentation")]
+        fn set_input_cloud_min_cut_xyz(
+            mc: Pin<&mut MinCutSegmentation_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_foreground_points_min_cut_xyz(
+            mc: Pin<&mut MinCutSegmentation_PointXYZ>,
+            foreground_points: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_sigma_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>, sigma: f64);
+        #[cfg(feature = "segmentation")]
+        fn get_sigma_min_cut_xyz(mc: &MinCutSegmentation_PointXYZ) -> f64;
+        #[cfg(feature = "segmentation")]
+        fn set_radius_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>, radius: f64);
+        #[cfg(feature = "segmentation")]
+        fn get_radius_min_cut_xyz(mc: &MinCutSegmentation_PointXYZ) -> f64;
+        #[cfg(feature = "segmentation")]
+        fn set_number_of_neighbours_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>, k: i32);
+        #[cfg(feature = "segmentation")]
+        fn get_number_of_neighbours_min_cut_xyz(mc: &MinCutSegmentation_PointXYZ) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn set_source_weight_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>, weight: f64);
+        #[cfg(feature = "segmentation")]
+        fn get_source_weight_min_cut_xyz(mc: &MinCutSegmentation_PointXYZ) -> f64;
+        #[cfg(feature = "segmentation")]
+        fn extract_min_cut_xyz(mc: Pin<&mut MinCutSegmentation_PointXYZ>) -> Vec<i32>;
+
+        // Extract Polygonal Prism Data functions - PointXYZ
+        #[cfg(feature = "segmentation")]
+        fn new_extract_polygonal_prism_xyz() -> UniquePtr<ExtractPolygonalPrismData_PointXYZ>;
+        #[cfg(feature = "segmentation")]
+        fn set_input_cloud_polygonal_prism_xyz(
+            prism: Pin<&mut ExtractPolygonalPrismData_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_input_planar_hull_polygonal_prism_xyz(
+            prism: Pin<&mut ExtractPolygonalPrismData_PointXYZ>,
+            hull: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_height_limits_polygonal_prism_xyz(
+            prism: Pin<&mut ExtractPolygonalPrismData_PointXYZ>,
+            min_height: f64,
+            max_height: f64,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_height_limits_polygonal_prism_xyz(
+            prism: &ExtractPolygonalPrismData_PointXYZ,
+            min_height: &mut f64,
+            max_height: &mut f64,
+        );
+        #[cfg(feature = "segmentation")]
+        fn segment_polygonal_prism_xyz(
+            prism: Pin<&mut ExtractPolygonalPrismData_PointXYZ>,
+        ) -> Vec<i32>;
+
+        // Progressive Morphological Filter functions - PointXYZ
+        #[cfg(feature = "segmentation")]
+        fn new_progressive_morphological_filter_xyz()
+        -> UniquePtr<ProgressiveMorphologicalFilter_PointXYZ>;
+        #[cfg(feature = "segmentation")]
+        fn set_input_cloud_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_max_window_size_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            size: i32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_max_window_size_pmf_xyz(pmf: &ProgressiveMorphologicalFilter_PointXYZ) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn set_slope_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>, slope: f32);
+        #[cfg(feature = "segmentation")]
+        fn get_slope_pmf_xyz(pmf: &ProgressiveMorphologicalFilter_PointXYZ) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_max_distance_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            distance: f32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_max_distance_pmf_xyz(pmf: &ProgressiveMorphologicalFilter_PointXYZ) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_initial_distance_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            distance: f32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_initial_distance_pmf_xyz(pmf: &ProgressiveMorphologicalFilter_PointXYZ) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_cell_size_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>, size: f32);
+        #[cfg(feature = "segmentation")]
+        fn get_cell_size_pmf_xyz(pmf: &ProgressiveMorphologicalFilter_PointXYZ) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_base_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>, base: f32);
+        #[cfg(feature = "segmentation")]
+        fn get_base_pmf_xyz(pmf: &ProgressiveMorphologicalFilter_PointXYZ) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_exponential_pmf_xyz(
+            pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>,
+            exponential: bool,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_exponential_pmf_xyz(pmf: &ProgressiveMorphologicalFilter_PointXYZ) -> bool;
+        #[cfg(feature = "segmentation")]
+        fn extract_pmf_xyz(pmf: Pin<&mut ProgressiveMorphologicalFilter_PointXYZ>) -> Vec<i32>;
+
+        // Conditional Euclidean Clustering functions - PointXYZ
+        #[cfg(feature = "segmentation")]
+        fn new_conditional_euclidean_clustering_xyz()
+        -> UniquePtr<ConditionalEuclideanClustering_PointXYZ>;
+        #[cfg(feature = "segmentation")]
+        fn set_input_cloud_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "segmentation")]
+        fn set_cluster_tolerance_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+            tolerance: f32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_cluster_tolerance_conditional_euclidean_xyz(
+            cec: &ConditionalEuclideanClustering_PointXYZ,
+        ) -> f32;
+        #[cfg(feature = "segmentation")]
+        fn set_min_cluster_size_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+            min_size: i32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_min_cluster_size_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+        ) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn set_max_cluster_size_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+            max_size: i32,
+        );
+        #[cfg(feature = "segmentation")]
+        fn get_max_cluster_size_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+        ) -> i32;
+        #[cfg(feature = "segmentation")]
+        fn segment_conditional_euclidean_xyz(
+            cec: Pin<&mut ConditionalEuclideanClustering_PointXYZ>,
+        ) -> Vec<i32>;
+
     }
 }

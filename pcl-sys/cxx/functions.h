@@ -4,6 +4,7 @@
 #include "features_impl.h"
 #include "keypoints_impl.h"
 #include "rust/cxx.h"
+#include "segmentation_impl.h"
 #include "types.h"
 
 // Try to include VTK to determine if visualization is available

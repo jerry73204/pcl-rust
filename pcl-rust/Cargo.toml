@@ -27,7 +27,7 @@ visualization = ["pcl-sys/visualization"]
 features = ["pcl-sys/features", "search"]  # features uses search for KdTree
 keypoints = ["pcl-sys/keypoints", "search"]  # keypoints likely uses search
 registration = ["pcl-sys/registration", "search"]  # registration likely uses search
-segmentation = ["pcl-sys/segmentation"]
+segmentation = ["pcl-sys/segmentation", "search", "features"]  # segmentation uses search and may use features
 sample_consensus = ["pcl-sys/sample_consensus"]
 
 [dependencies]
@@ -37,6 +37,7 @@ cxx = "1.0"
 
 [dev-dependencies]
 tempfile = "3.0"
+rand = "0.8"
 
 # Examples with required features
 [[example]]
@@ -66,3 +67,7 @@ required-features = ["filters"]
 [[example]]
 name = "auto_detection_example"
 required-features = ["search", "octree", "io"]
+
+[[example]]
+name = "segmentation_demo"
+required-features = ["segmentation"]

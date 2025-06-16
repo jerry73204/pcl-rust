@@ -31,7 +31,8 @@ pub mod keypoints;
 pub mod registration;
 #[cfg(feature = "sample_consensus")]
 pub mod sample_consensus;
-// pub mod segmentation;
+#[cfg(feature = "segmentation")]
+pub mod segmentation;
 
 #[cfg(test)]
 mod error_tests;
@@ -74,11 +75,13 @@ pub use sample_consensus::{
     PlaneModelXYZ, PlaneModelXYZRGB, RansacPlaneXYZ, RansacPlaneXYZRGB, RansacSphereXYZ,
     RansacSphereXYZRGB, SphereModelXYZ, SphereModelXYZRGB,
 };
-// pub use segmentation::sac_segmentation::SegmentationResult;
-// pub use segmentation::{
-//     ClusteringXYZ, EuclideanClusterExtractionXYZ, MethodType, ModelType, RegionGrowingRgbXYZRGB,
-//     RegionGrowingXYZ, SacSegmentationXYZ, Segmentation, SegmentationXYZ, SegmentationXYZRGB,
-// };
+#[cfg(feature = "segmentation")]
+pub use segmentation::{
+    ClusteringXYZ, ConditionalEuclideanClusteringXYZ, EuclideanClusterExtractionXYZ,
+    ExtractPolygonalPrismDataXYZ, MethodType, MinCutSegmentationXYZ, ModelType,
+    ProgressiveMorphologicalFilterXYZ, RegionGrowingRgbXYZRGB, RegionGrowingXYZ,
+    SacSegmentationXYZ, Segmentation, SegmentationResult,
+};
 
 #[cfg(test)]
 mod tests {

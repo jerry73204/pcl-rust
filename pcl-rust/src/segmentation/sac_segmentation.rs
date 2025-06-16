@@ -5,7 +5,7 @@
 
 use crate::common::PointCloudXYZ;
 use crate::error::{PclError, PclResult};
-use crate::segmentation::{SegmentationXYZ, method_types, model_types};
+use crate::segmentation::{method_types, model_types};
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
@@ -92,7 +92,7 @@ pub struct SegmentationResult {
 /// in point clouds. It's particularly useful for finding planes, spheres, and other
 /// parametric shapes in noisy data.
 pub struct SacSegmentationXYZ {
-    inner: UniquePtr<pcl_sys::SacSegmentationXYZ>,
+    inner: UniquePtr<ffi::SACSegmentation_PointXYZ>,
 }
 
 impl SacSegmentationXYZ {
@@ -119,8 +119,8 @@ impl SacSegmentationXYZ {
     }
 
     /// Get the current model type
-    pub fn model_type(&mut self) -> ModelType {
-        let model_type = ffi::get_model_type_sac_xyz(self.inner.pin_mut());
+    pub fn model_type(&self) -> ModelType {
+        let model_type = ffi::get_model_type_sac_xyz(&self.inner);
         match model_type {
             x if x == model_types::SACMODEL_PLANE => ModelType::Plane,
             x if x == model_types::SACMODEL_LINE => ModelType::Line,
@@ -140,8 +140,8 @@ impl SacSegmentationXYZ {
     }
 
     /// Get the current method type
-    pub fn method_type(&mut self) -> MethodType {
-        let method_type = ffi::get_method_type_sac_xyz(self.inner.pin_mut());
+    pub fn method_type(&self) -> MethodType {
+        let method_type = ffi::get_method_type_sac_xyz(&self.inner);
         match method_type {
             x if x == method_types::SAC_RANSAC => MethodType::Ransac,
             x if x == method_types::SAC_LMEDS => MethodType::LMedS,
@@ -157,35 +157,39 @@ impl SacSegmentationXYZ {
     /// Set the distance threshold for inlier detection
     pub fn set_distance_threshold(&mut self, threshold: f64) -> PclResult<()> {
         if threshold <= 0.0 {
-            return Err(PclError::InvalidParameter {
-                param: "distance_threshold".to_string(),
-                message: "Must be positive".to_string(),
-            });
+            return Err(PclError::invalid_parameters(
+                "Invalid distance threshold",
+                "distance_threshold",
+                "positive value",
+                &threshold.to_string(),
+            ));
         }
         ffi::set_distance_threshold_sac_xyz(self.inner.pin_mut(), threshold);
         Ok(())
     }
 
     /// Get the distance threshold
-    pub fn distance_threshold(&mut self) -> f64 {
-        ffi::get_distance_threshold_sac_xyz(self.inner.pin_mut())
+    pub fn distance_threshold(&self) -> f64 {
+        ffi::get_distance_threshold_sac_xyz(&self.inner)
     }
 
     /// Set the maximum number of iterations
     pub fn set_max_iterations(&mut self, max_iterations: i32) -> PclResult<()> {
         if max_iterations <= 0 {
-            return Err(PclError::InvalidParameter {
-                param: "max_iterations".to_string(),
-                message: "Must be positive".to_string(),
-            });
+            return Err(PclError::invalid_parameters(
+                "Invalid maximum iterations",
+                "max_iterations",
+                "positive value",
+                &max_iterations.to_string(),
+            ));
         }
         ffi::set_max_iterations_sac_xyz(self.inner.pin_mut(), max_iterations);
         Ok(())
     }
 
     /// Get the maximum number of iterations
-    pub fn max_iterations(&mut self) -> i32 {
-        ffi::get_max_iterations_sac_xyz(self.inner.pin_mut())
+    pub fn max_iterations(&self) -> i32 {
+        ffi::get_max_iterations_sac_xyz(&self.inner)
     }
 
     /// Set whether to optimize coefficients
@@ -195,8 +199,8 @@ impl SacSegmentationXYZ {
     }
 
     /// Get whether coefficients are optimized
-    pub fn optimize_coefficients(&mut self) -> bool {
-        ffi::get_optimize_coefficients_sac_xyz(self.inner.pin_mut())
+    pub fn optimize_coefficients(&self) -> bool {
+        ffi::get_optimize_coefficients_sac_xyz(&self.inner)
     }
 
     /// Perform segmentation and return the result
@@ -217,24 +221,20 @@ impl SacSegmentationXYZ {
             coefficients,
         })
     }
-}
 
-impl SegmentationXYZ for SacSegmentationXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    /// Set the input point cloud
+    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
         if cloud.empty() {
-            return Err(PclError::InvalidPointCloud {
-                message: "Input cloud is empty".to_string(),
-                source: None,
-            });
+            return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_sac_xyz(self.inner.pin_mut(), &cloud.inner);
+        ffi::set_input_cloud_sac_xyz(self.inner.pin_mut(), cloud.as_raw());
         Ok(())
     }
+}
 
-    fn segment(&mut self) -> PclResult<Vec<Vec<i32>>> {
-        let result = self.segment_model()?;
-        // Return single cluster containing all inliers
-        Ok(vec![result.inliers])
+impl Default for SacSegmentationXYZ {
+    fn default() -> Self {
+        Self::new().expect("Failed to create default SacSegmentationXYZ")
     }
 }
 

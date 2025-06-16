@@ -152,4 +152,17 @@ using GreedyProjectionTriangulation_PointNormal =
     GreedyProjectionTriangulation<PointNormal>;
 using MovingLeastSquares_PointXYZ_PointNormal =
     MovingLeastSquares<PointXYZ, PointNormal>;
+
+// Segmentation type aliases
+using RegionGrowing_PointXYZ_Normal = RegionGrowing<PointXYZ, Normal>;
+using RegionGrowingRGB_PointXYZRGB = RegionGrowingRGB<PointXYZRGB>;
+using EuclideanClusterExtraction_PointXYZ =
+    EuclideanClusterExtraction<PointXYZ>;
+using SACSegmentation_PointXYZ = SACSegmentation<PointXYZ>;
+using MinCutSegmentation_PointXYZ = MinCutSegmentation<PointXYZ>;
+using ExtractPolygonalPrismData_PointXYZ = ExtractPolygonalPrismData<PointXYZ>;
+using ProgressiveMorphologicalFilter_PointXYZ =
+    ProgressiveMorphologicalFilter<PointXYZ>;
+using ConditionalEuclideanClustering_PointXYZ =
+    ConditionalEuclideanClustering<PointXYZ>;
 } // namespace pcl

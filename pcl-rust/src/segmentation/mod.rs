@@ -4,14 +4,20 @@
 //! algorithms including region growing, clustering, and model-based segmentation.
 
 pub mod clustering;
+pub mod min_cut;
+pub mod polygonal_prism;
+pub mod progressive_morphological_filter;
 pub mod region_growing;
 pub mod sac_segmentation;
 
-pub use clustering::{ClusteringXYZ, EuclideanClusterExtractionXYZ};
-pub use region_growing::{
-    RegionGrowingRgbXYZRGB, RegionGrowingXYZ, SegmentationXYZ, SegmentationXYZRGB,
+pub use clustering::{
+    ClusteringXYZ, ConditionalEuclideanClusteringXYZ, EuclideanClusterExtractionXYZ,
 };
-pub use sac_segmentation::{MethodType, ModelType, SacSegmentationXYZ};
+pub use min_cut::MinCutSegmentationXYZ;
+pub use polygonal_prism::ExtractPolygonalPrismDataXYZ;
+pub use progressive_morphological_filter::ProgressiveMorphologicalFilterXYZ;
+pub use region_growing::{RegionGrowingRgbXYZRGB, RegionGrowingXYZ};
+pub use sac_segmentation::{MethodType, ModelType, SacSegmentationXYZ, SegmentationResult};
 
 use crate::error::PclResult;
 

@@ -70,6 +70,11 @@ fn main() {
 
     if is_feature_enabled("segmentation") {
         println!("cargo:rustc-link-lib=pcl_segmentation");
+        // Segmentation depends on search functionality
+        println!("cargo:rustc-link-lib=pcl_search");
+        println!("cargo:rustc-link-lib=pcl_kdtree");
+        // Segmentation may also depend on features for normals
+        println!("cargo:rustc-link-lib=pcl_features");
     }
 
     if is_feature_enabled("features") {
