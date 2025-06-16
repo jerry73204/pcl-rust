@@ -2,12 +2,21 @@
 //!
 //! This module provides algorithms for aligning point clouds, including:
 //! - ICP (Iterative Closest Point)
-//! - NDT (Normal Distributions Transform) [planned]
+//! - NDT (Normal Distributions Transform)
+//! - Feature-based registration using correspondences
 
+pub mod correspondence;
 pub mod icp;
+pub mod ndt;
 pub mod transform;
 
+pub use correspondence::{
+    Correspondence, CorrespondenceEstimation, CorrespondenceRejectorSampleConsensus,
+    FeatureBasedRegistration, FeatureBasedRegistrationBuilder, RegistrationResult,
+    TransformationEstimationSVD,
+};
 pub use icp::{IcpXYZ, IcpXYZBuilder, IcpXYZRGB, IcpXYZRGBBuilder};
+pub use ndt::{NdtXYZ, NdtXYZBuilder, NdtXYZRGB, NdtXYZRGBBuilder};
 pub use transform::{Transform3D, TransformationMatrix};
 
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB};

@@ -75,3 +75,7 @@ required-features = ["segmentation"]
 [[example]]
 name = "surface_demo"
 required-features = ["surface"]
+
+[[example]]
+name = "registration_showcase"
+required-features = ["registration"]

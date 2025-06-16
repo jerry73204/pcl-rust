@@ -101,6 +101,8 @@ using CorrespondenceEstimation_PointXYZ =
     CorrespondenceEstimation<PointXYZ, PointXYZ>;
 using CorrespondenceRejectorSampleConsensus_PointXYZ =
     CorrespondenceRejectorSampleConsensus<PointXYZ>;
+using TransformationEstimationSVD_PointXYZ =
+    TransformationEstimationSVD<PointXYZ, PointXYZ>;
 } // namespace registration
 
 using SampleConsensusInitialAlignment_PointXYZ_FPFH =

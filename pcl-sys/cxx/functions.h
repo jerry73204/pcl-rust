@@ -102,6 +102,55 @@ get_fitness_score_icp_xyzrgb(pcl::IterativeClosestPoint_PointXYZRGB &icp);
 rust::Vec<float> get_final_transformation_icp_xyzrgb(
     pcl::IterativeClosestPoint_PointXYZRGB &icp);
 
+// Correspondence estimation functions
+std::unique_ptr<pcl::registration::CorrespondenceEstimation_PointXYZ>
+new_correspondence_estimation_xyz();
+void set_input_source_correspondence_xyz(
+    pcl::registration::CorrespondenceEstimation_PointXYZ &ce,
+    const pcl::PointCloud_PointXYZ &cloud);
+void set_input_target_correspondence_xyz(
+    pcl::registration::CorrespondenceEstimation_PointXYZ &ce,
+    const pcl::PointCloud_PointXYZ &cloud);
+void determine_correspondences_xyz(
+    pcl::registration::CorrespondenceEstimation_PointXYZ &ce,
+    rust::Vec<int32_t> &correspondences, rust::Vec<float> &distances);
+void determine_reciprocal_correspondences_xyz(
+    pcl::registration::CorrespondenceEstimation_PointXYZ &ce,
+    rust::Vec<int32_t> &correspondences, rust::Vec<float> &distances);
+
+// Correspondence rejection functions
+std::unique_ptr<
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ>
+new_correspondence_rejector_sac_xyz();
+void set_input_source_rejector_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    const pcl::PointCloud_PointXYZ &cloud);
+void set_input_target_rejector_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    const pcl::PointCloud_PointXYZ &cloud);
+void set_inlier_threshold_rejector_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    double threshold);
+double get_inlier_threshold_rejector_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ
+        &rejector);
+void get_correspondences_rejector_xyz(
+    pcl::registration::CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    const rust::Vec<int32_t> &correspondences,
+    const rust::Vec<float> &distances,
+    rust::Vec<int32_t> &remaining_correspondences,
+    rust::Vec<float> &remaining_distances);
+
+// Transformation estimation functions
+std::unique_ptr<pcl::registration::TransformationEstimationSVD_PointXYZ>
+new_transformation_estimation_svd_xyz();
+void estimate_rigid_transformation_xyz(
+    pcl::registration::TransformationEstimationSVD_PointXYZ &est,
+    const pcl::PointCloud_PointXYZ &source,
+    const pcl::PointCloud_PointXYZ &target,
+    const rust::Vec<int32_t> &correspondences,
+    const rust::Vec<float> &distances, rust::Vec<float> &transformation);
+
 // PointCloud functions
 std::unique_ptr<pcl::PointCloud_PointXYZ> new_point_cloud_xyz();
 std::unique_ptr<pcl::PointCloud_PointXYZI> new_point_cloud_xyzi();

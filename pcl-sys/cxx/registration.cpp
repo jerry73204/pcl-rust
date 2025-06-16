@@ -10,6 +10,15 @@
 #include <pcl/registration/ndt.h>
 #include <pcl/registration/transformation_estimation_svd.h>
 
+// Type aliases for cleaner code
+using CorrespondenceEstimation_PointXYZ =
+    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>;
+using CorrespondenceRejectorSampleConsensus_PointXYZ =
+    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>;
+using TransformationEstimationSVD_PointXYZ =
+    pcl::registration::TransformationEstimationSVD<pcl::PointXYZ,
+                                                   pcl::PointXYZ>;
+
 // NDT functions - PointXYZ
 std::unique_ptr<pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>>
 new_ndt_xyz() {
@@ -535,137 +544,25 @@ double get_transformation_probability_ndt_xyzrgb(
 }
 
 // Correspondence Estimation functions - PointXYZ
-std::unique_ptr<
-    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>>
+std::unique_ptr<CorrespondenceEstimation_PointXYZ>
 new_correspondence_estimation_xyz() {
   try {
-    return std::make_unique<pcl::registration::CorrespondenceEstimation<
-        pcl::PointXYZ, pcl::PointXYZ>>();
+    return std::make_unique<CorrespondenceEstimation_PointXYZ>();
   } catch (const std::exception &e) {
     return nullptr;
   }
 }
 
 void set_input_source_correspondence_xyz(
-    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>
-        &ce,
+    CorrespondenceEstimation_PointXYZ &ce,
     const pcl::PointCloud<pcl::PointXYZ> &cloud) {
   ce.setInputSource(cloud.makeShared());
 }
 
 void set_input_target_correspondence_xyz(
-    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>
-        &ce,
+    CorrespondenceEstimation_PointXYZ &ce,
     const pcl::PointCloud<pcl::PointXYZ> &cloud) {
   ce.setInputTarget(cloud.makeShared());
-}
-
-std::unique_ptr<pcl::Correspondences> determine_correspondences_xyz(
-    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>
-        &ce) {
-  try {
-    auto correspondences = std::make_unique<pcl::Correspondences>();
-    ce.determineCorrespondences(*correspondences);
-    return correspondences;
-  } catch (const std::exception &e) {
-    return nullptr;
-  }
-}
-
-std::unique_ptr<pcl::Correspondences> determine_reciprocal_correspondences_xyz(
-    pcl::registration::CorrespondenceEstimation<pcl::PointXYZ, pcl::PointXYZ>
-        &ce) {
-  try {
-    auto correspondences = std::make_unique<pcl::Correspondences>();
-    ce.determineReciprocalCorrespondences(*correspondences);
-    return correspondences;
-  } catch (const std::exception &e) {
-    return nullptr;
-  }
-}
-
-// Correspondence Rejection RANSAC functions - PointXYZ
-std::unique_ptr<
-    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>>
-new_correspondence_rejection_ransac_xyz() {
-  try {
-    return std::make_unique<
-        pcl::registration::CorrespondenceRejectorSampleConsensus<
-            pcl::PointXYZ>>();
-  } catch (const std::exception &e) {
-    return nullptr;
-  }
-}
-
-void set_input_source_rejection_xyz(
-    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
-        &rejector,
-    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
-  rejector.setInputSource(cloud.makeShared());
-}
-
-void set_input_target_rejection_xyz(
-    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
-        &rejector,
-    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
-  rejector.setInputTarget(cloud.makeShared());
-}
-
-void set_inlier_threshold_rejection_xyz(
-    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
-        &rejector,
-    double threshold) {
-  rejector.setInlierThreshold(threshold);
-}
-
-double get_inlier_threshold_rejection_xyz(
-    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
-        &rejector) {
-  return rejector.getInlierThreshold();
-}
-
-void set_max_iterations_rejection_xyz(
-    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
-        &rejector,
-    int iterations) {
-  rejector.setMaximumIterations(iterations);
-}
-
-int get_max_iterations_rejection_xyz(
-    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
-        &rejector) {
-  return rejector.getMaximumIterations();
-}
-
-std::unique_ptr<pcl::Correspondences> get_remaining_correspondences_xyz(
-    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
-        &rejector,
-    const pcl::Correspondences &original_correspondences) {
-  try {
-    auto remaining = std::make_unique<pcl::Correspondences>();
-    rejector.setInputCorrespondences(
-        std::make_shared<const pcl::Correspondences>(original_correspondences));
-    rejector.getCorrespondences(*remaining);
-    return remaining;
-  } catch (const std::exception &e) {
-    return nullptr;
-  }
-}
-
-rust::Vec<float> get_best_transformation_rejection_xyz(
-    pcl::registration::CorrespondenceRejectorSampleConsensus<pcl::PointXYZ>
-        &rejector) {
-  Eigen::Matrix4f transform = rejector.getBestTransformation();
-  rust::Vec<float> result;
-  result.reserve(16);
-
-  for (int i = 0; i < 4; ++i) {
-    for (int j = 0; j < 4; ++j) {
-      result.push_back(transform(i, j));
-    }
-  }
-
-  return result;
 }
 
 // Sample Consensus Initial Alignment (SAC-IA) functions - PointXYZ with FPFH
@@ -798,4 +695,175 @@ rust::Vec<float> get_final_transformation_sac_ia_xyz(
   }
 
   return result;
+}
+
+// Correspondence estimation functions using flattened representation
+void determine_correspondences_xyz(CorrespondenceEstimation_PointXYZ &ce,
+                                   rust::Vec<int32_t> &correspondences,
+                                   rust::Vec<float> &distances) {
+  try {
+    pcl::Correspondences pcl_corrs;
+    ce.determineCorrespondences(pcl_corrs);
+
+    correspondences.clear();
+    distances.clear();
+    correspondences.reserve(pcl_corrs.size() * 2);
+    distances.reserve(pcl_corrs.size());
+
+    for (const auto &corr : pcl_corrs) {
+      correspondences.push_back(corr.index_query);
+      correspondences.push_back(corr.index_match);
+      distances.push_back(corr.distance);
+    }
+  } catch (const std::exception &e) {
+    // Handle error
+  }
+}
+
+void determine_reciprocal_correspondences_xyz(
+    CorrespondenceEstimation_PointXYZ &ce, rust::Vec<int32_t> &correspondences,
+    rust::Vec<float> &distances) {
+  try {
+    pcl::Correspondences pcl_corrs;
+    ce.determineReciprocalCorrespondences(pcl_corrs);
+
+    correspondences.clear();
+    distances.clear();
+    correspondences.reserve(pcl_corrs.size() * 2);
+    distances.reserve(pcl_corrs.size());
+
+    for (const auto &corr : pcl_corrs) {
+      correspondences.push_back(corr.index_query);
+      correspondences.push_back(corr.index_match);
+      distances.push_back(corr.distance);
+    }
+  } catch (const std::exception &e) {
+    // Handle error
+  }
+}
+
+// Correspondence rejection RANSAC functions
+std::unique_ptr<CorrespondenceRejectorSampleConsensus_PointXYZ>
+new_correspondence_rejector_sac_xyz() {
+  try {
+    return std::make_unique<
+        pcl::registration::CorrespondenceRejectorSampleConsensus<
+            pcl::PointXYZ>>();
+  } catch (const std::exception &e) {
+    return nullptr;
+  }
+}
+
+void set_input_source_rejector_xyz(
+    CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  rejector.setInputSource(cloud.makeShared());
+}
+
+void set_input_target_rejector_xyz(
+    CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  rejector.setInputTarget(cloud.makeShared());
+}
+
+void set_inlier_threshold_rejector_xyz(
+    CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    double threshold) {
+  rejector.setInlierThreshold(threshold);
+}
+
+double get_inlier_threshold_rejector_xyz(
+    CorrespondenceRejectorSampleConsensus_PointXYZ &rejector) {
+  return rejector.getInlierThreshold();
+}
+
+void get_correspondences_rejector_xyz(
+    CorrespondenceRejectorSampleConsensus_PointXYZ &rejector,
+    const rust::Vec<int32_t> &correspondences,
+    const rust::Vec<float> &distances,
+    rust::Vec<int32_t> &remaining_correspondences,
+    rust::Vec<float> &remaining_distances) {
+  try {
+    // Convert flattened arrays to pcl::Correspondences
+    pcl::Correspondences pcl_corrs;
+    size_t num_corrs = correspondences.size() / 2;
+    pcl_corrs.reserve(num_corrs);
+
+    for (size_t i = 0; i < num_corrs; ++i) {
+      pcl::Correspondence corr;
+      corr.index_query = correspondences[i * 2];
+      corr.index_match = correspondences[i * 2 + 1];
+      corr.distance = distances[i];
+      pcl_corrs.push_back(corr);
+    }
+
+    // Set input correspondences and get filtered result
+    rejector.setInputCorrespondences(
+        std::make_shared<const pcl::Correspondences>(pcl_corrs));
+    pcl::Correspondences filtered;
+    rejector.getCorrespondences(filtered);
+
+    // Convert back to flattened arrays
+    remaining_correspondences.clear();
+    remaining_distances.clear();
+    remaining_correspondences.reserve(filtered.size() * 2);
+    remaining_distances.reserve(filtered.size());
+
+    for (const auto &corr : filtered) {
+      remaining_correspondences.push_back(corr.index_query);
+      remaining_correspondences.push_back(corr.index_match);
+      remaining_distances.push_back(corr.distance);
+    }
+  } catch (const std::exception &e) {
+    // Handle error
+  }
+}
+
+// Transformation estimation SVD functions
+std::unique_ptr<TransformationEstimationSVD_PointXYZ>
+new_transformation_estimation_svd_xyz() {
+  try {
+    return std::make_unique<pcl::registration::TransformationEstimationSVD<
+        pcl::PointXYZ, pcl::PointXYZ>>();
+  } catch (const std::exception &e) {
+    return nullptr;
+  }
+}
+
+void estimate_rigid_transformation_xyz(
+    TransformationEstimationSVD_PointXYZ &est,
+    const pcl::PointCloud<pcl::PointXYZ> &source,
+    const pcl::PointCloud<pcl::PointXYZ> &target,
+    const rust::Vec<int32_t> &correspondences,
+    const rust::Vec<float> &distances, rust::Vec<float> &transformation) {
+  try {
+    // Convert flattened arrays to pcl::Correspondences
+    pcl::Correspondences pcl_corrs;
+    size_t num_corrs = correspondences.size() / 2;
+    pcl_corrs.reserve(num_corrs);
+
+    for (size_t i = 0; i < num_corrs; ++i) {
+      pcl::Correspondence corr;
+      corr.index_query = correspondences[i * 2];
+      corr.index_match = correspondences[i * 2 + 1];
+      corr.distance = distances[i];
+      pcl_corrs.push_back(corr);
+    }
+
+    // Estimate transformation
+    Eigen::Matrix4f transform_matrix;
+    est.estimateRigidTransformation(source, target, pcl_corrs,
+                                    transform_matrix);
+
+    // Convert to rust::Vec
+    transformation.clear();
+    transformation.reserve(16);
+    for (int i = 0; i < 4; ++i) {
+      for (int j = 0; j < 4; ++j) {
+        transformation.push_back(transform_matrix(i, j));
+      }
+    }
+  } catch (const std::exception &e) {
+    // Handle error
+  }
 }

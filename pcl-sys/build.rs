@@ -66,6 +66,8 @@ fn main() {
 
     if is_feature_enabled("registration") {
         println!("cargo:rustc-link-lib=pcl_registration");
+        // Registration correspondence rejection uses RANSAC which needs sample_consensus
+        println!("cargo:rustc-link-lib=pcl_sample_consensus");
     }
 
     if is_feature_enabled("segmentation") {

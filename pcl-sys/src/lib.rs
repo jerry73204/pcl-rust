@@ -1774,6 +1774,85 @@ pub mod ffi {
             icp: Pin<&mut IterativeClosestPoint_PointXYZRGB>,
         ) -> Vec<f32>;
 
+        // Correspondence estimation types
+        #[namespace = "pcl::registration"]
+        type CorrespondenceEstimation_PointXYZ;
+        #[namespace = "pcl::registration"]
+        type CorrespondenceRejectorSampleConsensus_PointXYZ;
+        #[namespace = "pcl::registration"]
+        type TransformationEstimationSVD_PointXYZ;
+
+        // Correspondence estimation functions
+        #[cfg(feature = "registration")]
+        fn new_correspondence_estimation_xyz() -> UniquePtr<CorrespondenceEstimation_PointXYZ>;
+        #[cfg(feature = "registration")]
+        fn set_input_source_correspondence_xyz(
+            est: Pin<&mut CorrespondenceEstimation_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "registration")]
+        fn set_input_target_correspondence_xyz(
+            est: Pin<&mut CorrespondenceEstimation_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "registration")]
+        fn determine_correspondences_xyz(
+            est: Pin<&mut CorrespondenceEstimation_PointXYZ>,
+            correspondences: &mut Vec<i32>, // Flattened: [source_idx, target_idx, source_idx, target_idx, ...]
+            distances: &mut Vec<f32>,       // Corresponding distances
+        );
+        #[cfg(feature = "registration")]
+        fn determine_reciprocal_correspondences_xyz(
+            est: Pin<&mut CorrespondenceEstimation_PointXYZ>,
+            correspondences: &mut Vec<i32>, // Flattened: [source_idx, target_idx, source_idx, target_idx, ...]
+            distances: &mut Vec<f32>,       // Corresponding distances
+        );
+
+        // Correspondence rejection functions
+        #[cfg(feature = "registration")]
+        fn new_correspondence_rejector_sac_xyz()
+        -> UniquePtr<CorrespondenceRejectorSampleConsensus_PointXYZ>;
+        #[cfg(feature = "registration")]
+        fn set_input_source_rejector_xyz(
+            rej: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "registration")]
+        fn set_input_target_rejector_xyz(
+            rej: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+            cloud: &PointCloud_PointXYZ,
+        );
+        #[cfg(feature = "registration")]
+        fn set_inlier_threshold_rejector_xyz(
+            rej: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+            threshold: f64,
+        );
+        #[cfg(feature = "registration")]
+        fn get_inlier_threshold_rejector_xyz(
+            rej: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+        ) -> f64;
+        #[cfg(feature = "registration")]
+        fn get_correspondences_rejector_xyz(
+            rej: Pin<&mut CorrespondenceRejectorSampleConsensus_PointXYZ>,
+            correspondences: &Vec<i32>, // Input flattened correspondences
+            distances: &Vec<f32>,       // Input distances
+            remaining_correspondences: &mut Vec<i32>, // Output flattened correspondences
+            remaining_distances: &mut Vec<f32>, // Output distances
+        );
+
+        // Transformation estimation functions
+        #[cfg(feature = "registration")]
+        fn new_transformation_estimation_svd_xyz() -> UniquePtr<TransformationEstimationSVD_PointXYZ>;
+        #[cfg(feature = "registration")]
+        fn estimate_rigid_transformation_xyz(
+            est: Pin<&mut TransformationEstimationSVD_PointXYZ>,
+            source: &PointCloud_PointXYZ,
+            target: &PointCloud_PointXYZ,
+            correspondences: &Vec<i32>, // Flattened correspondences
+            distances: &Vec<f32>,       // Corresponding distances
+            transformation: &mut Vec<f32>,
+        );
+
         // Keypoints types - always available but functions conditionally compiled
         #[namespace = "pcl"]
         type HarrisKeypoint3D_PointXYZ_PointXYZI;
