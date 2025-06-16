@@ -159,6 +159,13 @@ impl PointCloudXYZRGB {
         self.height() > 1
     }
 
+    /// Add a point to the cloud
+    pub fn push(&mut self, x: f32, y: f32, z: f32, r: u8, g: u8, b: u8) -> PclResult<()> {
+        let coords = [x, y, z, r as f32, g as f32, b as f32];
+        ffi::push_back_xyzrgb(self.inner.pin_mut(), &coords);
+        Ok(())
+    }
+
     /// Get a reference to the underlying pcl-sys point cloud
     pub fn as_raw(&self) -> &ffi::PointCloud_PointXYZRGB {
         &self.inner

@@ -22,6 +22,7 @@ pub mod io;
 pub mod octree;
 #[cfg(feature = "search")]
 pub mod search;
+pub mod traits;
 
 #[cfg(feature = "features")]
 pub mod features;
@@ -43,7 +44,8 @@ mod error_tests;
 
 // Re-export common types for convenience
 pub use common::{
-    PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB, PointXYZ, PointXYZI, PointXYZRGB,
+    PointCloudXYZ, PointCloudXYZBuilder, PointCloudXYZI, PointCloudXYZRGB, PointCloudXYZRGBBuilder,
+    PointXYZ, PointXYZI, PointXYZRGB,
 };
 pub use error::{PclError, PclResult};
 #[cfg(feature = "io")]
@@ -54,6 +56,10 @@ pub use io::{
 pub use octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
 #[cfg(feature = "search")]
 pub use search::{KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB, SearchMethod};
+pub use traits::{
+    ConvertPoint, Curvature, Intensity, NormalXyz, Point, Rgb, SpatialPoint, SurfacePoint, Xyz,
+    Xyzi, Xyzrgb,
+};
 
 #[cfg(feature = "filters")]
 pub use filters::{

@@ -5,6 +5,7 @@
 
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB, PointXYZ};
 use crate::error::{PclError, PclResult};
+use crate::traits::PointFfi;
 use crate::visualization::{
     CameraControl, RenderingProperties, ViewerXYZ, ViewerXYZRGB, VisualizationControl,
 };
@@ -179,7 +180,8 @@ impl PclVisualizer {
         b: f64,
         id: &str,
     ) -> PclResult<()> {
-        let result = ffi::add_sphere_xyz(self.inner.pin_mut(), &center.inner, radius, r, g, b, id);
+        let result =
+            ffi::add_sphere_xyz(self.inner.pin_mut(), center.as_ffi(), radius, r, g, b, id);
         if result != 0 {
             return Err(PclError::VisualizationError {
                 message: format!("Failed to add sphere '{}'", id),

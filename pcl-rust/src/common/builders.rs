@@ -49,20 +49,18 @@ impl PointCloudXYZBuilder {
     }
 
     /// Build the point cloud
-    /// Note: This creates an empty cloud and resizes it.
-    /// Actual point data cannot be set from Rust due to FFI limitations.
     pub fn build(self) -> PclResult<PointCloudXYZ> {
         let mut cloud = PointCloudXYZ::new()?;
 
         // Reserve space for efficiency
         if !self.points.is_empty() {
             cloud.reserve(self.points.len())?;
-            cloud.resize(self.points.len())?;
         }
 
-        // Note: We cannot actually set the point values from Rust
-        // This is a limitation of the current FFI approach
-        // The cloud will contain default-initialized points
+        // Add all points using the push method
+        for (x, y, z) in self.points {
+            cloud.push(x, y, z)?;
+        }
 
         Ok(cloud)
     }
@@ -91,7 +89,13 @@ impl PointCloudXYZRGBBuilder {
         }
     }
 
-    /// Add a point to the cloud
+    /// Add a point to the cloud with RGB color
+    pub fn add_point_rgb(mut self, x: f32, y: f32, z: f32, r: u8, g: u8, b: u8) -> Self {
+        self.points.push((x, y, z, r, g, b));
+        self
+    }
+
+    /// Add a point to the cloud (alias for add_point_rgb)
     pub fn add_point(mut self, x: f32, y: f32, z: f32, r: u8, g: u8, b: u8) -> Self {
         self.points.push((x, y, z, r, g, b));
         self
@@ -119,20 +123,18 @@ impl PointCloudXYZRGBBuilder {
     }
 
     /// Build the point cloud
-    /// Note: This creates an empty cloud and resizes it.
-    /// Actual point data cannot be set from Rust due to FFI limitations.
     pub fn build(self) -> PclResult<PointCloudXYZRGB> {
         let mut cloud = PointCloudXYZRGB::new()?;
 
         // Reserve space for efficiency
         if !self.points.is_empty() {
             cloud.reserve(self.points.len())?;
-            cloud.resize(self.points.len())?;
         }
 
-        // Note: We cannot actually set the point values from Rust
-        // This is a limitation of the current FFI approach
-        // The cloud will contain default-initialized points
+        // Add all points using the push method
+        for (x, y, z, r, g, b) in self.points {
+            cloud.push(x, y, z, r, g, b)?;
+        }
 
         Ok(cloud)
     }
