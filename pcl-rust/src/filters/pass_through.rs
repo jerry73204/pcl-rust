@@ -77,7 +77,7 @@ impl Default for PassThroughXYZ {
 
 impl FilterXYZ for PassThroughXYZ {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_cloud_pass_xyz(self.filter.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_pass_xyz(self.filter.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -160,7 +160,7 @@ impl Default for PassThroughXYZRGB {
 
 impl FilterXYZRGB for PassThroughXYZRGB {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
-        ffi::set_input_cloud_pass_xyzrgb(self.filter.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_pass_xyzrgb(self.filter.pin_mut(), cloud.inner());
         Ok(())
     }
 

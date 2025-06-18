@@ -71,12 +71,12 @@ impl NdtXYZ {
 
 impl RegistrationXYZ for NdtXYZ {
     fn set_input_source(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_source_ndt_xyz(self.inner.pin_mut(), &cloud.inner);
+        ffi::set_input_source_ndt_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
     fn set_input_target(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_target_ndt_xyz(self.inner.pin_mut(), &cloud.inner);
+        ffi::set_input_target_ndt_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -87,7 +87,7 @@ impl RegistrationXYZ for NdtXYZ {
                 message: "NDT alignment failed".into(),
             })
         } else {
-            Ok(PointCloudXYZ { inner: aligned })
+            Ok(PointCloudXYZ::from_unique_ptr(aligned))
         }
     }
 
@@ -101,7 +101,7 @@ impl RegistrationXYZ for NdtXYZ {
                 message: "NDT alignment with guess failed".into(),
             })
         } else {
-            Ok(PointCloudXYZ { inner: aligned })
+            Ok(PointCloudXYZ::from_unique_ptr(aligned))
         }
     }
 
@@ -180,12 +180,12 @@ impl NdtXYZRGB {
 
 impl RegistrationXYZRGB for NdtXYZRGB {
     fn set_input_source(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
-        ffi::set_input_source_ndt_xyzrgb(self.inner.pin_mut(), &cloud.inner);
+        ffi::set_input_source_ndt_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
     fn set_input_target(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
-        ffi::set_input_target_ndt_xyzrgb(self.inner.pin_mut(), &cloud.inner);
+        ffi::set_input_target_ndt_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -196,7 +196,7 @@ impl RegistrationXYZRGB for NdtXYZRGB {
                 message: "NDT alignment failed".into(),
             })
         } else {
-            Ok(PointCloudXYZRGB { inner: aligned })
+            Ok(PointCloudXYZRGB::from_unique_ptr(aligned))
         }
     }
 
@@ -211,7 +211,7 @@ impl RegistrationXYZRGB for NdtXYZRGB {
                 message: "NDT alignment with guess failed".into(),
             })
         } else {
-            Ok(PointCloudXYZRGB { inner: aligned })
+            Ok(PointCloudXYZRGB::from_unique_ptr(aligned))
         }
     }
 

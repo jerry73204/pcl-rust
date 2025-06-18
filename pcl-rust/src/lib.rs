@@ -6,9 +6,9 @@
 //! # Examples
 //!
 //! ```rust
-//! use pcl::PointCloudXYZ;
+//! use pcl::{PointCloud, PointXYZ};
 //!
-//! let mut cloud = PointCloudXYZ::new();
+//! let mut cloud: PointCloud<PointXYZ> = PointCloud::new();
 //! // Add points, perform operations...
 //! ```
 
@@ -44,10 +44,12 @@ mod error_tests;
 
 // Re-export common types for convenience
 pub use common::{
-    PointCloudXYZ, PointCloudXYZBuilder, PointCloudXYZI, PointCloudXYZRGB, PointCloudXYZRGBBuilder,
-    PointXYZ, PointXYZI, PointXYZRGB,
+    PointCloud, PointCloudNormal, PointCloudNormalBuilder, PointCloudXYZ, PointCloudXYZBuilder,
+    PointCloudXYZI, PointCloudXYZRGB, PointCloudXYZRGBBuilder, PointNormal, PointXYZ, PointXYZI,
+    PointXYZRGB,
 };
 pub use error::{PclError, PclResult};
+// Re-export commonly used traits
 #[cfg(feature = "io")]
 pub use io::{
     BinaryFormat, FileFormat, PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB, PlyIoXYZ, PlyIoXYZI, PlyIoXYZRGB,
@@ -57,9 +59,13 @@ pub use octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
 #[cfg(feature = "search")]
 pub use search::{KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB, SearchMethod};
 pub use traits::{
-    ConvertPoint, Curvature, Intensity, NormalXyz, Point, Rgb, SpatialPoint, SurfacePoint, Xyz,
-    Xyzi, Xyzrgb,
+    ConvertPoint, Curvature, Intensity, NormalXyz, Point, PointIntensityOps, PointRgbOps,
+    PointXyzOps, Rgb, SpatialPoint, SurfacePoint, Xyz, Xyzi, Xyzrgb,
 };
+
+// Type aliases for backward compatibility
+pub type PointCloudXYZGeneric = PointCloud<common::PointXYZ>;
+pub type PointCloudXYZRGBGeneric = PointCloud<common::PointXYZRGB>;
 
 #[cfg(feature = "filters")]
 pub use filters::{

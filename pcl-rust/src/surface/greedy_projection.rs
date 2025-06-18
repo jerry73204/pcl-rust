@@ -3,9 +3,9 @@
 //! This module provides the Greedy Projection Triangulation algorithm,
 //! which performs triangulation on a set of points with normals.
 
+use crate::common::PointCloudNormal;
 use crate::error::{PclError, PclResult};
 use crate::surface::PolygonMesh;
-use crate::surface::poisson::PointCloudWithNormals;
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
@@ -161,11 +161,8 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Set the input point cloud with normals
-    pub fn set_input_cloud<T: PointCloudWithNormals>(&mut self, cloud: &T) -> PclResult<()> {
-        if cloud.is_empty() {
-            return Err(PclError::invalid_point_cloud("Input cloud is empty"));
-        }
-        ffi::set_input_cloud_greedy(self.inner.pin_mut(), cloud.as_raw());
+    pub fn set_input_cloud(&mut self, cloud: &PointCloudNormal) -> PclResult<()> {
+        ffi::set_input_cloud_greedy(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -184,6 +181,18 @@ impl GreedyProjectionTriangulation {
 impl Default for GreedyProjectionTriangulation {
     fn default() -> Self {
         Self::new().expect("Failed to create default GreedyProjectionTriangulation")
+    }
+}
+
+impl crate::surface::SurfaceReconstruction<PointCloudNormal, PolygonMesh>
+    for GreedyProjectionTriangulation
+{
+    fn set_input_cloud(&mut self, cloud: &PointCloudNormal) -> PclResult<()> {
+        self.set_input_cloud(cloud)
+    }
+
+    fn reconstruct(&mut self, mesh: &mut PolygonMesh) -> PclResult<()> {
+        self.reconstruct(mesh)
     }
 }
 

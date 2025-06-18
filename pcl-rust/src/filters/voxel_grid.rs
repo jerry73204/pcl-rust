@@ -46,7 +46,7 @@ impl VoxelGridXYZ {
 
 impl FilterXYZ for VoxelGridXYZ {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_cloud_voxel_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_voxel_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -133,7 +133,7 @@ impl VoxelGridXYZRGB {
 
 impl FilterXYZRGB for VoxelGridXYZRGB {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
-        ffi::set_input_cloud_voxel_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_voxel_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 

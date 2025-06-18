@@ -2,12 +2,12 @@
 //!
 //! This module provides safe, idiomatic Rust interfaces for PCL's point types.
 
-use crate::error::{PclError, PclResult};
-use crate::traits::point_cloud::PointCloudImpl;
-use crate::traits::{Intensity, Point, PointCloud, PointFfi, Rgb, Xyz};
+use crate::common::point_cloud_generic::PointCloud;
+use crate::error::PclResult;
+use crate::traits::{Intensity, Point, PointFfi, Rgb, Xyz};
 use pcl_sys::ffi;
-use std::ffi::c_void;
 use std::fmt::Debug;
+use std::pin::Pin;
 
 /// A 3D point with x, y, z coordinates
 pub struct PointXYZ {
@@ -35,21 +35,64 @@ impl Debug for PointXYZ {
 
 // Implement Point trait for PointXYZ
 impl Point for PointXYZ {
+    type CloudType = ffi::PointCloud_PointXYZ;
+    type FfiPointType = ffi::PointXYZ;
+
     fn type_name() -> &'static str {
         "PointXYZ"
     }
 
     fn default_point() -> Self {
-        // This should not be called as points cannot be created directly
-        panic!("Cannot create PointXYZ directly - use PointCloud methods instead")
+        // FFI types cannot be created directly in safe Rust
+        // This is a placeholder that should not be called
+        panic!("PointXYZ cannot be created directly - use point cloud operations instead")
     }
 
     fn create_cloud() -> PclResult<PointCloud<Self>>
     where
         Self: Sized,
     {
-        let inner = Box::new(PointCloudXYZImpl::new()?);
-        Ok(PointCloud::from_impl(inner))
+        PointCloud::new()
+    }
+
+    fn new_cloud() -> cxx::UniquePtr<Self::CloudType> {
+        ffi::new_point_cloud_xyz()
+    }
+
+    fn cloud_size(cloud: &Self::CloudType) -> usize {
+        ffi::size(cloud)
+    }
+
+    fn cloud_empty(cloud: &Self::CloudType) -> bool {
+        ffi::empty(cloud)
+    }
+
+    fn cloud_clear(cloud: Pin<&mut Self::CloudType>) {
+        ffi::clear(cloud);
+    }
+
+    fn cloud_reserve(cloud: Pin<&mut Self::CloudType>, n: usize) {
+        ffi::reserve_xyz(cloud, n);
+    }
+
+    fn cloud_resize(cloud: Pin<&mut Self::CloudType>, n: usize) {
+        ffi::resize_xyz(cloud, n);
+    }
+
+    fn cloud_width(cloud: &Self::CloudType) -> u32 {
+        ffi::width(cloud)
+    }
+
+    fn cloud_height(cloud: &Self::CloudType) -> u32 {
+        ffi::height(cloud)
+    }
+
+    fn cloud_is_dense(cloud: &Self::CloudType) -> bool {
+        ffi::is_dense(cloud)
+    }
+
+    fn as_raw_cloud(cloud: &Self::CloudType) -> *const Self::CloudType {
+        cloud as *const _
     }
 }
 
@@ -94,6 +137,14 @@ impl Xyz for PointXYZ {
     }
 }
 
+// Implement PointXyzOps trait for PointXYZ
+impl crate::traits::PointXyzOps for PointXYZ {
+    fn push_xyz(cloud: Pin<&mut Self::CloudType>, x: f32, y: f32, z: f32) {
+        let coords = [x, y, z];
+        ffi::push_back_xyz(cloud, &coords);
+    }
+}
+
 /// A 3D point with x, y, z coordinates and intensity
 pub struct PointXYZI {
     pub(crate) inner: ffi::PointXYZI,
@@ -121,21 +172,62 @@ impl Debug for PointXYZI {
 
 // Implement Point trait for PointXYZI
 impl Point for PointXYZI {
+    type CloudType = ffi::PointCloud_PointXYZI;
+    type FfiPointType = ffi::PointXYZI;
+
     fn type_name() -> &'static str {
         "PointXYZI"
     }
 
     fn default_point() -> Self {
-        // This should not be called as points cannot be created directly
-        panic!("Cannot create PointXYZI directly - use PointCloud methods instead")
+        panic!("PointXYZI cannot be created directly - use point cloud operations instead")
     }
 
     fn create_cloud() -> PclResult<PointCloud<Self>>
     where
         Self: Sized,
     {
-        let inner = Box::new(PointCloudXYZIImpl::new()?);
-        Ok(PointCloud::from_impl(inner))
+        PointCloud::new()
+    }
+
+    fn new_cloud() -> cxx::UniquePtr<Self::CloudType> {
+        ffi::new_point_cloud_xyzi()
+    }
+
+    fn cloud_size(cloud: &Self::CloudType) -> usize {
+        ffi::size_xyzi(cloud)
+    }
+
+    fn cloud_empty(cloud: &Self::CloudType) -> bool {
+        ffi::empty_xyzi(cloud)
+    }
+
+    fn cloud_clear(cloud: Pin<&mut Self::CloudType>) {
+        ffi::clear_xyzi(cloud);
+    }
+
+    fn cloud_reserve(cloud: Pin<&mut Self::CloudType>, n: usize) {
+        ffi::reserve_xyzi(cloud, n);
+    }
+
+    fn cloud_resize(cloud: Pin<&mut Self::CloudType>, n: usize) {
+        ffi::resize_xyzi(cloud, n);
+    }
+
+    fn cloud_width(cloud: &Self::CloudType) -> u32 {
+        ffi::width_xyzi(cloud)
+    }
+
+    fn cloud_height(cloud: &Self::CloudType) -> u32 {
+        ffi::height_xyzi(cloud)
+    }
+
+    fn cloud_is_dense(cloud: &Self::CloudType) -> bool {
+        ffi::is_dense_xyzi(cloud)
+    }
+
+    fn as_raw_cloud(cloud: &Self::CloudType) -> *const Self::CloudType {
+        cloud as *const _
     }
 }
 
@@ -190,8 +282,192 @@ impl Intensity for PointXYZI {
     }
 }
 
+// Implement PointIntensityOps trait for PointXYZI
+impl crate::traits::PointIntensityOps for PointXYZI {
+    fn push_xyzi(cloud: Pin<&mut Self::CloudType>, x: f32, y: f32, z: f32, intensity: f32) {
+        let coords = [x, y, z, intensity];
+        ffi::push_back_xyzi(cloud, &coords);
+    }
+}
+
 // Note: Point creation is not currently supported due to cxx limitations
 // Points must be created and managed by PCL C++ code
+
+/// A 3D point with surface normal information
+pub struct PointNormal {
+    pub(crate) inner: ffi::PointNormal,
+}
+
+// Clone is implemented but panics because points cannot be created directly
+impl Clone for PointNormal {
+    fn clone(&self) -> Self {
+        panic!("Cannot clone PointNormal - FFI type is opaque")
+    }
+}
+
+impl Debug for PointNormal {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("PointNormal").finish()
+    }
+}
+
+// Implement Point trait for PointNormal
+impl Point for PointNormal {
+    type CloudType = ffi::PointCloud_PointNormal;
+    type FfiPointType = ffi::PointNormal;
+
+    fn type_name() -> &'static str {
+        "PointNormal"
+    }
+
+    fn default_point() -> Self {
+        panic!("PointNormal cannot be created directly - use point cloud operations instead")
+    }
+
+    fn create_cloud() -> PclResult<PointCloud<Self>>
+    where
+        Self: Sized,
+    {
+        PointCloud::new()
+    }
+
+    fn new_cloud() -> cxx::UniquePtr<Self::CloudType> {
+        ffi::new_point_cloud_point_normal()
+    }
+
+    fn cloud_size(cloud: &Self::CloudType) -> usize {
+        ffi::size_point_normal(cloud)
+    }
+
+    fn cloud_empty(cloud: &Self::CloudType) -> bool {
+        ffi::empty_point_normal(cloud)
+    }
+
+    fn cloud_clear(cloud: Pin<&mut Self::CloudType>) {
+        ffi::clear_point_normal(cloud);
+    }
+
+    fn cloud_reserve(cloud: Pin<&mut Self::CloudType>, n: usize) {
+        ffi::reserve_point_normal(cloud, n);
+    }
+
+    fn cloud_resize(cloud: Pin<&mut Self::CloudType>, n: usize) {
+        ffi::resize_point_normal(cloud, n);
+    }
+
+    fn cloud_width(cloud: &Self::CloudType) -> u32 {
+        ffi::width_point_normal(cloud)
+    }
+
+    fn cloud_height(cloud: &Self::CloudType) -> u32 {
+        ffi::height_point_normal(cloud)
+    }
+
+    fn cloud_is_dense(cloud: &Self::CloudType) -> bool {
+        ffi::is_dense_point_normal(cloud)
+    }
+
+    fn as_raw_cloud(cloud: &Self::CloudType) -> *const Self::CloudType {
+        cloud as *const _
+    }
+}
+
+// Implement internal FFI trait
+impl PointFfi for PointNormal {
+    type FfiType = pcl_sys::ffi::PointNormal;
+
+    fn as_ffi(&self) -> &Self::FfiType {
+        &self.inner
+    }
+
+    fn as_ffi_mut(&mut self) -> &mut Self::FfiType {
+        &mut self.inner
+    }
+}
+
+// Implement Xyz trait for PointNormal
+impl Xyz for PointNormal {
+    fn x(&self) -> f32 {
+        ffi::get_x_point_normal(&self.inner)
+    }
+
+    fn y(&self) -> f32 {
+        ffi::get_y_point_normal(&self.inner)
+    }
+
+    fn z(&self) -> f32 {
+        ffi::get_z_point_normal(&self.inner)
+    }
+
+    fn set_x(&mut self, _x: f32) {
+        // Point modification not supported through FFI yet
+    }
+
+    fn set_y(&mut self, _y: f32) {
+        // Point modification not supported through FFI yet
+    }
+
+    fn set_z(&mut self, _z: f32) {
+        // Point modification not supported through FFI yet
+    }
+}
+
+// Implement NormalXyz trait for PointNormal
+impl crate::traits::NormalXyz for PointNormal {
+    fn normal_x(&self) -> f32 {
+        ffi::get_normal_x_point_normal(&self.inner)
+    }
+
+    fn normal_y(&self) -> f32 {
+        ffi::get_normal_y_point_normal(&self.inner)
+    }
+
+    fn normal_z(&self) -> f32 {
+        ffi::get_normal_z_point_normal(&self.inner)
+    }
+
+    fn set_normal_x(&mut self, _nx: f32) {
+        // Point modification not supported through FFI yet
+    }
+
+    fn set_normal_y(&mut self, _ny: f32) {
+        // Point modification not supported through FFI yet
+    }
+
+    fn set_normal_z(&mut self, _nz: f32) {
+        // Point modification not supported through FFI yet
+    }
+}
+
+// Implement PointNormalOps trait for push operations
+impl PointNormalOps for PointNormal {
+    fn push_point_normal(
+        cloud: Pin<&mut Self::CloudType>,
+        x: f32,
+        y: f32,
+        z: f32,
+        nx: f32,
+        ny: f32,
+        nz: f32,
+    ) {
+        let coords = [x, y, z, nx, ny, nz];
+        ffi::push_back_point_normal(cloud, &coords);
+    }
+}
+
+/// Trait for point types that support normal push operations
+pub trait PointNormalOps: Point {
+    /// Push a point with x, y, z coordinates and normal to the cloud
+    fn push_point_normal(
+        cloud: Pin<&mut Self::CloudType>,
+        x: f32,
+        y: f32,
+        z: f32,
+        nx: f32,
+        ny: f32,
+        nz: f32,
+    );
+}
 
 /// A 3D point with x, y, z coordinates and RGB color
 pub struct PointXYZRGB {
@@ -222,21 +498,62 @@ impl Debug for PointXYZRGB {
 
 // Implement Point trait for PointXYZRGB
 impl Point for PointXYZRGB {
+    type CloudType = ffi::PointCloud_PointXYZRGB;
+    type FfiPointType = ffi::PointXYZRGB;
+
     fn type_name() -> &'static str {
         "PointXYZRGB"
     }
 
     fn default_point() -> Self {
-        // This should not be called as points cannot be created directly
-        panic!("Cannot create PointXYZRGB directly - use PointCloud methods instead")
+        panic!("PointXYZRGB cannot be created directly - use point cloud operations instead")
     }
 
     fn create_cloud() -> PclResult<PointCloud<Self>>
     where
         Self: Sized,
     {
-        let inner = Box::new(PointCloudXYZRGBImpl::new()?);
-        Ok(PointCloud::from_impl(inner))
+        PointCloud::new()
+    }
+
+    fn new_cloud() -> cxx::UniquePtr<Self::CloudType> {
+        ffi::new_point_cloud_xyzrgb()
+    }
+
+    fn cloud_size(cloud: &Self::CloudType) -> usize {
+        ffi::size_xyzrgb(cloud)
+    }
+
+    fn cloud_empty(cloud: &Self::CloudType) -> bool {
+        ffi::empty_xyzrgb(cloud)
+    }
+
+    fn cloud_clear(cloud: Pin<&mut Self::CloudType>) {
+        ffi::clear_xyzrgb(cloud);
+    }
+
+    fn cloud_reserve(cloud: Pin<&mut Self::CloudType>, n: usize) {
+        ffi::reserve_xyzrgb(cloud, n);
+    }
+
+    fn cloud_resize(cloud: Pin<&mut Self::CloudType>, n: usize) {
+        ffi::resize_xyzrgb(cloud, n);
+    }
+
+    fn cloud_width(cloud: &Self::CloudType) -> u32 {
+        ffi::width_xyzrgb(cloud)
+    }
+
+    fn cloud_height(cloud: &Self::CloudType) -> u32 {
+        ffi::height_xyzrgb(cloud)
+    }
+
+    fn cloud_is_dense(cloud: &Self::CloudType) -> bool {
+        ffi::is_dense_xyzrgb(cloud)
+    }
+
+    fn as_raw_cloud(cloud: &Self::CloudType) -> *const Self::CloudType {
+        cloud as *const _
     }
 }
 
@@ -307,310 +624,43 @@ impl Rgb for PointXYZRGB {
     }
 }
 
-// Concrete PointCloudImpl implementations
-
-/// PointCloudImpl implementation for PointXYZ
-struct PointCloudXYZImpl {
-    cloud: crate::common::PointCloudXYZ,
-}
-
-impl PointCloudXYZImpl {
-    fn new() -> PclResult<Self> {
-        Ok(Self {
-            cloud: crate::common::PointCloudXYZ::new()?,
-        })
+// Implement PointRgbOps trait for PointXYZRGB
+impl crate::traits::PointRgbOps for PointXYZRGB {
+    fn push_xyzrgb(cloud: Pin<&mut Self::CloudType>, x: f32, y: f32, z: f32, r: u8, g: u8, b: u8) {
+        let coords = [x, y, z, r as f32, g as f32, b as f32];
+        ffi::push_back_xyzrgb(cloud, &coords);
     }
 }
 
-impl PointCloudImpl<PointXYZ> for PointCloudXYZImpl {
-    fn size(&self) -> usize {
-        self.cloud.size()
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::common::PointCloudNormalBuilder;
+
+    #[test]
+    fn test_point_normal_cloud_creation() {
+        let cloud = PointCloud::<PointNormal>::new();
+        assert!(cloud.is_ok());
+        let cloud = cloud.unwrap();
+        assert!(cloud.empty());
+        assert_eq!(cloud.size(), 0);
     }
 
-    fn empty(&self) -> bool {
-        self.cloud.empty()
+    #[test]
+    fn test_point_normal_cloud_builder() {
+        let cloud = PointCloudNormalBuilder::new()
+            .add_point_normal(1.0, 2.0, 3.0, 0.0, 0.0, 1.0)
+            .add_point_normal(4.0, 5.0, 6.0, 0.0, 1.0, 0.0)
+            .build();
+
+        assert!(cloud.is_ok());
+        let cloud = cloud.unwrap();
+        assert_eq!(cloud.size(), 2);
+        assert!(!cloud.empty());
     }
 
-    fn clear(&mut self) -> PclResult<()> {
-        self.cloud.clear()
-    }
-
-    fn reserve(&mut self, n: usize) -> PclResult<()> {
-        self.cloud.reserve(n)
-    }
-
-    fn resize(&mut self, n: usize) -> PclResult<()> {
-        self.cloud.resize(n)
-    }
-
-    fn width(&self) -> u32 {
-        self.cloud.width()
-    }
-
-    fn height(&self) -> u32 {
-        self.cloud.height()
-    }
-
-    fn set_width(&mut self, _width: u32) {
-        // Not implemented in current FFI
-    }
-
-    fn set_height(&mut self, _height: u32) {
-        // Not implemented in current FFI
-    }
-
-    fn is_dense(&self) -> bool {
-        self.cloud.is_dense()
-    }
-
-    fn set_is_dense(&mut self, _is_dense: bool) {
-        // Not implemented in current FFI
-    }
-
-    fn at(&self, index: usize) -> PclResult<PointXYZ> {
-        let coords = ffi::get_point_coords(self.cloud.as_raw(), index);
-        if coords.len() >= 3 {
-            // Points cannot be created directly, return error
-            Err(PclError::NotImplemented {
-                feature: "Direct point access".to_string(),
-                workaround: Some("Use point cloud methods to access coordinates".to_string()),
-            })
-        } else {
-            Err(PclError::InvalidState {
-                message: "Failed to get point coordinates".to_string(),
-                expected_state: "valid point data".to_string(),
-                actual_state: "insufficient coordinates".to_string(),
-            })
-        }
-    }
-
-    fn set_at(&mut self, _index: usize, _point: PointXYZ) -> PclResult<()> {
-        // Point modification not supported through FFI yet
-        Ok(())
-    }
-
-    fn push(&mut self, _point: PointXYZ) -> PclResult<()> {
-        // Point creation not supported through FFI yet
-        // Use cloud.push(x, y, z) instead
-        Err(PclError::NotImplemented {
-            feature: "Point push".to_string(),
-            workaround: Some("Use PointCloudXYZ::push(x, y, z) directly".to_string()),
-        })
-    }
-
-    fn clone_impl(&self) -> Box<dyn PointCloudImpl<PointXYZ>> {
-        Box::new(PointCloudXYZImpl {
-            cloud: crate::common::PointCloudXYZ::new().unwrap(),
-        })
-    }
-
-    fn as_ffi_ptr(&self) -> *const c_void {
-        self.cloud.as_raw() as *const _ as *const c_void
-    }
-
-    fn as_ffi_ptr_mut(&mut self) -> *mut c_void {
-        self.cloud.as_raw() as *const _ as *mut c_void
-    }
-}
-
-/// PointCloudImpl implementation for PointXYZI
-struct PointCloudXYZIImpl {
-    cloud: crate::common::PointCloudXYZI,
-}
-
-impl PointCloudXYZIImpl {
-    fn new() -> PclResult<Self> {
-        Ok(Self {
-            cloud: crate::common::PointCloudXYZI::new()?,
-        })
-    }
-}
-
-impl PointCloudImpl<PointXYZI> for PointCloudXYZIImpl {
-    fn size(&self) -> usize {
-        self.cloud.size()
-    }
-
-    fn empty(&self) -> bool {
-        self.cloud.empty()
-    }
-
-    fn clear(&mut self) -> PclResult<()> {
-        self.cloud.clear()
-    }
-
-    fn reserve(&mut self, n: usize) -> PclResult<()> {
-        self.cloud.reserve(n)
-    }
-
-    fn resize(&mut self, n: usize) -> PclResult<()> {
-        self.cloud.resize(n)
-    }
-
-    fn width(&self) -> u32 {
-        self.cloud.width()
-    }
-
-    fn height(&self) -> u32 {
-        self.cloud.height()
-    }
-
-    fn set_width(&mut self, _width: u32) {
-        // Not implemented in current FFI
-    }
-
-    fn set_height(&mut self, _height: u32) {
-        // Not implemented in current FFI
-    }
-
-    fn is_dense(&self) -> bool {
-        self.cloud.is_dense()
-    }
-
-    fn set_is_dense(&mut self, _is_dense: bool) {
-        // Not implemented in current FFI
-    }
-
-    fn at(&self, index: usize) -> PclResult<PointXYZI> {
-        let coords = ffi::get_point_coords_xyzi(self.cloud.as_raw(), index);
-        if coords.len() >= 4 {
-            // Points cannot be created directly, return error
-            Err(PclError::NotImplemented {
-                feature: "Direct point access".to_string(),
-                workaround: Some("Use point cloud methods to access coordinates".to_string()),
-            })
-        } else {
-            Err(PclError::InvalidState {
-                message: "Failed to get point coordinates".to_string(),
-                expected_state: "valid point data".to_string(),
-                actual_state: "insufficient coordinates".to_string(),
-            })
-        }
-    }
-
-    fn set_at(&mut self, _index: usize, _point: PointXYZI) -> PclResult<()> {
-        Ok(())
-    }
-
-    fn push(&mut self, _point: PointXYZI) -> PclResult<()> {
-        Err(PclError::NotImplemented {
-            feature: "Point push".to_string(),
-            workaround: Some("Use direct coordinate manipulation".to_string()),
-        })
-    }
-
-    fn clone_impl(&self) -> Box<dyn PointCloudImpl<PointXYZI>> {
-        Box::new(PointCloudXYZIImpl {
-            cloud: crate::common::PointCloudXYZI::new().unwrap(),
-        })
-    }
-
-    fn as_ffi_ptr(&self) -> *const c_void {
-        self.cloud.as_raw() as *const _ as *const c_void
-    }
-
-    fn as_ffi_ptr_mut(&mut self) -> *mut c_void {
-        self.cloud.as_raw() as *const _ as *mut c_void
-    }
-}
-
-/// PointCloudImpl implementation for PointXYZRGB
-struct PointCloudXYZRGBImpl {
-    cloud: crate::common::PointCloudXYZRGB,
-}
-
-impl PointCloudXYZRGBImpl {
-    fn new() -> PclResult<Self> {
-        Ok(Self {
-            cloud: crate::common::PointCloudXYZRGB::new()?,
-        })
-    }
-}
-
-impl PointCloudImpl<PointXYZRGB> for PointCloudXYZRGBImpl {
-    fn size(&self) -> usize {
-        self.cloud.size()
-    }
-
-    fn empty(&self) -> bool {
-        self.cloud.empty()
-    }
-
-    fn clear(&mut self) -> PclResult<()> {
-        self.cloud.clear()
-    }
-
-    fn reserve(&mut self, n: usize) -> PclResult<()> {
-        self.cloud.reserve(n)
-    }
-
-    fn resize(&mut self, n: usize) -> PclResult<()> {
-        self.cloud.resize(n)
-    }
-
-    fn width(&self) -> u32 {
-        self.cloud.width()
-    }
-
-    fn height(&self) -> u32 {
-        self.cloud.height()
-    }
-
-    fn set_width(&mut self, _width: u32) {
-        // Not implemented in current FFI
-    }
-
-    fn set_height(&mut self, _height: u32) {
-        // Not implemented in current FFI
-    }
-
-    fn is_dense(&self) -> bool {
-        self.cloud.is_dense()
-    }
-
-    fn set_is_dense(&mut self, _is_dense: bool) {
-        // Not implemented in current FFI
-    }
-
-    fn at(&self, index: usize) -> PclResult<PointXYZRGB> {
-        let coords = ffi::get_point_coords_xyzrgb(self.cloud.as_raw(), index);
-        if coords.len() >= 6 {
-            // Points cannot be created directly, return error
-            Err(PclError::NotImplemented {
-                feature: "Direct point access".to_string(),
-                workaround: Some("Use point cloud methods to access coordinates".to_string()),
-            })
-        } else {
-            Err(PclError::InvalidState {
-                message: "Failed to get point coordinates".to_string(),
-                expected_state: "valid point data".to_string(),
-                actual_state: "insufficient coordinates".to_string(),
-            })
-        }
-    }
-
-    fn set_at(&mut self, _index: usize, _point: PointXYZRGB) -> PclResult<()> {
-        Ok(())
-    }
-
-    fn push(&mut self, _point: PointXYZRGB) -> PclResult<()> {
-        Err(PclError::NotImplemented {
-            feature: "Point push".to_string(),
-            workaround: Some("Use direct coordinate manipulation".to_string()),
-        })
-    }
-
-    fn clone_impl(&self) -> Box<dyn PointCloudImpl<PointXYZRGB>> {
-        Box::new(PointCloudXYZRGBImpl {
-            cloud: crate::common::PointCloudXYZRGB::new().unwrap(),
-        })
-    }
-
-    fn as_ffi_ptr(&self) -> *const c_void {
-        self.cloud.as_raw() as *const _ as *const c_void
-    }
-
-    fn as_ffi_ptr_mut(&mut self) -> *mut c_void {
-        self.cloud.as_raw() as *const _ as *mut c_void
+    #[test]
+    fn test_point_normal_type_name() {
+        assert_eq!(PointNormal::type_name(), "PointNormal");
     }
 }

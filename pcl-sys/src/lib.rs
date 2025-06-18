@@ -70,11 +70,15 @@ pub mod ffi {
 
         fn new_point_cloud_xyzrgba() -> UniquePtr<PointCloud_PointXYZRGBA>;
 
+        fn new_point_cloud_point_normal() -> UniquePtr<PointCloud_PointNormal>;
+
         fn size(cloud: &PointCloud_PointXYZ) -> usize;
 
         fn size_xyzi(cloud: &PointCloud_PointXYZI) -> usize;
 
         fn size_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> usize;
+
+        fn size_point_normal(cloud: &PointCloud_PointNormal) -> usize;
 
         fn clear(cloud: Pin<&mut PointCloud_PointXYZ>);
 
@@ -82,11 +86,15 @@ pub mod ffi {
 
         fn clear_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>);
 
+        fn clear_point_normal(cloud: Pin<&mut PointCloud_PointNormal>);
+
         fn empty(cloud: &PointCloud_PointXYZ) -> bool;
 
         fn empty_xyzi(cloud: &PointCloud_PointXYZI) -> bool;
 
         fn empty_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> bool;
+
+        fn empty_point_normal(cloud: &PointCloud_PointNormal) -> bool;
 
         // Additional basic point cloud functions - part of common
 
@@ -96,11 +104,15 @@ pub mod ffi {
 
         fn reserve_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>, n: usize);
 
+        fn reserve_point_normal(cloud: Pin<&mut PointCloud_PointNormal>, n: usize);
+
         fn resize_xyz(cloud: Pin<&mut PointCloud_PointXYZ>, n: usize);
 
         fn resize_xyzi(cloud: Pin<&mut PointCloud_PointXYZI>, n: usize);
 
         fn resize_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>, n: usize);
+
+        fn resize_point_normal(cloud: Pin<&mut PointCloud_PointNormal>, n: usize);
 
         fn width(cloud: &PointCloud_PointXYZ) -> u32;
 
@@ -114,11 +126,17 @@ pub mod ffi {
 
         fn height_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> u32;
 
+        fn width_point_normal(cloud: &PointCloud_PointNormal) -> u32;
+
+        fn height_point_normal(cloud: &PointCloud_PointNormal) -> u32;
+
         fn is_dense(cloud: &PointCloud_PointXYZ) -> bool;
 
         fn is_dense_xyzi(cloud: &PointCloud_PointXYZI) -> bool;
 
         fn is_dense_xyzrgb(cloud: &PointCloud_PointXYZRGB) -> bool;
+
+        fn is_dense_point_normal(cloud: &PointCloud_PointNormal) -> bool;
 
         // Point field access functions - part of common
 
@@ -148,6 +166,18 @@ pub mod ffi {
 
         fn get_b(point: &PointXYZRGB) -> u8;
 
+        fn get_x_point_normal(point: &PointNormal) -> f32;
+
+        fn get_y_point_normal(point: &PointNormal) -> f32;
+
+        fn get_z_point_normal(point: &PointNormal) -> f32;
+
+        fn get_normal_x_point_normal(point: &PointNormal) -> f32;
+
+        fn get_normal_y_point_normal(point: &PointNormal) -> f32;
+
+        fn get_normal_z_point_normal(point: &PointNormal) -> f32;
+
         // Point manipulation functions - part of common
 
         fn get_point_coords(cloud: &PointCloud_PointXYZ, index: usize) -> Vec<f32>;
@@ -175,6 +205,8 @@ pub mod ffi {
         fn push_back_xyzi(cloud: Pin<&mut PointCloud_PointXYZI>, coords: &[f32]);
 
         fn push_back_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>, coords: &[f32]);
+
+        fn push_back_point_normal(cloud: Pin<&mut PointCloud_PointNormal>, coords: &[f32]);
 
         // Search types - always available but functions conditionally compiled
         #[namespace = "pcl::search"]
@@ -2461,3 +2493,23 @@ pub mod ffi {
 
     }
 }
+
+// The PCL library is thread-safe for immutable operations
+// These types are opaque C++ objects that PCL guarantees are safe to use across threads
+unsafe impl Send for ffi::PointCloud_PointXYZ {}
+unsafe impl Sync for ffi::PointCloud_PointXYZ {}
+unsafe impl Send for ffi::PointCloud_PointXYZI {}
+unsafe impl Sync for ffi::PointCloud_PointXYZI {}
+unsafe impl Send for ffi::PointCloud_PointXYZRGB {}
+unsafe impl Sync for ffi::PointCloud_PointXYZRGB {}
+
+unsafe impl Send for ffi::PointXYZ {}
+unsafe impl Sync for ffi::PointXYZ {}
+unsafe impl Send for ffi::PointXYZI {}
+unsafe impl Sync for ffi::PointXYZI {}
+unsafe impl Send for ffi::PointXYZRGB {}
+unsafe impl Sync for ffi::PointXYZRGB {}
+unsafe impl Send for ffi::PointNormal {}
+unsafe impl Sync for ffi::PointNormal {}
+unsafe impl Send for ffi::PointCloud_PointNormal {}
+unsafe impl Sync for ffi::PointCloud_PointNormal {}

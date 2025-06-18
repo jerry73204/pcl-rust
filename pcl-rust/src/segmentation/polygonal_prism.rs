@@ -34,7 +34,7 @@ impl ExtractPolygonalPrismDataXYZ {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_polygonal_prism_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_polygonal_prism_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -48,7 +48,7 @@ impl ExtractPolygonalPrismDataXYZ {
                 "Planar hull must have at least 3 points to form a polygon",
             ));
         }
-        ffi::set_input_planar_hull_polygonal_prism_xyz(self.inner.pin_mut(), hull.as_raw());
+        ffi::set_input_planar_hull_polygonal_prism_xyz(self.inner.pin_mut(), hull.inner());
         Ok(())
     }
 

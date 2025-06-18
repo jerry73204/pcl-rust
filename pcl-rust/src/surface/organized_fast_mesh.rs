@@ -99,7 +99,7 @@ impl SurfaceReconstruction<PointCloudXYZ, PolygonMesh> for OrganizedFastMeshXYZ 
             ));
         }
 
-        ffi::set_input_cloud_ofm_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_ofm_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 

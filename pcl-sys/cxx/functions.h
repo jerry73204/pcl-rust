@@ -38,6 +38,13 @@ uint8_t get_r(const pcl::PointXYZRGB &point);
 uint8_t get_g(const pcl::PointXYZRGB &point);
 uint8_t get_b(const pcl::PointXYZRGB &point);
 
+float get_x_point_normal(const pcl::PointNormal &point);
+float get_y_point_normal(const pcl::PointNormal &point);
+float get_z_point_normal(const pcl::PointNormal &point);
+float get_normal_x_point_normal(const pcl::PointNormal &point);
+float get_normal_y_point_normal(const pcl::PointNormal &point);
+float get_normal_z_point_normal(const pcl::PointNormal &point);
+
 // Registration function declarations - ICP for PointXYZ
 std::unique_ptr<pcl::IterativeClosestPoint_PointXYZ> new_icp_xyz();
 void set_input_source_icp_xyz(pcl::IterativeClosestPoint_PointXYZ &icp,
@@ -223,26 +230,32 @@ std::unique_ptr<pcl::PointCloud_PointXYZ> new_point_cloud_xyz();
 std::unique_ptr<pcl::PointCloud_PointXYZI> new_point_cloud_xyzi();
 std::unique_ptr<pcl::PointCloud_PointXYZRGB> new_point_cloud_xyzrgb();
 std::unique_ptr<pcl::PointCloud_PointXYZRGBA> new_point_cloud_xyzrgba();
+std::unique_ptr<pcl::PointCloud_PointNormal> new_point_cloud_point_normal();
 
 size_t size(const pcl::PointCloud_PointXYZ &cloud);
 size_t size_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 size_t size_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+size_t size_point_normal(const pcl::PointCloud_PointNormal &cloud);
 
 bool empty(const pcl::PointCloud_PointXYZ &cloud);
 bool empty_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 bool empty_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+bool empty_point_normal(const pcl::PointCloud_PointNormal &cloud);
 
 void clear(pcl::PointCloud_PointXYZ &cloud);
 void clear_xyzi(pcl::PointCloud_PointXYZI &cloud);
 void clear_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud);
+void clear_point_normal(pcl::PointCloud_PointNormal &cloud);
 
 void reserve(pcl::PointCloud_PointXYZ &cloud, size_t size);
 void reserve_xyzi(pcl::PointCloud_PointXYZI &cloud, size_t size);
 void reserve_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud, size_t size);
+void reserve_point_normal(pcl::PointCloud_PointNormal &cloud, size_t size);
 
 void resize(pcl::PointCloud_PointXYZ &cloud, size_t size);
 void resize_xyzi(pcl::PointCloud_PointXYZI &cloud, size_t size);
 void resize_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud, size_t size);
+void resize_point_normal(pcl::PointCloud_PointNormal &cloud, size_t size);
 
 rust::Vec<float> get_point_coords(const pcl::PointCloud_PointXYZ &cloud,
                                   size_t index);
@@ -264,6 +277,8 @@ void push_back_xyzi(pcl::PointCloud_PointXYZI &cloud,
                     rust::Slice<const float> coords);
 void push_back_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud,
                       rust::Slice<const float> coords);
+void push_back_point_normal(pcl::PointCloud_PointNormal &cloud,
+                            rust::Slice<const float> coords);
 
 // Additional basic point cloud functions
 void reserve_xyz(pcl::PointCloud_PointXYZ &cloud, size_t n);
@@ -280,10 +295,13 @@ uint32_t width_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 uint32_t height_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 uint32_t width_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
 uint32_t height_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+uint32_t width_point_normal(const pcl::PointCloud_PointNormal &cloud);
+uint32_t height_point_normal(const pcl::PointCloud_PointNormal &cloud);
 
 bool is_dense(const pcl::PointCloud_PointXYZ &cloud);
 bool is_dense_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 bool is_dense_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+bool is_dense_point_normal(const pcl::PointCloud_PointNormal &cloud);
 
 // Search functions
 std::unique_ptr<pcl::search::KdTree_PointXYZ> new_kdtree_xyz();

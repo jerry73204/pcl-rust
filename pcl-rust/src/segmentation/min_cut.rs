@@ -33,7 +33,7 @@ impl MinCutSegmentationXYZ {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_min_cut_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_min_cut_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -42,7 +42,7 @@ impl MinCutSegmentationXYZ {
         if foreground.empty() {
             return Err(PclError::invalid_point_cloud("Foreground points are empty"));
         }
-        ffi::set_foreground_points_min_cut_xyz(self.inner.pin_mut(), foreground.as_raw());
+        ffi::set_foreground_points_min_cut_xyz(self.inner.pin_mut(), foreground.inner());
         Ok(())
     }
 

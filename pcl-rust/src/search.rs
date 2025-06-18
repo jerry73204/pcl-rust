@@ -80,6 +80,11 @@ impl KdTreeXYZ {
     pub fn as_raw(&self) -> &ffi::KdTree_PointXYZ {
         &self.inner
     }
+
+    /// Get reference to inner KdTree for FFI operations
+    pub(crate) fn inner(&self) -> &ffi::KdTree_PointXYZ {
+        &self.inner
+    }
 }
 
 impl NearestNeighborSearch<PointXYZ> for KdTreeXYZ {
@@ -137,7 +142,7 @@ impl SearchConfiguration for KdTreeXYZ {
 
 impl SearchInputCloud<PointCloudXYZ> for KdTreeXYZ {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_cloud_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_xyz(self.inner.pin_mut(), cloud.inner());
         self.has_cloud = true;
         Ok(())
     }
@@ -223,6 +228,11 @@ impl KdTreeXYZI {
     pub fn as_raw(&self) -> &ffi::KdTree_PointXYZI {
         &self.inner
     }
+
+    /// Get reference to inner KdTree for FFI operations
+    pub(crate) fn inner(&self) -> &ffi::KdTree_PointXYZI {
+        &self.inner
+    }
 }
 
 impl NearestNeighborSearch<PointXYZI> for KdTreeXYZI {
@@ -280,7 +290,7 @@ impl SearchConfiguration for KdTreeXYZI {
 
 impl SearchInputCloud<PointCloudXYZI> for KdTreeXYZI {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZI) -> PclResult<()> {
-        ffi::set_input_cloud_xyzi(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_xyzi(self.inner.pin_mut(), cloud.inner());
         self.has_cloud = true;
         Ok(())
     }
@@ -361,6 +371,11 @@ impl KdTreeXYZRGB {
         let indices = ffi::radius_search_xyzrgb(&self.inner, &point.inner, radius);
         Ok(indices)
     }
+
+    /// Get reference to inner KdTree for FFI operations
+    pub(crate) fn inner(&self) -> &ffi::KdTree_PointXYZRGB {
+        &self.inner
+    }
 }
 
 impl NearestNeighborSearch<PointXYZRGB> for KdTreeXYZRGB {
@@ -418,7 +433,7 @@ impl SearchConfiguration for KdTreeXYZRGB {
 
 impl SearchInputCloud<PointCloudXYZRGB> for KdTreeXYZRGB {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
-        ffi::set_input_cloud_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_xyzrgb(self.inner.pin_mut(), cloud.inner());
         self.has_cloud = true;
         Ok(())
     }

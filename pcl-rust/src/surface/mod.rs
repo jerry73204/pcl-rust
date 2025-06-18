@@ -11,11 +11,11 @@ pub mod organized_fast_mesh;
 pub mod poisson;
 pub mod polygon_mesh;
 
-pub use greedy_projection::GreedyProjectionTriangulation;
+pub use greedy_projection::{GreedyProjectionTriangulation, GreedyProjectionTriangulationBuilder};
 pub use marching_cubes::{MarchingCubesHoppeXYZ, MarchingCubesRbfXYZ};
-pub use moving_least_squares::{MovingLeastSquares, UpsampleMethod};
+pub use moving_least_squares::{MovingLeastSquares, MovingLeastSquaresBuilder, UpsampleMethod};
 pub use organized_fast_mesh::{OrganizedFastMeshXYZ, TriangulationType};
-pub use poisson::PoissonReconstruction;
+pub use poisson::{PoissonReconstruction, PoissonReconstructionBuilder};
 pub use polygon_mesh::PolygonMesh;
 
 use crate::error::PclResult;

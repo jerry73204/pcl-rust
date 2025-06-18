@@ -42,7 +42,7 @@ impl OctreeSearchXYZ {
 
     /// Set the input point cloud and build the octree
     pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_cloud_octree_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_octree_xyz(self.inner.pin_mut(), cloud.inner());
         ffi::add_points_from_input_cloud_xyz(self.inner.pin_mut());
         self.has_cloud = true;
         Ok(())
@@ -251,7 +251,7 @@ impl OctreeVoxelCentroidXYZ {
 
     /// Set the input point cloud
     pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_cloud_voxel_centroid_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_voxel_centroid_xyz(self.inner.pin_mut(), cloud.inner());
         self.has_cloud = true;
         Ok(())
     }

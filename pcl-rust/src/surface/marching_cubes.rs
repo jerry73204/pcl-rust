@@ -73,7 +73,7 @@ impl SurfaceReconstruction<PointCloudXYZ, PolygonMesh> for MarchingCubesHoppeXYZ
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_hoppe_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_hoppe_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -164,7 +164,7 @@ impl SurfaceReconstruction<PointCloudXYZ, PolygonMesh> for MarchingCubesRbfXYZ {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_rbf_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_rbf_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 

@@ -18,7 +18,7 @@ pub struct PlaneModelXYZ {
 impl PlaneModelXYZ {
     /// Create a new plane model for the given point cloud
     pub fn new(cloud: &PointCloudXYZ) -> PclResult<Self> {
-        let inner = ffi::new_sac_model_plane_xyz(&cloud.inner);
+        let inner = ffi::new_sac_model_plane_xyz(cloud.inner());
         if inner.is_null() {
             return Err(PclError::ModelError(
                 "Failed to create plane model".to_string(),
@@ -107,7 +107,7 @@ impl PlaneModelXYZ {
                 "Failed to project points onto plane".to_string(),
             ));
         }
-        Ok(PointCloudXYZ { inner: projected })
+        Ok(PointCloudXYZ::from_unique_ptr(projected))
     }
 }
 
@@ -121,7 +121,7 @@ pub struct SphereModelXYZ {
 impl SphereModelXYZ {
     /// Create a new sphere model for the given point cloud
     pub fn new(cloud: &PointCloudXYZ) -> PclResult<Self> {
-        let inner = ffi::new_sac_model_sphere_xyz(&cloud.inner);
+        let inner = ffi::new_sac_model_sphere_xyz(cloud.inner());
         if inner.is_null() {
             return Err(PclError::ModelError(
                 "Failed to create sphere model".to_string(),
@@ -223,7 +223,7 @@ impl SphereModelXYZ {
                 "Failed to project points onto sphere".to_string(),
             ));
         }
-        Ok(PointCloudXYZ { inner: projected })
+        Ok(PointCloudXYZ::from_unique_ptr(projected))
     }
 }
 
@@ -237,7 +237,7 @@ pub struct PlaneModelXYZRGB {
 impl PlaneModelXYZRGB {
     /// Create a new plane model for the given point cloud
     pub fn new(cloud: &PointCloudXYZRGB) -> PclResult<Self> {
-        let inner = ffi::new_sac_model_plane_xyzrgb(&cloud.inner);
+        let inner = ffi::new_sac_model_plane_xyzrgb(cloud.inner());
         if inner.is_null() {
             return Err(PclError::ModelError(
                 "Failed to create plane model".to_string(),
@@ -326,7 +326,7 @@ impl PlaneModelXYZRGB {
                 "Failed to project points onto plane".to_string(),
             ));
         }
-        Ok(PointCloudXYZRGB { inner: projected })
+        Ok(PointCloudXYZRGB::from_unique_ptr(projected))
     }
 }
 
@@ -340,7 +340,7 @@ pub struct SphereModelXYZRGB {
 impl SphereModelXYZRGB {
     /// Create a new sphere model for the given point cloud
     pub fn new(cloud: &PointCloudXYZRGB) -> PclResult<Self> {
-        let inner = ffi::new_sac_model_sphere_xyzrgb(&cloud.inner);
+        let inner = ffi::new_sac_model_sphere_xyzrgb(cloud.inner());
         if inner.is_null() {
             return Err(PclError::ModelError(
                 "Failed to create sphere model".to_string(),
@@ -446,6 +446,6 @@ impl SphereModelXYZRGB {
                 "Failed to project points onto sphere".to_string(),
             ));
         }
-        Ok(PointCloudXYZRGB { inner: projected })
+        Ok(PointCloudXYZRGB::from_unique_ptr(projected))
     }
 }

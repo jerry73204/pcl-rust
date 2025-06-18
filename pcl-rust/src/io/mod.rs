@@ -104,7 +104,7 @@ pub mod auto_detect {
         let path_str = path.as_ref().to_string_lossy();
         let mut cloud = PointCloudXYZ::new()?;
 
-        let result = load_point_cloud_auto_xyz(&path_str, cloud.inner.pin_mut());
+        let result = load_point_cloud_auto_xyz(&path_str, cloud.inner_mut());
 
         if result == 0 {
             Ok(cloud)

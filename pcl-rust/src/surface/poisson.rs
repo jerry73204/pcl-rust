@@ -3,21 +3,11 @@
 //! This module provides Poisson surface reconstruction, which is one of the most
 //! robust methods for reconstructing surfaces from oriented point sets.
 
+use crate::common::PointCloudNormal;
 use crate::error::{PclError, PclResult};
 use crate::surface::PolygonMesh;
 use cxx::UniquePtr;
 use pcl_sys::ffi;
-
-// We need to create a wrapper for PointCloudNormal since it's not in common
-// For now, we'll use a placeholder trait that can be implemented when features module is available
-
-/// Placeholder trait for point clouds with normals
-pub trait PointCloudWithNormals {
-    /// Check if the point cloud is empty
-    fn is_empty(&self) -> bool;
-    /// Get the raw PCL point cloud reference
-    fn as_raw(&self) -> &ffi::PointCloud_PointNormal;
-}
 
 /// Poisson surface reconstruction algorithm
 pub struct PoissonReconstruction {
@@ -219,11 +209,8 @@ impl PoissonReconstruction {
     }
 
     /// Set the input point cloud with normals
-    pub fn set_input_cloud<T: PointCloudWithNormals>(&mut self, cloud: &T) -> PclResult<()> {
-        if cloud.is_empty() {
-            return Err(PclError::invalid_point_cloud("Input cloud is empty"));
-        }
-        ffi::set_input_cloud_poisson(self.inner.pin_mut(), cloud.as_raw());
+    pub fn set_input_cloud(&mut self, cloud: &PointCloudNormal) -> PclResult<()> {
+        ffi::set_input_cloud_poisson(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -242,6 +229,18 @@ impl PoissonReconstruction {
 impl Default for PoissonReconstruction {
     fn default() -> Self {
         Self::new().expect("Failed to create default PoissonReconstruction")
+    }
+}
+
+impl crate::surface::SurfaceReconstruction<PointCloudNormal, PolygonMesh>
+    for PoissonReconstruction
+{
+    fn set_input_cloud(&mut self, cloud: &PointCloudNormal) -> PclResult<()> {
+        self.set_input_cloud(cloud)
+    }
+
+    fn reconstruct(&mut self, mesh: &mut PolygonMesh) -> PclResult<()> {
+        self.reconstruct(mesh)
     }
 }
 

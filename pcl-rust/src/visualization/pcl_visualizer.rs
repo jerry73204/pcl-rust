@@ -30,7 +30,7 @@ impl PclVisualizer {
 
     /// Add a PointXYZ cloud to the viewer
     pub fn add_point_cloud_xyz(&mut self, cloud: &PointCloudXYZ, id: &str) -> PclResult<()> {
-        let result = ffi::add_point_cloud_xyz(self.inner.pin_mut(), cloud.as_raw(), id);
+        let result = ffi::add_point_cloud_xyz(self.inner.pin_mut(), cloud.inner(), id);
         if result != 0 {
             return Err(PclError::VisualizationError {
                 message: format!("Failed to add PointXYZ cloud '{}'", id),
@@ -42,7 +42,7 @@ impl PclVisualizer {
 
     /// Add a PointXYZRGB cloud to the viewer
     pub fn add_point_cloud_xyzrgb(&mut self, cloud: &PointCloudXYZRGB, id: &str) -> PclResult<()> {
-        let result = ffi::add_point_cloud_xyzrgb(self.inner.pin_mut(), cloud.as_raw(), id);
+        let result = ffi::add_point_cloud_xyzrgb(self.inner.pin_mut(), cloud.inner(), id);
         if result != 0 {
             return Err(PclError::VisualizationError {
                 message: format!("Failed to add PointXYZRGB cloud '{}'", id),
@@ -54,7 +54,7 @@ impl PclVisualizer {
 
     /// Update an existing PointXYZ cloud in the viewer
     pub fn update_point_cloud_xyz(&mut self, cloud: &PointCloudXYZ, id: &str) -> PclResult<()> {
-        let result = ffi::update_point_cloud_xyz(self.inner.pin_mut(), cloud.as_raw(), id);
+        let result = ffi::update_point_cloud_xyz(self.inner.pin_mut(), cloud.inner(), id);
         if result != 0 {
             return Err(PclError::VisualizationError {
                 message: format!("Failed to update PointXYZ cloud '{}'", id),
@@ -70,7 +70,7 @@ impl PclVisualizer {
         cloud: &PointCloudXYZRGB,
         id: &str,
     ) -> PclResult<()> {
-        let result = ffi::update_point_cloud_xyzrgb(self.inner.pin_mut(), cloud.as_raw(), id);
+        let result = ffi::update_point_cloud_xyzrgb(self.inner.pin_mut(), cloud.inner(), id);
         if result != 0 {
             return Err(PclError::VisualizationError {
                 message: format!("Failed to update PointXYZRGB cloud '{}'", id),

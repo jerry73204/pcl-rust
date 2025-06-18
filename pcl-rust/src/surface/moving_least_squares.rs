@@ -3,9 +3,9 @@
 //! This module provides Moving Least Squares (MLS) surface smoothing and upsampling,
 //! which can be used to smooth noisy point clouds and compute surface normals.
 
+use crate::common::PointCloudNormal;
 use crate::common::PointCloudXYZ;
 use crate::error::{PclError, PclResult};
-use crate::surface::{PointCloudSmoothing, poisson::PointCloudWithNormals};
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
@@ -37,47 +37,6 @@ impl UpsampleMethod {
     /// Convert to integer value
     pub fn to_i32(self) -> i32 {
         self as i32
-    }
-}
-
-/// Placeholder for PointCloudNormal - this would be properly implemented when features module is available
-pub struct PointCloudNormal {
-    inner: UniquePtr<ffi::PointCloud_PointNormal>,
-}
-
-impl PointCloudNormal {
-    /// Create from a unique pointer (internal use)
-    pub(crate) fn from_ptr(ptr: UniquePtr<ffi::PointCloud_PointNormal>) -> Self {
-        Self { inner: ptr }
-    }
-
-    /// Check if the point cloud is empty
-    pub fn is_empty(&self) -> bool {
-        // This would be properly implemented when features module is available
-        // For now, return false as a placeholder
-        false
-    }
-
-    /// Get the size of the point cloud
-    pub fn size(&self) -> usize {
-        // This would be properly implemented when features module is available
-        // For now, return 0 as a placeholder
-        0
-    }
-
-    /// Get the raw PCL point cloud reference
-    pub fn as_raw(&self) -> &ffi::PointCloud_PointNormal {
-        &self.inner
-    }
-}
-
-impl PointCloudWithNormals for PointCloudNormal {
-    fn is_empty(&self) -> bool {
-        self.is_empty()
-    }
-
-    fn as_raw(&self) -> &ffi::PointCloud_PointNormal {
-        &self.inner
     }
 }
 
@@ -256,23 +215,35 @@ impl MovingLeastSquares {
     }
 }
 
-impl PointCloudSmoothing<PointCloudXYZ, PointCloudNormal> for MovingLeastSquares {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl MovingLeastSquares {
+    /// Set the input point cloud
+    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_mls(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_mls(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn process(&mut self) -> PclResult<PointCloudNormal> {
+    /// Process the input cloud and return a cloud with computed normals
+    pub fn process(&mut self) -> PclResult<PointCloudNormal> {
         let result = ffi::process_mls(self.inner.pin_mut());
         if result.is_null() {
             return Err(PclError::ProcessingFailed {
                 message: "Moving Least Squares processing failed".to_string(),
             });
         }
-        Ok(PointCloudNormal::from_ptr(result))
+        Ok(PointCloudNormal::from_unique_ptr(result))
+    }
+}
+
+impl crate::surface::PointCloudSmoothing<PointCloudXYZ, PointCloudNormal> for MovingLeastSquares {
+    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+        self.set_input_cloud(cloud)
+    }
+
+    fn process(&mut self) -> PclResult<PointCloudNormal> {
+        self.process()
     }
 }
 

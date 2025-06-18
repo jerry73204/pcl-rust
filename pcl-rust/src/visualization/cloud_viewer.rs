@@ -45,7 +45,7 @@ impl CloudViewer {
 
     /// Display a PointXYZ cloud
     pub fn show_cloud_xyz(&mut self, cloud: &PointCloudXYZ, cloud_name: &str) -> PclResult<()> {
-        let result = ffi::show_cloud_xyz(self.inner.pin_mut(), cloud.as_raw(), cloud_name);
+        let result = ffi::show_cloud_xyz(self.inner.pin_mut(), cloud.inner(), cloud_name);
         if result != 0 {
             return Err(PclError::VisualizationError {
                 message: format!("Failed to show PointXYZ cloud '{}'", cloud_name),
@@ -61,7 +61,7 @@ impl CloudViewer {
         cloud: &PointCloudXYZRGB,
         cloud_name: &str,
     ) -> PclResult<()> {
-        let result = ffi::show_cloud_xyzrgb(self.inner.pin_mut(), cloud.as_raw(), cloud_name);
+        let result = ffi::show_cloud_xyzrgb(self.inner.pin_mut(), cloud.inner(), cloud_name);
         if result != 0 {
             return Err(PclError::VisualizationError {
                 message: format!("Failed to show PointXYZRGB cloud '{}'", cloud_name),

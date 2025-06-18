@@ -34,7 +34,7 @@ impl ProgressiveMorphologicalFilterXYZ {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_pmf_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_pmf_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 

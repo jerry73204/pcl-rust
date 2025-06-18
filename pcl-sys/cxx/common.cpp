@@ -23,6 +23,19 @@ uint8_t get_r(const pcl::PointXYZRGB &point) { return point.r; }
 uint8_t get_g(const pcl::PointXYZRGB &point) { return point.g; }
 uint8_t get_b(const pcl::PointXYZRGB &point) { return point.b; }
 
+float get_x_point_normal(const pcl::PointNormal &point) { return point.x; }
+float get_y_point_normal(const pcl::PointNormal &point) { return point.y; }
+float get_z_point_normal(const pcl::PointNormal &point) { return point.z; }
+float get_normal_x_point_normal(const pcl::PointNormal &point) {
+  return point.normal_x;
+}
+float get_normal_y_point_normal(const pcl::PointNormal &point) {
+  return point.normal_y;
+}
+float get_normal_z_point_normal(const pcl::PointNormal &point) {
+  return point.normal_z;
+}
+
 // PointCloud functions
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>> new_point_cloud_xyz() {
   return std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
@@ -40,6 +53,11 @@ std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGBA>> new_point_cloud_xyzrgba() {
   return std::make_unique<pcl::PointCloud<pcl::PointXYZRGBA>>();
 }
 
+std::unique_ptr<pcl::PointCloud<pcl::PointNormal>>
+new_point_cloud_point_normal() {
+  return std::make_unique<pcl::PointCloud<pcl::PointNormal>>();
+}
+
 size_t size(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
   return cloud.size();
 }
@@ -52,11 +70,19 @@ size_t size_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
   return cloud.size();
 }
 
+size_t size_point_normal(const pcl::PointCloud<pcl::PointNormal> &cloud) {
+  return cloud.size();
+}
+
 void clear(pcl::PointCloud<pcl::PointXYZ> &cloud) { cloud.clear(); }
 
 void clear_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud) { cloud.clear(); }
 
 void clear_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud) { cloud.clear(); }
+
+void clear_point_normal(pcl::PointCloud<pcl::PointNormal> &cloud) {
+  cloud.clear();
+}
 
 bool empty(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
   return cloud.empty();
@@ -67,6 +93,10 @@ bool empty_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud) {
 }
 
 bool empty_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
+  return cloud.empty();
+}
+
+bool empty_point_normal(const pcl::PointCloud<pcl::PointNormal> &cloud) {
   return cloud.empty();
 }
 
@@ -82,6 +112,10 @@ void reserve_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud, size_t n) {
   cloud.reserve(n);
 }
 
+void reserve_point_normal(pcl::PointCloud<pcl::PointNormal> &cloud, size_t n) {
+  cloud.reserve(n);
+}
+
 void resize_xyz(pcl::PointCloud<pcl::PointXYZ> &cloud, size_t n) {
   cloud.resize(n);
 }
@@ -91,6 +125,10 @@ void resize_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud, size_t n) {
 }
 
 void resize_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud, size_t n) {
+  cloud.resize(n);
+}
+
+void resize_point_normal(pcl::PointCloud<pcl::PointNormal> &cloud, size_t n) {
   cloud.resize(n);
 }
 
@@ -118,6 +156,14 @@ uint32_t height_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
   return cloud.height;
 }
 
+uint32_t width_point_normal(const pcl::PointCloud<pcl::PointNormal> &cloud) {
+  return cloud.width;
+}
+
+uint32_t height_point_normal(const pcl::PointCloud<pcl::PointNormal> &cloud) {
+  return cloud.height;
+}
+
 bool is_dense(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
   return cloud.is_dense;
 }
@@ -127,6 +173,10 @@ bool is_dense_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud) {
 }
 
 bool is_dense_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
+  return cloud.is_dense;
+}
+
+bool is_dense_point_normal(const pcl::PointCloud<pcl::PointNormal> &cloud) {
   return cloud.is_dense;
 }
 
@@ -254,6 +304,23 @@ void push_back_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
   point.r = static_cast<uint8_t>(coords[3]);
   point.g = static_cast<uint8_t>(coords[4]);
   point.b = static_cast<uint8_t>(coords[5]);
+  cloud.points.push_back(point);
+  cloud.width = cloud.points.size();
+  cloud.height = 1;
+}
+
+void push_back_point_normal(pcl::PointCloud<pcl::PointNormal> &cloud,
+                            rust::Slice<const float> coords) {
+  if (coords.size() < 6) {
+    return;
+  }
+  pcl::PointNormal point;
+  point.x = coords[0];
+  point.y = coords[1];
+  point.z = coords[2];
+  point.normal_x = coords[3];
+  point.normal_y = coords[4];
+  point.normal_z = coords[5];
   cloud.points.push_back(point);
   cloud.width = cloud.points.size();
   cloud.height = 1;

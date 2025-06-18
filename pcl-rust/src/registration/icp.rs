@@ -117,7 +117,7 @@ impl RegistrationXYZ for IcpXYZ {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Source cloud is empty"));
         }
-        ffi::set_input_source_icp_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_source_icp_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -125,7 +125,7 @@ impl RegistrationXYZ for IcpXYZ {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Target cloud is empty"));
         }
-        ffi::set_input_target_icp_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_target_icp_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -281,7 +281,7 @@ impl RegistrationXYZRGB for IcpXYZRGB {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Source cloud is empty"));
         }
-        ffi::set_input_source_icp_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_source_icp_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -289,7 +289,7 @@ impl RegistrationXYZRGB for IcpXYZRGB {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Target cloud is empty"));
         }
-        ffi::set_input_target_icp_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_target_icp_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 

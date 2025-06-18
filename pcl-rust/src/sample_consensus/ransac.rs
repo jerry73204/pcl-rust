@@ -13,7 +13,7 @@ pub struct RansacPlaneXYZ {
 impl RansacPlaneXYZ {
     /// Create a new RANSAC plane fitter for a PointXYZ cloud
     pub fn new(cloud: &PointCloudXYZ) -> PclResult<Self> {
-        let inner = ffi::new_ransac_plane_xyz(&cloud.inner);
+        let inner = ffi::new_ransac_plane_xyz(cloud.inner());
         if inner.is_null() {
             return Err(PclError::RansacError(
                 "Failed to create RANSAC plane fitter".to_string(),
@@ -99,7 +99,7 @@ pub struct RansacSphereXYZ {
 impl RansacSphereXYZ {
     /// Create a new RANSAC sphere fitter for a PointXYZ cloud
     pub fn new(cloud: &PointCloudXYZ) -> PclResult<Self> {
-        let inner = ffi::new_ransac_sphere_xyz(&cloud.inner);
+        let inner = ffi::new_ransac_sphere_xyz(cloud.inner());
         if inner.is_null() {
             return Err(PclError::RansacError(
                 "Failed to create RANSAC sphere fitter".to_string(),
@@ -185,7 +185,7 @@ pub struct RansacPlaneXYZRGB {
 impl RansacPlaneXYZRGB {
     /// Create a new RANSAC plane fitter for a PointXYZRGB cloud
     pub fn new(cloud: &PointCloudXYZRGB) -> PclResult<Self> {
-        let inner = ffi::new_ransac_plane_xyzrgb(&cloud.inner);
+        let inner = ffi::new_ransac_plane_xyzrgb(cloud.inner());
         if inner.is_null() {
             return Err(PclError::RansacError(
                 "Failed to create RANSAC plane fitter".to_string(),
@@ -271,7 +271,7 @@ pub struct RansacSphereXYZRGB {
 impl RansacSphereXYZRGB {
     /// Create a new RANSAC sphere fitter for a PointXYZRGB cloud
     pub fn new(cloud: &PointCloudXYZRGB) -> PclResult<Self> {
-        let inner = ffi::new_ransac_sphere_xyzrgb(&cloud.inner);
+        let inner = ffi::new_ransac_sphere_xyzrgb(cloud.inner());
         if inner.is_null() {
             return Err(PclError::RansacError(
                 "Failed to create RANSAC sphere fitter".to_string(),

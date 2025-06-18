@@ -48,13 +48,13 @@ impl CorrespondenceEstimation {
 
     /// Set the input source cloud
     pub fn set_input_source(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_source_correspondence_xyz(self.inner.pin_mut(), &cloud.inner);
+        ffi::set_input_source_correspondence_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
     /// Set the input target cloud
     pub fn set_input_target(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_target_correspondence_xyz(self.inner.pin_mut(), &cloud.inner);
+        ffi::set_input_target_correspondence_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -125,13 +125,13 @@ impl CorrespondenceRejectorSampleConsensus {
 
     /// Set the input source cloud
     pub fn set_input_source(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_source_rejector_xyz(self.inner.pin_mut(), &cloud.inner);
+        ffi::set_input_source_rejector_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
     /// Set the input target cloud
     pub fn set_input_target(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_target_rejector_xyz(self.inner.pin_mut(), &cloud.inner);
+        ffi::set_input_target_rejector_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -222,8 +222,8 @@ impl TransformationEstimationSVD {
         let mut transformation_data = Vec::new();
         ffi::estimate_rigid_transformation_xyz(
             self.inner.pin_mut(),
-            &source.inner,
-            &target.inner,
+            source.inner(),
+            target.inner(),
             &indices,
             &distances,
             &mut transformation_data,

@@ -37,7 +37,7 @@ impl Harris3D {
 
     /// Set the search method for finding neighbors
     pub fn set_search_method(&mut self, kdtree: &KdTreeXYZ) -> PclResult<()> {
-        ffi::set_search_method_harris_3d_xyz(self.inner.pin_mut(), kdtree.as_raw());
+        ffi::set_search_method_harris_3d_xyz(self.inner.pin_mut(), kdtree.inner());
         Ok(())
     }
 
@@ -99,7 +99,7 @@ impl KeypointDetector<PointCloudXYZ, PointCloudXYZI> for Harris3D {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_harris_3d_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_harris_3d_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 

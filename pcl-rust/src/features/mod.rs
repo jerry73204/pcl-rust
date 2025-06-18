@@ -469,7 +469,7 @@ impl NormalEstimation {
                 actual_state: "null".into(),
             });
         }
-        pcl_sys::ffi::set_input_cloud_normal_xyz(self.inner.pin_mut(), cloud.as_raw());
+        pcl_sys::ffi::set_input_cloud_normal_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -482,7 +482,7 @@ impl NormalEstimation {
                 actual_state: "null".into(),
             });
         }
-        pcl_sys::ffi::set_search_method_normal_xyz(self.inner.pin_mut(), tree.as_raw());
+        pcl_sys::ffi::set_search_method_normal_xyz(self.inner.pin_mut(), tree.inner());
         Ok(())
     }
 
@@ -596,7 +596,7 @@ impl NormalEstimationOmp {
                 actual_state: "null".into(),
             });
         }
-        pcl_sys::ffi::set_input_cloud_normal_omp_xyz(self.inner.pin_mut(), cloud.as_raw());
+        pcl_sys::ffi::set_input_cloud_normal_omp_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -721,7 +721,7 @@ impl FpfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        pcl_sys::ffi::set_input_cloud_fpfh_xyz(self.inner.pin_mut(), cloud.as_raw());
+        pcl_sys::ffi::set_input_cloud_fpfh_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -734,7 +734,7 @@ impl FpfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        pcl_sys::ffi::set_search_method_fpfh_xyz(self.inner.pin_mut(), tree.as_raw());
+        pcl_sys::ffi::set_search_method_fpfh_xyz(self.inner.pin_mut(), tree.inner());
         Ok(())
     }
 
@@ -829,7 +829,7 @@ impl FpfhEstimationOmp {
                 actual_state: "null".into(),
             });
         }
-        pcl_sys::ffi::set_input_cloud_fpfh_omp_xyz(self.inner.pin_mut(), cloud.as_raw());
+        pcl_sys::ffi::set_input_cloud_fpfh_omp_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -842,7 +842,7 @@ impl FpfhEstimationOmp {
                 actual_state: "null".into(),
             });
         }
-        pcl_sys::ffi::set_search_method_fpfh_omp_xyz(self.inner.pin_mut(), tree.as_raw());
+        pcl_sys::ffi::set_search_method_fpfh_omp_xyz(self.inner.pin_mut(), tree.inner());
         Ok(())
     }
 
@@ -937,7 +937,7 @@ impl PfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        pcl_sys::ffi::set_input_cloud_pfh_xyz(self.inner.pin_mut(), cloud.as_raw());
+        pcl_sys::ffi::set_input_cloud_pfh_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -950,7 +950,7 @@ impl PfhEstimation {
                 actual_state: "null".into(),
             });
         }
-        pcl_sys::ffi::set_search_method_pfh_xyz(self.inner.pin_mut(), tree.as_raw());
+        pcl_sys::ffi::set_search_method_pfh_xyz(self.inner.pin_mut(), tree.inner());
         Ok(())
     }
 

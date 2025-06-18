@@ -60,7 +60,7 @@ impl RadiusOutlierRemovalXYZ {
 
 impl FilterXYZ for RadiusOutlierRemovalXYZ {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_cloud_radius_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_radius_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -183,7 +183,7 @@ impl RadiusOutlierRemovalXYZRGB {
 
 impl FilterXYZRGB for RadiusOutlierRemovalXYZRGB {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
-        ffi::set_input_cloud_radius_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_radius_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 

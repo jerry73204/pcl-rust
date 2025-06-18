@@ -32,7 +32,7 @@ impl RegionGrowingXYZ {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_region_growing_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_region_growing_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -215,7 +215,7 @@ impl RegionGrowingRgbXYZRGB {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_region_growing_rgb_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_region_growing_rgb_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 

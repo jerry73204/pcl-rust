@@ -64,7 +64,7 @@ impl StatisticalOutlierRemovalXYZ {
 
 impl FilterXYZ for StatisticalOutlierRemovalXYZ {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
-        ffi::set_input_cloud_statistical_xyz(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_statistical_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
@@ -187,7 +187,7 @@ impl StatisticalOutlierRemovalXYZRGB {
 
 impl FilterXYZRGB for StatisticalOutlierRemovalXYZRGB {
     fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
-        ffi::set_input_cloud_statistical_xyzrgb(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_statistical_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 

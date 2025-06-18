@@ -63,7 +63,7 @@ impl SiftKeypoint {
 
     /// Set the search method for finding neighbors
     pub fn set_search_method(&mut self, kdtree: &KdTreeXYZI) -> PclResult<()> {
-        ffi::set_search_method_sift_xyzi(self.inner.pin_mut(), kdtree.as_raw());
+        ffi::set_search_method_sift_xyzi(self.inner.pin_mut(), kdtree.inner());
         Ok(())
     }
 
@@ -143,7 +143,7 @@ impl KeypointDetector<PointCloudXYZI, PointCloudWithScale> for SiftKeypoint {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
-        ffi::set_input_cloud_sift_xyzi(self.inner.pin_mut(), cloud.as_raw());
+        ffi::set_input_cloud_sift_xyzi(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
