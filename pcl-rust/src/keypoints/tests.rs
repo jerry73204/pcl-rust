@@ -3,7 +3,7 @@
 use crate::common::{PointCloud, PointXYZ, PointXYZI};
 use crate::error::PclResult;
 use crate::keypoints::*;
-use crate::search::{KdTreeXYZ, KdTreeXYZI, SearchInputCloud};
+use crate::search::{KdTreeXYZ, SearchInputCloud};
 
 /// Create a simple test cloud with known features
 fn create_test_cloud_xyz() -> PclResult<PointCloud<PointXYZ>> {

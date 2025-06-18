@@ -10,14 +10,22 @@ pub mod progressive_morphological_filter;
 pub mod region_growing;
 pub mod sac_segmentation;
 
+#[cfg(test)]
+mod tests;
+
 pub use clustering::{
-    ClusteringXYZ, ConditionalEuclideanClusteringXYZ, EuclideanClusterExtractionXYZ,
+    ClusteringXYZ, ConditionalEuclideanClusteringXYZ, EuclideanClusterExtractionBuilder,
+    EuclideanClusterExtractionXYZ,
 };
 pub use min_cut::MinCutSegmentationXYZ;
 pub use polygonal_prism::ExtractPolygonalPrismDataXYZ;
-pub use progressive_morphological_filter::ProgressiveMorphologicalFilterXYZ;
-pub use region_growing::{RegionGrowingRgbXYZRGB, RegionGrowingXYZ};
-pub use sac_segmentation::{MethodType, ModelType, SacSegmentationXYZ, SegmentationResult};
+pub use progressive_morphological_filter::{
+    ProgressiveMorphologicalFilterXYZ, ProgressiveMorphologicalFilterXYZBuilder,
+};
+pub use region_growing::{RegionGrowingRgbXYZRGB, RegionGrowingXYZ, RegionGrowingXYZBuilder};
+pub use sac_segmentation::{
+    MethodType, ModelType, SacSegmentationBuilder, SacSegmentationXYZ, SegmentationResult,
+};
 
 use crate::error::PclResult;
 
