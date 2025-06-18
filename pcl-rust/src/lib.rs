@@ -81,7 +81,8 @@ pub use features::{
 };
 #[cfg(feature = "keypoints")]
 pub use keypoints::{
-    Harris3D, Iss3D, KeypointBuilder, KeypointDetector, PointWithScale, SiftKeypoint,
+    Harris3D, Harris3DBuilder, Iss3D, Iss3DBuilder, KeypointBuilder, KeypointDetector,
+    PointCloudWithScale, PointWithScale, SiftKeypoint, SiftKeypointBuilder,
 };
 #[cfg(feature = "registration")]
 pub use registration::{

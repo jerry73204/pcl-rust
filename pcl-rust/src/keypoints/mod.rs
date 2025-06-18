@@ -9,9 +9,9 @@ pub mod iss;
 pub mod sift;
 
 // Re-export main types for convenience
-pub use harris::Harris3D;
-pub use iss::Iss3D;
-pub use sift::SiftKeypoint;
+pub use harris::{Harris3D, Harris3DBuilder};
+pub use iss::{Iss3D, Iss3DBuilder};
+pub use sift::{PointCloudWithScale, SiftKeypoint, SiftKeypointBuilder};
 
 /// Types representing different scales of keypoints
 #[derive(Debug, Clone, Copy)]
@@ -60,3 +60,6 @@ pub trait KeypointBuilder<T> {
     /// Build the configured keypoint detector
     fn build(self) -> crate::error::PclResult<T>;
 }
+
+#[cfg(test)]
+mod tests;

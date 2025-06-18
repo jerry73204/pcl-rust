@@ -79,3 +79,7 @@ required-features = ["surface"]
 [[example]]
 name = "registration_showcase"
 required-features = ["registration"]
+
+[[example]]
+name = "keypoints_demo"
+required-features = ["keypoints"]
