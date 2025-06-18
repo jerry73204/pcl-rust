@@ -10,7 +10,7 @@ use pcl::{
     PointCloudXYZ,
     common::PointCloudXYZBuilder,
     filters::{
-        FilterXYZ, PassThroughXYZBuilder, RadiusOutlierRemovalXYZBuilder,
+        Filter, PassThroughXYZBuilder, RadiusOutlierRemovalXYZBuilder,
         StatisticalOutlierRemovalXYZBuilder, VoxelGridXYZBuilder,
     },
 };

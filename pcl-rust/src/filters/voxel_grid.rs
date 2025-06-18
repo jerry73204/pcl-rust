@@ -4,9 +4,9 @@
 //! All points within each voxel are approximated with their centroid, effectively
 //! downsampling the cloud while preserving its shape characteristics.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
 use crate::error::PclResult;
-use crate::filters::{FilterXYZ, FilterXYZRGB};
+use crate::filters::Filter;
 use pcl_sys::{UniquePtr, ffi};
 
 /// VoxelGrid filter for PointXYZ clouds
@@ -44,20 +44,20 @@ impl VoxelGridXYZ {
     }
 }
 
-impl FilterXYZ for VoxelGridXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl Filter<PointXYZ> for VoxelGridXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
         ffi::set_input_cloud_voxel_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloudXYZ> {
+    fn filter(&mut self) -> PclResult<PointCloud<PointXYZ>> {
         let result = ffi::filter_voxel_xyz(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {
                 message: "VoxelGrid filter failed".to_string(),
             });
         }
-        Ok(PointCloudXYZ::from_unique_ptr(result))
+        Ok(PointCloud::from_unique_ptr(result))
     }
 }
 
@@ -131,20 +131,20 @@ impl VoxelGridXYZRGB {
     }
 }
 
-impl FilterXYZRGB for VoxelGridXYZRGB {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
+impl Filter<PointXYZRGB> for VoxelGridXYZRGB {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
         ffi::set_input_cloud_voxel_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloudXYZRGB> {
+    fn filter(&mut self) -> PclResult<PointCloud<PointXYZRGB>> {
         let result = ffi::filter_voxel_xyzrgb(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {
                 message: "VoxelGrid filter failed".to_string(),
             });
         }
-        Ok(PointCloudXYZRGB::from_unique_ptr(result))
+        Ok(PointCloud::from_unique_ptr(result))
     }
 }
 

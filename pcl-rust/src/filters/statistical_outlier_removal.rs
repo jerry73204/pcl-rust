@@ -7,9 +7,9 @@
 //! is above a threshold defined by the global mean distance plus stddev_mult times the
 //! global standard deviation.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
 use crate::error::PclResult;
-use crate::filters::{FilterXYZ, FilterXYZRGB};
+use crate::filters::Filter;
 use pcl_sys::{UniquePtr, ffi};
 
 /// StatisticalOutlierRemoval filter for PointXYZ clouds
@@ -62,20 +62,20 @@ impl StatisticalOutlierRemovalXYZ {
     }
 }
 
-impl FilterXYZ for StatisticalOutlierRemovalXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl Filter<PointXYZ> for StatisticalOutlierRemovalXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
         ffi::set_input_cloud_statistical_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloudXYZ> {
+    fn filter(&mut self) -> PclResult<PointCloud<PointXYZ>> {
         let result = ffi::filter_statistical_xyz(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {
                 message: "StatisticalOutlierRemoval filter failed".to_string(),
             });
         }
-        Ok(PointCloudXYZ::from_unique_ptr(result))
+        Ok(PointCloud::from_unique_ptr(result))
     }
 }
 
@@ -185,20 +185,20 @@ impl StatisticalOutlierRemovalXYZRGB {
     }
 }
 
-impl FilterXYZRGB for StatisticalOutlierRemovalXYZRGB {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
+impl Filter<PointXYZRGB> for StatisticalOutlierRemovalXYZRGB {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
         ffi::set_input_cloud_statistical_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloudXYZRGB> {
+    fn filter(&mut self) -> PclResult<PointCloud<PointXYZRGB>> {
         let result = ffi::filter_statistical_xyzrgb(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {
                 message: "StatisticalOutlierRemoval filter failed".to_string(),
             });
         }
-        Ok(PointCloudXYZRGB::from_unique_ptr(result))
+        Ok(PointCloud::from_unique_ptr(result))
     }
 }
 

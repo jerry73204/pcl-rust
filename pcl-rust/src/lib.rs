@@ -57,7 +57,7 @@ pub use io::{
 #[cfg(feature = "octree")]
 pub use octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
 #[cfg(feature = "search")]
-pub use search::{KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB, SearchMethod};
+pub use search::{KdTree, KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB, SearchMethod};
 pub use traits::{
     ConvertPoint, Curvature, Intensity, NormalXyz, Point, PointIntensityOps, PointRgbOps,
     PointXyzOps, Rgb, SpatialPoint, SurfacePoint, Xyz, Xyzi, Xyzrgb,
@@ -69,8 +69,9 @@ pub type PointCloudXYZRGBGeneric = PointCloud<common::PointXYZRGB>;
 
 #[cfg(feature = "filters")]
 pub use filters::{
-    PassThroughXYZ, PassThroughXYZRGB, RadiusOutlierRemovalXYZ, RadiusOutlierRemovalXYZRGB,
-    StatisticalOutlierRemovalXYZ, StatisticalOutlierRemovalXYZRGB, VoxelGridXYZ, VoxelGridXYZRGB,
+    Filter, PassThrough, PassThroughXYZ, PassThroughXYZRGB, RadiusOutlierRemovalXYZ,
+    RadiusOutlierRemovalXYZRGB, StatisticalOutlierRemovalXYZ, StatisticalOutlierRemovalXYZRGB,
+    VoxelGrid, VoxelGridBuilder, VoxelGridXYZ, VoxelGridXYZRGB,
 };
 
 #[cfg(feature = "features")]

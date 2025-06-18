@@ -4,6 +4,7 @@
 //! including Marching Cubes, Poisson reconstruction, Greedy Projection Triangulation,
 //! and Moving Least Squares smoothing.
 
+pub mod generic;
 pub mod greedy_projection;
 pub mod marching_cubes;
 pub mod moving_least_squares;
@@ -17,6 +18,12 @@ pub use moving_least_squares::{MovingLeastSquares, MovingLeastSquaresBuilder, Up
 pub use organized_fast_mesh::{OrganizedFastMeshXYZ, TriangulationType};
 pub use poisson::{PoissonReconstruction, PoissonReconstructionBuilder};
 pub use polygon_mesh::PolygonMesh;
+
+// Re-export generic traits
+pub use generic::{
+    MeshGeneration, SearchConfiguration, SearchMethod, SurfacePoint, SurfaceReconstructionConfig,
+    SurfaceReconstructionConfigBuilder,
+};
 
 use crate::error::PclResult;
 

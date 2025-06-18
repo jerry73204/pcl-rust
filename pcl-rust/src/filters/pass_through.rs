@@ -3,9 +3,9 @@
 //! The PassThrough filter removes points outside a specified range along a given field.
 //! This is useful for cropping point clouds or removing outliers in specific dimensions.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
 use crate::error::{PclError, PclResult};
-use crate::filters::{FilterXYZ, FilterXYZRGB};
+use crate::filters::Filter;
 use pcl_sys::{UniquePtr, ffi};
 
 /// PassThrough filter for PointXYZ clouds
@@ -75,18 +75,18 @@ impl Default for PassThroughXYZ {
     }
 }
 
-impl FilterXYZ for PassThroughXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl Filter<PointXYZ> for PassThroughXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
         ffi::set_input_cloud_pass_xyz(self.filter.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloudXYZ> {
+    fn filter(&mut self) -> PclResult<PointCloud<PointXYZ>> {
         let result = ffi::filter_pass_xyz(self.filter.pin_mut());
         if result.is_null() {
             Err(PclError::FilterError("Filter operation failed".to_string()))
         } else {
-            Ok(PointCloudXYZ::from_unique_ptr(result))
+            Ok(PointCloud::from_unique_ptr(result))
         }
     }
 }
@@ -158,18 +158,18 @@ impl Default for PassThroughXYZRGB {
     }
 }
 
-impl FilterXYZRGB for PassThroughXYZRGB {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
+impl Filter<PointXYZRGB> for PassThroughXYZRGB {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
         ffi::set_input_cloud_pass_xyzrgb(self.filter.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloudXYZRGB> {
+    fn filter(&mut self) -> PclResult<PointCloud<PointXYZRGB>> {
         let result = ffi::filter_pass_xyzrgb(self.filter.pin_mut());
         if result.is_null() {
             Err(PclError::FilterError("Filter operation failed".to_string()))
         } else {
-            Ok(PointCloudXYZRGB::from_unique_ptr(result))
+            Ok(PointCloud::from_unique_ptr(result))
         }
     }
 }

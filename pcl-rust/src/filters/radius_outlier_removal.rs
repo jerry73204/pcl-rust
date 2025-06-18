@@ -4,9 +4,9 @@
 //! within a given search radius. It's useful for removing isolated points or small
 //! clusters of points that are likely to be noise.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
 use crate::error::PclResult;
-use crate::filters::{FilterXYZ, FilterXYZRGB};
+use crate::filters::Filter;
 use pcl_sys::{UniquePtr, ffi};
 
 /// RadiusOutlierRemoval filter for PointXYZ clouds
@@ -58,20 +58,20 @@ impl RadiusOutlierRemovalXYZ {
     }
 }
 
-impl FilterXYZ for RadiusOutlierRemovalXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl Filter<PointXYZ> for RadiusOutlierRemovalXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
         ffi::set_input_cloud_radius_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloudXYZ> {
+    fn filter(&mut self) -> PclResult<PointCloud<PointXYZ>> {
         let result = ffi::filter_radius_xyz(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {
                 message: "RadiusOutlierRemoval filter failed".to_string(),
             });
         }
-        Ok(PointCloudXYZ::from_unique_ptr(result))
+        Ok(PointCloud::from_unique_ptr(result))
     }
 }
 
@@ -181,20 +181,20 @@ impl RadiusOutlierRemovalXYZRGB {
     }
 }
 
-impl FilterXYZRGB for RadiusOutlierRemovalXYZRGB {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
+impl Filter<PointXYZRGB> for RadiusOutlierRemovalXYZRGB {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
         ffi::set_input_cloud_radius_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloudXYZRGB> {
+    fn filter(&mut self) -> PclResult<PointCloud<PointXYZRGB>> {
         let result = ffi::filter_radius_xyzrgb(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {
                 message: "RadiusOutlierRemoval filter failed".to_string(),
             });
         }
-        Ok(PointCloudXYZRGB::from_unique_ptr(result))
+        Ok(PointCloud::from_unique_ptr(result))
     }
 }
 

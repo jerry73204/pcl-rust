@@ -3,6 +3,7 @@
 //! This module provides safe wrappers around PCL's search interfaces
 //! for nearest neighbor and radius-based spatial queries.
 
+pub mod generic;
 pub mod traits;
 pub mod unified;
 
@@ -13,6 +14,10 @@ use crate::error::{PclError, PclResult};
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
+pub use generic::{
+    KdTree, KdTreeXYZ as GenericKdTreeXYZ, KdTreeXYZI as GenericKdTreeXYZI,
+    KdTreeXYZRGB as GenericKdTreeXYZRGB,
+};
 pub use traits::{NearestNeighborSearch, SearchConfiguration, SearchInputCloud, SearchMethod};
 pub use unified::{SearchXYZ, SearchXYZRGB};
 

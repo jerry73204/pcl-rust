@@ -2513,3 +2513,21 @@ unsafe impl Send for ffi::PointNormal {}
 unsafe impl Sync for ffi::PointNormal {}
 unsafe impl Send for ffi::PointCloud_PointNormal {}
 unsafe impl Sync for ffi::PointCloud_PointNormal {}
+
+// Search types
+unsafe impl Send for ffi::KdTree_PointXYZ {}
+unsafe impl Sync for ffi::KdTree_PointXYZ {}
+unsafe impl Send for ffi::KdTree_PointXYZI {}
+unsafe impl Sync for ffi::KdTree_PointXYZI {}
+unsafe impl Send for ffi::KdTree_PointXYZRGB {}
+unsafe impl Sync for ffi::KdTree_PointXYZRGB {}
+
+// Filter types
+unsafe impl Send for ffi::VoxelGrid_PointXYZ {}
+unsafe impl Sync for ffi::VoxelGrid_PointXYZ {}
+unsafe impl Send for ffi::VoxelGrid_PointXYZRGB {}
+unsafe impl Sync for ffi::VoxelGrid_PointXYZRGB {}
+unsafe impl Send for ffi::PassThrough_PointXYZ {}
+unsafe impl Sync for ffi::PassThrough_PointXYZ {}
+unsafe impl Send for ffi::PassThrough_PointXYZRGB {}
+unsafe impl Sync for ffi::PassThrough_PointXYZRGB {}

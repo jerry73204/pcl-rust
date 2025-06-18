@@ -4,6 +4,7 @@
 //! All filters follow a builder pattern for configuration and provide comprehensive
 //! error handling.
 
+pub mod generic;
 pub mod pass_through;
 pub mod radius_outlier_removal;
 pub mod statistical_outlier_removal;
@@ -22,26 +23,12 @@ pub use statistical_outlier_removal::{
 };
 pub use voxel_grid::{VoxelGridXYZ, VoxelGridXYZBuilder, VoxelGridXYZRGB, VoxelGridXYZRGBBuilder};
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
-use crate::error::PclResult;
-
-/// Trait for all PCL filters with PointXYZ
-pub trait FilterXYZ {
-    /// Set the input point cloud for filtering
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()>;
-
-    /// Apply the filter and return the filtered point cloud
-    fn filter(&mut self) -> PclResult<PointCloudXYZ>;
-}
-
-/// Trait for all PCL filters with PointXYZRGB
-pub trait FilterXYZRGB {
-    /// Set the input point cloud for filtering
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()>;
-
-    /// Apply the filter and return the filtered point cloud
-    fn filter(&mut self) -> PclResult<PointCloudXYZRGB>;
-}
+// Re-export generic filters and traits
+pub use generic::{
+    Filter, PassThrough, PassThroughXYZ as GenericPassThroughXYZ,
+    PassThroughXYZRGB as GenericPassThroughXYZRGB, VoxelGrid, VoxelGridBuilder,
+    VoxelGridXYZ as GenericVoxelGridXYZ, VoxelGridXYZRGB as GenericVoxelGridXYZRGB,
+};
 
 /// Common filter field names used in PCL
 pub mod field_names {
