@@ -54,11 +54,23 @@
 use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
 use crate::error::PclResult;
 
+pub mod advanced;
 pub mod cloud_viewer;
+pub mod generic;
+pub mod generic_impl;
 pub mod pcl_visualizer;
 pub mod properties;
 
+pub use advanced::{
+    AnimationController, ColorMap, ComparisonViewer, FeatureVisualizer, HistogramVisualizer,
+    RangeImageVisualizer,
+};
 pub use cloud_viewer::{CloudViewer, CloudViewerBuilder};
+pub use generic::{
+    AdvancedViewer, CameraPosition, InteractiveViewer, NormalVisualization, ShapeVisualization,
+    Viewer, ViewportControl, VisualizationConfig, VisualizationConfigBuilder,
+};
+pub use generic_impl::{MultiCloudViewer, VisualizablePoint};
 pub use pcl_visualizer::{PclVisualizer, PclVisualizerBuilder};
 pub use properties::{RenderingProperties, Representation, Shading};
 

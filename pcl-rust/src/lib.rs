@@ -107,8 +107,38 @@ pub use surface::{
 };
 #[cfg(feature = "visualization")]
 pub use visualization::{
-    CameraControl, CloudViewer, CloudViewerBuilder, PclVisualizer, PclVisualizerBuilder,
-    RenderingProperties, Representation, Shading, ViewerXYZ, ViewerXYZRGB, VisualizationControl,
+    AdvancedViewer,
+    // Advanced visualization features
+    AnimationController,
+    // Core viewers
+    CameraControl,
+    // Configuration
+    CameraPosition,
+    CloudViewer,
+    CloudViewerBuilder,
+    ColorMap,
+    ComparisonViewer,
+    FeatureVisualizer,
+    HistogramVisualizer,
+    InteractiveViewer,
+    MultiCloudViewer,
+    NormalVisualization,
+    PclVisualizer,
+    PclVisualizerBuilder,
+    RangeImageVisualizer,
+    RenderingProperties,
+    Representation,
+    Shading,
+    ShapeVisualization,
+    // Generic visualization traits
+    Viewer,
+    ViewerXYZ,
+    ViewerXYZRGB,
+    ViewportControl,
+    VisualizablePoint,
+    VisualizationConfig,
+    VisualizationConfigBuilder,
+    VisualizationControl,
 };
 
 #[cfg(test)]
