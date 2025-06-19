@@ -10,20 +10,17 @@ This is a Rust library project that provides safe bindings for the Point Cloud L
 
 ### Building and Testing
 - `cargo build` - Build the project (workspace builds both crates)
-- `cargo build -p pcl-sys` - Build only the FFI layer
-- `cargo build -p pcl` - Build only the safe Rust layer
-- `cargo test` - Run all tests
-- `cargo test -p pcl` - Run tests for the safe layer only
-- `cargo check` - Check code without building
-- `cargo clippy` - Run linter
-- `cargo fmt` - Format code
+- `cargo build -p pcl-sys --all-targets --all-features` - Build only the FFI layer
+- `cargo build -p pcl --all-targets --all-features` - Build only the safe Rust layer
+- `cargo test -p pcl --all-targets --all-features` - Run tests for the safe layer only
+- `cargo check --all-targets --all-features` - Check code without building
+- `cargo clippy --all-targets --all-features` - Run linter
 - `cargo test --all-targets --all-features` - Run all tests with all features
 
 ### Development
 - `cargo doc --open` - Generate and open documentation
 - `cargo run --example basic_usage` - Run the basic usage example
 - `cargo +nightly format` - Format the Rust code in this project
-- `cargo clippy` - Perform the quality check on Rust code
 
 ### PCL Dependencies
 The build system requires PCL 1.15 to be installed:
@@ -91,8 +88,14 @@ The project uses the `cxx` crate for C++ interop:
 - Search algorithms validate parameters and return proper Result types
 
 ### Additional Guidance
-- If there are FFI items missing in the Rust library, leave todo!() and comments instead of silent errors.
+- If there are FFI items missing in the Rust library, leave todo!() and TODO comments instead of silent errors or dummy values.
+- If a feature is not finished yet in Rust, leave todo!() and TODO comments instead of silent errors or dummy values
 
 ### Project Memories
 - The FFI crate should only provide C++ interface and essential Rust type conversion items.
 - Use clang-format to format C/C++ code. It might break the source code. Use "// clang-format off ... // clang-format on" mark to protect lines that would be broken by clang-format.
+- Format code whenever you make changes. Use `cargo +nightly fmt` for Rust and clang-format for C/C++.
+- Always build and test the project whenever you finish a feature.
+- Always run clippy to perform Rust code quality check whenever you finish a feature.
+- Avoid adding #[allow(dead_code)] on unused items because it would leave unused features without noticable compiler warnings. If the unused item will be used in the future, leave a TODO comment to elaborate.
+- At this moment, we don't care about backward compatibility in Rust API. We would optimize the API before the release.
