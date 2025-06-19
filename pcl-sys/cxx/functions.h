@@ -303,6 +303,90 @@ bool is_dense_xyzi(const pcl::PointCloud_PointXYZI &cloud);
 bool is_dense_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
 bool is_dense_point_normal(const pcl::PointCloud_PointNormal &cloud);
 
+// Point field access via at()
+std::unique_ptr<pcl::PointXYZ>
+get_point_at_xyz(const pcl::PointCloud_PointXYZ &cloud, size_t index);
+std::unique_ptr<pcl::PointXYZI>
+get_point_at_xyzi(const pcl::PointCloud_PointXYZI &cloud, size_t index);
+std::unique_ptr<pcl::PointXYZRGB>
+get_point_at_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud, size_t index);
+std::unique_ptr<pcl::PointNormal>
+get_point_at_point_normal(const pcl::PointCloud_PointNormal &cloud,
+                          size_t index);
+
+// Point modification functions
+void set_point_at_xyz(pcl::PointCloud_PointXYZ &cloud, size_t index,
+                      const pcl::PointXYZ &point);
+void set_point_at_xyzi(pcl::PointCloud_PointXYZI &cloud, size_t index,
+                       const pcl::PointXYZI &point);
+void set_point_at_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud, size_t index,
+                         const pcl::PointXYZRGB &point);
+void set_point_at_point_normal(pcl::PointCloud_PointNormal &cloud, size_t index,
+                               const pcl::PointNormal &point);
+
+// Set point fields
+void set_x(pcl::PointXYZ &point, float x);
+void set_y(pcl::PointXYZ &point, float y);
+void set_z(pcl::PointXYZ &point, float z);
+
+void set_x_xyzi(pcl::PointXYZI &point, float x);
+void set_y_xyzi(pcl::PointXYZI &point, float y);
+void set_z_xyzi(pcl::PointXYZI &point, float z);
+void set_intensity(pcl::PointXYZI &point, float intensity);
+
+void set_x_xyzrgb(pcl::PointXYZRGB &point, float x);
+void set_y_xyzrgb(pcl::PointXYZRGB &point, float y);
+void set_z_xyzrgb(pcl::PointXYZRGB &point, float z);
+void set_r(pcl::PointXYZRGB &point, uint8_t r);
+void set_g(pcl::PointXYZRGB &point, uint8_t g);
+void set_b(pcl::PointXYZRGB &point, uint8_t b);
+
+void set_x_point_normal(pcl::PointNormal &point, float x);
+void set_y_point_normal(pcl::PointNormal &point, float y);
+void set_z_point_normal(pcl::PointNormal &point, float z);
+void set_normal_x_point_normal(pcl::PointNormal &point, float nx);
+void set_normal_y_point_normal(pcl::PointNormal &point, float ny);
+void set_normal_z_point_normal(pcl::PointNormal &point, float nz);
+
+// Point creation
+std::unique_ptr<pcl::PointXYZ> new_point_xyz(float x, float y, float z);
+std::unique_ptr<pcl::PointXYZI> new_point_xyzi(float x, float y, float z,
+                                               float intensity);
+std::unique_ptr<pcl::PointXYZRGB>
+new_point_xyzrgb(float x, float y, float z, uint8_t r, uint8_t g, uint8_t b);
+std::unique_ptr<pcl::PointNormal>
+new_point_normal(float x, float y, float z, float nx, float ny, float nz);
+
+// Point cloud clone
+std::unique_ptr<pcl::PointCloud_PointXYZ>
+clone_point_cloud_xyz(const pcl::PointCloud_PointXYZ &cloud);
+std::unique_ptr<pcl::PointCloud_PointXYZI>
+clone_point_cloud_xyzi(const pcl::PointCloud_PointXYZI &cloud);
+std::unique_ptr<pcl::PointCloud_PointXYZRGB>
+clone_point_cloud_xyzrgb(const pcl::PointCloud_PointXYZRGB &cloud);
+std::unique_ptr<pcl::PointCloud_PointNormal>
+clone_point_cloud_point_normal(const pcl::PointCloud_PointNormal &cloud);
+
+// Set cloud width/height
+void set_width(pcl::PointCloud_PointXYZ &cloud, uint32_t width);
+void set_height(pcl::PointCloud_PointXYZ &cloud, uint32_t height);
+
+void set_width_xyzi(pcl::PointCloud_PointXYZI &cloud, uint32_t width);
+void set_height_xyzi(pcl::PointCloud_PointXYZI &cloud, uint32_t height);
+
+void set_width_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud, uint32_t width);
+void set_height_xyzrgb(pcl::PointCloud_PointXYZRGB &cloud, uint32_t height);
+
+void set_width_point_normal(pcl::PointCloud_PointNormal &cloud, uint32_t width);
+void set_height_point_normal(pcl::PointCloud_PointNormal &cloud,
+                             uint32_t height);
+
+// Check if point is finite
+bool is_finite_xyz(const pcl::PointXYZ &point);
+bool is_finite_xyzi(const pcl::PointXYZI &point);
+bool is_finite_xyzrgb(const pcl::PointXYZRGB &point);
+bool is_finite_point_normal(const pcl::PointNormal &point);
+
 // Search functions
 std::unique_ptr<pcl::search::KdTree_PointXYZ> new_kdtree_xyz();
 std::unique_ptr<pcl::search::KdTree_PointXYZI> new_kdtree_xyzi();

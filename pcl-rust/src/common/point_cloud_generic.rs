@@ -39,6 +39,17 @@ where
     _phantom: PhantomData<T>,
 }
 
+impl<T: Point> Clone for PointCloud<T>
+where
+    T::CloudType: UniquePtrTarget,
+{
+    fn clone(&self) -> Self {
+        // Use our custom deep_clone method which returns Result
+        // and unwrap since Clone trait doesn't allow Result
+        self.deep_clone().expect("Failed to clone PointCloud")
+    }
+}
+
 impl<T: Point> PointCloud<T>
 where
     T::CloudType: UniquePtrTarget,
@@ -141,13 +152,63 @@ where
 
     /// Access a point at the given index
     ///
-    /// Note: This currently returns an error because FFI points cannot be
-    /// created directly. Use point cloud methods to access coordinates instead.
-    pub fn at(&self, _index: usize) -> PclResult<T> {
-        Err(PclError::NotImplemented {
-            feature: "Direct point access".to_string(),
-            workaround: Some("Use point cloud methods to access coordinates".to_string()),
-        })
+    /// Returns the point at the specified index, or an error if the index is out of bounds.
+    pub fn at(&self, index: usize) -> PclResult<T>
+    where
+        T::FfiPointType: cxx::memory::UniquePtrTarget,
+    {
+        if index >= self.size() {
+            return Err(PclError::IndexOutOfBounds {
+                index,
+                size: self.size(),
+            });
+        }
+
+        let point_ptr = T::get_point_at(&*self.inner, index);
+        if point_ptr.is_null() {
+            return Err(PclError::IndexOutOfBounds {
+                index,
+                size: self.size(),
+            });
+        }
+
+        T::from_unique_ptr(point_ptr)
+    }
+
+    /// Set a point at the given index
+    ///
+    /// Replaces the point at the specified index with a new point.
+    pub fn set_at(&mut self, index: usize, point: &T) -> PclResult<()> {
+        if index >= self.size() {
+            return Err(PclError::IndexOutOfBounds {
+                index,
+                size: self.size(),
+            });
+        }
+
+        T::set_point_at(self.inner.pin_mut(), index, point);
+        Ok(())
+    }
+
+    /// Set the width of the cloud (for organized clouds)
+    pub fn set_width(&mut self, width: u32) {
+        T::cloud_set_width(self.inner.pin_mut(), width);
+    }
+
+    /// Set the height of the cloud (for organized clouds)
+    pub fn set_height(&mut self, height: u32) {
+        T::cloud_set_height(self.inner.pin_mut(), height);
+    }
+
+    /// Deep clone the entire point cloud
+    pub fn deep_clone(&self) -> PclResult<Self> {
+        let cloned = T::cloud_clone(&*self.inner);
+        if cloned.is_null() {
+            return Err(PclError::CloneFailed {
+                typename: T::type_name().to_string(),
+            });
+        }
+        Ok(Self::from_unique_ptr(cloned))
     }
 }
 

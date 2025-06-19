@@ -151,6 +151,31 @@ pub trait Point: Clone + Debug + 'static {
 
     /// Get a raw pointer for FFI operations
     fn as_raw_cloud(cloud: &Self::CloudType) -> *const Self::CloudType;
+
+    /// Get a point at the given index
+    fn get_point_at(cloud: &Self::CloudType, index: usize) -> cxx::UniquePtr<Self::FfiPointType>
+    where
+        Self::FfiPointType: cxx::memory::UniquePtrTarget;
+
+    /// Set a point at the given index
+    fn set_point_at(cloud: Pin<&mut Self::CloudType>, index: usize, point: &Self);
+
+    /// Create a point from a UniquePtr
+    fn from_unique_ptr(ptr: cxx::UniquePtr<Self::FfiPointType>) -> crate::error::PclResult<Self>
+    where
+        Self: Sized,
+        Self::FfiPointType: cxx::memory::UniquePtrTarget;
+
+    /// Set the cloud width
+    fn cloud_set_width(cloud: Pin<&mut Self::CloudType>, width: u32);
+
+    /// Set the cloud height  
+    fn cloud_set_height(cloud: Pin<&mut Self::CloudType>, height: u32);
+
+    /// Clone the entire cloud
+    fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType>
+    where
+        Self::CloudType: cxx::memory::UniquePtrTarget;
 }
 
 /// Trait for points with 3D Cartesian coordinates (x, y, z)

@@ -208,6 +208,114 @@ pub mod ffi {
 
         fn push_back_point_normal(cloud: Pin<&mut PointCloud_PointNormal>, coords: &[f32]);
 
+        // Point field access via at() - part of common
+        fn get_point_at_xyz(cloud: &PointCloud_PointXYZ, index: usize) -> UniquePtr<PointXYZ>;
+
+        fn get_point_at_xyzi(cloud: &PointCloud_PointXYZI, index: usize) -> UniquePtr<PointXYZI>;
+
+        fn get_point_at_xyzrgb(
+            cloud: &PointCloud_PointXYZRGB,
+            index: usize,
+        ) -> UniquePtr<PointXYZRGB>;
+
+        fn get_point_at_point_normal(
+            cloud: &PointCloud_PointNormal,
+            index: usize,
+        ) -> UniquePtr<PointNormal>;
+
+        // Point modification functions - part of common
+        fn set_point_at_xyz(cloud: Pin<&mut PointCloud_PointXYZ>, index: usize, point: &PointXYZ);
+
+        fn set_point_at_xyzi(
+            cloud: Pin<&mut PointCloud_PointXYZI>,
+            index: usize,
+            point: &PointXYZI,
+        );
+
+        fn set_point_at_xyzrgb(
+            cloud: Pin<&mut PointCloud_PointXYZRGB>,
+            index: usize,
+            point: &PointXYZRGB,
+        );
+
+        fn set_point_at_point_normal(
+            cloud: Pin<&mut PointCloud_PointNormal>,
+            index: usize,
+            point: &PointNormal,
+        );
+
+        // Set point fields - part of common
+        fn set_x(point: Pin<&mut PointXYZ>, x: f32);
+        fn set_y(point: Pin<&mut PointXYZ>, y: f32);
+        fn set_z(point: Pin<&mut PointXYZ>, z: f32);
+
+        fn set_x_xyzi(point: Pin<&mut PointXYZI>, x: f32);
+        fn set_y_xyzi(point: Pin<&mut PointXYZI>, y: f32);
+        fn set_z_xyzi(point: Pin<&mut PointXYZI>, z: f32);
+        fn set_intensity(point: Pin<&mut PointXYZI>, intensity: f32);
+
+        fn set_x_xyzrgb(point: Pin<&mut PointXYZRGB>, x: f32);
+        fn set_y_xyzrgb(point: Pin<&mut PointXYZRGB>, y: f32);
+        fn set_z_xyzrgb(point: Pin<&mut PointXYZRGB>, z: f32);
+        fn set_r(point: Pin<&mut PointXYZRGB>, r: u8);
+        fn set_g(point: Pin<&mut PointXYZRGB>, g: u8);
+        fn set_b(point: Pin<&mut PointXYZRGB>, b: u8);
+
+        fn set_x_point_normal(point: Pin<&mut PointNormal>, x: f32);
+        fn set_y_point_normal(point: Pin<&mut PointNormal>, y: f32);
+        fn set_z_point_normal(point: Pin<&mut PointNormal>, z: f32);
+        fn set_normal_x_point_normal(point: Pin<&mut PointNormal>, nx: f32);
+        fn set_normal_y_point_normal(point: Pin<&mut PointNormal>, ny: f32);
+        fn set_normal_z_point_normal(point: Pin<&mut PointNormal>, nz: f32);
+
+        // Point creation - part of common
+        fn new_point_xyz(x: f32, y: f32, z: f32) -> UniquePtr<PointXYZ>;
+
+        fn new_point_xyzi(x: f32, y: f32, z: f32, intensity: f32) -> UniquePtr<PointXYZI>;
+
+        fn new_point_xyzrgb(x: f32, y: f32, z: f32, r: u8, g: u8, b: u8) -> UniquePtr<PointXYZRGB>;
+
+        fn new_point_normal(
+            x: f32,
+            y: f32,
+            z: f32,
+            nx: f32,
+            ny: f32,
+            nz: f32,
+        ) -> UniquePtr<PointNormal>;
+
+        // Point cloud clone - part of common
+        fn clone_point_cloud_xyz(cloud: &PointCloud_PointXYZ) -> UniquePtr<PointCloud_PointXYZ>;
+
+        fn clone_point_cloud_xyzi(cloud: &PointCloud_PointXYZI) -> UniquePtr<PointCloud_PointXYZI>;
+
+        fn clone_point_cloud_xyzrgb(
+            cloud: &PointCloud_PointXYZRGB,
+        ) -> UniquePtr<PointCloud_PointXYZRGB>;
+
+        fn clone_point_cloud_point_normal(
+            cloud: &PointCloud_PointNormal,
+        ) -> UniquePtr<PointCloud_PointNormal>;
+
+        // Set cloud width/height - part of common
+        fn set_width(cloud: Pin<&mut PointCloud_PointXYZ>, width: u32);
+        fn set_height(cloud: Pin<&mut PointCloud_PointXYZ>, height: u32);
+
+        fn set_width_xyzi(cloud: Pin<&mut PointCloud_PointXYZI>, width: u32);
+        fn set_height_xyzi(cloud: Pin<&mut PointCloud_PointXYZI>, height: u32);
+
+        fn set_width_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>, width: u32);
+        fn set_height_xyzrgb(cloud: Pin<&mut PointCloud_PointXYZRGB>, height: u32);
+
+        fn set_width_point_normal(cloud: Pin<&mut PointCloud_PointNormal>, width: u32);
+        fn set_height_point_normal(cloud: Pin<&mut PointCloud_PointNormal>, height: u32);
+
+        // Check if point is finite - part of common
+        fn is_finite_xyz(point: &PointXYZ) -> bool;
+        fn is_finite_xyzi(point: &PointXYZI) -> bool;
+        fn is_finite_xyzrgb(point: &PointXYZRGB) -> bool;
+        fn is_finite_point_normal(point: &PointNormal) -> bool;
+
         // Search types - always available but functions conditionally compiled
         #[namespace = "pcl::search"]
         type KdTree_PointXYZ;

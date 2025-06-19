@@ -134,14 +134,24 @@ where
 }
 
 /// Example of a generic spatial algorithm
+/// Note: Direct point access via at() is not available due to FFI limitations
+/// This is left here as an example of what could be done if direct access was available
+#[allow(dead_code)]
 fn _compute_centroid<T: Point + Xyz>(cloud: &PointCloud<T>) -> PclResult<(f32, f32, f32)>
 where
     T::CloudType: cxx::memory::UniquePtrTarget,
+    T::FfiPointType: cxx::memory::UniquePtrTarget,
 {
     if cloud.empty() {
         return Ok((0.0, 0.0, 0.0));
     }
 
+    // Direct point access is not available due to FFI limitations
+    // In a real implementation, you would need to use PCL algorithms
+    // or iterate through the cloud using FFI-specific methods
+
+    // This is what the code would look like if at() worked:
+    /*
     let mut sum_x = 0.0;
     let mut sum_y = 0.0;
     let mut sum_z = 0.0;
@@ -156,4 +166,11 @@ where
 
     let count = cloud.len() as f32;
     Ok((sum_x / count, sum_y / count, sum_z / count))
+    */
+
+    // For now, return a placeholder
+    Err(pcl::error::PclError::NotImplemented {
+        feature: "Direct point iteration".to_string(),
+        workaround: Some("Use PCL algorithms or FFI-specific iteration methods".to_string()),
+    })
 }

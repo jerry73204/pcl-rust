@@ -94,6 +94,35 @@ impl Point for PointXYZ {
     fn as_raw_cloud(cloud: &Self::CloudType) -> *const Self::CloudType {
         cloud as *const _
     }
+
+    fn get_point_at(cloud: &Self::CloudType, index: usize) -> cxx::UniquePtr<Self::FfiPointType> {
+        ffi::get_point_at_xyz(cloud, index)
+    }
+
+    fn set_point_at(cloud: Pin<&mut Self::CloudType>, index: usize, point: &Self) {
+        ffi::set_point_at_xyz(cloud, index, &point.inner);
+    }
+
+    fn from_unique_ptr(_ptr: cxx::UniquePtr<Self::FfiPointType>) -> PclResult<Self> {
+        // FFI points cannot be moved out of UniquePtr in safe Rust
+        // This is a limitation of the cxx bridge
+        Err(crate::error::PclError::NotImplemented {
+            feature: "Direct point access".to_string(),
+            workaround: Some("Use point cloud methods to access point data".to_string()),
+        })
+    }
+
+    fn cloud_set_width(cloud: Pin<&mut Self::CloudType>, width: u32) {
+        ffi::set_width(cloud, width);
+    }
+
+    fn cloud_set_height(cloud: Pin<&mut Self::CloudType>, height: u32) {
+        ffi::set_height(cloud, height);
+    }
+
+    fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType> {
+        ffi::clone_point_cloud_xyz(cloud)
+    }
 }
 
 // Implement internal FFI trait
@@ -123,17 +152,22 @@ impl Xyz for PointXYZ {
         ffi::get_z(&self.inner)
     }
 
-    fn set_x(&mut self, _x: f32) {
-        // Point modification not supported through FFI yet
-        // Points are typically created and managed by PCL algorithms
+    fn set_x(&mut self, x: f32) {
+        unsafe {
+            ffi::set_x(Pin::new_unchecked(&mut self.inner), x);
+        }
     }
 
-    fn set_y(&mut self, _y: f32) {
-        // Point modification not supported through FFI yet
+    fn set_y(&mut self, y: f32) {
+        unsafe {
+            ffi::set_y(Pin::new_unchecked(&mut self.inner), y);
+        }
     }
 
-    fn set_z(&mut self, _z: f32) {
-        // Point modification not supported through FFI yet
+    fn set_z(&mut self, z: f32) {
+        unsafe {
+            ffi::set_z(Pin::new_unchecked(&mut self.inner), z);
+        }
     }
 }
 
@@ -229,6 +263,35 @@ impl Point for PointXYZI {
     fn as_raw_cloud(cloud: &Self::CloudType) -> *const Self::CloudType {
         cloud as *const _
     }
+
+    fn get_point_at(cloud: &Self::CloudType, index: usize) -> cxx::UniquePtr<Self::FfiPointType> {
+        ffi::get_point_at_xyzi(cloud, index)
+    }
+
+    fn set_point_at(cloud: Pin<&mut Self::CloudType>, index: usize, point: &Self) {
+        ffi::set_point_at_xyzi(cloud, index, &point.inner);
+    }
+
+    fn from_unique_ptr(_ptr: cxx::UniquePtr<Self::FfiPointType>) -> PclResult<Self> {
+        // FFI points cannot be moved out of UniquePtr in safe Rust
+        // This is a limitation of the cxx bridge
+        Err(crate::error::PclError::NotImplemented {
+            feature: "Direct point access".to_string(),
+            workaround: Some("Use point cloud methods to access point data".to_string()),
+        })
+    }
+
+    fn cloud_set_width(cloud: Pin<&mut Self::CloudType>, width: u32) {
+        ffi::set_width_xyzi(cloud, width);
+    }
+
+    fn cloud_set_height(cloud: Pin<&mut Self::CloudType>, height: u32) {
+        ffi::set_height_xyzi(cloud, height);
+    }
+
+    fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType> {
+        ffi::clone_point_cloud_xyzi(cloud)
+    }
 }
 
 // Implement internal FFI trait
@@ -258,16 +321,22 @@ impl Xyz for PointXYZI {
         ffi::get_z_xyzi(&self.inner)
     }
 
-    fn set_x(&mut self, _x: f32) {
-        // Point modification not supported through FFI yet
+    fn set_x(&mut self, x: f32) {
+        unsafe {
+            ffi::set_x_xyzi(Pin::new_unchecked(&mut self.inner), x);
+        }
     }
 
-    fn set_y(&mut self, _y: f32) {
-        // Point modification not supported through FFI yet
+    fn set_y(&mut self, y: f32) {
+        unsafe {
+            ffi::set_y_xyzi(Pin::new_unchecked(&mut self.inner), y);
+        }
     }
 
-    fn set_z(&mut self, _z: f32) {
-        // Point modification not supported through FFI yet
+    fn set_z(&mut self, z: f32) {
+        unsafe {
+            ffi::set_z_xyzi(Pin::new_unchecked(&mut self.inner), z);
+        }
     }
 }
 
@@ -277,8 +346,10 @@ impl Intensity for PointXYZI {
         ffi::get_intensity(&self.inner)
     }
 
-    fn set_intensity(&mut self, _intensity: f32) {
-        // Point modification not supported through FFI yet
+    fn set_intensity(&mut self, intensity: f32) {
+        unsafe {
+            ffi::set_intensity(Pin::new_unchecked(&mut self.inner), intensity);
+        }
     }
 }
 
@@ -370,6 +441,35 @@ impl Point for PointNormal {
     fn as_raw_cloud(cloud: &Self::CloudType) -> *const Self::CloudType {
         cloud as *const _
     }
+
+    fn get_point_at(cloud: &Self::CloudType, index: usize) -> cxx::UniquePtr<Self::FfiPointType> {
+        ffi::get_point_at_point_normal(cloud, index)
+    }
+
+    fn set_point_at(cloud: Pin<&mut Self::CloudType>, index: usize, point: &Self) {
+        ffi::set_point_at_point_normal(cloud, index, &point.inner);
+    }
+
+    fn from_unique_ptr(_ptr: cxx::UniquePtr<Self::FfiPointType>) -> PclResult<Self> {
+        // FFI points cannot be moved out of UniquePtr in safe Rust
+        // This is a limitation of the cxx bridge
+        Err(crate::error::PclError::NotImplemented {
+            feature: "Direct point access".to_string(),
+            workaround: Some("Use point cloud methods to access point data".to_string()),
+        })
+    }
+
+    fn cloud_set_width(cloud: Pin<&mut Self::CloudType>, width: u32) {
+        ffi::set_width_point_normal(cloud, width);
+    }
+
+    fn cloud_set_height(cloud: Pin<&mut Self::CloudType>, height: u32) {
+        ffi::set_height_point_normal(cloud, height);
+    }
+
+    fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType> {
+        ffi::clone_point_cloud_point_normal(cloud)
+    }
 }
 
 // Implement internal FFI trait
@@ -399,16 +499,22 @@ impl Xyz for PointNormal {
         ffi::get_z_point_normal(&self.inner)
     }
 
-    fn set_x(&mut self, _x: f32) {
-        // Point modification not supported through FFI yet
+    fn set_x(&mut self, x: f32) {
+        unsafe {
+            ffi::set_x_point_normal(Pin::new_unchecked(&mut self.inner), x);
+        }
     }
 
-    fn set_y(&mut self, _y: f32) {
-        // Point modification not supported through FFI yet
+    fn set_y(&mut self, y: f32) {
+        unsafe {
+            ffi::set_y_point_normal(Pin::new_unchecked(&mut self.inner), y);
+        }
     }
 
-    fn set_z(&mut self, _z: f32) {
-        // Point modification not supported through FFI yet
+    fn set_z(&mut self, z: f32) {
+        unsafe {
+            ffi::set_z_point_normal(Pin::new_unchecked(&mut self.inner), z);
+        }
     }
 }
 
@@ -426,16 +532,22 @@ impl crate::traits::NormalXyz for PointNormal {
         ffi::get_normal_z_point_normal(&self.inner)
     }
 
-    fn set_normal_x(&mut self, _nx: f32) {
-        // Point modification not supported through FFI yet
+    fn set_normal_x(&mut self, nx: f32) {
+        unsafe {
+            ffi::set_normal_x_point_normal(Pin::new_unchecked(&mut self.inner), nx);
+        }
     }
 
-    fn set_normal_y(&mut self, _ny: f32) {
-        // Point modification not supported through FFI yet
+    fn set_normal_y(&mut self, ny: f32) {
+        unsafe {
+            ffi::set_normal_y_point_normal(Pin::new_unchecked(&mut self.inner), ny);
+        }
     }
 
-    fn set_normal_z(&mut self, _nz: f32) {
-        // Point modification not supported through FFI yet
+    fn set_normal_z(&mut self, nz: f32) {
+        unsafe {
+            ffi::set_normal_z_point_normal(Pin::new_unchecked(&mut self.inner), nz);
+        }
     }
 }
 
@@ -555,6 +667,35 @@ impl Point for PointXYZRGB {
     fn as_raw_cloud(cloud: &Self::CloudType) -> *const Self::CloudType {
         cloud as *const _
     }
+
+    fn get_point_at(cloud: &Self::CloudType, index: usize) -> cxx::UniquePtr<Self::FfiPointType> {
+        ffi::get_point_at_xyzrgb(cloud, index)
+    }
+
+    fn set_point_at(cloud: Pin<&mut Self::CloudType>, index: usize, point: &Self) {
+        ffi::set_point_at_xyzrgb(cloud, index, &point.inner);
+    }
+
+    fn from_unique_ptr(_ptr: cxx::UniquePtr<Self::FfiPointType>) -> PclResult<Self> {
+        // FFI points cannot be moved out of UniquePtr in safe Rust
+        // This is a limitation of the cxx bridge
+        Err(crate::error::PclError::NotImplemented {
+            feature: "Direct point access".to_string(),
+            workaround: Some("Use point cloud methods to access point data".to_string()),
+        })
+    }
+
+    fn cloud_set_width(cloud: Pin<&mut Self::CloudType>, width: u32) {
+        ffi::set_width_xyzrgb(cloud, width);
+    }
+
+    fn cloud_set_height(cloud: Pin<&mut Self::CloudType>, height: u32) {
+        ffi::set_height_xyzrgb(cloud, height);
+    }
+
+    fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType> {
+        ffi::clone_point_cloud_xyzrgb(cloud)
+    }
 }
 
 // Implement internal FFI trait
@@ -584,16 +725,22 @@ impl Xyz for PointXYZRGB {
         ffi::get_z_xyzrgb(&self.inner)
     }
 
-    fn set_x(&mut self, _x: f32) {
-        // Point modification not supported through FFI yet
+    fn set_x(&mut self, x: f32) {
+        unsafe {
+            ffi::set_x_xyzrgb(Pin::new_unchecked(&mut self.inner), x);
+        }
     }
 
-    fn set_y(&mut self, _y: f32) {
-        // Point modification not supported through FFI yet
+    fn set_y(&mut self, y: f32) {
+        unsafe {
+            ffi::set_y_xyzrgb(Pin::new_unchecked(&mut self.inner), y);
+        }
     }
 
-    fn set_z(&mut self, _z: f32) {
-        // Point modification not supported through FFI yet
+    fn set_z(&mut self, z: f32) {
+        unsafe {
+            ffi::set_z_xyzrgb(Pin::new_unchecked(&mut self.inner), z);
+        }
     }
 }
 
@@ -611,16 +758,22 @@ impl Rgb for PointXYZRGB {
         ffi::get_b(&self.inner)
     }
 
-    fn set_r(&mut self, _r: u8) {
-        // Point modification not supported through FFI yet
+    fn set_r(&mut self, r: u8) {
+        unsafe {
+            ffi::set_r(Pin::new_unchecked(&mut self.inner), r);
+        }
     }
 
-    fn set_g(&mut self, _g: u8) {
-        // Point modification not supported through FFI yet
+    fn set_g(&mut self, g: u8) {
+        unsafe {
+            ffi::set_g(Pin::new_unchecked(&mut self.inner), g);
+        }
     }
 
-    fn set_b(&mut self, _b: u8) {
-        // Point modification not supported through FFI yet
+    fn set_b(&mut self, b: u8) {
+        unsafe {
+            ffi::set_b(Pin::new_unchecked(&mut self.inner), b);
+        }
     }
 }
 

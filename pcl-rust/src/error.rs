@@ -132,6 +132,14 @@ pub enum PclError {
     /// Visualization operation error
     #[error("Visualization error: {message}")]
     VisualizationError { message: String, operation: String },
+
+    /// Index out of bounds error
+    #[error("Index {index} is out of bounds for size {size}")]
+    IndexOutOfBounds { index: usize, size: usize },
+
+    /// Clone operation failed
+    #[error("Failed to clone {typename}")]
+    CloneFailed { typename: String },
 }
 
 /// Types of search operations that can fail

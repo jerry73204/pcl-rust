@@ -7,6 +7,9 @@ pub mod builders;
 pub mod point_cloud_generic;
 pub mod point_types;
 
+#[cfg(test)]
+mod tests;
+
 pub use builders::{PointCloudNormalBuilder, PointCloudXYZBuilder, PointCloudXYZRGBBuilder};
 // Export generic PointCloud and type aliases
 pub use point_cloud_generic::{

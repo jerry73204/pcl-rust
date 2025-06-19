@@ -326,6 +326,223 @@ void push_back_point_normal(pcl::PointCloud<pcl::PointNormal> &cloud,
   cloud.height = 1;
 }
 
+// Point field access via at()
+std::unique_ptr<pcl::PointXYZ>
+get_point_at_xyz(const pcl::PointCloud<pcl::PointXYZ> &cloud, size_t index) {
+  if (index >= cloud.size()) {
+    return nullptr;
+  }
+  auto point = std::make_unique<pcl::PointXYZ>();
+  *point = cloud.points[index];
+  return point;
+}
+
+std::unique_ptr<pcl::PointXYZI>
+get_point_at_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud, size_t index) {
+  if (index >= cloud.size()) {
+    return nullptr;
+  }
+  auto point = std::make_unique<pcl::PointXYZI>();
+  *point = cloud.points[index];
+  return point;
+}
+
+std::unique_ptr<pcl::PointXYZRGB>
+get_point_at_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                    size_t index) {
+  if (index >= cloud.size()) {
+    return nullptr;
+  }
+  auto point = std::make_unique<pcl::PointXYZRGB>();
+  *point = cloud.points[index];
+  return point;
+}
+
+std::unique_ptr<pcl::PointNormal>
+get_point_at_point_normal(const pcl::PointCloud<pcl::PointNormal> &cloud,
+                          size_t index) {
+  if (index >= cloud.size()) {
+    return nullptr;
+  }
+  auto point = std::make_unique<pcl::PointNormal>();
+  *point = cloud.points[index];
+  return point;
+}
+
+// Point modification functions
+void set_point_at_xyz(pcl::PointCloud<pcl::PointXYZ> &cloud, size_t index,
+                      const pcl::PointXYZ &point) {
+  if (index >= cloud.size()) {
+    return;
+  }
+  cloud.points[index] = point;
+}
+
+void set_point_at_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud, size_t index,
+                       const pcl::PointXYZI &point) {
+  if (index >= cloud.size()) {
+    return;
+  }
+  cloud.points[index] = point;
+}
+
+void set_point_at_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud, size_t index,
+                         const pcl::PointXYZRGB &point) {
+  if (index >= cloud.size()) {
+    return;
+  }
+  cloud.points[index] = point;
+}
+
+void set_point_at_point_normal(pcl::PointCloud<pcl::PointNormal> &cloud,
+                               size_t index, const pcl::PointNormal &point) {
+  if (index >= cloud.size()) {
+    return;
+  }
+  cloud.points[index] = point;
+}
+
+// Set point fields
+void set_x(pcl::PointXYZ &point, float x) { point.x = x; }
+void set_y(pcl::PointXYZ &point, float y) { point.y = y; }
+void set_z(pcl::PointXYZ &point, float z) { point.z = z; }
+
+void set_x_xyzi(pcl::PointXYZI &point, float x) { point.x = x; }
+void set_y_xyzi(pcl::PointXYZI &point, float y) { point.y = y; }
+void set_z_xyzi(pcl::PointXYZI &point, float z) { point.z = z; }
+void set_intensity(pcl::PointXYZI &point, float intensity) {
+  point.intensity = intensity;
+}
+
+void set_x_xyzrgb(pcl::PointXYZRGB &point, float x) { point.x = x; }
+void set_y_xyzrgb(pcl::PointXYZRGB &point, float y) { point.y = y; }
+void set_z_xyzrgb(pcl::PointXYZRGB &point, float z) { point.z = z; }
+void set_r(pcl::PointXYZRGB &point, uint8_t r) { point.r = r; }
+void set_g(pcl::PointXYZRGB &point, uint8_t g) { point.g = g; }
+void set_b(pcl::PointXYZRGB &point, uint8_t b) { point.b = b; }
+
+void set_x_point_normal(pcl::PointNormal &point, float x) { point.x = x; }
+void set_y_point_normal(pcl::PointNormal &point, float y) { point.y = y; }
+void set_z_point_normal(pcl::PointNormal &point, float z) { point.z = z; }
+void set_normal_x_point_normal(pcl::PointNormal &point, float nx) {
+  point.normal_x = nx;
+}
+void set_normal_y_point_normal(pcl::PointNormal &point, float ny) {
+  point.normal_y = ny;
+}
+void set_normal_z_point_normal(pcl::PointNormal &point, float nz) {
+  point.normal_z = nz;
+}
+
+// Point creation
+std::unique_ptr<pcl::PointXYZ> new_point_xyz(float x, float y, float z) {
+  auto point = std::make_unique<pcl::PointXYZ>();
+  point->x = x;
+  point->y = y;
+  point->z = z;
+  return point;
+}
+
+std::unique_ptr<pcl::PointXYZI> new_point_xyzi(float x, float y, float z,
+                                               float intensity) {
+  auto point = std::make_unique<pcl::PointXYZI>();
+  point->x = x;
+  point->y = y;
+  point->z = z;
+  point->intensity = intensity;
+  return point;
+}
+
+std::unique_ptr<pcl::PointXYZRGB>
+new_point_xyzrgb(float x, float y, float z, uint8_t r, uint8_t g, uint8_t b) {
+  auto point = std::make_unique<pcl::PointXYZRGB>();
+  point->x = x;
+  point->y = y;
+  point->z = z;
+  point->r = r;
+  point->g = g;
+  point->b = b;
+  return point;
+}
+
+std::unique_ptr<pcl::PointNormal>
+new_point_normal(float x, float y, float z, float nx, float ny, float nz) {
+  auto point = std::make_unique<pcl::PointNormal>();
+  point->x = x;
+  point->y = y;
+  point->z = z;
+  point->normal_x = nx;
+  point->normal_y = ny;
+  point->normal_z = nz;
+  return point;
+}
+
+// Point cloud clone
+std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>
+clone_point_cloud_xyz(const pcl::PointCloud<pcl::PointXYZ> &cloud) {
+  return std::make_unique<pcl::PointCloud<pcl::PointXYZ>>(cloud);
+}
+
+std::unique_ptr<pcl::PointCloud<pcl::PointXYZI>>
+clone_point_cloud_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud) {
+  return std::make_unique<pcl::PointCloud<pcl::PointXYZI>>(cloud);
+}
+
+std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>
+clone_point_cloud_xyzrgb(const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
+  return std::make_unique<pcl::PointCloud<pcl::PointXYZRGB>>(cloud);
+}
+
+std::unique_ptr<pcl::PointCloud<pcl::PointNormal>>
+clone_point_cloud_point_normal(const pcl::PointCloud<pcl::PointNormal> &cloud) {
+  return std::make_unique<pcl::PointCloud<pcl::PointNormal>>(cloud);
+}
+
+// Set cloud width/height
+void set_width(pcl::PointCloud<pcl::PointXYZ> &cloud, uint32_t width) {
+  cloud.width = width;
+}
+void set_height(pcl::PointCloud<pcl::PointXYZ> &cloud, uint32_t height) {
+  cloud.height = height;
+}
+
+void set_width_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud, uint32_t width) {
+  cloud.width = width;
+}
+void set_height_xyzi(pcl::PointCloud<pcl::PointXYZI> &cloud, uint32_t height) {
+  cloud.height = height;
+}
+
+void set_width_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                      uint32_t width) {
+  cloud.width = width;
+}
+void set_height_xyzrgb(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                       uint32_t height) {
+  cloud.height = height;
+}
+
+void set_width_point_normal(pcl::PointCloud<pcl::PointNormal> &cloud,
+                            uint32_t width) {
+  cloud.width = width;
+}
+void set_height_point_normal(pcl::PointCloud<pcl::PointNormal> &cloud,
+                             uint32_t height) {
+  cloud.height = height;
+}
+
+// Check if point is finite
+bool is_finite_xyz(const pcl::PointXYZ &point) { return pcl::isFinite(point); }
+bool is_finite_xyzi(const pcl::PointXYZI &point) {
+  return pcl::isFinite(point);
+}
+bool is_finite_xyzrgb(const pcl::PointXYZRGB &point) {
+  return pcl::isFinite(point);
+}
+bool is_finite_point_normal(const pcl::PointNormal &point) {
+  return pcl::isFinite(point);
+}
+
 // Feature cloud functions
 size_t size_normal(const pcl::PointCloud<pcl::Normal> &cloud) {
   return cloud.size();
