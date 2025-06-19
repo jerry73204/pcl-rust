@@ -1,3 +1,110 @@
+use std::fs;
+
+// Expected PCL version for pcl-rust compatibility
+const EXPECTED_PCL_VERSION: &str = "1.12.1";
+const EXPECTED_PCL_MAJOR: u32 = 1;
+const EXPECTED_PCL_MINOR: u32 = 12;
+const EXPECTED_PCL_PATCH: u32 = 1;
+
+// Function to check PCL version from headers
+fn check_pcl_version(include_paths: &[std::path::PathBuf]) {
+    // Look for pcl_config.h or pcl/pcl_config.h
+    for include_path in include_paths {
+        let config_paths = [
+            include_path.join("pcl_config.h"),
+            include_path.join("pcl").join("pcl_config.h"),
+            include_path.join("pcl").join("pcl_version.h"),
+        ];
+
+        for config_path in &config_paths {
+            if config_path.exists() {
+                if let Ok(content) = fs::read_to_string(config_path) {
+                    if let Some((major, minor, patch)) = parse_pcl_version(&content) {
+                        let actual_version = format!("{}.{}.{}", major, minor, patch);
+
+                        // Check if version matches expected
+                        if major != EXPECTED_PCL_MAJOR
+                            || minor != EXPECTED_PCL_MINOR
+                            || patch != EXPECTED_PCL_PATCH
+                        {
+                            println!("cargo:warning=PCL version mismatch detected!");
+                            println!(
+                                "cargo:warning=Expected PCL version: {}",
+                                EXPECTED_PCL_VERSION
+                            );
+                            println!("cargo:warning=Found PCL version: {}", actual_version);
+                            println!("cargo:warning=This may cause compatibility issues.");
+                            println!(
+                                "cargo:warning=Consider installing PCL {} or update pcl-rust to match your PCL version.",
+                                EXPECTED_PCL_VERSION
+                            );
+                        } else {
+                            println!(
+                                "cargo:warning=PCL version check: {} matches expected {}",
+                                actual_version, EXPECTED_PCL_VERSION
+                            );
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    println!("cargo:warning=Could not determine PCL version from headers");
+    println!(
+        "cargo:warning=Expected PCL version: {}",
+        EXPECTED_PCL_VERSION
+    );
+    println!(
+        "cargo:warning=Please ensure you have PCL {} installed",
+        EXPECTED_PCL_VERSION
+    );
+}
+
+// Function to parse PCL version from header content
+fn parse_pcl_version(content: &str) -> Option<(u32, u32, u32)> {
+    let mut major = None;
+    let mut minor = None;
+    let mut patch = None;
+
+    for line in content.lines() {
+        let line = line.trim();
+
+        // Look for version definitions
+        if line.starts_with("#define PCL_MAJOR_VERSION") {
+            if let Some(value) = extract_define_value(line) {
+                major = value.parse().ok();
+            }
+        } else if line.starts_with("#define PCL_MINOR_VERSION") {
+            if let Some(value) = extract_define_value(line) {
+                minor = value.parse().ok();
+            }
+        } else if line.starts_with("#define PCL_REVISION_VERSION")
+            || line.starts_with("#define PCL_PATCH_VERSION")
+        {
+            if let Some(value) = extract_define_value(line) {
+                patch = value.parse().ok();
+            }
+        }
+    }
+
+    match (major, minor, patch) {
+        (Some(maj), Some(min), Some(pat)) => Some((maj, min, pat)),
+        _ => None,
+    }
+}
+
+// Function to extract value from #define line
+fn extract_define_value(line: &str) -> Option<&str> {
+    let parts: Vec<&str> = line.split_whitespace().collect();
+    if parts.len() >= 3 {
+        Some(parts[2])
+    } else {
+        None
+    }
+}
+
 fn main() {
     println!("cargo:rerun-if-changed=src/");
     println!("cargo:rerun-if-changed=cxx/");
@@ -202,6 +309,9 @@ fn main() {
             }
         }
     }
+
+    // Check PCL version in headers and warn if mismatch
+    check_pcl_version(&pcl_include_paths);
 
     // Always add common source file since it's always required
     build.file("cxx/common.cpp");
