@@ -5,7 +5,7 @@
 
 use crate::common::point_types::{PointNormal, PointNormalOps, PointXYZ, PointXYZI, PointXYZRGB};
 use crate::error::{PclError, PclResult};
-use crate::traits::{Point, PointIntensityOps, PointRgbOps, PointXyzOps, Xyz};
+use crate::traits::{Point, PointCloudClone, PointIntensityOps, PointRgbOps, PointXyzOps, Xyz};
 use cxx::{self, memory::UniquePtrTarget};
 use std::fmt;
 use std::marker::PhantomData;
@@ -39,14 +39,14 @@ where
     _phantom: PhantomData<T>,
 }
 
-impl<T: Point> Clone for PointCloud<T>
+impl<T: Point + PointCloudClone> Clone for PointCloud<T>
 where
     T::CloudType: UniquePtrTarget,
 {
     fn clone(&self) -> Self {
-        // Use our custom deep_clone method which returns Result
+        // Use our custom try_clone method which returns Result
         // and unwrap since Clone trait doesn't allow Result
-        self.deep_clone().expect("Failed to clone PointCloud")
+        self.try_clone().expect("Failed to clone PointCloud")
     }
 }
 
@@ -201,7 +201,10 @@ where
     }
 
     /// Deep clone the entire point cloud
-    pub fn deep_clone(&self) -> PclResult<Self> {
+    pub fn try_clone(&self) -> PclResult<Self>
+    where
+        T: PointCloudClone,
+    {
         let cloned = T::cloud_clone(&*self.inner);
         if cloned.is_null() {
             return Err(PclError::CloneFailed {

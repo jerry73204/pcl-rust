@@ -155,8 +155,8 @@ mod iss_tests {
         iss.set_input_cloud(&cloud).unwrap();
         let keypoints = iss.compute().unwrap();
 
-        // Should detect some keypoints
-        assert!(keypoints.size() >= 0, "ISS detection should not fail");
+        // Should detect some keypoints (size() returns usize which is always >= 0)
+        let _keypoint_count = keypoints.size();
     }
 
     #[test]
@@ -383,7 +383,7 @@ mod integration_tests {
         iss.set_input_cloud(&cloud).unwrap();
 
         let iss_keypoints = iss.compute().unwrap();
-        assert!(iss_keypoints.size() >= 0, "ISS detection should complete");
+        let _keypoint_count = iss_keypoints.size(); // ISS detection completed
     }
 
     #[test]

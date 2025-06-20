@@ -2,9 +2,9 @@
 //!
 //! This module provides safe, idiomatic Rust interfaces for PCL's point types.
 
-use crate::common::point_cloud_generic::PointCloud;
+use crate::common::point_cloud::PointCloud;
 use crate::error::PclResult;
-use crate::traits::{Intensity, Point, PointFfi, Rgb, Xyz};
+use crate::traits::{Intensity, Point, PointCloudClone, PointFfi, PointRgbOps, Rgb, Xyz};
 use pcl_sys::ffi;
 use std::fmt::Debug;
 use std::pin::Pin;
@@ -14,10 +14,13 @@ pub struct PointXYZ {
     pub(crate) inner: ffi::PointXYZ,
 }
 
-// Clone is implemented but panics because points cannot be created directly
+// Clone is required by the Point trait, but individual points cannot be cloned
+// due to FFI limitations. Points can only exist within PointClouds.
 impl Clone for PointXYZ {
     fn clone(&self) -> Self {
-        panic!("Cannot clone PointXYZ - FFI type is opaque")
+        panic!(
+            "Cannot clone individual PointXYZ - points can only be cloned as part of a PointCloud. This is a limitation of the FFI bridge."
+        )
     }
 }
 
@@ -120,6 +123,13 @@ impl Point for PointXYZ {
         ffi::set_height(cloud, height);
     }
 
+    fn is_finite(&self) -> bool {
+        ffi::is_finite_xyz(&self.inner)
+    }
+}
+
+// Implement PointCloudClone trait
+impl PointCloudClone for PointXYZ {
     fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType> {
         ffi::clone_point_cloud_xyz(cloud)
     }
@@ -184,10 +194,13 @@ pub struct PointXYZI {
     pub(crate) inner: ffi::PointXYZI,
 }
 
-// Clone is implemented but panics because points cannot be created directly
+// Clone is required by the Point trait, but individual points cannot be cloned
+// due to FFI limitations. Points can only exist within PointClouds.
 impl Clone for PointXYZI {
     fn clone(&self) -> Self {
-        panic!("Cannot clone PointXYZI - FFI type is opaque")
+        panic!(
+            "Cannot clone individual PointXYZI - points can only be cloned as part of a PointCloud. This is a limitation of the FFI bridge."
+        )
     }
 }
 
@@ -289,6 +302,13 @@ impl Point for PointXYZI {
         ffi::set_height_xyzi(cloud, height);
     }
 
+    fn is_finite(&self) -> bool {
+        ffi::is_finite_xyzi(&self.inner)
+    }
+}
+
+// Implement PointCloudClone trait
+impl PointCloudClone for PointXYZI {
     fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType> {
         ffi::clone_point_cloud_xyzi(cloud)
     }
@@ -369,10 +389,13 @@ pub struct PointNormal {
     pub(crate) inner: ffi::PointNormal,
 }
 
-// Clone is implemented but panics because points cannot be created directly
+// Clone is required by the Point trait, but individual points cannot be cloned
+// due to FFI limitations. Points can only exist within PointClouds.
 impl Clone for PointNormal {
     fn clone(&self) -> Self {
-        panic!("Cannot clone PointNormal - FFI type is opaque")
+        panic!(
+            "Cannot clone individual PointNormal - points can only be cloned as part of a PointCloud. This is a limitation of the FFI bridge."
+        )
     }
 }
 
@@ -467,6 +490,13 @@ impl Point for PointNormal {
         ffi::set_height_point_normal(cloud, height);
     }
 
+    fn is_finite(&self) -> bool {
+        ffi::is_finite_point_normal(&self.inner)
+    }
+}
+
+// Implement PointCloudClone trait
+impl PointCloudClone for PointNormal {
     fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType> {
         ffi::clone_point_cloud_point_normal(cloud)
     }
@@ -586,10 +616,13 @@ pub struct PointXYZRGB {
     pub(crate) inner: ffi::PointXYZRGB,
 }
 
-// Clone is implemented but panics because points cannot be created directly
+// Clone is required by the Point trait, but individual points cannot be cloned
+// due to FFI limitations. Points can only exist within PointClouds.
 impl Clone for PointXYZRGB {
     fn clone(&self) -> Self {
-        panic!("Cannot clone PointXYZRGB - FFI type is opaque")
+        panic!(
+            "Cannot clone individual PointXYZRGB - points can only be cloned as part of a PointCloud. This is a limitation of the FFI bridge."
+        )
     }
 }
 
@@ -693,6 +726,13 @@ impl Point for PointXYZRGB {
         ffi::set_height_xyzrgb(cloud, height);
     }
 
+    fn is_finite(&self) -> bool {
+        ffi::is_finite_xyzrgb(&self.inner)
+    }
+}
+
+// Implement PointCloudClone trait
+impl PointCloudClone for PointXYZRGB {
     fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType> {
         ffi::clone_point_cloud_xyzrgb(cloud)
     }
@@ -778,7 +818,7 @@ impl Rgb for PointXYZRGB {
 }
 
 // Implement PointRgbOps trait for PointXYZRGB
-impl crate::traits::PointRgbOps for PointXYZRGB {
+impl PointRgbOps for PointXYZRGB {
     fn push_xyzrgb(cloud: Pin<&mut Self::CloudType>, x: f32, y: f32, z: f32, r: u8, g: u8, b: u8) {
         let coords = [x, y, z, r as f32, g as f32, b as f32];
         ffi::push_back_xyzrgb(cloud, &coords);

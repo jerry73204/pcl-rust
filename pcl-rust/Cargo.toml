@@ -83,3 +83,23 @@ required-features = ["registration"]
 [[example]]
 name = "keypoints_demo"
 required-features = ["keypoints"]
+
+[[example]]
+name = "visualization_demo"
+required-features = ["visualization"]
+
+[[example]]
+name = "visualization_generic_demo"
+required-features = ["visualization"]
+
+[[example]]
+name = "visualization_test"
+required-features = ["visualization"]
+
+[[example]]
+name = "test_correspondence"
+required-features = ["registration"]
+
+[[example]]
+name = "test_correspondence_simple"
+required-features = ["registration"]

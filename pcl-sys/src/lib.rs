@@ -284,6 +284,12 @@ pub mod ffi {
             nz: f32,
         ) -> UniquePtr<PointNormal>;
 
+        // Point clone functions - part of common
+        fn clone_point_xyz(point: &PointXYZ) -> UniquePtr<PointXYZ>;
+        fn clone_point_xyzi(point: &PointXYZI) -> UniquePtr<PointXYZI>;
+        fn clone_point_xyzrgb(point: &PointXYZRGB) -> UniquePtr<PointXYZRGB>;
+        fn clone_point_normal(point: &PointNormal) -> UniquePtr<PointNormal>;
+
         // Point cloud clone - part of common
         fn clone_point_cloud_xyz(cloud: &PointCloud_PointXYZ) -> UniquePtr<PointCloud_PointXYZ>;
 
@@ -315,6 +321,28 @@ pub mod ffi {
         fn is_finite_xyzi(point: &PointXYZI) -> bool;
         fn is_finite_xyzrgb(point: &PointXYZRGB) -> bool;
         fn is_finite_point_normal(point: &PointNormal) -> bool;
+
+        // Transform operations - part of common
+        fn transform_point_cloud_xyz(
+            cloud_in: &PointCloud_PointXYZ,
+            cloud_out: Pin<&mut PointCloud_PointXYZ>,
+            transform_matrix: &Vec<f32>,
+        );
+        fn transform_point_cloud_xyzi(
+            cloud_in: &PointCloud_PointXYZI,
+            cloud_out: Pin<&mut PointCloud_PointXYZI>,
+            transform_matrix: &Vec<f32>,
+        );
+        fn transform_point_cloud_xyzrgb(
+            cloud_in: &PointCloud_PointXYZRGB,
+            cloud_out: Pin<&mut PointCloud_PointXYZRGB>,
+            transform_matrix: &Vec<f32>,
+        );
+        fn transform_point_cloud_normal(
+            cloud_in: &PointCloud_PointNormal,
+            cloud_out: Pin<&mut PointCloud_PointNormal>,
+            transform_matrix: &Vec<f32>,
+        );
 
         // Search types - always available but functions conditionally compiled
         #[namespace = "pcl::search"]

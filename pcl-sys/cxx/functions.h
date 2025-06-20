@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common_functions.h"
 #include "common_impl.h"
 #include "features_impl.h"
 #include "keypoints_impl.h"
@@ -1431,5 +1432,7 @@ compute_sift_xyzi(pcl::SIFTKeypoint_PointXYZI_PointWithScale &sift);
 // Helper functions for keypoint data access
 rust::Vec<float> get_point_with_scale_coords(const pcl::PointWithScale &point);
 rust::Vec<float> get_point_xyzi_coords(const pcl::PointXYZI &point);
+
+// Point clone and transform functions are declared in common_functions.h
 
 #endif

@@ -1,4 +1,5 @@
 #include "pcl/common/common.h"
+#include "cxx/common_functions.h"
 #include "cxx/functions.h"
 #include <memory>
 #include <pcl/features/fpfh.h>
@@ -443,6 +444,11 @@ std::unique_ptr<pcl::PointXYZ> new_point_xyz(float x, float y, float z) {
   return point;
 }
 
+// Point clone functions
+std::unique_ptr<pcl::PointXYZ> clone_point_xyz(const pcl::PointXYZ &point) {
+  return std::make_unique<pcl::PointXYZ>(point);
+}
+
 std::unique_ptr<pcl::PointXYZI> new_point_xyzi(float x, float y, float z,
                                                float intensity) {
   auto point = std::make_unique<pcl::PointXYZI>();
@@ -451,6 +457,10 @@ std::unique_ptr<pcl::PointXYZI> new_point_xyzi(float x, float y, float z,
   point->z = z;
   point->intensity = intensity;
   return point;
+}
+
+std::unique_ptr<pcl::PointXYZI> clone_point_xyzi(const pcl::PointXYZI &point) {
+  return std::make_unique<pcl::PointXYZI>(point);
 }
 
 std::unique_ptr<pcl::PointXYZRGB>
@@ -465,6 +475,11 @@ new_point_xyzrgb(float x, float y, float z, uint8_t r, uint8_t g, uint8_t b) {
   return point;
 }
 
+std::unique_ptr<pcl::PointXYZRGB>
+clone_point_xyzrgb(const pcl::PointXYZRGB &point) {
+  return std::make_unique<pcl::PointXYZRGB>(point);
+}
+
 std::unique_ptr<pcl::PointNormal>
 new_point_normal(float x, float y, float z, float nx, float ny, float nz) {
   auto point = std::make_unique<pcl::PointNormal>();
@@ -475,6 +490,11 @@ new_point_normal(float x, float y, float z, float nx, float ny, float nz) {
   point->normal_y = ny;
   point->normal_z = nz;
   return point;
+}
+
+std::unique_ptr<pcl::PointNormal>
+clone_point_normal(const pcl::PointNormal &point) {
+  return std::make_unique<pcl::PointNormal>(point);
 }
 
 // Point cloud clone
@@ -623,3 +643,76 @@ get_pfh_signature_at(const pcl::PointCloud<pcl::PFHSignature125> &cloud,
 // Note: Bulk histogram access functions removed due to cxx Vec<Vec<T>>
 // limitation Use individual access functions get_fpfh_signature_at and
 // get_pfh_signature_at instead
+
+// Transform operations
+#include <pcl/common/transforms.h>
+
+void transform_point_cloud_xyz(const pcl::PointCloud<pcl::PointXYZ> &cloud_in,
+                               pcl::PointCloud<pcl::PointXYZ> &cloud_out,
+                               const rust::Vec<float> &transform_matrix) {
+  if (transform_matrix.size() != 16) {
+    return; // Invalid matrix size
+  }
+
+  Eigen::Matrix4f transform;
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      transform(i, j) = transform_matrix[i * 4 + j];
+    }
+  }
+
+  pcl::transformPointCloud(cloud_in, cloud_out, transform);
+}
+
+void transform_point_cloud_xyzi(const pcl::PointCloud<pcl::PointXYZI> &cloud_in,
+                                pcl::PointCloud<pcl::PointXYZI> &cloud_out,
+                                const rust::Vec<float> &transform_matrix) {
+  if (transform_matrix.size() != 16) {
+    return; // Invalid matrix size
+  }
+
+  Eigen::Matrix4f transform;
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      transform(i, j) = transform_matrix[i * 4 + j];
+    }
+  }
+
+  pcl::transformPointCloud(cloud_in, cloud_out, transform);
+}
+
+void transform_point_cloud_xyzrgb(
+    const pcl::PointCloud<pcl::PointXYZRGB> &cloud_in,
+    pcl::PointCloud<pcl::PointXYZRGB> &cloud_out,
+    const rust::Vec<float> &transform_matrix) {
+  if (transform_matrix.size() != 16) {
+    return; // Invalid matrix size
+  }
+
+  Eigen::Matrix4f transform;
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      transform(i, j) = transform_matrix[i * 4 + j];
+    }
+  }
+
+  pcl::transformPointCloud(cloud_in, cloud_out, transform);
+}
+
+void transform_point_cloud_normal(
+    const pcl::PointCloud<pcl::PointNormal> &cloud_in,
+    pcl::PointCloud<pcl::PointNormal> &cloud_out,
+    const rust::Vec<float> &transform_matrix) {
+  if (transform_matrix.size() != 16) {
+    return; // Invalid matrix size
+  }
+
+  Eigen::Matrix4f transform;
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      transform(i, j) = transform_matrix[i * 4 + j];
+    }
+  }
+
+  pcl::transformPointCloudWithNormals(cloud_in, cloud_out, transform);
+}

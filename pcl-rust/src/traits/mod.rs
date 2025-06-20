@@ -112,8 +112,7 @@ pub trait Point: Clone + Debug + 'static {
         Self: Sized;
 
     /// Create a new point cloud for this point type (legacy method)
-    fn create_cloud()
-    -> crate::error::PclResult<crate::common::point_cloud_generic::PointCloud<Self>>
+    fn create_cloud() -> crate::error::PclResult<crate::common::point_cloud::PointCloud<Self>>
     where
         Self: Sized,
         Self::CloudType: cxx::memory::UniquePtrTarget;
@@ -172,6 +171,12 @@ pub trait Point: Clone + Debug + 'static {
     /// Set the cloud height  
     fn cloud_set_height(cloud: Pin<&mut Self::CloudType>, height: u32);
 
+    /// Check if all point values are finite (not NaN or infinite)
+    fn is_finite(&self) -> bool;
+}
+
+/// Internal trait for cloud cloning operations (not exposed to users)
+pub(crate) trait PointCloudClone: Point {
     /// Clone the entire cloud
     fn cloud_clone(cloud: &Self::CloudType) -> cxx::UniquePtr<Self::CloudType>
     where

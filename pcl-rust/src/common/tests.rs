@@ -88,12 +88,14 @@ mod point_type_tests {
 
         // Test finite point
         cloud.push(1.0, 2.0, 3.0)?;
-        // Note: is_finite() is not exposed in the current FFI interface
-        // We can test that the point was added successfully
         assert_eq!(cloud.size(), 1);
 
-        // Test NaN, Infinity values - these might be handled by PCL internally
-        // The behavior when pushing non-finite values is undefined in the current FFI
+        // Note: Due to FFI limitations, we cannot directly access points from the cloud
+        // to test is_finite(). The is_finite() method is now available on point types
+        // (PointXYZ, PointXYZI, PointXYZRGB, PointNormal) but can only be used when
+        // points are obtained through other means (e.g., from algorithm outputs).
+
+        // TODO: Add is_finite() tests when we have a way to access individual points
 
         Ok(())
     }
@@ -366,16 +368,40 @@ mod copy_tests {
 /// TODO: Implement when transform operations are available in FFI
 #[cfg(test)]
 mod transform_tests {
+    use super::*;
+    use crate::common::{TransformBuilder, transform_point_cloud};
+
     #[test]
-    #[ignore = "Transform operations not yet implemented"]
-    fn test_transform_point_cloud() {
-        // TODO: Implement when transform operations are available
+    fn test_transform_point_cloud() -> PclResult<()> {
+        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        cloud.push(1.0, 0.0, 0.0)?;
+        cloud.push(0.0, 1.0, 0.0)?;
+        cloud.push(0.0, 0.0, 1.0)?;
+
+        // Test identity transform
+        let identity = TransformBuilder::new().build();
+        let transformed = transform_point_cloud(&cloud, &identity)?;
+        assert_eq!(transformed.size(), cloud.size());
+
+        // Test translation
+        let translation = TransformBuilder::translation(1.0, 2.0, 3.0).build();
+        let transformed = transform_point_cloud(&cloud, &translation)?;
+        assert_eq!(transformed.size(), cloud.size());
+
+        Ok(())
     }
 
     #[test]
-    #[ignore = "Transform operations not yet implemented"]
-    fn test_transform_point() {
-        // TODO: Implement when transform operations are available
+    fn test_transform_builders() -> PclResult<()> {
+        // Test rotation builders
+        let _rot_x = TransformBuilder::rotation_x(std::f32::consts::PI / 2.0).build();
+        let _rot_y = TransformBuilder::rotation_y(std::f32::consts::PI / 2.0).build();
+        let _rot_z = TransformBuilder::rotation_z(std::f32::consts::PI / 2.0).build();
+
+        // Test scale builder
+        let _scale = TransformBuilder::scale(2.0).build();
+
+        Ok(())
     }
 }
 
