@@ -49,11 +49,10 @@ fn demonstrate_point_clouds() -> PclResult<()> {
 
     cloud_xyz.resize(100)?;
     println!(
-        "  After resize(100): {} points, width: {}, height: {}, dense: {}",
+        "  After resize(100): {} points, width: {}, height: {}",
         cloud_xyz.size(),
         cloud_xyz.width(),
-        cloud_xyz.height(),
-        cloud_xyz.is_dense()
+        cloud_xyz.height()
     );
 
     cloud_xyz.clear()?;

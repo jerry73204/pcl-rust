@@ -7,7 +7,7 @@
 //! is above a threshold defined by the global mean distance plus stddev_mult times the
 //! global standard deviation.
 
-use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::PclResult;
 use crate::filters::Filter;
 use pcl_sys::{UniquePtr, ffi};
@@ -62,13 +62,13 @@ impl StatisticalOutlierRemovalXYZ {
     }
 }
 
-impl Filter<PointXYZ> for StatisticalOutlierRemovalXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
+impl Filter<XYZ> for StatisticalOutlierRemovalXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_cloud_statistical_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloud<PointXYZ>> {
+    fn filter(&mut self) -> PclResult<PointCloud<XYZ>> {
         let result = ffi::filter_statistical_xyz(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {
@@ -185,13 +185,13 @@ impl StatisticalOutlierRemovalXYZRGB {
     }
 }
 
-impl Filter<PointXYZRGB> for StatisticalOutlierRemovalXYZRGB {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
+impl Filter<XYZRGB> for StatisticalOutlierRemovalXYZRGB {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()> {
         ffi::set_input_cloud_statistical_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloud<PointXYZRGB>> {
+    fn filter(&mut self) -> PclResult<PointCloud<XYZRGB>> {
         let result = ffi::filter_statistical_xyzrgb(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {

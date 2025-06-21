@@ -25,9 +25,9 @@ fn kdtree_demo() -> PclResult<()> {
 
     // Create a PointXYZ cloud
     let mut xyz_cloud = PointCloud::<PointXYZ>::new()?;
-    xyz_cloud.push(1.0, 2.0, 3.0)?;
-    xyz_cloud.push(4.0, 5.0, 6.0)?;
-    xyz_cloud.push(7.0, 8.0, 9.0)?;
+    xyz_cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
+    xyz_cloud.push(PointXYZ::new(4.0, 5.0, 6.0))?;
+    xyz_cloud.push(PointXYZ::new(7.0, 8.0, 9.0))?;
 
     // Create a generic KdTree for PointXYZ
     let mut xyz_kdtree = KdTree::<PointXYZ>::new()?;
@@ -39,9 +39,9 @@ fn kdtree_demo() -> PclResult<()> {
 
     // Create a PointXYZRGB cloud
     let mut rgb_cloud = PointCloud::<PointXYZRGB>::new()?;
-    rgb_cloud.push(1.0, 2.0, 3.0, 255, 0, 0)?;
-    rgb_cloud.push(4.0, 5.0, 6.0, 0, 255, 0)?;
-    rgb_cloud.push(7.0, 8.0, 9.0, 0, 0, 255)?;
+    rgb_cloud.push(PointXYZRGB::new(1.0, 2.0, 3.0, 255, 0, 0))?;
+    rgb_cloud.push(PointXYZRGB::new(4.0, 5.0, 6.0, 0, 255, 0))?;
+    rgb_cloud.push(PointXYZRGB::new(7.0, 8.0, 9.0, 0, 0, 255))?;
 
     // Create a generic KdTree for PointXYZRGB
     let mut rgb_kdtree = KdTree::<PointXYZRGB>::new()?;
@@ -67,7 +67,7 @@ fn filter_demo() -> PclResult<()> {
     let mut cloud = PointCloud::<PointXYZ>::new()?;
     for i in 0..100 {
         for j in 0..100 {
-            cloud.push(i as f32 * 0.01, j as f32 * 0.01, 0.0)?;
+            cloud.push(PointXYZ::new(i as f32 * 0.01, j as f32 * 0.01, 0.0))?;
         }
     }
     println!("✓ Created dense cloud with {} points", cloud.size());
@@ -90,14 +90,14 @@ fn filter_demo() -> PclResult<()> {
     let mut rgb_cloud = PointCloud::<PointXYZRGB>::new()?;
     for i in 0..50 {
         for j in 0..50 {
-            rgb_cloud.push(
+            rgb_cloud.push(PointXYZRGB::new(
                 i as f32 * 0.02,
                 j as f32 * 0.02,
                 0.0,
                 (i * 5) as u8,
                 (j * 5) as u8,
                 128,
-            )?;
+            ))?;
         }
     }
 
@@ -115,7 +115,7 @@ fn filter_demo() -> PclResult<()> {
 }
 
 // Generic function that works with any point cloud type
-fn print_cloud_info<T: pcl::Point>(cloud: &PointCloud<T>)
+fn print_cloud_info<T: pcl::common::point_types::PointType>(cloud: &PointCloud<T>)
 where
     T::CloudType: cxx::memory::UniquePtrTarget,
 {
@@ -124,5 +124,5 @@ where
     println!("  Size: {}", cloud.size());
     println!("  Empty: {}", cloud.empty());
     println!("  Organized: {}", cloud.is_organized());
-    println!("  Dense: {}", cloud.is_dense());
+    // Note: is_dense() is not available in the new API
 }

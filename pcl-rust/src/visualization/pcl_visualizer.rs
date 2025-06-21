@@ -173,15 +173,23 @@ impl PclVisualizer {
     /// Add a sphere to the viewer
     pub fn add_sphere(
         &mut self,
-        center: &PointXYZ,
+        center: &crate::common::PointXYZ,
         radius: f64,
         r: f64,
         g: f64,
         b: f64,
         id: &str,
     ) -> PclResult<()> {
-        let result =
-            ffi::add_sphere_xyz(self.inner.pin_mut(), center.as_ffi(), radius, r, g, b, id);
+        let ffi_point = ffi::new_point_xyz(center.x, center.y, center.z);
+        let result = ffi::add_sphere_xyz(
+            self.inner.pin_mut(),
+            ffi_point.as_ref().unwrap(),
+            radius,
+            r,
+            g,
+            b,
+            id,
+        );
         if result != 0 {
             return Err(PclError::VisualizationError {
                 message: format!("Failed to add sphere '{}'", id),

@@ -22,7 +22,7 @@ pub trait OctreeConfiguration {
 /// Trait for octree structures that support voxel operations
 pub trait VoxelOperations {
     /// Find all points in the same voxel as the query point
-    fn voxel_search(&mut self, point: &crate::PointXYZ) -> PclResult<Vec<i32>>;
+    fn voxel_search(&mut self, point: &crate::common::PointXYZ) -> PclResult<Vec<i32>>;
 }
 
 /// Trait for octree structures that can be cleared

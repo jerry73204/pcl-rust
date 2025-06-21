@@ -46,7 +46,7 @@ mod error_tests;
 pub use common::{
     PointCloud, PointCloudNormal, PointCloudNormalBuilder, PointCloudXYZ, PointCloudXYZBuilder,
     PointCloudXYZI, PointCloudXYZRGB, PointCloudXYZRGBBuilder, PointNormal, PointXYZ, PointXYZI,
-    PointXYZRGB,
+    PointXYZRGB, XYZ, XYZI, XYZRGB,
 };
 pub use error::{PclError, PclResult};
 // Re-export commonly used traits

@@ -4,8 +4,8 @@
 //! histogram visualization, range images, and point cloud comparisons.
 
 use crate::common::PointCloud;
+use crate::common::point_types::PointType;
 use crate::error::{PclError, PclResult};
-use crate::traits::Point;
 use crate::visualization::{PclVisualizer, VisualizationControl};
 use cxx::memory::UniquePtrTarget;
 
@@ -101,7 +101,7 @@ impl ComparisonViewer {
     }
 
     /// Add clouds to compare side by side
-    pub fn add_comparison<T: Point>(
+    pub fn add_comparison<T: PointType>(
         &mut self,
         cloud_left: &PointCloud<T>,
         cloud_right: &PointCloud<T>,
@@ -164,7 +164,7 @@ impl RangeImageVisualizer {
     }
 
     /// Display a range image from a point cloud
-    pub fn show_range_image<T: Point>(
+    pub fn show_range_image<T: PointType>(
         &mut self,
         cloud: &PointCloud<T>,
         angular_resolution: f32,
@@ -216,7 +216,7 @@ pub struct FeatureVisualizer;
 
 impl FeatureVisualizer {
     /// Visualize point cloud with feature values as colors
-    pub fn visualize_features<T: Point>(
+    pub fn visualize_features<T: PointType>(
         viewer: &mut PclVisualizer,
         cloud: &PointCloud<T>,
         features: &[f32],
@@ -357,7 +357,7 @@ impl AnimationController {
     }
 
     /// Play animation of point cloud sequence
-    pub fn play_sequence<T: Point, F>(
+    pub fn play_sequence<T: PointType, F>(
         &mut self,
         clouds: &[PointCloud<T>],
         id: &str,

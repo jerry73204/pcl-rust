@@ -4,7 +4,6 @@
 //! that works with any point type implementing the required traits.
 
 use pcl::error::PclResult;
-use pcl::traits::{Point, Rgb, Xyz};
 use pcl::{PointCloud, PointXYZ, PointXYZRGB};
 
 fn main() -> PclResult<()> {
@@ -31,14 +30,14 @@ fn test_generic_creation() -> PclResult<()> {
     let xyz_cloud: PointCloud<PointXYZ> = PointCloud::new()?;
     println!(
         "   Created PointCloud<PointXYZ> - size: {}",
-        xyz_cloud.len()
+        xyz_cloud.size()
     );
 
     // Create PointCloud<PointXYZRGB> using the generic API
     let xyzrgb_cloud: PointCloud<PointXYZRGB> = PointCloud::new()?;
     println!(
         "   Created PointCloud<PointXYZRGB> - size: {}",
-        xyzrgb_cloud.len()
+        xyzrgb_cloud.size()
     );
 
     println!("   ✓ Generic creation works!\n");
@@ -76,18 +75,18 @@ fn test_builder_pattern() -> PclResult<()> {
     // Build PointCloudXYZ using the existing concrete builder
     let mut xyz_cloud = PointCloudXYZ::new()?;
     xyz_cloud.reserve(100)?;
-    xyz_cloud.push(1.0, 2.0, 3.0)?;
-    xyz_cloud.push(4.0, 5.0, 6.0)?;
-    xyz_cloud.push(7.0, 8.0, 9.0)?;
+    xyz_cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
+    xyz_cloud.push(PointXYZ::new(4.0, 5.0, 6.0))?;
+    xyz_cloud.push(PointXYZ::new(7.0, 8.0, 9.0))?;
 
     println!("   Built PointXYZ cloud with {} points", xyz_cloud.size());
 
     // Build PointCloudXYZRGB using the existing concrete builder
     let mut xyzrgb_cloud = PointCloudXYZRGB::new()?;
     xyzrgb_cloud.reserve(100)?;
-    xyzrgb_cloud.push(1.0, 2.0, 3.0, 255, 0, 0)?; // Red point
-    xyzrgb_cloud.push(4.0, 5.0, 6.0, 0, 255, 0)?; // Green point
-    xyzrgb_cloud.push(7.0, 8.0, 9.0, 0, 0, 255)?; // Blue point
+    xyzrgb_cloud.push(PointXYZRGB::new(1.0, 2.0, 3.0, 255, 0, 0))?; // Red point
+    xyzrgb_cloud.push(PointXYZRGB::new(4.0, 5.0, 6.0, 0, 255, 0))?; // Green point
+    xyzrgb_cloud.push(PointXYZRGB::new(7.0, 8.0, 9.0, 0, 0, 255))?; // Blue point
 
     println!(
         "   Built PointXYZRGB cloud with {} points",
@@ -103,11 +102,11 @@ fn test_builder_pattern() -> PclResult<()> {
 }
 
 /// Generic algorithm that works with any point type having XYZ coordinates
-fn analyze_cloud<T: Point + Xyz>(cloud: &PointCloud<T>) -> PclResult<String>
+fn analyze_cloud<T: pcl::common::point_types::PointType>(cloud: &PointCloud<T>) -> PclResult<String>
 where
     T::CloudType: cxx::memory::UniquePtrTarget,
 {
-    let mut info = format!("type={}, size={}", T::type_name(), cloud.len());
+    let mut info = format!("type={}, size={}", T::type_name(), cloud.size());
 
     if cloud.is_organized() {
         info.push_str(&format!(", organized={}x{}", cloud.width(), cloud.height()));
@@ -115,17 +114,15 @@ where
         info.push_str(", unorganized");
     }
 
-    if cloud.is_dense() {
-        info.push_str(", dense");
-    } else {
-        info.push_str(", sparse");
-    }
+    // Note: is_dense() is not available in the new API
 
     Ok(info)
 }
 
 /// Generic algorithm that works with any point type having both XYZ and RGB
-fn _analyze_colored_cloud<T: Point + Xyz + Rgb>(cloud: &PointCloud<T>) -> PclResult<String>
+fn _analyze_colored_cloud<T: pcl::common::point_types::PointType>(
+    cloud: &PointCloud<T>,
+) -> PclResult<String>
 where
     T::CloudType: cxx::memory::UniquePtrTarget,
 {
@@ -137,10 +134,11 @@ where
 /// Note: Direct point access via at() is not available due to FFI limitations
 /// This is left here as an example of what could be done if direct access was available
 #[allow(dead_code)]
-fn _compute_centroid<T: Point + Xyz>(cloud: &PointCloud<T>) -> PclResult<(f32, f32, f32)>
+fn _compute_centroid<T: pcl::common::point_types::PointType>(
+    cloud: &PointCloud<T>,
+) -> PclResult<(f32, f32, f32)>
 where
     T::CloudType: cxx::memory::UniquePtrTarget,
-    T::FfiPointType: cxx::memory::UniquePtrTarget,
 {
     if cloud.empty() {
         return Ok((0.0, 0.0, 0.0));
@@ -156,7 +154,7 @@ where
     let mut sum_y = 0.0;
     let mut sum_z = 0.0;
 
-    for i in 0..cloud.len() {
+    for i in 0..cloud.size() {
         let point = cloud.at(i)?;
         let (x, y, z) = point.xyz();
         sum_x += x;
@@ -164,7 +162,7 @@ where
         sum_z += z;
     }
 
-    let count = cloud.len() as f32;
+    let count = cloud.size() as f32;
     Ok((sum_x / count, sum_y / count, sum_z / count))
     */
 

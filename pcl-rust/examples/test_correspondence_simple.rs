@@ -1,6 +1,6 @@
 //! Simple test for correspondence estimation
 
-use pcl::common::PointCloudXYZ;
+use pcl::common::{PointCloudXYZ, PointXYZ};
 use pcl::error::PclResult;
 use pcl::registration::correspondence::CorrespondenceEstimation;
 
@@ -16,9 +16,9 @@ fn main() -> PclResult<()> {
         for j in 0..3 {
             let x = i as f32 * 0.1;
             let y = j as f32 * 0.1;
-            source.push(x, y, 0.0)?;
+            source.push(PointXYZ::new(x, y, 0.0))?;
             // Target is translated by (0.05, 0.05, 0.0)
-            target.push(x + 0.05, y + 0.05, 0.0)?;
+            target.push(PointXYZ::new(x + 0.05, y + 0.05, 0.0))?;
         }
     }
 

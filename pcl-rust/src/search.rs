@@ -55,7 +55,8 @@ impl KdTreeXYZ {
             ));
         }
 
-        let indices = ffi::nearest_k_search_xyz(&self.inner, &point.inner, k);
+        let ffi_point = crate::common::point_types::owned_to_ffi_xyz(*point);
+        let indices = ffi::nearest_k_search_xyz(&self.inner, ffi_point.as_ref().unwrap(), k);
         Ok(indices)
     }
 
@@ -77,7 +78,8 @@ impl KdTreeXYZ {
             ));
         }
 
-        let indices = ffi::radius_search_xyz(&self.inner, &point.inner, radius);
+        let ffi_point = crate::common::point_types::owned_to_ffi_xyz(*point);
+        let indices = ffi::radius_search_xyz(&self.inner, ffi_point.as_ref().unwrap(), radius);
         Ok(indices)
     }
 
@@ -203,7 +205,8 @@ impl KdTreeXYZI {
             ));
         }
 
-        let indices = ffi::nearest_k_search_xyzi(&self.inner, &point.inner, k);
+        let ffi_point = crate::common::point_types::owned_to_ffi_xyzi(*point);
+        let indices = ffi::nearest_k_search_xyzi(&self.inner, ffi_point.as_ref().unwrap(), k);
         Ok(indices)
     }
 
@@ -225,7 +228,8 @@ impl KdTreeXYZI {
             ));
         }
 
-        let indices = ffi::radius_search_xyzi(&self.inner, &point.inner, radius);
+        let ffi_point = crate::common::point_types::owned_to_ffi_xyzi(*point);
+        let indices = ffi::radius_search_xyzi(&self.inner, ffi_point.as_ref().unwrap(), radius);
         Ok(indices)
     }
 
@@ -351,7 +355,8 @@ impl KdTreeXYZRGB {
             ));
         }
 
-        let indices = ffi::nearest_k_search_xyzrgb(&self.inner, &point.inner, k);
+        let ffi_point = crate::common::point_types::owned_to_ffi_xyzrgb(*point);
+        let indices = ffi::nearest_k_search_xyzrgb(&self.inner, ffi_point.as_ref().unwrap(), k);
         Ok(indices)
     }
 
@@ -373,7 +378,8 @@ impl KdTreeXYZRGB {
             ));
         }
 
-        let indices = ffi::radius_search_xyzrgb(&self.inner, &point.inner, radius);
+        let ffi_point = crate::common::point_types::owned_to_ffi_xyzrgb(*point);
+        let indices = ffi::radius_search_xyzrgb(&self.inner, ffi_point.as_ref().unwrap(), radius);
         Ok(indices)
     }
 

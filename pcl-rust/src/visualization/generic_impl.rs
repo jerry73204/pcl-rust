@@ -3,7 +3,8 @@
 //! This module provides concrete implementations of generic visualization traits
 //! for PCL's visualization classes.
 
-use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
+use crate::common::point_types::PointType;
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::{PclError, PclResult};
 use crate::traits::Point;
 use crate::visualization::{
@@ -14,7 +15,7 @@ use crate::visualization::{
 use cxx::memory::UniquePtrTarget;
 
 // Marker trait for points that can be visualized
-pub trait VisualizablePoint: Point {
+pub trait VisualizablePoint: PointType {
     /// Add this point cloud to a PclVisualizer
     fn add_to_visualizer(
         visualizer: &mut PclVisualizer,
@@ -22,7 +23,7 @@ pub trait VisualizablePoint: Point {
         id: &str,
     ) -> PclResult<()>
     where
-        Self::CloudType: UniquePtrTarget;
+        <Self as PointType>::CloudType: UniquePtrTarget;
 
     /// Update this point cloud in a PclVisualizer
     fn update_in_visualizer(
@@ -31,7 +32,7 @@ pub trait VisualizablePoint: Point {
         id: &str,
     ) -> PclResult<()>
     where
-        Self::CloudType: UniquePtrTarget;
+        <Self as PointType>::CloudType: UniquePtrTarget;
 
     /// Add this point cloud to a CloudViewer
     fn add_to_cloud_viewer(
@@ -40,11 +41,11 @@ pub trait VisualizablePoint: Point {
         id: &str,
     ) -> PclResult<()>
     where
-        Self::CloudType: UniquePtrTarget;
+        <Self as PointType>::CloudType: UniquePtrTarget;
 }
 
-// Implement VisualizablePoint for PointXYZ
-impl VisualizablePoint for PointXYZ {
+// Implement VisualizablePoint for XYZ marker type
+impl VisualizablePoint for crate::common::point_types::XYZ {
     fn add_to_visualizer(
         visualizer: &mut PclVisualizer,
         cloud: &PointCloud<Self>,
@@ -70,8 +71,8 @@ impl VisualizablePoint for PointXYZ {
     }
 }
 
-// Implement VisualizablePoint for PointXYZRGB
-impl VisualizablePoint for PointXYZRGB {
+// Implement VisualizablePoint for XYZRGB marker type
+impl VisualizablePoint for crate::common::point_types::XYZRGB {
     fn add_to_visualizer(
         visualizer: &mut PclVisualizer,
         cloud: &PointCloud<Self>,
@@ -100,7 +101,7 @@ impl VisualizablePoint for PointXYZRGB {
 // Implement generic Viewer trait for PclVisualizer
 impl<T: VisualizablePoint> Viewer<T> for PclVisualizer
 where
-    T::CloudType: UniquePtrTarget,
+    <T as PointType>::CloudType: UniquePtrTarget,
 {
     fn show_cloud(&mut self, cloud: &PointCloud<T>, id: &str) -> PclResult<()> {
         T::add_to_visualizer(self, cloud, id)
@@ -118,7 +119,7 @@ where
 // Implement generic Viewer trait for CloudViewer
 impl<T: VisualizablePoint> Viewer<T> for CloudViewer
 where
-    T::CloudType: UniquePtrTarget,
+    <T as PointType>::CloudType: UniquePtrTarget,
 {
     fn show_cloud(&mut self, cloud: &PointCloud<T>, id: &str) -> PclResult<()> {
         T::add_to_cloud_viewer(self, cloud, id)
@@ -141,7 +142,7 @@ where
 // Implement AdvancedViewer for PclVisualizer
 impl<T: VisualizablePoint> AdvancedViewer<T> for PclVisualizer
 where
-    T::CloudType: UniquePtrTarget,
+    <T as PointType>::CloudType: UniquePtrTarget,
 {
     fn set_point_size(&mut self, id: &str, size: f64) -> PclResult<()> {
         self.set_point_size(id, size)
@@ -237,7 +238,7 @@ impl MultiCloudViewer {
         id: &str,
     ) -> PclResult<()>
     where
-        T::CloudType: UniquePtrTarget,
+        <T as PointType>::CloudType: UniquePtrTarget,
     {
         T::add_to_visualizer(&mut self.viewer, cloud, id)
     }
@@ -249,7 +250,7 @@ impl MultiCloudViewer {
         id: &str,
     ) -> PclResult<()>
     where
-        T::CloudType: UniquePtrTarget,
+        <T as PointType>::CloudType: UniquePtrTarget,
     {
         T::update_in_visualizer(&mut self.viewer, cloud, id)
     }

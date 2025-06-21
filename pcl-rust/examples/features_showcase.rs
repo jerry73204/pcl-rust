@@ -1,6 +1,6 @@
 //! Comprehensive features module showcase
 
-use pcl::common::PointCloudXYZ;
+use pcl::common::{PointCloudXYZ, PointXYZ};
 use pcl::error::PclResult;
 use pcl::features::{
     FpfhEstimation, NormalEstimation, NormalEstimationOmp, PfhEstimation,
@@ -18,7 +18,7 @@ fn main() -> PclResult<()> {
             let y = j as f32 * 0.05;
             let z = ((x * 20.0).sin() + (y * 20.0).cos()) * 0.02
                 + (rand::random::<f32>() - 0.5) * 0.005; // Add small random noise
-            cloud.push(x, y, z)?;
+            cloud.push(PointXYZ::new(x, y, z))?;
         }
     }
     println!("Created test point cloud with {} points", cloud.size());

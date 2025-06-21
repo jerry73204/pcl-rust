@@ -4,7 +4,7 @@
 //! within a given search radius. It's useful for removing isolated points or small
 //! clusters of points that are likely to be noise.
 
-use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::PclResult;
 use crate::filters::Filter;
 use pcl_sys::{UniquePtr, ffi};
@@ -58,13 +58,13 @@ impl RadiusOutlierRemovalXYZ {
     }
 }
 
-impl Filter<PointXYZ> for RadiusOutlierRemovalXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
+impl Filter<XYZ> for RadiusOutlierRemovalXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_cloud_radius_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloud<PointXYZ>> {
+    fn filter(&mut self) -> PclResult<PointCloud<XYZ>> {
         let result = ffi::filter_radius_xyz(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {
@@ -181,13 +181,13 @@ impl RadiusOutlierRemovalXYZRGB {
     }
 }
 
-impl Filter<PointXYZRGB> for RadiusOutlierRemovalXYZRGB {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
+impl Filter<XYZRGB> for RadiusOutlierRemovalXYZRGB {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()> {
         ffi::set_input_cloud_radius_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloud<PointXYZRGB>> {
+    fn filter(&mut self) -> PclResult<PointCloud<XYZRGB>> {
         let result = ffi::filter_radius_xyzrgb(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {

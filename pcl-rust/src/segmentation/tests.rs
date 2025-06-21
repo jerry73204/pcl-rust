@@ -1,60 +1,58 @@
 //! Comprehensive tests for segmentation algorithms
 
-use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
+use crate::common::{PointCloud, PointXYZ, PointXYZRGB, XYZ, XYZRGB};
 use crate::error::PclResult;
 use crate::segmentation::*;
 
 /// Create a simple test cloud with known structure
-fn create_test_cloud_xyz() -> PclResult<PointCloud<PointXYZ>> {
+fn create_test_cloud_xyz() -> PclResult<PointCloud<XYZ>> {
     let mut cloud = PointCloud::new()?;
 
     // Create a simple plane at z=0
     for x in -5..=5 {
         for y in -5..=5 {
-            PointCloud::<PointXYZ>::push(&mut cloud, x as f32 * 0.1, y as f32 * 0.1, 0.0)?;
+            cloud.push(PointXYZ::new(x as f32 * 0.1, y as f32 * 0.1, 0.0))?;
         }
     }
 
     // Add some points above the plane (objects)
     for i in 0..20 {
         let angle = i as f32 * std::f32::consts::PI / 10.0;
-        PointCloud::<PointXYZ>::push(&mut cloud, angle.cos() * 0.3, angle.sin() * 0.3, 0.5)?;
+        cloud.push(PointXYZ::new(angle.cos() * 0.3, angle.sin() * 0.3, 0.5))?;
     }
 
     Ok(cloud)
 }
 
 /// Create a colored test cloud
-fn create_test_cloud_xyzrgb() -> PclResult<PointCloud<PointXYZRGB>> {
+fn create_test_cloud_xyzrgb() -> PclResult<PointCloud<XYZRGB>> {
     let mut cloud = PointCloud::new()?;
 
     // Red region
     for x in 0..10 {
         for y in 0..10 {
-            PointCloud::<PointXYZRGB>::push(
-                &mut cloud,
+            cloud.push(PointXYZRGB::new(
                 x as f32 * 0.1,
                 y as f32 * 0.1,
                 0.0,
                 255,
                 0,
                 0,
-            )?;
+            ))?;
         }
     }
 
     // Green region
     for x in 0..10 {
         for y in 0..10 {
-            PointCloud::<PointXYZRGB>::push(
-                &mut cloud,
+            cloud.push(PointXYZRGB::new(
                 x as f32 * 0.1 + 1.5,
                 y as f32 * 0.1,
                 0.0,
                 0,
                 255,
                 0,
-            )?;
+            ))?;
         }
     }
 
@@ -160,7 +158,7 @@ mod sac_segmentation_tests {
 
     #[test]
     fn test_sac_empty_cloud() {
-        let cloud = PointCloud::<PointXYZ>::new().unwrap();
+        let cloud = PointCloud::<XYZ>::new().unwrap();
         let mut sac = SacSegmentationXYZ::new().unwrap();
 
         // Should error on empty cloud
@@ -516,12 +514,13 @@ mod integration_tests {
     #[test]
     fn test_segmentation_pipeline() {
         // Create a more complex test cloud
-        let mut cloud = PointCloud::<PointXYZ>::new().unwrap();
+        let mut cloud = PointCloud::<XYZ>::new().unwrap();
 
         // Ground plane
         for x in -20..=20 {
             for y in -20..=20 {
-                PointCloud::<PointXYZ>::push(&mut cloud, x as f32 * 0.05, y as f32 * 0.05, 0.0)
+                cloud
+                    .push(PointXYZ::new(x as f32 * 0.05, y as f32 * 0.05, 0.0))
                     .unwrap();
             }
         }
@@ -530,13 +529,13 @@ mod integration_tests {
         for x in 0..5 {
             for y in 0..5 {
                 for z in 0..10 {
-                    PointCloud::<PointXYZ>::push(
-                        &mut cloud,
-                        x as f32 * 0.02,
-                        y as f32 * 0.02,
-                        z as f32 * 0.02 + 0.1,
-                    )
-                    .unwrap();
+                    cloud
+                        .push(PointXYZ::new(
+                            x as f32 * 0.02,
+                            y as f32 * 0.02,
+                            z as f32 * 0.02 + 0.1,
+                        ))
+                        .unwrap();
                 }
             }
         }

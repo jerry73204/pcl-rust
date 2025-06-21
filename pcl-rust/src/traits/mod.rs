@@ -112,7 +112,7 @@ pub trait Point: Clone + Debug + 'static {
         Self: Sized;
 
     /// Create a new point cloud for this point type (legacy method)
-    fn create_cloud() -> crate::error::PclResult<crate::common::point_cloud::PointCloud<Self>>
+    fn create_cloud() -> crate::error::PclResult<Self>
     where
         Self: Sized,
         Self::CloudType: cxx::memory::UniquePtrTarget;

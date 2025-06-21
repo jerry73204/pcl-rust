@@ -12,9 +12,35 @@ pub mod transform;
 mod tests;
 
 pub use builders::{PointCloudNormalBuilder, PointCloudXYZBuilder, PointCloudXYZRGBBuilder};
-// Export generic PointCloud and type aliases
-pub use point_cloud::{
-    PointCloud, PointCloudNormal, PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB,
-};
-pub use point_types::*;
+// Export the new PointCloud with marker types
+pub use point_cloud::{PointCloud, PointCloudIter};
 pub use transform::{TransformBuilder, transform_point_cloud};
+
+// New point type system - these are the primary types now
+pub use point_types::{
+    Normal,
+    PointNormal,
+    // Compatibility trait
+    PointNormalOps,
+    PointNormalRef,
+    PointType,
+    PointXYZ,
+    PointXYZI,
+    PointXYZIRef,
+    PointXYZRGB,
+    PointXYZRGBRef,
+    // Reference types for compatibility
+    PointXYZRef,
+    ToPointOwned,
+    XYZ,
+    XYZI,
+    XYZRGB,
+};
+
+// Compatibility aliases for the old API - these will eventually be removed
+
+// Type aliases for old PointCloud API
+pub type PointCloudXYZ = PointCloud<XYZ>;
+pub type PointCloudXYZI = PointCloud<XYZI>;
+pub type PointCloudXYZRGB = PointCloud<XYZRGB>;
+pub type PointCloudNormal = PointCloud<Normal>;

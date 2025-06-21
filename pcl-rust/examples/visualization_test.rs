@@ -52,7 +52,7 @@ fn generate_helix(
         let g = (255.0 * (1.0 - t)) as u8;
         let b = (255.0 * (0.5 + 0.5 * angle.sin())) as u8;
 
-        builder = builder.add_point_rgb(x as f32, y as f32, z as f32, r, g, b);
+        builder = builder.point(x as f32, y as f32, z as f32, r, g, b);
     }
 
     builder.build()
@@ -102,7 +102,7 @@ fn generate_torus(
             let y = (major_radius + minor_radius * phi.cos()) * theta.sin();
             let z = minor_radius * phi.sin();
 
-            builder = builder.add_point_rgb(x as f32, y as f32, z as f32, r, g, b);
+            builder = builder.point(x as f32, y as f32, z as f32, r, g, b);
         }
     }
 

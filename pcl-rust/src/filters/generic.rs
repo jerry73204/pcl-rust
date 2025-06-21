@@ -13,7 +13,7 @@ use std::marker::PhantomData;
 ///
 /// This trait defines the common interface for all filters that operate
 /// on point clouds, transforming an input cloud to an output cloud.
-pub trait Filter<T: Point>
+pub trait Filter<T: crate::common::point_types::PointType>
 where
     T::CloudType: UniquePtrTarget,
 {
@@ -122,13 +122,18 @@ where
     }
 }
 
-impl<T: VoxelGridPoint> Filter<T> for VoxelGrid<T>
+impl<T: VoxelGridPoint + crate::common::point_types::PointType> Filter<T> for VoxelGrid<T>
 where
     T::VoxelGridType: UniquePtrTarget,
-    T::CloudType: UniquePtrTarget,
+    <T as crate::traits::Point>::CloudType: UniquePtrTarget,
 {
     fn set_input_cloud(&mut self, cloud: &PointCloud<T>) -> PclResult<()> {
-        T::set_input_cloud_voxel(self.inner.pin_mut(), cloud.inner());
+        // SAFETY: Point::CloudType and PointType::CloudType are the same type in our compatibility implementation
+        let inner = unsafe {
+            &*(cloud.inner() as *const <T as crate::common::point_types::PointType>::CloudType
+                as *const <T as crate::traits::Point>::CloudType)
+        };
+        T::set_input_cloud_voxel(self.inner.pin_mut(), inner);
         Ok(())
     }
 
@@ -139,7 +144,14 @@ where
                 message: "VoxelGrid filter failed".to_string(),
             });
         }
-        Ok(PointCloud::from_unique_ptr(result))
+        // SAFETY: Point::CloudType and PointType::CloudType are the same type in our compatibility implementation
+        let converted_result = unsafe {
+            std::mem::transmute::<
+                cxx::UniquePtr<<T as crate::traits::Point>::CloudType>,
+                cxx::UniquePtr<<T as crate::common::point_types::PointType>::CloudType>,
+            >(result)
+        };
+        Ok(PointCloud::from_unique_ptr(converted_result))
     }
 }
 
@@ -233,13 +245,18 @@ where
     }
 }
 
-impl<T: PassThroughPoint> Filter<T> for PassThrough<T>
+impl<T: PassThroughPoint + crate::common::point_types::PointType> Filter<T> for PassThrough<T>
 where
     T::PassThroughType: UniquePtrTarget,
-    T::CloudType: UniquePtrTarget,
+    <T as crate::traits::Point>::CloudType: UniquePtrTarget,
 {
     fn set_input_cloud(&mut self, cloud: &PointCloud<T>) -> PclResult<()> {
-        T::set_input_cloud_pass_through(self.inner.pin_mut(), cloud.inner());
+        // SAFETY: Point::CloudType and PointType::CloudType are the same type in our compatibility implementation
+        let inner = unsafe {
+            &*(cloud.inner() as *const <T as crate::common::point_types::PointType>::CloudType
+                as *const <T as crate::traits::Point>::CloudType)
+        };
+        T::set_input_cloud_pass_through(self.inner.pin_mut(), inner);
         Ok(())
     }
 
@@ -250,7 +267,14 @@ where
                 message: "PassThrough filter failed".to_string(),
             });
         }
-        Ok(PointCloud::from_unique_ptr(result))
+        // SAFETY: Point::CloudType and PointType::CloudType are the same type in our compatibility implementation
+        let converted_result = unsafe {
+            std::mem::transmute::<
+                cxx::UniquePtr<<T as crate::traits::Point>::CloudType>,
+                cxx::UniquePtr<<T as crate::common::point_types::PointType>::CloudType>,
+            >(result)
+        };
+        Ok(PointCloud::from_unique_ptr(converted_result))
     }
 }
 

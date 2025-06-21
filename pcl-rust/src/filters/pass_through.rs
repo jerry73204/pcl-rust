@@ -3,7 +3,7 @@
 //! The PassThrough filter removes points outside a specified range along a given field.
 //! This is useful for cropping point clouds or removing outliers in specific dimensions.
 
-use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::{PclError, PclResult};
 use crate::filters::Filter;
 use pcl_sys::{UniquePtr, ffi};
@@ -75,13 +75,13 @@ impl Default for PassThroughXYZ {
     }
 }
 
-impl Filter<PointXYZ> for PassThroughXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
+impl Filter<XYZ> for PassThroughXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_cloud_pass_xyz(self.filter.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloud<PointXYZ>> {
+    fn filter(&mut self) -> PclResult<PointCloud<XYZ>> {
         let result = ffi::filter_pass_xyz(self.filter.pin_mut());
         if result.is_null() {
             Err(PclError::FilterError("Filter operation failed".to_string()))
@@ -158,13 +158,13 @@ impl Default for PassThroughXYZRGB {
     }
 }
 
-impl Filter<PointXYZRGB> for PassThroughXYZRGB {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
+impl Filter<XYZRGB> for PassThroughXYZRGB {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()> {
         ffi::set_input_cloud_pass_xyzrgb(self.filter.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloud<PointXYZRGB>> {
+    fn filter(&mut self) -> PclResult<PointCloud<XYZRGB>> {
         let result = ffi::filter_pass_xyzrgb(self.filter.pin_mut());
         if result.is_null() {
             Err(PclError::FilterError("Filter operation failed".to_string()))

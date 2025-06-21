@@ -290,6 +290,26 @@ pub mod ffi {
         fn clone_point_xyzrgb(point: &PointXYZRGB) -> UniquePtr<PointXYZRGB>;
         fn clone_point_normal(point: &PointNormal) -> UniquePtr<PointNormal>;
 
+        // Point creation from values - part of common
+        fn create_point_xyz(x: f32, y: f32, z: f32) -> UniquePtr<PointXYZ>;
+        fn create_point_xyzi(x: f32, y: f32, z: f32, intensity: f32) -> UniquePtr<PointXYZI>;
+        fn create_point_xyzrgb(
+            x: f32,
+            y: f32,
+            z: f32,
+            r: u8,
+            g: u8,
+            b: u8,
+        ) -> UniquePtr<PointXYZRGB>;
+        fn create_point_normal(
+            x: f32,
+            y: f32,
+            z: f32,
+            nx: f32,
+            ny: f32,
+            nz: f32,
+        ) -> UniquePtr<PointNormal>;
+
         // Point cloud clone - part of common
         fn clone_point_cloud_xyz(cloud: &PointCloud_PointXYZ) -> UniquePtr<PointCloud_PointXYZ>;
 

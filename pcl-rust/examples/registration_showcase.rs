@@ -2,7 +2,7 @@
 //!
 //! Demonstrates ICP, NDT, and feature-based registration algorithms
 
-use pcl::common::PointCloudXYZ;
+use pcl::common::{PointCloudXYZ, PointXYZ};
 use pcl::error::PclResult;
 use pcl::registration::{
     FeatureBasedRegistrationBuilder, IcpXYZBuilder, NdtXYZBuilder, RegistrationXYZ,
@@ -50,13 +50,13 @@ fn create_test_clouds() -> PclResult<(PointCloudXYZ, PointCloudXYZ)> {
             let z = 0.0;
 
             // Source cloud - original position
-            source.push(x, y, z)?;
+            source.push(PointXYZ::new(x, y, z))?;
 
             // Target cloud - translated and slightly rotated
             let tx = x + 0.05; // small translation
             let ty = y + 0.02;
             let tz = z + 0.01;
-            target.push(tx, ty, tz)?;
+            target.push(PointXYZ::new(tx, ty, tz))?;
         }
     }
 

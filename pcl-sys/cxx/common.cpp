@@ -497,6 +497,50 @@ clone_point_normal(const pcl::PointNormal &point) {
   return std::make_unique<pcl::PointNormal>(point);
 }
 
+// Point creation from values - for new owned types
+std::unique_ptr<pcl::PointXYZ> create_point_xyz(float x, float y, float z) {
+  auto point = std::make_unique<pcl::PointXYZ>();
+  point->x = x;
+  point->y = y;
+  point->z = z;
+  return point;
+}
+
+std::unique_ptr<pcl::PointXYZI> create_point_xyzi(float x, float y, float z,
+                                                  float intensity) {
+  auto point = std::make_unique<pcl::PointXYZI>();
+  point->x = x;
+  point->y = y;
+  point->z = z;
+  point->intensity = intensity;
+  return point;
+}
+
+std::unique_ptr<pcl::PointXYZRGB> create_point_xyzrgb(float x, float y, float z,
+                                                      uint8_t r, uint8_t g,
+                                                      uint8_t b) {
+  auto point = std::make_unique<pcl::PointXYZRGB>();
+  point->x = x;
+  point->y = y;
+  point->z = z;
+  point->r = r;
+  point->g = g;
+  point->b = b;
+  return point;
+}
+
+std::unique_ptr<pcl::PointNormal>
+create_point_normal(float x, float y, float z, float nx, float ny, float nz) {
+  auto point = std::make_unique<pcl::PointNormal>();
+  point->x = x;
+  point->y = y;
+  point->z = z;
+  point->normal_x = nx;
+  point->normal_y = ny;
+  point->normal_z = nz;
+  return point;
+}
+
 // Point cloud clone
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>
 clone_point_cloud_xyz(const pcl::PointCloud<pcl::PointXYZ> &cloud) {

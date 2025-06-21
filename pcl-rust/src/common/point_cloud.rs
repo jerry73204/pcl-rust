@@ -1,62 +1,49 @@
-//! Generic PointCloud<T> implementation using associated types
+//! PointCloud implementation using marker types
 //!
-//! This module provides the unified generic PointCloud<T> API that works with any
-//! point type implementing the Point trait with associated types.
+//! This module provides the main PointCloud<T> API using marker types for clean generics.
 
-use crate::common::point_types::{PointNormal, PointNormalOps, PointXYZ, PointXYZI, PointXYZRGB};
+use crate::common::point_types::{PointType, ToPointOwned};
 use crate::error::{PclError, PclResult};
-use crate::traits::{Point, PointCloudClone, PointIntensityOps, PointRgbOps, PointXyzOps, Xyz};
-use cxx::{self, memory::UniquePtrTarget};
+use pcl_sys::ffi;
 use std::fmt;
 use std::marker::PhantomData;
+use std::pin::Pin;
 
-/// A generic point cloud container that works with any point type
-///
-/// This struct provides a unified interface for working with point clouds
-/// of different types (PointXYZ, PointXYZRGB, PointXYZI, etc.) through
-/// the use of associated types.
-///
-/// # Type Parameters
-///
-/// * `T` - The point type, which must implement the `Point` trait
-///
-/// # Examples
-///
-/// ```rust
-/// use pcl::{PointCloud, PointXYZ, PointXYZRGB};
-///
-/// // Create a point cloud of XYZ points
-/// let mut xyz_cloud: PointCloud<PointXYZ> = PointCloud::new()?;
-///
-/// // Create a point cloud of colored points
-/// let mut rgb_cloud: PointCloud<PointXYZRGB> = PointCloud::new()?;
-/// ```
-pub struct PointCloud<T: Point>
-where
-    T::CloudType: UniquePtrTarget,
-{
+/// A point cloud container using marker types for clean generic APIs
+pub struct PointCloud<T: PointType> {
     inner: cxx::UniquePtr<T::CloudType>,
     _phantom: PhantomData<T>,
 }
 
-impl<T: Point + PointCloudClone> Clone for PointCloud<T>
-where
-    T::CloudType: UniquePtrTarget,
-{
-    fn clone(&self) -> Self {
-        // Use our custom try_clone method which returns Result
-        // and unwrap since Clone trait doesn't allow Result
-        self.try_clone().expect("Failed to clone PointCloud")
-    }
-}
-
-impl<T: Point> PointCloud<T>
-where
-    T::CloudType: UniquePtrTarget,
-{
+impl<T: PointType> PointCloud<T> {
     /// Create a new empty point cloud
     pub fn new() -> PclResult<Self> {
-        let inner = T::new_cloud();
+        let inner: cxx::UniquePtr<T::CloudType> = match T::type_name() {
+            "PointXYZ" => {
+                let cloud = ffi::new_point_cloud_xyz();
+                // SAFETY: We know the type matches based on type_name
+                unsafe { std::mem::transmute(cloud) }
+            }
+            "PointXYZI" => {
+                let cloud = ffi::new_point_cloud_xyzi();
+                unsafe { std::mem::transmute(cloud) }
+            }
+            "PointXYZRGB" => {
+                let cloud = ffi::new_point_cloud_xyzrgb();
+                unsafe { std::mem::transmute(cloud) }
+            }
+            "PointNormal" => {
+                let cloud = ffi::new_point_cloud_point_normal();
+                unsafe { std::mem::transmute(cloud) }
+            }
+            _ => {
+                return Err(PclError::InvalidParameter {
+                    param: "point type".to_string(),
+                    message: format!("Unsupported point type: {}", T::type_name()),
+                });
+            }
+        };
+
         if inner.is_null() {
             return Err(PclError::CreationFailed {
                 typename: T::type_name().to_string(),
@@ -69,6 +56,224 @@ where
         })
     }
 
+    /// Get the number of points in the cloud
+    pub fn size(&self) -> usize {
+        match T::type_name() {
+            "PointXYZ" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointXYZ)
+                };
+                ffi::size(cloud)
+            }
+            "PointXYZI" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointXYZI)
+                };
+                ffi::size_xyzi(cloud)
+            }
+            "PointXYZRGB" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointXYZRGB)
+                };
+                ffi::size_xyzrgb(cloud)
+            }
+            "PointNormal" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointNormal)
+                };
+                ffi::size_point_normal(cloud)
+            }
+            _ => 0,
+        }
+    }
+
+    /// Check if the cloud is empty
+    pub fn is_empty(&self) -> bool {
+        self.size() == 0
+    }
+
+    /// Get a reference to a point at the given index
+    pub fn get(&self, index: usize) -> PclResult<&T::Ref> {
+        if index >= self.size() {
+            return Err(PclError::IndexOutOfBounds {
+                index,
+                size: self.size(),
+            });
+        }
+
+        // This will be implemented when we have proper point access
+        todo!("Point access not yet implemented")
+    }
+
+    /// Get an owned copy of a point at the given index
+    pub fn at(&self, index: usize) -> PclResult<T::Owned> {
+        self.get(index).map(|p| p.to_owned())
+    }
+
+    /// Create an iterator over owned copies of points
+    pub fn iter(&self) -> PointCloudIter<T> {
+        PointCloudIter {
+            cloud: self,
+            index: 0,
+        }
+    }
+
+    /// Clear all points from the cloud
+    pub fn clear(&mut self) -> PclResult<()> {
+        match T::type_name() {
+            "PointXYZ" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZ),
+                    )
+                };
+                ffi::clear(cloud);
+            }
+            "PointXYZI" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZI),
+                    )
+                };
+                ffi::clear_xyzi(cloud);
+            }
+            "PointXYZRGB" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZRGB),
+                    )
+                };
+                ffi::clear_xyzrgb(cloud);
+            }
+            "PointNormal" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointNormal),
+                    )
+                };
+                ffi::clear_point_normal(cloud);
+            }
+            _ => {
+                return Err(PclError::InvalidParameter {
+                    param: "point type".to_string(),
+                    message: format!("Clear not implemented for point type: {}", T::type_name()),
+                });
+            }
+        }
+        Ok(())
+    }
+
+    /// Reserve space for n points
+    pub fn reserve(&mut self, n: usize) -> PclResult<()> {
+        match T::type_name() {
+            "PointXYZ" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZ),
+                    )
+                };
+                ffi::reserve_xyz(cloud, n);
+            }
+            "PointXYZI" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZI),
+                    )
+                };
+                ffi::reserve_xyzi(cloud, n);
+            }
+            "PointXYZRGB" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZRGB),
+                    )
+                };
+                ffi::reserve_xyzrgb(cloud, n);
+            }
+            "PointNormal" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointNormal),
+                    )
+                };
+                ffi::reserve_point_normal(cloud, n);
+            }
+            _ => {
+                return Err(PclError::InvalidParameter {
+                    param: "point type".to_string(),
+                    message: format!("Reserve not implemented for point type: {}", T::type_name()),
+                });
+            }
+        }
+        Ok(())
+    }
+
+    /// Resize the cloud to contain n points
+    pub fn resize(&mut self, n: usize) -> PclResult<()> {
+        match T::type_name() {
+            "PointXYZ" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZ),
+                    )
+                };
+                ffi::resize_xyz(cloud, n);
+            }
+            "PointXYZI" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZI),
+                    )
+                };
+                ffi::resize_xyzi(cloud, n);
+            }
+            "PointXYZRGB" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZRGB),
+                    )
+                };
+                ffi::resize_xyzrgb(cloud, n);
+            }
+            "PointNormal" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointNormal),
+                    )
+                };
+                ffi::resize_point_normal(cloud, n);
+            }
+            _ => {
+                return Err(PclError::InvalidParameter {
+                    param: "point type".to_string(),
+                    message: format!("Resize not implemented for point type: {}", T::type_name()),
+                });
+            }
+        }
+        Ok(())
+    }
+
+    /// Check if the cloud is empty (alias for backwards compatibility)
+    pub fn empty(&self) -> bool {
+        self.is_empty()
+    }
+
     /// Create from a UniquePtr (internal use only)
     pub(crate) fn from_unique_ptr(inner: cxx::UniquePtr<T::CloudType>) -> Self {
         Self {
@@ -77,267 +282,261 @@ where
         }
     }
 
-    /// Get the number of points in the cloud
-    pub fn len(&self) -> usize {
-        T::cloud_size(&*self.inner)
+    /// Get access to the inner cloud pointer (for compatibility with filters)
+    pub(crate) fn inner(&self) -> &T::CloudType {
+        self.inner.as_ref().unwrap()
     }
 
-    /// Check if the cloud is empty
-    pub fn empty(&self) -> bool {
-        T::cloud_empty(&*self.inner)
-    }
-
-    /// Alias for size() for backward compatibility
-    pub fn size(&self) -> usize {
-        self.len()
-    }
-
-    /// Alias for empty() for backward compatibility
-    pub fn is_empty(&self) -> bool {
-        self.empty()
-    }
-
-    /// Clear all points from the cloud
-    pub fn clear(&mut self) -> PclResult<()> {
-        T::cloud_clear(self.inner.pin_mut());
-        Ok(())
-    }
-
-    /// Reserve capacity for at least n points
-    pub fn reserve(&mut self, n: usize) -> PclResult<()> {
-        T::cloud_reserve(self.inner.pin_mut(), n);
-        Ok(())
-    }
-
-    /// Resize the point cloud to contain n points
-    pub fn resize(&mut self, n: usize) -> PclResult<()> {
-        T::cloud_resize(self.inner.pin_mut(), n);
-        Ok(())
+    /// Get mutable access to the inner cloud pointer (for compatibility)
+    pub(crate) fn inner_mut(&mut self) -> Pin<&mut T::CloudType> {
+        self.inner.pin_mut()
     }
 
     /// Get the width of the cloud (for organized clouds)
     pub fn width(&self) -> u32 {
-        T::cloud_width(&*self.inner)
+        match T::type_name() {
+            "PointXYZ" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointXYZ)
+                };
+                ffi::width(cloud)
+            }
+            "PointXYZI" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointXYZI)
+                };
+                ffi::width_xyzi(cloud)
+            }
+            "PointXYZRGB" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointXYZRGB)
+                };
+                ffi::width_xyzrgb(cloud)
+            }
+            "PointNormal" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointNormal)
+                };
+                ffi::width_point_normal(cloud)
+            }
+            _ => 0,
+        }
     }
 
     /// Get the height of the cloud (for organized clouds)
     pub fn height(&self) -> u32 {
-        T::cloud_height(&*self.inner)
+        match T::type_name() {
+            "PointXYZ" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointXYZ)
+                };
+                ffi::height(cloud)
+            }
+            "PointXYZI" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointXYZI)
+                };
+                ffi::height_xyzi(cloud)
+            }
+            "PointXYZRGB" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointXYZRGB)
+                };
+                ffi::height_xyzrgb(cloud)
+            }
+            "PointNormal" => {
+                let cloud = unsafe {
+                    &*(self.inner.as_ref().unwrap() as *const T::CloudType
+                        as *const ffi::PointCloud_PointNormal)
+                };
+                ffi::height_point_normal(cloud)
+            }
+            _ => 0,
+        }
     }
 
-    /// Check if the cloud is organized (2D structure)
+    /// Check if the cloud is organized (width > 1 and height > 1)
     pub fn is_organized(&self) -> bool {
-        self.height() > 1
-    }
-
-    /// Check if the cloud is dense (no invalid points)
-    pub fn is_dense(&self) -> bool {
-        T::cloud_is_dense(&*self.inner)
-    }
-
-    /// Get raw pointer for FFI operations
-    pub(crate) fn as_raw(&self) -> *const T::CloudType {
-        T::as_raw_cloud(&*self.inner)
-    }
-
-    /// Get reference to inner cloud for FFI operations
-    pub(crate) fn inner(&self) -> &T::CloudType {
-        &*self.inner
-    }
-
-    /// Get mutable pinned reference to inner cloud for FFI operations
-    pub(crate) fn inner_mut(&mut self) -> std::pin::Pin<&mut T::CloudType> {
-        self.inner.pin_mut()
-    }
-
-    /// Access a point at the given index
-    ///
-    /// Returns the point at the specified index, or an error if the index is out of bounds.
-    pub fn at(&self, index: usize) -> PclResult<T>
-    where
-        T::FfiPointType: cxx::memory::UniquePtrTarget,
-    {
-        if index >= self.size() {
-            return Err(PclError::IndexOutOfBounds {
-                index,
-                size: self.size(),
-            });
-        }
-
-        let point_ptr = T::get_point_at(&*self.inner, index);
-        if point_ptr.is_null() {
-            return Err(PclError::IndexOutOfBounds {
-                index,
-                size: self.size(),
-            });
-        }
-
-        T::from_unique_ptr(point_ptr)
-    }
-
-    /// Set a point at the given index
-    ///
-    /// Replaces the point at the specified index with a new point.
-    pub fn set_at(&mut self, index: usize, point: &T) -> PclResult<()> {
-        if index >= self.size() {
-            return Err(PclError::IndexOutOfBounds {
-                index,
-                size: self.size(),
-            });
-        }
-
-        T::set_point_at(self.inner.pin_mut(), index, point);
-        Ok(())
-    }
-
-    /// Set the width of the cloud (for organized clouds)
-    pub fn set_width(&mut self, width: u32) {
-        T::cloud_set_width(self.inner.pin_mut(), width);
-    }
-
-    /// Set the height of the cloud (for organized clouds)
-    pub fn set_height(&mut self, height: u32) {
-        T::cloud_set_height(self.inner.pin_mut(), height);
-    }
-
-    /// Deep clone the entire point cloud
-    pub fn try_clone(&self) -> PclResult<Self>
-    where
-        T: PointCloudClone,
-    {
-        let cloned = T::cloud_clone(&*self.inner);
-        if cloned.is_null() {
-            return Err(PclError::CloneFailed {
-                typename: T::type_name().to_string(),
-            });
-        }
-        Ok(Self::from_unique_ptr(cloned))
+        self.width() > 1 && self.height() > 1
     }
 }
 
-// Extension methods for XYZ points
-impl<T: Point + Xyz + PointXyzOps> PointCloud<T>
-where
-    T::CloudType: UniquePtrTarget,
-{
-    /// Add a point by coordinates
-    pub fn push(&mut self, x: f32, y: f32, z: f32) -> PclResult<()> {
-        T::push_xyz(self.inner.pin_mut(), x, y, z);
-        Ok(())
-    }
-
-    /// Add multiple points from coordinates
-    pub fn extend_from_slice(&mut self, coords: &[[f32; 3]]) -> PclResult<()> {
-        for &[x, y, z] in coords {
-            self.push(x, y, z)?;
+// Generic push method using marker types
+impl<T: PointType> PointCloud<T> {
+    /// Push a point to the cloud
+    pub fn push(&mut self, point: T::Owned) -> PclResult<()> {
+        match T::type_name() {
+            "PointXYZ" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZ),
+                    )
+                };
+                // SAFETY: We know T::Owned is PointXYZ based on type_name
+                let point: &crate::common::point_types::PointXYZ =
+                    unsafe { std::mem::transmute(&point) };
+                let coords = [point.x, point.y, point.z];
+                ffi::push_back_xyz(cloud, &coords);
+            }
+            "PointXYZI" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZI),
+                    )
+                };
+                let point: &crate::common::point_types::PointXYZI =
+                    unsafe { std::mem::transmute(&point) };
+                let coords = [point.x, point.y, point.z, point.intensity];
+                ffi::push_back_xyzi(cloud, &coords);
+            }
+            "PointXYZRGB" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointXYZRGB),
+                    )
+                };
+                let point: &crate::common::point_types::PointXYZRGB =
+                    unsafe { std::mem::transmute(&point) };
+                let coords = [
+                    point.x,
+                    point.y,
+                    point.z,
+                    point.r as f32,
+                    point.g as f32,
+                    point.b as f32,
+                ];
+                ffi::push_back_xyzrgb(cloud, &coords);
+            }
+            "PointNormal" => {
+                let cloud = unsafe {
+                    Pin::new_unchecked(
+                        &mut *(self.inner.pin_mut().get_unchecked_mut() as *mut T::CloudType
+                            as *mut ffi::PointCloud_PointNormal),
+                    )
+                };
+                let point: &crate::common::point_types::PointNormal =
+                    unsafe { std::mem::transmute(&point) };
+                let coords = [
+                    point.x,
+                    point.y,
+                    point.z,
+                    point.normal_x,
+                    point.normal_y,
+                    point.normal_z,
+                ];
+                ffi::push_back_point_normal(cloud, &coords);
+            }
+            _ => {
+                return Err(PclError::InvalidParameter {
+                    param: "point type".to_string(),
+                    message: format!("Unsupported point type for push: {}", T::type_name()),
+                });
+            }
         }
         Ok(())
     }
 }
 
-// Specialized push method for PointXYZRGB
-impl PointCloud<PointXYZRGB>
-where
-    <PointXYZRGB as Point>::CloudType: UniquePtrTarget,
-{
-    /// Add a colored point (alias for backward compatibility)
-    pub fn push(&mut self, x: f32, y: f32, z: f32, r: u8, g: u8, b: u8) -> PclResult<()> {
-        self.push_colored(x, y, z, r, g, b)
-    }
-
-    /// Add a colored point
-    pub fn push_colored(&mut self, x: f32, y: f32, z: f32, r: u8, g: u8, b: u8) -> PclResult<()> {
-        PointXYZRGB::push_xyzrgb(self.inner.pin_mut(), x, y, z, r, g, b);
-        Ok(())
-    }
-}
-
-// Specialized push method for PointXYZI
-impl PointCloud<PointXYZI>
-where
-    <PointXYZI as Point>::CloudType: UniquePtrTarget,
-{
-    /// Add a point with intensity
-    pub fn push_with_intensity(&mut self, x: f32, y: f32, z: f32, intensity: f32) -> PclResult<()> {
-        PointXYZI::push_xyzi(self.inner.pin_mut(), x, y, z, intensity);
-        Ok(())
-    }
-}
-
-// Specialized push method for PointNormal
-impl PointCloud<PointNormal>
-where
-    <PointNormal as Point>::CloudType: UniquePtrTarget,
-{
-    /// Add a point with normal
-    pub fn push_with_normal(
-        &mut self,
-        x: f32,
-        y: f32,
-        z: f32,
-        nx: f32,
-        ny: f32,
-        nz: f32,
-    ) -> PclResult<()> {
-        PointNormal::push_point_normal(self.inner.pin_mut(), x, y, z, nx, ny, nz);
-        Ok(())
-    }
-}
-
-// Implement Default for PointCloud
-impl<T: Point> Default for PointCloud<T>
-where
-    T::CloudType: UniquePtrTarget,
-{
+impl<T: PointType> Default for PointCloud<T> {
     fn default() -> Self {
         Self::new().expect("Failed to create default PointCloud")
     }
 }
 
-// Implement Debug for PointCloud
-impl<T: Point> fmt::Debug for PointCloud<T>
-where
-    T::CloudType: UniquePtrTarget,
-{
+impl<T: PointType> fmt::Debug for PointCloud<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("PointCloud")
             .field("type", &T::type_name())
             .field("size", &self.size())
-            .field("organized", &self.is_organized())
-            .field("dense", &self.is_dense())
             .finish()
     }
 }
 
-// Type aliases for backward compatibility
-pub type PointCloudXYZ = PointCloud<PointXYZ>;
-pub type PointCloudXYZRGB = PointCloud<PointXYZRGB>;
-pub type PointCloudXYZI = PointCloud<PointXYZI>;
-pub type PointCloudNormal = PointCloud<PointNormal>;
+// ============================================================================
+// Iterator Implementation
+// ============================================================================
+
+/// Iterator over owned copies of points in a PointCloud
+pub struct PointCloudIter<'a, T: PointType> {
+    cloud: &'a PointCloud<T>,
+    index: usize,
+}
+
+impl<'a, T: PointType> Iterator for PointCloudIter<'a, T> {
+    type Item = T::Owned;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.index >= self.cloud.size() {
+            return None;
+        }
+
+        // For now, we don't have point access implemented
+        // When implemented, this would be:
+        // let point = self.cloud.at(self.index).ok()?;
+        // self.index += 1;
+        // Some(point)
+
+        None // TODO: Implement when point access is available
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.cloud.size().saturating_sub(self.index);
+        (remaining, Some(remaining))
+    }
+}
+
+impl<'a, T: PointType> ExactSizeIterator for PointCloudIter<'a, T> {
+    fn len(&self) -> usize {
+        self.cloud.size().saturating_sub(self.index)
+    }
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::common::point_types::{Normal, PointXYZ, XYZ, XYZI, XYZRGB};
 
     #[test]
-    fn test_point_cloud_creation() {
-        let xyz_cloud: PointCloud<PointXYZ> = PointCloud::new().unwrap();
-        assert!(xyz_cloud.empty());
-        assert_eq!(xyz_cloud.len(), 0);
-
-        let rgb_cloud: PointCloud<PointXYZRGB> = PointCloud::new().unwrap();
-        assert!(rgb_cloud.empty());
-        assert_eq!(rgb_cloud.len(), 0);
-
-        let xyzi_cloud: PointCloud<PointXYZI> = PointCloud::new().unwrap();
-        assert!(xyzi_cloud.empty());
-        assert_eq!(xyzi_cloud.len(), 0);
+    fn test_point_cloud2_creation() {
+        let cloud: PointCloud<XYZ> = PointCloud::new().unwrap();
+        assert_eq!(cloud.size(), 0);
+        assert!(cloud.is_empty());
     }
 
     #[test]
-    fn test_type_aliases() {
-        let _xyz: PointCloudXYZ = PointCloud::new().unwrap();
-        let _rgb: PointCloudXYZRGB = PointCloud::new().unwrap();
-        let _xyzi: PointCloudXYZI = PointCloud::new().unwrap();
+    fn test_point_cloud2_push() {
+        let mut cloud: PointCloud<XYZ> = PointCloud::new().unwrap();
+        let point = PointXYZ::new(1.0, 2.0, 3.0);
+        cloud.push(point).unwrap();
+        assert_eq!(cloud.size(), 1);
+        assert!(!cloud.is_empty());
+    }
+
+    #[test]
+    fn test_different_types() {
+        let _xyz: PointCloud<XYZ> = PointCloud::new().unwrap();
+        let _xyzi: PointCloud<XYZI> = PointCloud::new().unwrap();
+        let _xyzrgb: PointCloud<XYZRGB> = PointCloud::new().unwrap();
+        let _normal: PointCloud<Normal> = PointCloud::new().unwrap();
+    }
+
+    #[test]
+    fn test_iterator() {
+        let cloud: PointCloud<XYZ> = PointCloud::new().unwrap();
+        let iter = cloud.iter();
+
+        // Iterator should report correct size hints
+        assert_eq!(iter.size_hint(), (0, Some(0)));
+        assert_eq!(iter.len(), 0);
     }
 }

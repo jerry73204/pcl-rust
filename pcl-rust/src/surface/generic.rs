@@ -4,6 +4,7 @@
 //! that can work with different point types and mesh representations.
 
 use crate::common::PointCloud;
+use crate::common::point_types::PointType;
 use crate::error::PclResult;
 use crate::traits::{NormalXyz, Point, Xyz};
 use cxx::memory::UniquePtrTarget;
@@ -17,7 +18,7 @@ use cxx::memory::UniquePtrTarget;
 ///
 /// * `T` - The input point type
 /// * `M` - The output mesh type
-pub trait SurfaceReconstruction<T: Point, M>
+pub trait SurfaceReconstruction<T: PointType, M>
 where
     T::CloudType: UniquePtrTarget,
 {
@@ -38,7 +39,7 @@ where
 ///
 /// * `T` - The input point type
 /// * `U` - The output point type (may be different, e.g., with normals added)
-pub trait PointCloudSmoothing<T: Point, U: Point>
+pub trait PointCloudSmoothing<T: PointType, U: PointType>
 where
     T::CloudType: UniquePtrTarget,
     U::CloudType: UniquePtrTarget,
@@ -54,7 +55,11 @@ where
 ///
 /// This marker trait indicates that a point type has all the necessary
 /// capabilities for surface reconstruction algorithms.
-pub trait SurfacePoint: Point + Xyz + NormalXyz {}
+pub trait SurfacePoint: Point + PointType + Xyz + NormalXyz
+where
+    <Self as PointType>::CloudType: UniquePtrTarget,
+{
+}
 
 // Implement SurfacePoint for types that have both coordinates and normals
 use crate::common::PointNormal;
@@ -140,7 +145,7 @@ impl Default for SurfaceReconstructionConfigBuilder {
 /// Generic mesh generation trait
 ///
 /// This trait provides common operations for mesh generation from point clouds
-pub trait MeshGeneration<T: SurfacePoint>
+pub trait MeshGeneration<T: PointType>
 where
     T::CloudType: UniquePtrTarget,
 {

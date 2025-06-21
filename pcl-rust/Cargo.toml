@@ -103,3 +103,15 @@ required-features = ["registration"]
 [[example]]
 name = "test_correspondence_simple"
 required-features = ["registration"]
+
+[[example]]
+name = "generic_demo"
+required-features = ["filters", "search"]
+
+[[example]]
+name = "generic_point_cloud_demo"
+required-features = ["filters", "search"]
+
+[[example]]
+name = "surface_advanced_demo"
+required-features = ["surface"]

@@ -4,7 +4,7 @@
 //! All points within each voxel are approximated with their centroid, effectively
 //! downsampling the cloud while preserving its shape characteristics.
 
-use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::PclResult;
 use crate::filters::Filter;
 use pcl_sys::{UniquePtr, ffi};
@@ -44,13 +44,13 @@ impl VoxelGridXYZ {
     }
 }
 
-impl Filter<PointXYZ> for VoxelGridXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
+impl Filter<XYZ> for VoxelGridXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_cloud_voxel_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloud<PointXYZ>> {
+    fn filter(&mut self) -> PclResult<PointCloud<XYZ>> {
         let result = ffi::filter_voxel_xyz(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {
@@ -131,13 +131,13 @@ impl VoxelGridXYZRGB {
     }
 }
 
-impl Filter<PointXYZRGB> for VoxelGridXYZRGB {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
+impl Filter<XYZRGB> for VoxelGridXYZRGB {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()> {
         ffi::set_input_cloud_voxel_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn filter(&mut self) -> PclResult<PointCloud<PointXYZRGB>> {
+    fn filter(&mut self) -> PclResult<PointCloud<XYZRGB>> {
         let result = ffi::filter_voxel_xyzrgb(self.inner.pin_mut());
         if result.is_null() {
             return Err(crate::error::PclError::ProcessingFailed {

@@ -40,12 +40,12 @@ use std::pin::Pin;
 ///     Ok(())
 /// }
 /// ```
-pub fn transform_point_cloud<T: Point>(
+pub fn transform_point_cloud<T: Point + crate::common::point_types::PointType>(
     input: &PointCloud<T>,
     transform: &[f32; 16],
 ) -> PclResult<PointCloud<T>>
 where
-    T::CloudType: cxx::memory::UniquePtrTarget,
+    <T as crate::common::point_types::PointType>::CloudType: cxx::memory::UniquePtrTarget,
 {
     // Create output cloud
     let mut output = PointCloud::<T>::new()?;
@@ -58,42 +58,50 @@ where
     let mut output_inner = output.inner_mut();
 
     // Call the appropriate FFI function based on point type
-    match T::type_name() {
+    match <T as crate::common::point_types::PointType>::type_name() {
         "PointXYZ" => {
             // SAFETY: We know the types are correct based on type_name()
             unsafe {
-                let input_cloud =
-                    &*(input_inner as *const T::CloudType as *const ffi::PointCloud_PointXYZ);
+                let input_cloud = &*(input_inner
+                    as *const <T as crate::common::point_types::PointType>::CloudType
+                    as *const ffi::PointCloud_PointXYZ);
                 let output_cloud = Pin::new_unchecked(
-                    &mut *(output_inner.as_mut().get_unchecked_mut() as *mut T::CloudType
+                    &mut *(output_inner.as_mut().get_unchecked_mut()
+                        as *mut <T as crate::common::point_types::PointType>::CloudType
                         as *mut ffi::PointCloud_PointXYZ),
                 );
                 ffi::transform_point_cloud_xyz(input_cloud, output_cloud, &transform_vec);
             }
         }
         "PointXYZI" => unsafe {
-            let input_cloud =
-                &*(input_inner as *const T::CloudType as *const ffi::PointCloud_PointXYZI);
+            let input_cloud = &*(input_inner
+                as *const <T as crate::common::point_types::PointType>::CloudType
+                as *const ffi::PointCloud_PointXYZI);
             let output_cloud = Pin::new_unchecked(
-                &mut *(output_inner.as_mut().get_unchecked_mut() as *mut T::CloudType
+                &mut *(output_inner.as_mut().get_unchecked_mut()
+                    as *mut <T as crate::common::point_types::PointType>::CloudType
                     as *mut ffi::PointCloud_PointXYZI),
             );
             ffi::transform_point_cloud_xyzi(input_cloud, output_cloud, &transform_vec);
         },
         "PointXYZRGB" => unsafe {
-            let input_cloud =
-                &*(input_inner as *const T::CloudType as *const ffi::PointCloud_PointXYZRGB);
+            let input_cloud = &*(input_inner
+                as *const <T as crate::common::point_types::PointType>::CloudType
+                as *const ffi::PointCloud_PointXYZRGB);
             let output_cloud = Pin::new_unchecked(
-                &mut *(output_inner.as_mut().get_unchecked_mut() as *mut T::CloudType
+                &mut *(output_inner.as_mut().get_unchecked_mut()
+                    as *mut <T as crate::common::point_types::PointType>::CloudType
                     as *mut ffi::PointCloud_PointXYZRGB),
             );
             ffi::transform_point_cloud_xyzrgb(input_cloud, output_cloud, &transform_vec);
         },
         "PointNormal" => unsafe {
-            let input_cloud =
-                &*(input_inner as *const T::CloudType as *const ffi::PointCloud_PointNormal);
+            let input_cloud = &*(input_inner
+                as *const <T as crate::common::point_types::PointType>::CloudType
+                as *const ffi::PointCloud_PointNormal);
             let output_cloud = Pin::new_unchecked(
-                &mut *(output_inner.as_mut().get_unchecked_mut() as *mut T::CloudType
+                &mut *(output_inner.as_mut().get_unchecked_mut()
+                    as *mut <T as crate::common::point_types::PointType>::CloudType
                     as *mut ffi::PointCloud_PointNormal),
             );
             ffi::transform_point_cloud_normal(input_cloud, output_cloud, &transform_vec);
@@ -103,7 +111,7 @@ where
                 param: "point type".to_string(),
                 message: format!(
                     "Transform not implemented for point type: {}",
-                    T::type_name()
+                    <T as crate::common::point_types::PointType>::type_name()
                 ),
             });
         }

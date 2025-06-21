@@ -71,17 +71,20 @@ where
     _phantom: PhantomData<T>,
 }
 
-impl<T: KdTreePoint> KdTree<T>
+impl<T: KdTreePoint + crate::common::point_types::PointType> KdTree<T>
 where
     T::KdTreeType: UniquePtrTarget,
-    T::CloudType: UniquePtrTarget,
+    <T as crate::traits::Point>::CloudType: UniquePtrTarget,
 {
     /// Create a new KdTree
     pub fn new() -> PclResult<Self> {
         let inner = T::new_kdtree();
         if inner.is_null() {
             return Err(PclError::CreationFailed {
-                typename: format!("KdTree<{}>", T::type_name()),
+                typename: format!(
+                    "KdTree<{}>",
+                    <T as crate::common::point_types::PointType>::type_name()
+                ),
             });
         }
 
@@ -94,7 +97,12 @@ where
 
     /// Set the input point cloud for the search
     pub fn set_input_cloud(&mut self, cloud: &PointCloud<T>) -> PclResult<()> {
-        T::set_input_cloud_kdtree(self.inner.pin_mut(), cloud.inner());
+        // SAFETY: Point::CloudType and PointType::CloudType are the same type in our compatibility implementation
+        let inner = unsafe {
+            &*(cloud.inner() as *const <T as crate::common::point_types::PointType>::CloudType
+                as *const <T as crate::traits::Point>::CloudType)
+        };
+        T::set_input_cloud_kdtree(self.inner.pin_mut(), inner);
         self.has_cloud = true;
         Ok(())
     }
@@ -204,10 +212,10 @@ where
     }
 }
 
-impl<T: KdTreePoint> Default for KdTree<T>
+impl<T: KdTreePoint + crate::common::point_types::PointType> Default for KdTree<T>
 where
     T::KdTreeType: UniquePtrTarget,
-    T::CloudType: UniquePtrTarget,
+    <T as crate::traits::Point>::CloudType: UniquePtrTarget,
 {
     fn default() -> Self {
         Self::new().expect("Failed to create default KdTree")

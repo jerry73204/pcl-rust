@@ -4,13 +4,13 @@
 //! distinctive points in point clouds.
 
 use pcl::{
-    PclResult, PointCloud, PointXYZ, PointXYZI,
+    PclResult, PointCloud, PointXYZ, PointXYZI, XYZ, XYZI,
     keypoints::{Harris3D, Iss3D, KeypointDetector, SiftKeypoint},
     search::{KdTreeXYZ, KdTreeXYZI, SearchInputCloud},
 };
 
 /// Create a sample point cloud with some distinctive features
-fn create_sample_cloud() -> PclResult<PointCloud<PointXYZ>> {
+fn create_sample_cloud() -> PclResult<PointCloud<XYZ>> {
     let mut cloud = PointCloud::new()?;
 
     // Create a cube with corners (these should be detected as keypoints)
@@ -22,22 +22,22 @@ fn create_sample_cloud() -> PclResult<PointCloud<PointXYZ>> {
         let t = i as f32 / (points_per_edge - 1) as f32;
 
         // Bottom square edges
-        PointCloud::<PointXYZ>::push(&mut cloud, t * cube_size, 0.0, 0.0)?;
-        PointCloud::<PointXYZ>::push(&mut cloud, 0.0, t * cube_size, 0.0)?;
-        PointCloud::<PointXYZ>::push(&mut cloud, cube_size, t * cube_size, 0.0)?;
-        PointCloud::<PointXYZ>::push(&mut cloud, t * cube_size, cube_size, 0.0)?;
+        cloud.push(PointXYZ::new(t * cube_size, 0.0, 0.0))?;
+        cloud.push(PointXYZ::new(0.0, t * cube_size, 0.0))?;
+        cloud.push(PointXYZ::new(cube_size, t * cube_size, 0.0))?;
+        cloud.push(PointXYZ::new(t * cube_size, cube_size, 0.0))?;
 
         // Top square edges
-        PointCloud::<PointXYZ>::push(&mut cloud, t * cube_size, 0.0, cube_size)?;
-        PointCloud::<PointXYZ>::push(&mut cloud, 0.0, t * cube_size, cube_size)?;
-        PointCloud::<PointXYZ>::push(&mut cloud, cube_size, t * cube_size, cube_size)?;
-        PointCloud::<PointXYZ>::push(&mut cloud, t * cube_size, cube_size, cube_size)?;
+        cloud.push(PointXYZ::new(t * cube_size, 0.0, cube_size))?;
+        cloud.push(PointXYZ::new(0.0, t * cube_size, cube_size))?;
+        cloud.push(PointXYZ::new(cube_size, t * cube_size, cube_size))?;
+        cloud.push(PointXYZ::new(t * cube_size, cube_size, cube_size))?;
 
         // Vertical edges
-        PointCloud::<PointXYZ>::push(&mut cloud, 0.0, 0.0, t * cube_size)?;
-        PointCloud::<PointXYZ>::push(&mut cloud, cube_size, 0.0, t * cube_size)?;
-        PointCloud::<PointXYZ>::push(&mut cloud, 0.0, cube_size, t * cube_size)?;
-        PointCloud::<PointXYZ>::push(&mut cloud, cube_size, cube_size, t * cube_size)?;
+        cloud.push(PointXYZ::new(0.0, 0.0, t * cube_size))?;
+        cloud.push(PointXYZ::new(cube_size, 0.0, t * cube_size))?;
+        cloud.push(PointXYZ::new(0.0, cube_size, t * cube_size))?;
+        cloud.push(PointXYZ::new(cube_size, cube_size, t * cube_size))?;
     }
 
     // Add some planar surfaces with noise
@@ -46,7 +46,7 @@ fn create_sample_cloud() -> PclResult<PointCloud<PointXYZ>> {
             let x = 2.0 + i as f32 * 0.05;
             let y = j as f32 * 0.05;
             let z = 0.5 + (rand::random::<f32>() - 0.5) * 0.01; // Small noise
-            PointCloud::<PointXYZ>::push(&mut cloud, x, y, z)?;
+            cloud.push(PointXYZ::new(x, y, z))?;
         }
     }
 
@@ -61,14 +61,14 @@ fn create_sample_cloud() -> PclResult<PointCloud<PointXYZ>> {
         let y = sphere_center.1 + sphere_radius * phi.sin() * theta.sin();
         let z = sphere_center.2 + sphere_radius * phi.cos();
 
-        PointCloud::<PointXYZ>::push(&mut cloud, x, y, z)?;
+        cloud.push(PointXYZ::new(x, y, z))?;
     }
 
     Ok(cloud)
 }
 
 /// Create a sample point cloud with intensity for SIFT
-fn create_sample_cloud_with_intensity() -> PclResult<PointCloud<PointXYZI>> {
+fn create_sample_cloud_with_intensity() -> PclResult<PointCloud<XYZI>> {
     let mut cloud = PointCloud::new()?;
 
     // Create a simple scene with varying intensity
@@ -81,7 +81,7 @@ fn create_sample_cloud_with_intensity() -> PclResult<PointCloud<PointXYZI>> {
             // Intensity based on position - creates a gradient
             let intensity = ((x + y) * 50.0) as u8;
 
-            cloud.push_with_intensity(x, y, z, intensity as f32)?;
+            cloud.push(PointXYZI::new(x, y, z, intensity as f32))?;
         }
     }
 
@@ -93,14 +93,14 @@ fn create_sample_cloud_with_intensity() -> PclResult<PointCloud<PointXYZI>> {
         let z = 0.2;
 
         // High intensity points that should be detected
-        cloud.push_with_intensity(x, y, z, 255.0)?;
+        cloud.push(PointXYZI::new(x, y, z, 255.0))?;
     }
 
     Ok(cloud)
 }
 
 /// Demonstrate Harris 3D keypoint detection
-fn demo_harris3d(cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
+fn demo_harris3d(cloud: &PointCloud<XYZ>) -> PclResult<()> {
     println!("\n=== Harris 3D Keypoint Detection ===");
 
     // Create and configure Harris detector
@@ -134,7 +134,7 @@ fn demo_harris3d(cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
 }
 
 /// Demonstrate ISS 3D keypoint detection
-fn demo_iss3d(cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
+fn demo_iss3d(cloud: &PointCloud<XYZ>) -> PclResult<()> {
     println!("\n=== ISS 3D Keypoint Detection ===");
 
     // Create and configure ISS detector
@@ -168,7 +168,7 @@ fn demo_iss3d(cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
 }
 
 /// Demonstrate SIFT keypoint detection
-fn demo_sift(cloud: &PointCloud<PointXYZI>) -> PclResult<()> {
+fn demo_sift(cloud: &PointCloud<XYZI>) -> PclResult<()> {
     println!("\n=== SIFT Keypoint Detection ===");
 
     // Create and configure SIFT detector

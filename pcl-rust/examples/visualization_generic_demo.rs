@@ -4,32 +4,39 @@
 //! advanced visualization features.
 
 use pcl::{
-    PclResult, PointCloud, PointXYZ, PointXYZRGB,
+    PclResult, PointCloud, PointXYZ, PointXYZRGB, XYZ, XYZRGB,
     visualization::{
         AdvancedViewer, AnimationController, CameraPosition, ColorMap, ComparisonViewer,
         MultiCloudViewer, VisualizationConfigBuilder, VisualizationControl,
     },
 };
 
-fn create_sample_clouds() -> PclResult<(PointCloud<PointXYZ>, PointCloud<PointXYZRGB>)> {
+fn create_sample_clouds() -> PclResult<(PointCloud<XYZ>, PointCloud<XYZRGB>)> {
     // Create XYZ cloud - a simple spiral
-    let mut xyz_cloud = PointCloud::<PointXYZ>::new()?;
+    let mut xyz_cloud = PointCloud::<XYZ>::new()?;
     for i in 0..100 {
         let angle = i as f32 * 0.1;
         let x = angle.cos() * (i as f32 * 0.01);
         let y = angle.sin() * (i as f32 * 0.01);
         let z = i as f32 * 0.01;
-        xyz_cloud.push(x, y, z)?;
+        xyz_cloud.push(PointXYZ::new(x, y, z))?;
     }
 
     // Create XYZRGB cloud - a colorful grid
-    let mut xyzrgb_cloud = PointCloud::<PointXYZRGB>::new()?;
+    let mut xyzrgb_cloud = PointCloud::<XYZRGB>::new()?;
     for x in 0..10 {
         for y in 0..10 {
             let r = (x * 25) as u8;
             let g = (y * 25) as u8;
             let b = 128;
-            xyzrgb_cloud.push(x as f32 * 0.1 - 0.5, y as f32 * 0.1 - 0.5, 0.0, r, g, b)?;
+            xyzrgb_cloud.push(PointXYZRGB::new(
+                x as f32 * 0.1 - 0.5,
+                y as f32 * 0.1 - 0.5,
+                0.0,
+                r,
+                g,
+                b,
+            ))?;
         }
     }
 
@@ -54,9 +61,9 @@ fn demo_generic_viewer() -> PclResult<()> {
     pcl_viewer.add_coordinate_system(0.5, "axes")?;
 
     // Use the AdvancedViewer trait methods
-    AdvancedViewer::<PointXYZ>::set_point_size(pcl_viewer, "spiral", 3.0)?;
-    AdvancedViewer::<PointXYZ>::set_cloud_color(pcl_viewer, "spiral", 1.0, 1.0, 0.0)?; // Yellow
-    AdvancedViewer::<PointXYZ>::set_opacity(pcl_viewer, "spiral", 0.8)?;
+    AdvancedViewer::<XYZ>::set_point_size(pcl_viewer, "spiral", 3.0)?;
+    AdvancedViewer::<XYZ>::set_cloud_color(pcl_viewer, "spiral", 1.0, 1.0, 0.0)?; // Yellow
+    AdvancedViewer::<XYZ>::set_opacity(pcl_viewer, "spiral", 0.8)?;
 
     pcl_viewer.set_point_size("grid", 5.0)?;
 
@@ -83,15 +90,15 @@ fn demo_comparison_viewer() -> PclResult<()> {
     println!("\n=== Comparison Viewer Demo ===");
 
     // Create two clouds to compare
-    let mut cloud1 = PointCloud::<PointXYZ>::new()?;
-    let mut cloud2 = PointCloud::<PointXYZ>::new()?;
+    let mut cloud1 = PointCloud::<XYZ>::new()?;
+    let mut cloud2 = PointCloud::<XYZ>::new()?;
 
     // Cloud 1: Original data
     for i in 0..50 {
         let x = (i as f32 - 25.0) * 0.02;
         let y = x * x;
         let z = 0.0;
-        cloud1.push(x, y, z)?;
+        cloud1.push(PointXYZ::new(x, y, z))?;
     }
 
     // Cloud 2: Transformed data
@@ -99,7 +106,7 @@ fn demo_comparison_viewer() -> PclResult<()> {
         let x = (i as f32 - 25.0) * 0.02;
         let y = x * x + 0.1; // Offset
         let z = 0.1;
-        cloud2.push(x, y, z)?;
+        cloud2.push(PointXYZ::new(x, y, z))?;
     }
 
     // Create comparison viewer
@@ -122,7 +129,7 @@ fn demo_animation() -> PclResult<()> {
     let mut cloud_sequence = Vec::new();
 
     for frame in 0..10 {
-        let mut cloud = PointCloud::<PointXYZ>::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
 
         // Create a rotating point pattern
         for i in 0..50 {
@@ -134,7 +141,7 @@ fn demo_animation() -> PclResult<()> {
             let y = angle.sin() * 0.5;
             let z = i as f32 * 0.01;
 
-            cloud.push(x, y, z)?;
+            cloud.push(PointXYZ::new(x, y, z))?;
         }
 
         cloud_sequence.push(cloud);

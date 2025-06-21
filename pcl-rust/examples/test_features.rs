@@ -1,6 +1,6 @@
 //! Test example for the features module
 
-use pcl::common::PointCloudXYZ;
+use pcl::common::{PointCloudXYZ, PointXYZ};
 use pcl::error::PclResult;
 use pcl::features::{FpfhEstimation, NormalEstimation, PfhEstimation};
 
@@ -16,7 +16,7 @@ fn main() -> PclResult<()> {
             let x = i as f32 * 0.1;
             let y = j as f32 * 0.1;
             let z = ((x * x + y * y) * 10.0).sin() * 0.05; // Simple surface
-            cloud.push(x, y, z)?;
+            cloud.push(PointXYZ::new(x, y, z))?;
         }
     }
 

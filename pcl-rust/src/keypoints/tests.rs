@@ -1,29 +1,29 @@
 //! Comprehensive tests for keypoint detection algorithms
 
-use crate::common::{PointCloud, PointXYZ, PointXYZI};
+use crate::common::{PointCloud, PointXYZ, PointXYZI, XYZ, XYZI};
 use crate::error::PclResult;
 use crate::keypoints::*;
 use crate::search::{KdTreeXYZ, SearchInputCloud};
 
 /// Create a simple test cloud with known features
-fn create_test_cloud_xyz() -> PclResult<PointCloud<PointXYZ>> {
+fn create_test_cloud_xyz() -> PclResult<PointCloud<XYZ>> {
     let mut cloud = PointCloud::new()?;
 
     // Create a simple L-shaped corner (should be detected as keypoint)
     // Horizontal line
     for i in 0..10 {
-        PointCloud::<PointXYZ>::push(&mut cloud, i as f32 * 0.1, 0.0, 0.0)?;
+        cloud.push(PointXYZ::new(i as f32 * 0.1, 0.0, 0.0))?;
     }
 
     // Vertical line
     for i in 1..10 {
-        PointCloud::<PointXYZ>::push(&mut cloud, 0.0, i as f32 * 0.1, 0.0)?;
+        cloud.push(PointXYZ::new(0.0, i as f32 * 0.1, 0.0))?;
     }
 
     // Add some planar points (should not be keypoints)
     for i in 0..5 {
         for j in 0..5 {
-            PointCloud::<PointXYZ>::push(&mut cloud, 2.0 + i as f32 * 0.1, j as f32 * 0.1, 0.0)?;
+            cloud.push(PointXYZ::new(2.0 + i as f32 * 0.1, j as f32 * 0.1, 0.0))?;
         }
     }
 
@@ -31,7 +31,7 @@ fn create_test_cloud_xyz() -> PclResult<PointCloud<PointXYZ>> {
 }
 
 /// Create a test cloud with intensity values
-fn create_test_cloud_xyzi() -> PclResult<PointCloud<PointXYZI>> {
+fn create_test_cloud_xyzi() -> PclResult<PointCloud<XYZI>> {
     let mut cloud = PointCloud::new()?;
 
     // Create a grid with varying intensity
@@ -42,13 +42,13 @@ fn create_test_cloud_xyzi() -> PclResult<PointCloud<PointXYZI>> {
             let z = 0.0;
             let intensity = (i * j) as f32; // Varying intensity
 
-            cloud.push_with_intensity(x, y, z, intensity)?;
+            cloud.push(PointXYZI::new(x, y, z, intensity))?;
         }
     }
 
     // Add some high-intensity points (potential keypoints)
-    cloud.push_with_intensity(0.5, 0.5, 0.1, 255.0)?;
-    cloud.push_with_intensity(0.2, 0.8, 0.1, 255.0)?;
+    cloud.push(PointXYZI::new(0.5, 0.5, 0.1, 255.0))?;
+    cloud.push(PointXYZI::new(0.2, 0.8, 0.1, 255.0))?;
 
     Ok(cloud)
 }
@@ -122,7 +122,7 @@ mod harris_tests {
 
     #[test]
     fn test_harris_empty_cloud() {
-        let cloud = PointCloud::<PointXYZ>::new().unwrap();
+        let cloud = PointCloud::<XYZ>::new().unwrap();
         let mut harris = Harris3D::new().unwrap();
 
         // Should error on empty cloud
@@ -331,7 +331,7 @@ mod integration_tests {
     #[test]
     fn test_keypoint_detection_pipeline() {
         // Create a more complex test cloud
-        let mut cloud = PointCloud::<PointXYZ>::new().unwrap();
+        let mut cloud = PointCloud::<XYZ>::new().unwrap();
 
         // Add a cube with edges (corners should be keypoints)
         let positions = [
@@ -346,15 +346,15 @@ mod integration_tests {
         ];
 
         for &(x, y, z) in &positions {
-            cloud.push(x, y, z).unwrap();
+            cloud.push(PointXYZ::new(x, y, z)).unwrap();
         }
 
         // Add points along edges
         for i in 1..10 {
             let t = i as f32 / 10.0;
-            cloud.push(t, 0.0, 0.0).unwrap();
-            cloud.push(0.0, t, 0.0).unwrap();
-            cloud.push(0.0, 0.0, t).unwrap();
+            cloud.push(PointXYZ::new(t, 0.0, 0.0)).unwrap();
+            cloud.push(PointXYZ::new(0.0, t, 0.0)).unwrap();
+            cloud.push(PointXYZ::new(0.0, 0.0, t)).unwrap();
         }
 
         // Test Harris detection
