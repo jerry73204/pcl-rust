@@ -1,6 +1,46 @@
 # PCL-Rust Implementation Plan
 
+> 🚨 **CRITICAL**: Memory alignment issue discovered (2025-06-22) - PCL's EIGEN_ALIGN16 is incompatible with cxx::UniquePtr. See [FFI Migration Plan](#ffi-migration-plan-raw-pointers-with-explicit-ownership) for the solution. This blocks 50+ tests from passing.
+
 This document outlines the implementation plan for PCL-Rust bindings, providing safe Rust interfaces to the Point Cloud Library.
+
+## Development Workflow
+
+### Makefile Commands (Recommended)
+
+Use the provided Makefile for consistent development workflow:
+
+```bash
+# Primary development commands
+make build              # Build with stable features (no visualization)
+make test               # Run tests with stable features (recommended)
+make lint               # Run clippy for code quality checks
+make clean              # Clean build artifacts
+
+# Advanced commands (may have issues)
+make build-all-features # Build with all features including visualization
+make test-all-features  # Run tests with all features (may fail due to VTK)
+
+# Information
+make help               # Show all available targets
+```
+
+**Why use Makefile?**
+- **Feature Stability**: Builds with stable feature set by default (excludes problematic visualization)
+- **Consistency**: Ensures all developers use the same commands and feature flags
+- **VTK Issues**: Handles VTK visualization feature that may have linking issues
+- **Simplified Workflow**: No need to remember long feature flag combinations
+
+### Direct Cargo Commands (if needed)
+
+For advanced use cases, direct cargo commands are still available:
+```bash
+# Stable build (equivalent to make build)
+cargo build --all-targets --features "search,octree,io,registration,sample_consensus,segmentation,keypoints,surface,features,filters"
+
+# Stable test (equivalent to make test)  
+cargo nextest run --all-targets --features "search,octree,io,registration,sample_consensus,segmentation,keypoints,surface,features,filters" --no-fail-fast
+```
 
 ## Recent Achievements (2025-06-18)
 
@@ -45,14 +85,183 @@ This document outlines the implementation plan for PCL-Rust bindings, providing 
 - **Backward Compatibility**: Type aliases preserve existing API (PointCloudXYZ = PointCloud<PointXYZ>)
 - **Surface Algorithms**: All surface reconstruction algorithms now properly integrated with PointCloudNormal
 
-### 📊 Current Stats
-- **Total Tests**: 180+ passing (including keypoints and segmentation tests)
+### 📊 Current Stats (Updated 2025-06-22)
+- **Total Tests**: 406 test functions discovered via cargo nextest (comprehensive test suite)
+- **Test Results**: 356 passed, 50 failed, 4 skipped (87.7% success rate)
+- **🔴 CRITICAL BLOCKER**: Memory alignment incompatibility between cxx::UniquePtr and PCL's EIGEN_ALIGN16
+  - **19 segfaults** in filters module (all filter operations crash during cleanup)
+  - **Root cause**: PCL uses custom aligned allocators, cxx only supports default deleters
+  - **Solution**: Migrate to raw pointer FFI with explicit ownership (see FFI Migration Plan above)
+- **Test Issues by Module**:
+  - Filters: 19 segfaults (memory alignment)
+  - Surface: 13 failures (likely same alignment issue)
+  - Registration: 8 failures
+  - I/O: 3 failures
 - **Point Types**: 5 fully implemented (PointXYZ, PointXYZRGB, PointXYZI, PointNormal, PointWithScale)
 - **Modules Completed**: 16 modules with full FFI and Rust API (including segmentation)
 - **Generic Algorithms**: KdTree<T>, Filter<T>, Surface<T> all generic
 - **Keypoint Detectors**: 3 algorithms (Harris3D, ISS3D, SIFT)
 - **Segmentation Algorithms**: 8 algorithms (SAC, Region Growing, Clustering, PMF, etc.)
 - **Surface Algorithms**: 7 algorithms (MarchingCubes, OrganizedFastMesh, Poisson, Greedy, MLS, etc.)
+- **Test Coverage**: Comprehensive tests across all modules with 406 test functions
+
+### 🚨 Critical Issue: Memory Alignment (2025-06-22)
+**Problem Discovered**: PCL uses `EIGEN_ALIGN16` and `PCL_MAKE_ALIGNED_OPERATOR_NEW` for SIMD-optimized memory alignment. The cxx crate only supports `std::unique_ptr` with default deleters, causing segfaults when PCL objects allocated with `Eigen::aligned_malloc` are freed with standard `delete`.
+
+**Impact**: All filter operations segfault during cleanup, blocking 19 tests and making filters unusable.
+
+**Root Cause**: 
+- PCL types override `operator new/delete` for 16-byte alignment
+- cxx::UniquePtr uses std::default_delete which calls regular `delete`
+- Mismatch between aligned allocation and standard deallocation causes memory corruption
+
+## FFI Migration Plan: Raw Pointers with Explicit Ownership
+
+### Overview
+Migrate from cxx's UniquePtr to raw pointers with explicit ownership transfer to respect PCL's custom memory alignment requirements. This approach maintains safety through clear ownership semantics and explicit lifetime management.
+
+### Migration Phases
+
+#### Phase 1: Infrastructure (1-2 days)
+| Task                          | Description                                   | Verification                        |
+|-------------------------------|-----------------------------------------------|-------------------------------------|
+| Create raw pointer wrapper    | Implement `PclPtr<T>` wrapper with drop logic | Unit tests for creation/destruction |
+| Add ownership transfer traits | Define `TransferOwnership` trait for safe FFI | Test ownership semantics            |
+| Update build system           | Modify build.rs to handle new FFI patterns    | Clean builds pass                   |
+| Create migration helpers      | Conversion utilities from old to new API      | Helper function tests               |
+
+#### Phase 2: Critical Modules (2-3 days)
+| Module  | Components                                  | Tests to Fix         | Verification          |
+|---------|---------------------------------------------|----------------------|-----------------------|
+| filters | PassThrough, VoxelGrid, Statistical, Radius | 19 segfaulting tests | All filter tests pass |
+| common  | PointCloud creation and cloning             | Core functionality   | Memory leak detection |
+| io      | File loading that creates PointClouds       | 3 failing tests      | I/O roundtrip tests   |
+
+#### Phase 3: Remaining Modules (3-4 days)
+| Module       | Components                    | Tests to Fix      | Verification          |
+|--------------|-------------------------------|-------------------|-----------------------|
+| surface      | All reconstruction algorithms | 13 tests          | Surface tests pass    |
+| registration | ICP, NDT alignment            | 8 tests           | Registration accuracy |
+| features     | Normal, FPFH, PFH estimation  | Feature tests     | Feature computation   |
+| segmentation | All segmentation algorithms   | Integration tests | Segmentation results  |
+
+#### Phase 4: Testing & Documentation (1-2 days)
+| Task                 | Description                        | Success Criteria   |
+|----------------------|------------------------------------|--------------------|
+| Run full test suite  | `make test` (stable features)       | 406/406 tests pass |
+| Memory leak testing  | Valgrind/ASAN verification         | No memory leaks    |
+| Performance testing  | Benchmark vs old implementation    | No regression      |
+| Update documentation | Migration guide and API docs       | Complete docs      |
+
+### Implementation Details
+
+#### 1. Raw Pointer Wrapper
+```rust
+// pcl-sys/src/ptr.rs
+pub struct PclPtr<T> {
+    ptr: *mut T,
+    _phantom: PhantomData<T>,
+}
+
+impl<T> PclPtr<T> {
+    pub unsafe fn from_raw(ptr: *mut T) -> Self {
+        Self { ptr, _phantom: PhantomData }
+    }
+    
+    pub fn as_ptr(&self) -> *const T { self.ptr }
+    pub fn as_mut_ptr(&mut self) -> *mut T { self.ptr }
+}
+
+impl<T> Drop for PclPtr<T> {
+    fn drop(&mut self) {
+        unsafe {
+            // Call PCL's aligned delete through FFI
+            ffi::delete_aligned(self.ptr);
+        }
+    }
+}
+```
+
+#### 2. FFI Functions Pattern
+```cpp
+// C++ side
+extern "C" {
+    PointCloudXYZ* pcl_pointcloud_xyz_new() {
+        return new pcl::PointCloud<pcl::PointXYZ>();
+    }
+    
+    void pcl_pointcloud_xyz_delete(PointCloudXYZ* cloud) {
+        delete cloud;  // Uses PCL's overloaded delete
+    }
+    
+    PointCloudXYZ* pcl_filter_pass_through_xyz(
+        PassThroughXYZ* filter, 
+        PointCloudXYZ* input
+    ) {
+        auto output = new pcl::PointCloud<pcl::PointXYZ>();
+        filter->setInputCloud(input->shared_from_this());
+        filter->filter(*output);
+        return output;
+    }
+}
+```
+
+#### 3. Rust Safe Wrapper Pattern
+```rust
+// pcl-rust/src/filters/pass_through.rs
+pub struct PassThrough {
+    inner: PclPtr<ffi::PassThroughXYZ>,
+}
+
+impl PassThrough {
+    pub fn filter(&mut self, input: &PointCloud) -> Result<PointCloud> {
+        unsafe {
+            let output_ptr = ffi::pcl_filter_pass_through_xyz(
+                self.inner.as_mut_ptr(),
+                input.as_ptr()
+            );
+            
+            if output_ptr.is_null() {
+                return Err(PclError::FilterFailed);
+            }
+            
+            Ok(PointCloud::from_raw(output_ptr))
+        }
+    }
+}
+```
+
+### Verification Steps
+
+1. **Memory Safety Verification**
+   - [ ] Run with ASAN: `RUSTFLAGS="-Z sanitizer=address" make test`
+   - [ ] Run with Valgrind: `valgrind --leak-check=full make test`
+   - [ ] Check for double-free errors
+   - [ ] Verify proper alignment with custom allocator
+
+2. **Test Suite Verification**
+   - [ ] All 19 filter tests pass without segfaults
+   - [ ] All 406 tests pass with `cargo nextest run --no-fail-fast`
+   - [ ] No performance regression in benchmarks
+   - [ ] Examples run successfully
+
+3. **API Compatibility**
+   - [ ] Existing public API remains unchanged
+   - [ ] Migration guide for any breaking changes
+   - [ ] Deprecation warnings for old patterns
+
+### Timeline: 7-10 days total
+- Days 1-2: Infrastructure and helpers
+- Days 3-5: Critical modules (filters, common, io)
+- Days 6-8: Remaining modules
+- Days 9-10: Testing, verification, documentation
+
+### Success Criteria
+- All 406 tests passing
+- No memory leaks or alignment issues
+- Performance within 5% of current implementation
+- Clear migration documentation
+- CI/CD pipeline updated and passing
 
 ## Project Overview
 
@@ -190,6 +399,15 @@ The FFI layer (pcl-sys) now compiles successfully with all modules enabled and t
 
 ## Implementation Plan & TODOs
 
+### 🚨 URGENT: FFI Migration (Blocking 50+ Tests)
+- [ ] **Phase 1**: Implement PclPtr wrapper and ownership traits (1-2 days)
+- [ ] **Phase 2**: Migrate critical modules - filters, common, io (2-3 days)
+- [ ] **Phase 3**: Migrate remaining modules - surface, registration, features (3-4 days)
+- [ ] **Phase 4**: Full testing, verification, and documentation (1-2 days)
+- [ ] Run memory leak detection with Valgrind/ASAN
+- [ ] Verify all 406 tests pass without segfaults
+- [ ] Update CI/CD pipeline for new FFI approach
+
 ### Immediate TODOs (Phase 1 Complete ✅ - Move to Phase 2)
 - [x] Add KdTree_PointXYZI functions to common.cpp and functions.h
 - [x] Add point manipulation functions (get_point_coords, set_point_coords, push_back)
@@ -207,8 +425,8 @@ The FFI layer (pcl-sys) now compiles successfully with all modules enabled and t
 - [x] Create I/O examples
 - [x] Create filters examples
 - [x] Implement format auto-detection for I/O
-- [ ] Create comprehensive tests for I/O module
-- [ ] Create comprehensive tests for filters module
+- [ ] ⚠️ **BLOCKED**: Create comprehensive tests for I/O module (waiting for FFI migration)
+- [ ] ⚠️ **BLOCKED**: Create comprehensive tests for filters module (waiting for FFI migration)
 - [ ] Update safe Rust wrappers for sample_consensus module
 
 ### Common Module Enhancement TODOs (Based on Test Implementation)
@@ -275,8 +493,11 @@ The FFI layer (pcl-sys) now compiles successfully with all modules enabled and t
 - [x] Create visualization safe Rust API
 - [x] Add visualization examples and tests
 
-### Testing TODOs
-- [x] Implement unit tests for common module (26 tests completed)
+### Testing TODOs (Updated 2025-06-22)
+- [x] Implement unit tests for common module (tests completed)
+- [x] Implement unit tests for keypoints module (comprehensive test coverage)
+- [x] Implement unit tests for segmentation module (comprehensive test coverage)
+- [ ] Implement unit tests for remaining modules (features, filters, io, etc.)
 - [ ] Fix thread safety issues in SIFT keypoint tests
 - [ ] Add mutex/synchronization for PCL algorithms that aren't thread-safe
 - [ ] Add integration tests with sample point cloud data
@@ -311,7 +532,7 @@ The FFI layer (pcl-sys) now compiles successfully with all modules enabled and t
 - **Problem**: Segmentation fault when running tests with multiple threads, specifically in SIFT keypoint detection tests
 - **Symptoms**: Tests pass with `RUST_TEST_THREADS=1` but crash with parallel execution
 - **Root Cause**: Likely race condition or memory safety issue in underlying PCL SIFT implementation
-- **Workaround**: Run tests with single thread: `RUST_TEST_THREADS=1 cargo test`
+- **Workaround**: Run tests with single thread: `RUST_TEST_THREADS=1 make test`
 - **TODO**: Investigate thread safety of PCL algorithms and add synchronization if needed
 
 ### FFI Limitations
@@ -744,7 +965,7 @@ The FFI layer (pcl-sys) now compiles successfully with all modules enabled and t
 ## Development Guidelines
 
 ### Code Quality Standards
-- ✅ Must pass `cargo clippy` with no warnings
+- ✅ Must pass `make lint` with no warnings
 - ✅ Must be formatted with `cargo +nightly fmt`
 - ✅ All public APIs must have documentation
 - ✅ All modules must have integration tests
