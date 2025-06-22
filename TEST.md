@@ -556,122 +556,122 @@ Updated: 2025-06-19 | PCL Version: 1.12.1
 **Note**: PCL tests are primarily unit tests organized by module. Each C++ test file in `pcl/test/{module}/` maps to test functions in `pcl-rust/src/{module}/tests.rs`.
 
 #### Common Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/common/test_common.cpp | src/common/tests.rs | ✅ Partial | Basic point type tests |
+| C++ Test File                   | Rust Implementation | Status     | Notes                      |
+|---------------------------------|---------------------|------------|----------------------------|
+| test/common/test_common.cpp     | src/common/tests.rs | ✅ Partial | Basic point type tests     |
 | test/common/test_pointcloud.cpp | src/common/tests.rs | ✅ Partial | PointCloud container tests |
-| test/common/test_copy_point.cpp | src/common/tests.rs | ❌ TODO | Point copy operations |
-| test/common/test_transforms.cpp | src/common/tests.rs | ❌ TODO | Transform operations |
-| test/common/test_centroid.cpp | src/common/tests.rs | ❌ TODO | Centroid calculations |
+| test/common/test_copy_point.cpp | src/common/tests.rs | ❌ TODO    | Point copy operations      |
+| test/common/test_transforms.cpp | src/common/tests.rs | ❌ TODO    | Transform operations       |
+| test/common/test_centroid.cpp   | src/common/tests.rs | ❌ TODO    | Centroid calculations      |
 
 #### Filters Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/filters/test_filters.cpp | src/filters/tests.rs | ✅ Partial | PassThrough, VoxelGrid, Statistical, Radius tests |
-| test/filters/test_bilateral.cpp | src/filters/tests.rs | ❌ TODO | Bilateral filter tests |
-| test/filters/test_convolution.cpp | src/filters/tests.rs | ❌ TODO | Convolution filter tests |
-| test/filters/test_morphological.cpp | src/filters/tests.rs | ❌ TODO | Morphological filter tests |
-| test/filters/test_sampling.cpp | src/filters/tests.rs | ✅ Partial | Sampling filter tests |
-| test/filters/test_crop_hull.cpp | src/filters/tests.rs | ❌ TODO | CropHull filter tests |
+| C++ Test File                       | Rust Implementation  | Status     | Notes                                             |
+|-------------------------------------|----------------------|------------|---------------------------------------------------|
+| test/filters/test_filters.cpp       | src/filters/tests.rs | ✅ Partial | PassThrough, VoxelGrid, Statistical, Radius tests |
+| test/filters/test_bilateral.cpp     | src/filters/tests.rs | ❌ TODO    | Bilateral filter tests                            |
+| test/filters/test_convolution.cpp   | src/filters/tests.rs | ❌ TODO    | Convolution filter tests                          |
+| test/filters/test_morphological.cpp | src/filters/tests.rs | ❌ TODO    | Morphological filter tests                        |
+| test/filters/test_sampling.cpp      | src/filters/tests.rs | ✅ Partial | Sampling filter tests                             |
+| test/filters/test_crop_hull.cpp     | src/filters/tests.rs | ❌ TODO    | CropHull filter tests                             |
 
 #### IO Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/io/test_io.cpp | src/io/tests.rs | ✅ Partial | PCD file I/O tests |
-| test/io/test_ply_io.cpp | src/io/tests.rs | ❌ TODO | PLY file I/O tests |
-| test/io/test_ply_mesh_io.cpp | src/io/tests.rs | ❌ TODO | PLY mesh I/O tests |
-| test/io/test_octree_compression.cpp | src/io/tests.rs | ❌ TODO | Octree compression tests |
-| test/io/test_buffers.cpp | src/io/tests.rs | ❌ TODO | Buffer operation tests |
+| C++ Test File                       | Rust Implementation | Status     | Notes                    |
+|-------------------------------------|---------------------|------------|--------------------------|
+| test/io/test_io.cpp                 | src/io/tests.rs     | ✅ Partial | PCD file I/O tests       |
+| test/io/test_ply_io.cpp             | src/io/tests.rs     | ❌ TODO    | PLY file I/O tests       |
+| test/io/test_ply_mesh_io.cpp        | src/io/tests.rs     | ❌ TODO    | PLY mesh I/O tests       |
+| test/io/test_octree_compression.cpp | src/io/tests.rs     | ❌ TODO    | Octree compression tests |
+| test/io/test_buffers.cpp            | src/io/tests.rs     | ❌ TODO    | Buffer operation tests   |
 
 #### Features Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/features/test_normal_estimation.cpp | src/features/tests.rs | ✅ Partial | Normal estimation tests |
-| test/features/test_pfh_estimation.cpp | src/features/tests.rs | ❌ TODO | PFH feature tests |
-| test/features/test_fpfh_estimation.cpp | src/features/tests.rs | ✅ Partial | FPFH feature tests |
-| test/features/test_shot_estimation.cpp | src/features/tests.rs | ❌ TODO | SHOT feature tests |
-| test/features/test_boundary_estimation.cpp | src/features/tests.rs | ❌ TODO | Boundary detection tests |
-| test/features/test_curvatures_estimation.cpp | src/features/tests.rs | ❌ TODO | Curvature estimation tests |
+| C++ Test File                                | Rust Implementation   | Status     | Notes                      |
+|----------------------------------------------|-----------------------|------------|----------------------------|
+| test/features/test_normal_estimation.cpp     | src/features/tests.rs | ✅ Partial | Normal estimation tests    |
+| test/features/test_pfh_estimation.cpp        | src/features/tests.rs | ❌ TODO    | PFH feature tests          |
+| test/features/test_fpfh_estimation.cpp       | src/features/tests.rs | ✅ Partial | FPFH feature tests         |
+| test/features/test_shot_estimation.cpp       | src/features/tests.rs | ❌ TODO    | SHOT feature tests         |
+| test/features/test_boundary_estimation.cpp   | src/features/tests.rs | ❌ TODO    | Boundary detection tests   |
+| test/features/test_curvatures_estimation.cpp | src/features/tests.rs | ❌ TODO    | Curvature estimation tests |
 
 #### Keypoints Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/keypoints/test_keypoints.cpp | src/keypoints/tests.rs | ✅ Implemented | SIFT keypoint tests |
-| test/keypoints/test_iss_3d.cpp | src/keypoints/tests.rs | ✅ Implemented | ISS3D, Harris3D tests |
+| C++ Test File                     | Rust Implementation    | Status         | Notes                 |
+|-----------------------------------|------------------------|----------------|-----------------------|
+| test/keypoints/test_keypoints.cpp | src/keypoints/tests.rs | ✅ Implemented | SIFT keypoint tests   |
+| test/keypoints/test_iss_3d.cpp    | src/keypoints/tests.rs | ✅ Implemented | ISS3D, Harris3D tests |
 
 #### Registration Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/registration/test_registration.cpp | src/registration/tests.rs | ✅ Partial | ICP and general registration tests |
-| test/registration/test_ndt.cpp | src/registration/tests.rs | ✅ Partial | NDT registration tests |
-| test/registration/test_correspondence_estimation.cpp | src/registration/tests.rs | ❌ TODO | Correspondence estimation tests |
-| test/registration/test_correspondence_rejectors.cpp | src/registration/tests.rs | ❌ TODO | Correspondence rejector tests |
-| test/registration/test_sac_ia.cpp | src/registration/tests.rs | ❌ TODO | SAC-IA alignment tests |
+| C++ Test File                                        | Rust Implementation       | Status     | Notes                              |
+|------------------------------------------------------|---------------------------|------------|------------------------------------|
+| test/registration/test_registration.cpp              | src/registration/tests.rs | ✅ Partial | ICP and general registration tests |
+| test/registration/test_ndt.cpp                       | src/registration/tests.rs | ✅ Partial | NDT registration tests             |
+| test/registration/test_correspondence_estimation.cpp | src/registration/tests.rs | ❌ TODO    | Correspondence estimation tests    |
+| test/registration/test_correspondence_rejectors.cpp  | src/registration/tests.rs | ❌ TODO    | Correspondence rejector tests      |
+| test/registration/test_sac_ia.cpp                    | src/registration/tests.rs | ❌ TODO    | SAC-IA alignment tests             |
 
 #### Segmentation Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/segmentation/test_segmentation.cpp | src/segmentation/tests.rs | ✅ Implemented | SAC, Region Growing, Euclidean tests |
-| test/segmentation/test_non_linear.cpp | src/segmentation/tests.rs | ❌ TODO | Non-linear optimization tests |
-| test/segmentation/test_random_walker.cpp | src/segmentation/tests.rs | ❌ TODO | Random walker segmentation tests |
+| C++ Test File                            | Rust Implementation       | Status         | Notes                                |
+|------------------------------------------|---------------------------|----------------|--------------------------------------|
+| test/segmentation/test_segmentation.cpp  | src/segmentation/tests.rs | ✅ Implemented | SAC, Region Growing, Euclidean tests |
+| test/segmentation/test_non_linear.cpp    | src/segmentation/tests.rs | ❌ TODO        | Non-linear optimization tests        |
+| test/segmentation/test_random_walker.cpp | src/segmentation/tests.rs | ❌ TODO        | Random walker segmentation tests     |
 
 #### Surface Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/surface/test_moving_least_squares.cpp | src/surface/tests.rs | ✅ Partial | MLS smoothing tests |
-| test/surface/test_gp3.cpp | src/surface/tests.rs | ✅ Partial | Greedy Projection tests |
-| test/surface/test_marching_cubes.cpp | src/surface/tests.rs | ✅ Partial | Marching Cubes tests |
-| test/surface/test_poisson.cpp | src/surface/tests.rs | ✅ Partial | Poisson reconstruction tests |
-| test/surface/test_convex_hull.cpp | src/surface/tests.rs | ❌ TODO | Convex hull tests |
-| test/surface/test_concave_hull.cpp | src/surface/tests.rs | ❌ TODO | Concave hull tests |
-| test/surface/test_organized_fast_mesh.cpp | src/surface/tests.rs | ❌ TODO | Organized fast mesh tests |
+| C++ Test File                              | Rust Implementation  | Status     | Notes                        |
+|--------------------------------------------|----------------------|------------|------------------------------|
+| test/surface/test_moving_least_squares.cpp | src/surface/tests.rs | ✅ Partial | MLS smoothing tests          |
+| test/surface/test_gp3.cpp                  | src/surface/tests.rs | ✅ Partial | Greedy Projection tests      |
+| test/surface/test_marching_cubes.cpp       | src/surface/tests.rs | ✅ Partial | Marching Cubes tests         |
+| test/surface/test_poisson.cpp              | src/surface/tests.rs | ✅ Partial | Poisson reconstruction tests |
+| test/surface/test_convex_hull.cpp          | src/surface/tests.rs | ❌ TODO    | Convex hull tests            |
+| test/surface/test_concave_hull.cpp         | src/surface/tests.rs | ❌ TODO    | Concave hull tests           |
+| test/surface/test_organized_fast_mesh.cpp  | src/surface/tests.rs | ❌ TODO    | Organized fast mesh tests    |
 
 #### Search Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/search/test_search.cpp | src/search/tests.rs | ✅ Partial | KdTree and general search tests |
-| test/search/test_kdtree.cpp | src/search/tests.rs | ✅ Partial | KdTree specific tests |
-| test/search/test_organized.cpp | src/search/tests.rs | ❌ TODO | Organized neighbor search tests |
-| test/search/test_organized_index.cpp | src/search/tests.rs | ❌ TODO | Organized index search tests |
-| test/search/test_octree.cpp | src/search/tests.rs | ❌ TODO | Octree search tests |
-| test/search/test_flann_search.cpp | src/search/tests.rs | ❌ TODO | FLANN search tests |
+| C++ Test File                        | Rust Implementation | Status     | Notes                           |
+|--------------------------------------|---------------------|------------|---------------------------------|
+| test/search/test_search.cpp          | src/search/tests.rs | ✅ Partial | KdTree and general search tests |
+| test/search/test_kdtree.cpp          | src/search/tests.rs | ✅ Partial | KdTree specific tests           |
+| test/search/test_organized.cpp       | src/search/tests.rs | ❌ TODO    | Organized neighbor search tests |
+| test/search/test_organized_index.cpp | src/search/tests.rs | ❌ TODO    | Organized index search tests    |
+| test/search/test_octree.cpp          | src/search/tests.rs | ❌ TODO    | Octree search tests             |
+| test/search/test_flann_search.cpp    | src/search/tests.rs | ❌ TODO    | FLANN search tests              |
 
 #### Octree Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/octree/test_octree.cpp | src/octree/tests.rs | ✅ Partial | Basic octree operations tests |
-| test/octree/test_octree_iterator.cpp | src/octree/tests.rs | ❌ TODO | Octree iterator tests |
+| C++ Test File                        | Rust Implementation | Status     | Notes                         |
+|--------------------------------------|---------------------|------------|-------------------------------|
+| test/octree/test_octree.cpp          | src/octree/tests.rs | ✅ Partial | Basic octree operations tests |
+| test/octree/test_octree_iterator.cpp | src/octree/tests.rs | ❌ TODO    | Octree iterator tests         |
 
 #### Sample Consensus Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/sample_consensus/test_sample_consensus.cpp | src/sample_consensus/tests.rs | ✅ Partial | RANSAC, MSAC, etc. tests |
-| test/sample_consensus/test_sample_consensus_plane_models.cpp | src/sample_consensus/tests.rs | ✅ Partial | Plane model tests |
-| test/sample_consensus/test_sample_consensus_line_models.cpp | src/sample_consensus/tests.rs | ❌ TODO | Line model tests |
-| test/sample_consensus/test_sample_consensus_quadric_models.cpp | src/sample_consensus/tests.rs | ❌ TODO | Quadric model tests |
+| C++ Test File                                                  | Rust Implementation           | Status     | Notes                    |
+|----------------------------------------------------------------|-------------------------------|------------|--------------------------|
+| test/sample_consensus/test_sample_consensus.cpp                | src/sample_consensus/tests.rs | ✅ Partial | RANSAC, MSAC, etc. tests |
+| test/sample_consensus/test_sample_consensus_plane_models.cpp   | src/sample_consensus/tests.rs | ✅ Partial | Plane model tests        |
+| test/sample_consensus/test_sample_consensus_line_models.cpp    | src/sample_consensus/tests.rs | ❌ TODO    | Line model tests         |
+| test/sample_consensus/test_sample_consensus_quadric_models.cpp | src/sample_consensus/tests.rs | ❌ TODO    | Quadric model tests      |
 
 #### Visualization Module
-| C++ Test File | Rust Implementation | Status | Notes |
-|---------------|---------------------|--------|-------|
-| test/visualization/test_visualization.cpp | src/visualization/tests.rs | ❌ TODO | Visualization unit tests |
-| - | examples/visualization_demo.rs | ✅ Example | Visualization examples |
+| C++ Test File                             | Rust Implementation            | Status     | Notes                    |
+|-------------------------------------------|--------------------------------|------------|--------------------------|
+| test/visualization/test_visualization.cpp | src/visualization/tests.rs     | ❌ TODO    | Visualization unit tests |
+| -                                         | examples/visualization_demo.rs | ✅ Example | Visualization examples   |
 
 ### Summary Statistics
 
-| Module | C++ Test Files | Rust Status | Coverage | Notes |
-|--------|----------------|-------------|----------|-------|
-| Common | 26 test files | ✅ Partial in tests.rs | ~15% | Basic tests implemented |
-| Filters | 6 test files | ✅ Partial in tests.rs | ~33% | Core filters tested |
-| IO | 5 test files | ✅ Partial in tests.rs | ~20% | PCD I/O tested |
-| Features | 22 test files | ✅ Partial in tests.rs | ~10% | Normal, FPFH tested |
-| Keypoints | 2 test files | ✅ tests.rs | 100% | All keypoint tests present |
-| Registration | 5 test files | ✅ Partial in tests.rs | ~40% | ICP, NDT tested |
-| Segmentation | 3 test files | ✅ tests.rs | ~70% | Major algorithms tested |
-| Surface | 7 test files | ✅ Partial in tests.rs | ~60% | Core algorithms tested |
-| Search | 6 test files | ✅ Partial in tests.rs | ~33% | KdTree tested |
-| Octree | 2 test files | ✅ Partial in tests.rs | ~50% | Basic octree tested |
-| Sample Consensus | 4 test files | ✅ Partial in tests.rs | ~50% | RANSAC, plane models tested |
-| Visualization | 1 test file | ❌ No tests.rs | 0% | Examples only |
+| Module           | C++ Test Files | Rust Status            | Coverage | Notes                       |
+|------------------|----------------|------------------------|----------|-----------------------------|
+| Common           | 26 test files  | ✅ Partial in tests.rs | ~15%     | Basic tests implemented     |
+| Filters          | 6 test files   | ✅ Partial in tests.rs | ~33%     | Core filters tested         |
+| IO               | 5 test files   | ✅ Partial in tests.rs | ~20%     | PCD I/O tested              |
+| Features         | 22 test files  | ✅ Partial in tests.rs | ~10%     | Normal, FPFH tested         |
+| Keypoints        | 2 test files   | ✅ tests.rs            | 100%     | All keypoint tests present  |
+| Registration     | 5 test files   | ✅ Partial in tests.rs | ~40%     | ICP, NDT tested             |
+| Segmentation     | 3 test files   | ✅ tests.rs            | ~70%     | Major algorithms tested     |
+| Surface          | 7 test files   | ✅ Partial in tests.rs | ~60%     | Core algorithms tested      |
+| Search           | 6 test files   | ✅ Partial in tests.rs | ~33%     | KdTree tested               |
+| Octree           | 2 test files   | ✅ Partial in tests.rs | ~50%     | Basic octree tested         |
+| Sample Consensus | 4 test files   | ✅ Partial in tests.rs | ~50%     | RANSAC, plane models tested |
+| Visualization    | 1 test file    | ❌ No tests.rs         | 0%       | Examples only               |
 
 ### Test Data Files Used
 

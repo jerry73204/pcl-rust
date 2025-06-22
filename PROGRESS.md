@@ -66,29 +66,35 @@ PCL-Rust provides safe Rust bindings for the Point Cloud Library (PCL) using a t
 
 ### Phase 1: Foundation ✅ **MINIMAL FFI COMPLETE, RUST API ENABLED** 
 
-| Module     | Component                | FFI Status  | Rust API Status | Priority | Notes |
-|------------|--------------------------|-------------|-----------------|----------|--------|
-| **common** |                          |             |                 | High     |        |
-|            | PointXYZ                 | ✅ Complete | ✅ Working      |          | All point types fully functional |
-|            | PointXYZI                | ✅ Complete | ✅ Working      |          | All point types fully functional |
-|            | PointXYZRGB              | ✅ Complete | ✅ Working      |          | All point types fully functional |
-|            | PointNormal              | ✅ Complete | ✅ Working      |          | Full implementation with normals (2025-06-18) |
-|            | Basic PointCloud ops     | ✅ Complete | ✅ Working      |          | size, clear, empty work |
-|            | Extended PointCloud ops  | ✅ Complete | ✅ Working      |          | reserve, resize, width, height, is_dense |
-|            | Point field access       | ✅ Complete | ✅ Working      |          | get_x, get_y, get_z variants |
-|            | Point manipulation       | ✅ Complete | ✅ Working      |          | get_point_coords, set_point_coords, push_back |
-|            | Generic PointCloud<T>    | ✅ Complete | ✅ Working      |          | Unified generic API (2025-06-18) |
-| **search** |                          |             |                 | High     |        |
-|            | KdTree PointXYZ          | ✅ Complete | ✅ Working      |          | Fully implemented |
-|            | KdTree PointXYZRGB       | ✅ Complete | ✅ Working      |          | Fully implemented |
-|            | KdTree PointXYZI         | ✅ Complete | ✅ Working      |          | All functions implemented and working |
-| **octree** |                          |             |                 | High     |        |
-|            | OctreeSearch             | ✅ Complete | ✅ Working      |          | All search functions implemented |
-|            | OctreeVoxelCentroid      | ✅ Complete | ✅ Working      |          | All voxel centroid functions working |
-|            | Advanced octree ops      | ✅ Complete | ✅ Working      |          | search, introspection functions all enabled |
-| **error**  |                          |             |                 | High     |        |
-|            | Error types              | ✅ Complete | ✅ Working      |          | thiserror-based error handling |
-|            | Result types             | ✅ Complete | ✅ Working      |          | Custom Result<T, PclError> |
+| Module     | Component               | FFI Status  | Rust API Status  | Priority | Notes                                             |
+|------------|-------------------------|-------------|------------------|----------|---------------------------------------------------|
+| **common** |                         |             |                  | High     |                                                   |
+|            | PointXYZ                | ✅ Complete | ✅ Working       |          | All point types fully functional                  |
+|            | PointXYZI               | ✅ Complete | ✅ Working       |          | All point types fully functional                  |
+|            | PointXYZRGB             | ✅ Complete | ✅ Working       |          | All point types fully functional                  |
+|            | PointNormal             | ✅ Complete | ✅ Working       |          | Full implementation with normals (2025-06-18)     |
+|            | Basic PointCloud ops    | ✅ Complete | ✅ Working       |          | size, clear, empty work                           |
+|            | Extended PointCloud ops | ✅ Complete | ✅ Working       |          | reserve, resize, width, height, is_dense          |
+|            | Point field access      | ✅ Complete | ⚠️ Limited        |          | No direct point access via at() - FFI limitation  |
+|            | Point manipulation      | ✅ Complete | ✅ Working       |          | Can modify point fields via set_x/y/z methods     |
+|            | Generic PointCloud<T>   | ✅ Complete | ✅ Working       |          | Unified generic API (2025-06-18)                  |
+|            | Point creation          | ✅ Complete | ⚠️ Limited        |          | Points created via FFI, not directly in Rust      |
+|            | Cloud width/height set  | ✅ Complete | ✅ Working       |          | set_width/set_height methods implemented          |
+|            | Point cloud clone       | ✅ Complete | ✅ Working       |          | Clone trait implemented for all PointCloud types  |
+|            | Transform operations    | ✅ Complete | ✅ Working       |          | 4x4 matrix transformations for all point types    |
+|            | Centroid calculations   | ✅ Complete | ✅ Working       |          | Available in traits::utils module                 |
+|            | Point is_finite()       | ✅ Complete | ✅ Working       |          | All point types now have is_finite() method       |
+| **search** |                         |             |                  | High     |                                                   |
+|            | KdTree PointXYZ         | ✅ Complete | ✅ Working       |          | Fully implemented                                 |
+|            | KdTree PointXYZRGB      | ✅ Complete | ✅ Working       |          | Fully implemented                                 |
+|            | KdTree PointXYZI        | ✅ Complete | ✅ Working       |          | All functions implemented and working             |
+| **octree** |                         |             |                  | High     |                                                   |
+|            | OctreeSearch            | ✅ Complete | ✅ Working       |          | All search functions implemented                  |
+|            | OctreeVoxelCentroid     | ✅ Complete | ✅ Working       |          | All voxel centroid functions working              |
+|            | Advanced octree ops     | ✅ Complete | ✅ Working       |          | search, introspection functions all enabled       |
+| **error**  |                         |             |                  | High     |                                                   |
+|            | Error types             | ✅ Complete | ✅ Working       |          | thiserror-based error handling                    |
+|            | Result types            | ✅ Complete | ✅ Working       |          | Custom Result<T, PclError>                        |
 
 ### Phase 2: I/O and Processing ✅ **FFI IMPLEMENTED, RUST API IN PROGRESS**
 
@@ -205,6 +211,20 @@ The FFI layer (pcl-sys) now compiles successfully with all modules enabled and t
 - [ ] Create comprehensive tests for filters module
 - [ ] Update safe Rust wrappers for sample_consensus module
 
+### Common Module Enhancement TODOs (Based on Test Implementation)
+- [x] Add FFI for direct point access (at() method) - Implemented but limited by cxx bridge
+- [x] Add FFI for point modification (set_x, set_y, set_z on existing points) - ✅ Complete
+- [x] Add FFI for setting cloud width/height dimensions - ✅ Complete
+- [x] Implement Clone trait for PointCloud (deep copy) - ✅ Complete
+- [x] Add transform operations (4x4 matrix transformations) - ✅ Complete (2025-06-20)
+- [x] Add centroid computation functions - ✅ Available in traits::utils
+- [x] Add is_finite() check for points - ✅ Complete with Rust API (2025-06-20)
+- [x] Add point-to-point distance calculations - ✅ Available in Xyz trait
+- [x] Add bounding box computation - ✅ Available in traits::utils
+- [ ] Investigate alternative approaches for point iteration (iterator pattern)
+- [ ] Add batch point access methods to work around FFI limitations
+- [x] Expose is_finite() in Rust API for all point types - ✅ Complete (2025-06-20)
+
 ### Phase 2 TODOs (Expand FFI)
 - [x] Design sample_consensus module architecture
 - [x] Create sample_consensus module structure  
@@ -256,6 +276,9 @@ The FFI layer (pcl-sys) now compiles successfully with all modules enabled and t
 - [x] Add visualization examples and tests
 
 ### Testing TODOs
+- [x] Implement unit tests for common module (26 tests completed)
+- [ ] Fix thread safety issues in SIFT keypoint tests
+- [ ] Add mutex/synchronization for PCL algorithms that aren't thread-safe
 - [ ] Add integration tests with sample point cloud data
 - [ ] Create benchmarks comparing with C++ PCL
 - [ ] Add property-based tests for search algorithms
@@ -263,6 +286,7 @@ The FFI layer (pcl-sys) now compiles successfully with all modules enabled and t
 - [ ] Add CI/CD pipeline with multiple PCL versions
 - [ ] Add I/O format round-trip tests
 - [ ] Create performance regression tests
+- [ ] Map PCL C++ tests to Rust equivalents systematically
 
 ### Documentation TODOs
 - [ ] Create comprehensive API documentation
@@ -281,7 +305,52 @@ The FFI layer (pcl-sys) now compiles successfully with all modules enabled and t
 - [ ] Add Windows and macOS CI builds
 - [ ] Optimize linking for I/O libraries
 
+## Known Issues and Limitations
+
+### Test Concurrency Issue
+- **Problem**: Segmentation fault when running tests with multiple threads, specifically in SIFT keypoint detection tests
+- **Symptoms**: Tests pass with `RUST_TEST_THREADS=1` but crash with parallel execution
+- **Root Cause**: Likely race condition or memory safety issue in underlying PCL SIFT implementation
+- **Workaround**: Run tests with single thread: `RUST_TEST_THREADS=1 cargo test`
+- **TODO**: Investigate thread safety of PCL algorithms and add synchronization if needed
+
+### FFI Limitations
+- **Direct Point Access**: The `at()` method cannot return owned points due to cxx bridge limitations
+  - Points are opaque FFI types that cannot be moved out of UniquePtr
+  - Workaround: Use point cloud methods or PCL algorithms for point data access
+- **Point Creation**: Cannot create points directly in Rust, must use FFI functions
+  - This is a fundamental limitation of the cxx bridge design
+- **Example Impact**: Generic algorithms that need point iteration must use alternative approaches
+
+### Visualization Module
+- **Build Issues**: Some visualization examples have compilation errors
+- **Feature Gate**: Requires `visualization` feature to be enabled
+- **TODO**: Fix import paths and ensure examples compile with visualization feature
+
 ## Recent Achievements
+
+### Common Module Enhancements ✅ **COMPLETED** (2025-06-19)
+
+**Implemented Features:**
+- **Point Field Access**: Added FFI functions for getting/setting point coordinates
+  - `set_x`, `set_y`, `set_z` methods for all point types
+  - `set_r`, `set_g`, `set_b` for PointXYZRGB
+  - `set_intensity` for PointXYZI
+  - `set_normal_x/y/z` for PointNormal
+- **Point Cloud Dimensions**: Implemented `set_width` and `set_height` methods
+- **Clone Support**: Added Clone trait implementation for all PointCloud types
+  - Deep copy functionality via `clone_point_cloud_*` FFI functions
+- **Point Finiteness**: Added `is_finite_*` FFI functions and exposed in Rust API (2025-06-20)
+  - All point types (PointXYZ, PointXYZI, PointXYZRGB, PointNormal) now have `is_finite()` method
+- **Transform Operations**: Implemented 4x4 matrix transformations (2025-06-20)
+  - `transform_point_cloud` function for all point types
+  - `TransformBuilder` for creating common transformations (translation, rotation, scale)
+  - Full FFI integration with PCL's transformPointCloud functions
+
+**Limitations Discovered:**
+- Direct point access via `at()` limited by FFI type system
+- Points must be accessed through cloud methods or PCL algorithms
+- Generic point iteration requires workarounds
 
 ### Trait System Refactoring ✅ **COMPLETED**
 
