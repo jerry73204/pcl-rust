@@ -99,3 +99,4 @@ The project uses the `cxx` crate for C++ interop:
 - Always run clippy to perform Rust code quality check whenever you finish a feature.
 - Avoid adding #[allow(dead_code)] on unused items because it would leave unused features without noticable compiler warnings. If the unused item will be used in the future, leave a TODO comment to elaborate.
 - At this moment, we don't care about backward compatibility in Rust API. We would optimize the API before the release.
+- Unit tests in Rust API have counterparts in upstream C++ code. Leave comments in Rust test code to record the source of the C++ test.
