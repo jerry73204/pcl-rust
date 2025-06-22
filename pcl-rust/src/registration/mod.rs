@@ -10,6 +10,9 @@ pub mod icp;
 pub mod ndt;
 pub mod transform;
 
+#[cfg(test)]
+mod tests;
+
 pub use correspondence::{
     Correspondence, CorrespondenceEstimation, CorrespondenceRejectorSampleConsensus,
     FeatureBasedRegistration, FeatureBasedRegistrationBuilder, RegistrationResult,

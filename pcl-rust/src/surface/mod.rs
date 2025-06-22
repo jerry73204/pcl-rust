@@ -12,6 +12,9 @@ pub mod organized_fast_mesh;
 pub mod poisson;
 pub mod polygon_mesh;
 
+#[cfg(test)]
+mod tests;
+
 pub use greedy_projection::{GreedyProjectionTriangulation, GreedyProjectionTriangulationBuilder};
 pub use marching_cubes::{MarchingCubesHoppeXYZ, MarchingCubesRbfXYZ};
 pub use moving_least_squares::{MovingLeastSquares, MovingLeastSquaresBuilder, UpsampleMethod};
