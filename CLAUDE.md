@@ -8,19 +8,31 @@ This is a Rust library project that provides safe bindings for the Point Cloud L
 
 ## Common Commands
 
-### Building and Testing
-- `cargo build` - Build the project (workspace builds both crates)
-- `cargo build -p pcl-sys --all-targets --all-features` - Build only the FFI layer
-- `cargo build -p pcl --all-targets --all-features` - Build only the safe Rust layer
-- `cargo test -p pcl --all-targets --all-features` - Run tests for the safe layer only
-- `cargo check --all-targets --all-features` - Check code without building
-- `cargo clippy --all-targets --all-features` - Run linter
-- `cargo test --all-targets --all-features` - Run all tests with all features
+### Building and Testing (using Makefile - Recommended)
+- `make build` - Build with all features except visualization (recommended for development)
+- `make test` - Run tests with all features except visualization (stable)
+- `make build-all-features` - Build with all features including visualization (may have VTK linking issues)
+- `make test-all-features` - Run tests with all features including visualization (may fail due to VTK)
+- `make lint` - Run clippy for code quality checks
+- `make clean` - Clean build artifacts
+- `make help` - Show all available Makefile targets
+
+### Direct Cargo Commands (if needed)
+- `cargo build -p pcl-sys --all-targets --features "search,octree,io,registration,sample_consensus,segmentation,keypoints,surface,features,filters"` - Build only the FFI layer
+- `cargo build -p pcl --all-targets --features "search,octree,io,registration,sample_consensus,segmentation,keypoints,surface,features,filters"` - Build only the safe Rust layer
+- `cargo nextest run -p pcl --all-targets --features "search,octree,io,registration,sample_consensus,segmentation,keypoints,surface,features,filters" --no-fail-fast` - Run tests for the safe layer only
+- `cargo check --all-targets --features "search,octree,io,registration,sample_consensus,segmentation,keypoints,surface,features,filters"` - Check code without building
+
+### Advanced Testing with Nextest
+- `cargo nextest run --fail-fast` - Stop on first test failure
+- `cargo nextest run -j 8 --no-fail-fast` - Run tests with 8 parallel threads
+- `cargo nextest run <test-name>` - Run specific test by name
+- `cargo nextest run --lib --no-run` - Check test compilation without running
 
 ### Development
 - `cargo doc --open` - Generate and open documentation
 - `cargo run --example basic_usage` - Run the basic usage example
-- `cargo +nightly format` - Format the Rust code in this project
+- `cargo +nightly fmt` - Format the Rust code in this project
 
 ### PCL Dependencies
 The build system requires PCL 1.15 to be installed:
@@ -95,8 +107,8 @@ The project uses the `cxx` crate for C++ interop:
 - The FFI crate should only provide C++ interface and essential Rust type conversion items.
 - Use clang-format to format C/C++ code. It might break the source code. Use "// clang-format off ... // clang-format on" mark to protect lines that would be broken by clang-format.
 - Format code whenever you make changes. Use `cargo +nightly fmt` for Rust and clang-format for C/C++.
-- Always build and test the project whenever you finish a feature.
-- Always run clippy to perform Rust code quality check whenever you finish a feature.
+- Always build and test the project whenever you finish a feature. Use `make build` and `make test` for stable development.
+- Always run code quality checks whenever you finish a feature. Use `make lint` to run clippy.
 - Avoid adding #[allow(dead_code)] on unused items because it would leave unused features without noticable compiler warnings. If the unused item will be used in the future, leave a TODO comment to elaborate.
 - At this moment, we don't care about backward compatibility in Rust API. We would optimize the API before the release.
 - Unit tests in Rust API have counterparts in upstream C++ code. Leave comments in Rust test code to record the source of the C++ test.
