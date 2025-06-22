@@ -506,7 +506,7 @@ impl SearchConfiguration for KdTree<PointXYZ> {
 }
 
 impl SearchInputCloud<PointCloud<PointXYZ>> for KdTree<PointXYZ> {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
+    fn set_input_cloud(&mut self, _cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
         // The generic set_input_cloud expects PointCloud<PointXYZ>, not PointCloud<XYZ>
         // This is a limitation of the current design where marker and owned types don't align
         todo!("Type system mismatch between marker and owned types")
@@ -555,7 +555,7 @@ impl SearchConfiguration for KdTree<PointXYZRGB> {
 }
 
 impl SearchInputCloud<PointCloud<PointXYZRGB>> for KdTree<PointXYZRGB> {
-    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
+    fn set_input_cloud(&mut self, _cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
         // The generic set_input_cloud expects PointCloud<PointXYZRGB>, not PointCloud<XYZRGB>
         // This is a limitation of the current design where marker and owned types don't align
         todo!("Type system mismatch between marker and owned types")
