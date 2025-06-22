@@ -1,6 +1,6 @@
 //! Comprehensive features module showcase
 
-use pcl::common::{PointCloudXYZ, PointXYZ};
+use pcl::common::{PointCloud, PointXYZ, XYZ};
 use pcl::error::PclResult;
 use pcl::features::{
     FpfhEstimation, NormalEstimation, NormalEstimationOmp, PfhEstimation,
@@ -11,7 +11,7 @@ fn main() -> PclResult<()> {
     println!("=== PCL Features Module Showcase ===\n");
 
     // Create a test point cloud - a simple grid with some noise
-    let mut cloud = PointCloudXYZ::new()?;
+    let mut cloud = PointCloud::<XYZ>::new()?;
     for i in 0..15 {
         for j in 0..15 {
             let x = i as f32 * 0.05;

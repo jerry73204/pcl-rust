@@ -3,14 +3,14 @@
 //! This example shows how to use the RANSAC algorithm to fit a plane
 //! to a point cloud containing points and outliers.
 
-use pcl::{PointCloudXYZ, RansacPlaneXYZ};
+use pcl::{common::{PointCloud, XYZ}, RansacPlaneXYZ};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("PCL Rust RANSAC Plane Fitting Example");
     println!("=====================================");
 
     // Create a point cloud (empty for now, as we don't have point creation yet)
-    let cloud = PointCloudXYZ::new()?;
+    let cloud = PointCloud::<XYZ>::new()?;
 
     println!("Created point cloud with {} points", cloud.size());
 

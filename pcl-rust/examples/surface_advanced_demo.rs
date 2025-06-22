@@ -4,7 +4,7 @@
 //! require normals: Poisson reconstruction, Greedy Projection Triangulation,
 //! and Moving Least Squares smoothing.
 
-use pcl::{PointCloudXYZ, common::PointCloudXYZBuilder};
+use pcl::common::{PointCloud, PointCloudXYZBuilder, XYZ};
 
 #[cfg(feature = "surface")]
 use pcl::surface::{
@@ -54,7 +54,7 @@ fn main() -> pcl::PclResult<()> {
 }
 
 /// Create a sample point cloud with some structure
-fn create_sample_cloud() -> pcl::PclResult<PointCloudXYZ> {
+fn create_sample_cloud() -> pcl::PclResult<PointCloud<XYZ>> {
     let mut points = Vec::new();
 
     // Create a sphere-like structure
@@ -77,7 +77,7 @@ fn create_sample_cloud() -> pcl::PclResult<PointCloudXYZ> {
 
 /// Demonstrate Moving Least Squares smoothing
 #[cfg(feature = "surface")]
-fn moving_least_squares_demo(_cloud: &PointCloudXYZ) -> pcl::PclResult<()> {
+fn moving_least_squares_demo(_cloud: &PointCloud<XYZ>) -> pcl::PclResult<()> {
     println!("\n1. Moving Least Squares Smoothing");
     println!("---------------------------------");
 
@@ -184,7 +184,7 @@ fn greedy_triangulation_demo() -> pcl::PclResult<()> {
 
 /// Demonstrate OrganizedFastMesh (works with PointXYZ)
 #[cfg(feature = "surface")]
-fn organized_fast_mesh_demo(_cloud: &PointCloudXYZ) -> pcl::PclResult<()> {
+fn organized_fast_mesh_demo(_cloud: &PointCloud<XYZ>) -> pcl::PclResult<()> {
     println!("\n4. Organized Fast Mesh (PointXYZ compatible)");
     println!("---------------------------------------------");
 

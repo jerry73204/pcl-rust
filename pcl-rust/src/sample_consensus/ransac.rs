@@ -1,6 +1,6 @@
 //! RANSAC algorithm implementation
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::{PclError, PclResult};
 use pcl_sys::UniquePtr;
 use pcl_sys::ffi;
@@ -12,7 +12,7 @@ pub struct RansacPlaneXYZ {
 
 impl RansacPlaneXYZ {
     /// Create a new RANSAC plane fitter for a PointXYZ cloud
-    pub fn new(cloud: &PointCloudXYZ) -> PclResult<Self> {
+    pub fn new(cloud: &PointCloud<XYZ>) -> PclResult<Self> {
         let inner = ffi::new_ransac_plane_xyz(cloud.inner());
         if inner.is_null() {
             return Err(PclError::RansacError(
@@ -98,7 +98,7 @@ pub struct RansacSphereXYZ {
 
 impl RansacSphereXYZ {
     /// Create a new RANSAC sphere fitter for a PointXYZ cloud
-    pub fn new(cloud: &PointCloudXYZ) -> PclResult<Self> {
+    pub fn new(cloud: &PointCloud<XYZ>) -> PclResult<Self> {
         let inner = ffi::new_ransac_sphere_xyz(cloud.inner());
         if inner.is_null() {
             return Err(PclError::RansacError(
@@ -184,7 +184,7 @@ pub struct RansacPlaneXYZRGB {
 
 impl RansacPlaneXYZRGB {
     /// Create a new RANSAC plane fitter for a PointXYZRGB cloud
-    pub fn new(cloud: &PointCloudXYZRGB) -> PclResult<Self> {
+    pub fn new(cloud: &PointCloud<XYZRGB>) -> PclResult<Self> {
         let inner = ffi::new_ransac_plane_xyzrgb(cloud.inner());
         if inner.is_null() {
             return Err(PclError::RansacError(
@@ -270,7 +270,7 @@ pub struct RansacSphereXYZRGB {
 
 impl RansacSphereXYZRGB {
     /// Create a new RANSAC sphere fitter for a PointXYZRGB cloud
-    pub fn new(cloud: &PointCloudXYZRGB) -> PclResult<Self> {
+    pub fn new(cloud: &PointCloud<XYZRGB>) -> PclResult<Self> {
         let inner = ffi::new_ransac_sphere_xyzrgb(cloud.inner());
         if inner.is_null() {
             return Err(PclError::RansacError(

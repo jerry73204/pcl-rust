@@ -3,7 +3,7 @@
 //! This module provides functionality to extract points that lie within
 //! a polygonal prism defined by a planar hull and height limits.
 
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
 use cxx::UniquePtr;
 use pcl_sys::ffi;
@@ -30,7 +30,7 @@ impl ExtractPolygonalPrismDataXYZ {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
@@ -39,7 +39,7 @@ impl ExtractPolygonalPrismDataXYZ {
     }
 
     /// Set the planar hull that defines the polygon
-    pub fn set_input_planar_hull(&mut self, hull: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_planar_hull(&mut self, hull: &PointCloud<XYZ>) -> PclResult<()> {
         if hull.empty() {
             return Err(PclError::invalid_point_cloud("Planar hull is empty"));
         }

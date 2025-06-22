@@ -6,8 +6,8 @@
 //! - Load it back and verify the data
 
 use pcl::{
-    BinaryFormat, PcdIoXYZ, PlyIoXYZ, PointCloudXYZ,
-    common::PointCloudXYZBuilder,
+    BinaryFormat, PcdIoXYZ, PlyIoXYZ,
+    common::{PointCloud, PointCloudXYZBuilder, XYZ},
     io::{load_pcd_xyz, load_ply_xyz},
 };
 use std::fs;
@@ -84,7 +84,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Test loading into existing cloud
     println!("\n=== Testing Load into Existing Cloud ===");
-    let mut existing_cloud = PointCloudXYZ::new()?;
+    let mut existing_cloud = PointCloud::<XYZ>::new()?;
     existing_cloud.load_pcd(&pcd_ascii_path)?;
     println!(
         "Loaded {} points into existing cloud",

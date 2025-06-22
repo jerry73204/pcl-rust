@@ -26,7 +26,7 @@
 //! use pcl::common::PointCloudXYZ;
 //!
 //! // Note: These examples show the intended API once FFI linkage is resolved
-//! fn estimate_features(cloud: &PointCloudXYZ) -> pcl::error::PclResult<()> {
+//! fn estimate_features(cloud: &PointCloud<XYZ>) -> pcl::error::PclResult<()> {
 //!     // Estimate normals
 //!     let mut normal_est = NormalEstimation::new()?;
 //!     normal_est.set_input_cloud(cloud)?;
@@ -44,9 +44,9 @@
 //! }
 //! ```
 
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
-use crate::search::KdTreeXYZ;
+use crate::search::KdTree;
 
 /// Normal vector with curvature information
 #[derive(Debug, Clone)]
@@ -461,7 +461,7 @@ impl NormalEstimation {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if self.inner.is_null() {
             return Err(PclError::InvalidState {
                 message: "NormalEstimation not initialized".into(),
@@ -474,7 +474,7 @@ impl NormalEstimation {
     }
 
     /// Set the search method
-    pub fn set_search_method(&mut self, tree: &KdTreeXYZ) -> PclResult<()> {
+    pub fn set_search_method(&mut self, tree: &KdTree<XYZ>) -> PclResult<()> {
         if self.inner.is_null() {
             return Err(PclError::InvalidState {
                 message: "NormalEstimation not initialized".into(),
@@ -588,7 +588,7 @@ impl NormalEstimationOmp {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if self.inner.is_null() {
             return Err(PclError::InvalidState {
                 message: "NormalEstimationOMP not initialized".into(),
@@ -713,7 +713,7 @@ impl FpfhEstimation {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if self.inner.is_null() {
             return Err(PclError::InvalidState {
                 message: "FPFHEstimation not initialized".into(),
@@ -726,7 +726,7 @@ impl FpfhEstimation {
     }
 
     /// Set the search method
-    pub fn set_search_method(&mut self, tree: &KdTreeXYZ) -> PclResult<()> {
+    pub fn set_search_method(&mut self, tree: &KdTree<XYZ>) -> PclResult<()> {
         if self.inner.is_null() {
             return Err(PclError::InvalidState {
                 message: "FPFHEstimation not initialized".into(),
@@ -821,7 +821,7 @@ impl FpfhEstimationOmp {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if self.inner.is_null() {
             return Err(PclError::InvalidState {
                 message: "FPFHEstimationOMP not initialized".into(),
@@ -834,7 +834,7 @@ impl FpfhEstimationOmp {
     }
 
     /// Set the search method
-    pub fn set_search_method(&mut self, tree: &KdTreeXYZ) -> PclResult<()> {
+    pub fn set_search_method(&mut self, tree: &KdTree<XYZ>) -> PclResult<()> {
         if self.inner.is_null() {
             return Err(PclError::InvalidState {
                 message: "FPFHEstimationOMP not initialized".into(),
@@ -929,7 +929,7 @@ impl PfhEstimation {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if self.inner.is_null() {
             return Err(PclError::InvalidState {
                 message: "PFHEstimation not initialized".into(),
@@ -942,7 +942,7 @@ impl PfhEstimation {
     }
 
     /// Set the search method
-    pub fn set_search_method(&mut self, tree: &KdTreeXYZ) -> PclResult<()> {
+    pub fn set_search_method(&mut self, tree: &KdTree<XYZ>) -> PclResult<()> {
         if self.inner.is_null() {
             return Err(PclError::InvalidState {
                 message: "PFHEstimation not initialized".into(),
@@ -1007,7 +1007,7 @@ pub mod quick {
     use super::*;
 
     /// Estimate normals for a point cloud with default parameters
-    pub fn estimate_normals(cloud: &PointCloudXYZ, radius: f64) -> PclResult<NormalCloud> {
+    pub fn estimate_normals(cloud: &PointCloud<XYZ>, radius: f64) -> PclResult<NormalCloud> {
         let mut normal_est = NormalEstimation::new()?;
         normal_est.set_input_cloud(cloud)?;
         normal_est.set_radius_search(radius);
@@ -1016,7 +1016,7 @@ pub mod quick {
 
     /// Estimate normals using OpenMP with default parameters
     pub fn estimate_normals_omp(
-        cloud: &PointCloudXYZ,
+        cloud: &PointCloud<XYZ>,
         radius: f64,
         threads: i32,
     ) -> PclResult<NormalCloud> {
@@ -1029,7 +1029,7 @@ pub mod quick {
 
     /// Compute FPFH features with default parameters
     pub fn compute_fpfh(
-        cloud: &PointCloudXYZ,
+        cloud: &PointCloud<XYZ>,
         normals: &NormalCloud,
         radius: f64,
     ) -> PclResult<FpfhCloud> {
@@ -1042,7 +1042,7 @@ pub mod quick {
 
     /// Compute PFH features with default parameters
     pub fn compute_pfh(
-        cloud: &PointCloudXYZ,
+        cloud: &PointCloud<XYZ>,
         normals: &NormalCloud,
         radius: f64,
     ) -> PclResult<PfhCloud> {
@@ -1054,7 +1054,7 @@ pub mod quick {
     }
 
     /// Estimate normals with k-nearest neighbors search
-    pub fn estimate_normals_k(cloud: &PointCloudXYZ, k: i32) -> PclResult<NormalCloud> {
+    pub fn estimate_normals_k(cloud: &PointCloud<XYZ>, k: i32) -> PclResult<NormalCloud> {
         let mut normal_est = NormalEstimation::new()?;
         normal_est.set_input_cloud(cloud)?;
         normal_est.set_k_search(k);
@@ -1063,7 +1063,7 @@ pub mod quick {
 
     /// Complete feature pipeline: normals + FPFH with default parameters
     pub fn compute_fpfh_pipeline(
-        cloud: &PointCloudXYZ,
+        cloud: &PointCloud<XYZ>,
         normal_radius: f64,
         fpfh_radius: f64,
     ) -> PclResult<(NormalCloud, FpfhCloud)> {
@@ -1074,7 +1074,7 @@ pub mod quick {
 
     /// Complete feature pipeline: normals + PFH with default parameters
     pub fn compute_pfh_pipeline(
-        cloud: &PointCloudXYZ,
+        cloud: &PointCloud<XYZ>,
         normal_radius: f64,
         pfh_radius: f64,
     ) -> PclResult<(NormalCloud, PfhCloud)> {
@@ -1143,7 +1143,7 @@ pub mod builders {
         }
 
         /// Build and compute normals for the given point cloud
-        pub fn compute(&self, cloud: &PointCloudXYZ) -> PclResult<NormalCloud> {
+        pub fn compute(&self, cloud: &PointCloud<XYZ>) -> PclResult<NormalCloud> {
             if self.use_omp {
                 let mut est = NormalEstimationOmp::new()?;
                 est.set_input_cloud(cloud)?;
@@ -1228,7 +1228,7 @@ pub mod builders {
         /// Build and compute FPFH features for the given point cloud and normals
         pub fn compute(
             &self,
-            cloud: &PointCloudXYZ,
+            cloud: &PointCloud<XYZ>,
             normals: &NormalCloud,
         ) -> PclResult<FpfhCloud> {
             if self.use_omp {

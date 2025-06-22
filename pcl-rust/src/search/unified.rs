@@ -3,15 +3,15 @@
 //! This module provides a unified interface that can switch between
 //! different search algorithms at runtime.
 
+use super::KdTree;
 use super::traits::{NearestNeighborSearch, SearchConfiguration, SearchInputCloud, SearchMethod};
-use super::{KdTreeXYZ, KdTreeXYZRGB};
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB, PointXYZ, PointXYZRGB};
+use crate::common::{PointCloud, PointXYZ, PointXYZRGB};
 use crate::error::{PclError, PclResult};
 
 /// Unified search interface for PointXYZ
 pub enum SearchXYZ {
     /// KD-tree search
-    KdTree(KdTreeXYZ),
+    KdTree(KdTree<PointXYZ>),
     // Future: Octree, FLANN, etc.
 }
 
@@ -19,7 +19,7 @@ impl SearchXYZ {
     /// Create a new search instance with the specified method
     pub fn new(method: SearchMethod) -> PclResult<Self> {
         match method {
-            SearchMethod::KdTree => Ok(SearchXYZ::KdTree(KdTreeXYZ::new()?)),
+            SearchMethod::KdTree => Ok(SearchXYZ::KdTree(KdTree::<PointXYZ>::new()?)),
             _ => Err(PclError::not_implemented(
                 format!("{} search for PointXYZ", method.name()),
                 Some("Use KdTree method for now".to_string()),
@@ -83,8 +83,8 @@ impl SearchConfiguration for SearchXYZ {
     }
 }
 
-impl SearchInputCloud<PointCloudXYZ> for SearchXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl SearchInputCloud<PointCloud<PointXYZ>> for SearchXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZ>) -> PclResult<()> {
         match self {
             SearchXYZ::KdTree(kdtree) => kdtree.set_input_cloud(cloud),
         }
@@ -100,7 +100,7 @@ impl SearchInputCloud<PointCloudXYZ> for SearchXYZ {
 /// Unified search interface for PointXYZRGB
 pub enum SearchXYZRGB {
     /// KD-tree search
-    KdTree(KdTreeXYZRGB),
+    KdTree(KdTree<PointXYZRGB>),
     // Future: Octree, FLANN, etc.
 }
 
@@ -108,7 +108,7 @@ impl SearchXYZRGB {
     /// Create a new search instance with the specified method
     pub fn new(method: SearchMethod) -> PclResult<Self> {
         match method {
-            SearchMethod::KdTree => Ok(SearchXYZRGB::KdTree(KdTreeXYZRGB::new()?)),
+            SearchMethod::KdTree => Ok(SearchXYZRGB::KdTree(KdTree::<PointXYZRGB>::new()?)),
             _ => Err(PclError::not_implemented(
                 format!("{} search for PointXYZRGB", method.name()),
                 Some("Use KdTree method for now".to_string()),
@@ -172,8 +172,8 @@ impl SearchConfiguration for SearchXYZRGB {
     }
 }
 
-impl SearchInputCloud<PointCloudXYZRGB> for SearchXYZRGB {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
+impl SearchInputCloud<PointCloud<PointXYZRGB>> for SearchXYZRGB {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<PointXYZRGB>) -> PclResult<()> {
         match self {
             SearchXYZRGB::KdTree(kdtree) => kdtree.set_input_cloud(cloud),
         }

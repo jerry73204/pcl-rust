@@ -3,7 +3,7 @@
 //! This module provides implementations of Marching Cubes surface reconstruction
 //! using both Hoppe and RBF (Radial Basis Function) variants.
 
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
 use crate::surface::{PolygonMesh, SurfaceReconstruction};
 use cxx::UniquePtr;
@@ -68,8 +68,8 @@ impl MarchingCubesHoppeXYZ {
     }
 }
 
-impl SurfaceReconstruction<PointCloudXYZ, PolygonMesh> for MarchingCubesHoppeXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl SurfaceReconstruction<PointCloud<XYZ>, PolygonMesh> for MarchingCubesHoppeXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
@@ -159,8 +159,8 @@ impl MarchingCubesRbfXYZ {
     }
 }
 
-impl SurfaceReconstruction<PointCloudXYZ, PolygonMesh> for MarchingCubesRbfXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl SurfaceReconstruction<PointCloud<XYZ>, PolygonMesh> for MarchingCubesRbfXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }

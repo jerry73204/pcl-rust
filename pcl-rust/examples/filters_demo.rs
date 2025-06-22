@@ -3,14 +3,19 @@
 //! This example shows how to use the PassThrough filter to crop point clouds
 //! along specified dimensions.
 
-use pcl::{PclResult, PointCloudXYZ, filters::Filter, filters::PassThroughXYZ};
+use pcl::{
+    PclResult,
+    common::{PointCloud, XYZ},
+    filters::Filter,
+    filters::PassThroughXYZ,
+};
 
 fn main() -> PclResult<()> {
     println!("PCL Filters Demo");
     println!("================");
 
     // Create a point cloud (normally this would be loaded from a file)
-    let mut cloud = PointCloudXYZ::new()?;
+    let mut cloud = PointCloud::<XYZ>::new()?;
     cloud.resize(100)?; // Create 100 points
 
     println!("Original cloud size: {}", cloud.size());

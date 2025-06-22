@@ -6,13 +6,17 @@
 pub mod builders;
 pub mod traits;
 
-use crate::common::{PointCloudXYZ, PointXYZ as OwnedPointXYZ};
+use crate::common::{PointCloud, PointXYZ, XYZ};
 use crate::error::{PclError, PclResult};
 use crate::search::{NearestNeighborSearch, SearchInputCloud};
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
 pub use builders::{OctreeSearchBuilder, OctreeVoxelCentroidBuilder};
+
+// Re-export concrete types for backward compatibility
+pub use OctreeSearchXYZ as OctreeSearch;
+pub use OctreeVoxelCentroidXYZ as OctreeVoxelCentroid;
 pub use traits::{OctreeConfiguration, OctreeManagement, OctreeType, VoxelOperations};
 
 /// Octree for spatial search operations on PointXYZ clouds
@@ -41,7 +45,7 @@ impl OctreeSearchXYZ {
     }
 
     /// Set the input point cloud and build the octree
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_cloud_octree_xyz(self.inner.pin_mut(), cloud.inner());
         ffi::add_points_from_input_cloud_xyz(self.inner.pin_mut());
         self.has_cloud = true;
@@ -49,7 +53,7 @@ impl OctreeSearchXYZ {
     }
 
     /// Find the k nearest neighbors to a query point
-    pub fn nearest_k_search(&mut self, point: &OwnedPointXYZ, k: i32) -> PclResult<Vec<i32>> {
+    pub fn nearest_k_search(&mut self, point: &PointXYZ, k: i32) -> PclResult<Vec<i32>> {
         if !self.has_cloud {
             return Err(PclError::invalid_state(
                 "No input cloud set",
@@ -73,7 +77,7 @@ impl OctreeSearchXYZ {
     }
 
     /// Find all neighbors within a radius of a query point
-    pub fn radius_search(&mut self, point: &OwnedPointXYZ, radius: f64) -> PclResult<Vec<i32>> {
+    pub fn radius_search(&mut self, point: &PointXYZ, radius: f64) -> PclResult<Vec<i32>> {
         if !self.has_cloud {
             return Err(PclError::invalid_state(
                 "No input cloud set",
@@ -100,7 +104,7 @@ impl OctreeSearchXYZ {
     }
 
     /// Find all points in the same voxel as the query point
-    pub fn voxel_search(&mut self, point: &OwnedPointXYZ) -> PclResult<Vec<i32>> {
+    pub fn voxel_search(&mut self, point: &PointXYZ) -> PclResult<Vec<i32>> {
         if !self.has_cloud {
             return Err(PclError::invalid_state(
                 "No input cloud set",
@@ -135,8 +139,8 @@ impl OctreeSearchXYZ {
     }
 }
 
-impl NearestNeighborSearch<OwnedPointXYZ> for OctreeSearchXYZ {
-    fn nearest_k_search(&self, _point: &OwnedPointXYZ, _k: i32) -> PclResult<Vec<i32>> {
+impl NearestNeighborSearch<PointXYZ> for OctreeSearchXYZ {
+    fn nearest_k_search(&self, _point: &PointXYZ, _k: i32) -> PclResult<Vec<i32>> {
         // Octree requires mutable reference, so we need to handle this differently
         // For now, return not implemented
         Err(PclError::not_implemented(
@@ -147,7 +151,7 @@ impl NearestNeighborSearch<OwnedPointXYZ> for OctreeSearchXYZ {
 
     fn nearest_k_search_with_distances(
         &self,
-        _point: &OwnedPointXYZ,
+        _point: &PointXYZ,
         _k: i32,
     ) -> PclResult<(Vec<i32>, Vec<f32>)> {
         Err(PclError::not_implemented(
@@ -156,7 +160,7 @@ impl NearestNeighborSearch<OwnedPointXYZ> for OctreeSearchXYZ {
         ))
     }
 
-    fn radius_search(&self, _point: &OwnedPointXYZ, _radius: f64) -> PclResult<Vec<i32>> {
+    fn radius_search(&self, _point: &PointXYZ, _radius: f64) -> PclResult<Vec<i32>> {
         Err(PclError::not_implemented(
             "Const radius_search for octree",
             Some("Use the mutable radius_search method directly on OctreeSearchXYZ".to_string()),
@@ -165,7 +169,7 @@ impl NearestNeighborSearch<OwnedPointXYZ> for OctreeSearchXYZ {
 
     fn radius_search_with_distances(
         &self,
-        _point: &OwnedPointXYZ,
+        _point: &PointXYZ,
         _radius: f64,
     ) -> PclResult<(Vec<i32>, Vec<f32>)> {
         Err(PclError::not_implemented(
@@ -175,8 +179,8 @@ impl NearestNeighborSearch<OwnedPointXYZ> for OctreeSearchXYZ {
     }
 }
 
-impl SearchInputCloud<PointCloudXYZ> for OctreeSearchXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl SearchInputCloud<PointCloud<XYZ>> for OctreeSearchXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         self.set_input_cloud(cloud)
     }
 
@@ -204,7 +208,7 @@ impl OctreeConfiguration for OctreeSearchXYZ {
 }
 
 impl VoxelOperations for OctreeSearchXYZ {
-    fn voxel_search(&mut self, point: &crate::common::PointXYZ) -> PclResult<Vec<i32>> {
+    fn voxel_search(&mut self, point: &PointXYZ) -> PclResult<Vec<i32>> {
         self.voxel_search(point)
     }
 }
@@ -259,7 +263,7 @@ impl OctreeVoxelCentroidXYZ {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_cloud_voxel_centroid_xyz(self.inner.pin_mut(), cloud.inner());
         self.has_cloud = true;
         Ok(())
@@ -279,9 +283,9 @@ impl OctreeVoxelCentroidXYZ {
     }
 
     /// Get the centroids of all occupied voxels as a point cloud
-    pub fn get_voxel_centroids(&mut self) -> PclResult<PointCloudXYZ> {
+    pub fn get_voxel_centroids(&mut self) -> PclResult<PointCloud<XYZ>> {
         let inner = ffi::get_voxel_centroids_xyz(self.inner.pin_mut());
-        Ok(PointCloudXYZ::from_unique_ptr(inner))
+        Ok(PointCloud::from_unique_ptr(inner))
     }
 
     /// Get the octree resolution

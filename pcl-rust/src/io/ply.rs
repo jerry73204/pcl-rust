@@ -4,7 +4,7 @@
 //! PLY files with comprehensive error handling and format options.
 
 use super::BinaryFormat;
-use crate::common::{PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZI, XYZRGB};
 use crate::error::{PclError, PclResult};
 use std::path::Path;
 
@@ -44,7 +44,7 @@ pub trait PlyIoXYZRGB {
     fn save_ply_with_format<P: AsRef<Path>>(&self, path: P, format: BinaryFormat) -> PclResult<()>;
 }
 
-impl PlyIoXYZ for PointCloudXYZ {
+impl PlyIoXYZ for PointCloud<XYZ> {
     fn load_ply<P: AsRef<Path>>(&mut self, path: P) -> PclResult<()> {
         let path_str = path.as_ref().to_str().ok_or_else(|| {
             PclError::invalid_parameters(
@@ -103,7 +103,7 @@ impl PlyIoXYZ for PointCloudXYZ {
     }
 }
 
-impl PlyIoXYZI for PointCloudXYZI {
+impl PlyIoXYZI for PointCloud<XYZI> {
     fn load_ply<P: AsRef<Path>>(&mut self, path: P) -> PclResult<()> {
         let path_str = path.as_ref().to_str().ok_or_else(|| {
             PclError::invalid_parameters(
@@ -162,7 +162,7 @@ impl PlyIoXYZI for PointCloudXYZI {
     }
 }
 
-impl PlyIoXYZRGB for PointCloudXYZRGB {
+impl PlyIoXYZRGB for PointCloud<XYZRGB> {
     fn load_ply<P: AsRef<Path>>(&mut self, path: P) -> PclResult<()> {
         let path_str = path.as_ref().to_str().ok_or_else(|| {
             PclError::invalid_parameters(
@@ -224,22 +224,22 @@ impl PlyIoXYZRGB for PointCloudXYZRGB {
 }
 
 /// Convenience functions for loading PLY files
-pub fn load_ply_xyz<P: AsRef<Path>>(path: P) -> PclResult<PointCloudXYZ> {
-    let mut cloud = PointCloudXYZ::new()?;
+pub fn load_ply_xyz<P: AsRef<Path>>(path: P) -> PclResult<PointCloud<XYZ>> {
+    let mut cloud = PointCloud::<XYZ>::new()?;
     cloud.load_ply(path)?;
     Ok(cloud)
 }
 
 /// Convenience functions for loading PLY files with PointXYZI
-pub fn load_ply_xyzi<P: AsRef<Path>>(path: P) -> PclResult<PointCloudXYZI> {
-    let mut cloud = PointCloudXYZI::new()?;
+pub fn load_ply_xyzi<P: AsRef<Path>>(path: P) -> PclResult<PointCloud<XYZI>> {
+    let mut cloud = PointCloud::<XYZI>::new()?;
     cloud.load_ply(path)?;
     Ok(cloud)
 }
 
 /// Convenience functions for loading PLY files with PointXYZRGB
-pub fn load_ply_xyzrgb<P: AsRef<Path>>(path: P) -> PclResult<PointCloudXYZRGB> {
-    let mut cloud = PointCloudXYZRGB::new()?;
+pub fn load_ply_xyzrgb<P: AsRef<Path>>(path: P) -> PclResult<PointCloud<XYZRGB>> {
+    let mut cloud = PointCloud::<XYZRGB>::new()?;
     cloud.load_ply(path)?;
     Ok(cloud)
 }
@@ -251,7 +251,7 @@ mod tests {
 
     #[test]
     fn test_ply_io_xyz() {
-        let mut cloud = PointCloudXYZ::new().unwrap();
+        let mut cloud = PointCloud::<XYZ>::new().unwrap();
         cloud.resize(10).unwrap();
 
         let temp_file = NamedTempFile::new().unwrap();
@@ -262,14 +262,14 @@ mod tests {
         assert!(path.exists());
 
         // Test loading
-        let mut loaded_cloud = PointCloudXYZ::new().unwrap();
+        let mut loaded_cloud = PointCloud::<XYZ>::new().unwrap();
         assert!(loaded_cloud.load_ply(path).is_ok());
         assert_eq!(loaded_cloud.size(), cloud.size());
     }
 
     #[test]
     fn test_ply_format_options() {
-        let mut cloud = PointCloudXYZ::new().unwrap();
+        let mut cloud = PointCloud::<XYZ>::new().unwrap();
         cloud.resize(5).unwrap();
 
         // Test ASCII format
@@ -299,7 +299,7 @@ mod tests {
 
     #[test]
     fn test_convenience_functions() {
-        let mut cloud = PointCloudXYZ::new().unwrap();
+        let mut cloud = PointCloud::<XYZ>::new().unwrap();
         cloud.resize(3).unwrap();
 
         let temp_file = NamedTempFile::new().unwrap();

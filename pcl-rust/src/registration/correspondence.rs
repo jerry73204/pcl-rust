@@ -3,7 +3,7 @@
 //! This module provides tools for feature-based point cloud registration that uses
 //! correspondences between feature points to estimate transformations.
 
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
 use crate::registration::TransformationMatrix;
 use cxx::UniquePtr;
@@ -47,13 +47,13 @@ impl CorrespondenceEstimation {
     }
 
     /// Set the input source cloud
-    pub fn set_input_source(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_source(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_source_correspondence_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
     /// Set the input target cloud
-    pub fn set_input_target(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_target(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_target_correspondence_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
@@ -124,13 +124,13 @@ impl CorrespondenceRejectorSampleConsensus {
     }
 
     /// Set the input source cloud
-    pub fn set_input_source(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_source(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_source_rejector_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
     /// Set the input target cloud
-    pub fn set_input_target(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_target(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_target_rejector_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
@@ -206,8 +206,8 @@ impl TransformationEstimationSVD {
     /// Estimate rigid transformation from correspondences
     pub fn estimate_rigid_transformation(
         &mut self,
-        source: &PointCloudXYZ,
-        target: &PointCloudXYZ,
+        source: &PointCloud<XYZ>,
+        target: &PointCloud<XYZ>,
         correspondences: &[Correspondence],
     ) -> PclResult<TransformationMatrix> {
         // Flatten correspondences for FFI
@@ -273,8 +273,8 @@ impl FeatureBasedRegistration {
     /// Perform complete feature-based registration
     pub fn register(
         &mut self,
-        source: &PointCloudXYZ,
-        target: &PointCloudXYZ,
+        source: &PointCloud<XYZ>,
+        target: &PointCloud<XYZ>,
     ) -> PclResult<RegistrationResult> {
         // Set input clouds
         self.correspondence_estimator.set_input_source(source)?;

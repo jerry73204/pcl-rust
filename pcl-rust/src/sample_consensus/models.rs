@@ -3,7 +3,7 @@
 //! This module provides safe wrappers for PCL's geometric models used in
 //! sample consensus algorithms like RANSAC.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::{PclError, PclResult};
 use pcl_sys::UniquePtr;
 use pcl_sys::ffi;
@@ -17,7 +17,7 @@ pub struct PlaneModelXYZ {
 
 impl PlaneModelXYZ {
     /// Create a new plane model for the given point cloud
-    pub fn new(cloud: &PointCloudXYZ) -> PclResult<Self> {
+    pub fn new(cloud: &PointCloud<XYZ>) -> PclResult<Self> {
         let inner = ffi::new_sac_model_plane_xyz(cloud.inner());
         if inner.is_null() {
             return Err(PclError::ModelError(
@@ -93,7 +93,7 @@ impl PlaneModelXYZ {
         inliers: &[i32],
         coefficients: &[f32],
         copy_data_fields: bool,
-    ) -> PclResult<PointCloudXYZ> {
+    ) -> PclResult<PointCloud<XYZ>> {
         let inliers_vec: Vec<i32> = inliers.to_vec();
         let coeff_vec: Vec<f32> = coefficients.to_vec();
         let projected = ffi::project_points_plane_xyz(
@@ -107,7 +107,7 @@ impl PlaneModelXYZ {
                 "Failed to project points onto plane".to_string(),
             ));
         }
-        Ok(PointCloudXYZ::from_unique_ptr(projected))
+        Ok(PointCloud::<XYZ>::from_unique_ptr(projected))
     }
 }
 
@@ -120,7 +120,7 @@ pub struct SphereModelXYZ {
 
 impl SphereModelXYZ {
     /// Create a new sphere model for the given point cloud
-    pub fn new(cloud: &PointCloudXYZ) -> PclResult<Self> {
+    pub fn new(cloud: &PointCloud<XYZ>) -> PclResult<Self> {
         let inner = ffi::new_sac_model_sphere_xyz(cloud.inner());
         if inner.is_null() {
             return Err(PclError::ModelError(
@@ -209,7 +209,7 @@ impl SphereModelXYZ {
         inliers: &[i32],
         coefficients: &[f32],
         copy_data_fields: bool,
-    ) -> PclResult<PointCloudXYZ> {
+    ) -> PclResult<PointCloud<XYZ>> {
         let inliers_vec: Vec<i32> = inliers.to_vec();
         let coeff_vec: Vec<f32> = coefficients.to_vec();
         let projected = ffi::project_points_sphere_xyz(
@@ -223,7 +223,7 @@ impl SphereModelXYZ {
                 "Failed to project points onto sphere".to_string(),
             ));
         }
-        Ok(PointCloudXYZ::from_unique_ptr(projected))
+        Ok(PointCloud::<XYZ>::from_unique_ptr(projected))
     }
 }
 
@@ -236,7 +236,7 @@ pub struct PlaneModelXYZRGB {
 
 impl PlaneModelXYZRGB {
     /// Create a new plane model for the given point cloud
-    pub fn new(cloud: &PointCloudXYZRGB) -> PclResult<Self> {
+    pub fn new(cloud: &PointCloud<XYZRGB>) -> PclResult<Self> {
         let inner = ffi::new_sac_model_plane_xyzrgb(cloud.inner());
         if inner.is_null() {
             return Err(PclError::ModelError(
@@ -312,7 +312,7 @@ impl PlaneModelXYZRGB {
         inliers: &[i32],
         coefficients: &[f32],
         copy_data_fields: bool,
-    ) -> PclResult<PointCloudXYZRGB> {
+    ) -> PclResult<PointCloud<XYZRGB>> {
         let inliers_vec: Vec<i32> = inliers.to_vec();
         let coeff_vec: Vec<f32> = coefficients.to_vec();
         let projected = ffi::project_points_plane_xyzrgb(
@@ -326,7 +326,7 @@ impl PlaneModelXYZRGB {
                 "Failed to project points onto plane".to_string(),
             ));
         }
-        Ok(PointCloudXYZRGB::from_unique_ptr(projected))
+        Ok(PointCloud::<XYZRGB>::from_unique_ptr(projected))
     }
 }
 
@@ -339,7 +339,7 @@ pub struct SphereModelXYZRGB {
 
 impl SphereModelXYZRGB {
     /// Create a new sphere model for the given point cloud
-    pub fn new(cloud: &PointCloudXYZRGB) -> PclResult<Self> {
+    pub fn new(cloud: &PointCloud<XYZRGB>) -> PclResult<Self> {
         let inner = ffi::new_sac_model_sphere_xyzrgb(cloud.inner());
         if inner.is_null() {
             return Err(PclError::ModelError(
@@ -432,7 +432,7 @@ impl SphereModelXYZRGB {
         inliers: &[i32],
         coefficients: &[f32],
         copy_data_fields: bool,
-    ) -> PclResult<PointCloudXYZRGB> {
+    ) -> PclResult<PointCloud<XYZRGB>> {
         let inliers_vec: Vec<i32> = inliers.to_vec();
         let coeff_vec: Vec<f32> = coefficients.to_vec();
         let projected = ffi::project_points_sphere_xyzrgb(
@@ -446,6 +446,6 @@ impl SphereModelXYZRGB {
                 "Failed to project points onto sphere".to_string(),
             ));
         }
-        Ok(PointCloudXYZRGB::from_unique_ptr(projected))
+        Ok(PointCloud::<XYZRGB>::from_unique_ptr(projected))
     }
 }

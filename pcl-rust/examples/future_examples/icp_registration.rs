@@ -3,7 +3,7 @@
 //! This example shows how to align two point clouds using the ICP algorithm.
 
 use pcl::registration::RegistrationXYZ;
-use pcl::{IcpXYZ, PclResult, PointCloudXYZ, TransformationMatrix};
+use pcl::{IcpXYZ, PclResult, TransformationMatrix, common::{PointCloud, XYZ}};
 
 fn main() -> PclResult<()> {
     println!("ICP Registration Demo");
@@ -11,8 +11,8 @@ fn main() -> PclResult<()> {
 
     // Create source and target point clouds
     // In a real application, these would be loaded from files
-    let mut source = PointCloudXYZ::new()?;
-    let mut target = PointCloudXYZ::new()?;
+    let mut source = PointCloud::<XYZ>::new()?;
+    let mut target = PointCloud::<XYZ>::new()?;
 
     // For demonstration, create some dummy points
     // (In practice, you would load these from PCD/PLY files)

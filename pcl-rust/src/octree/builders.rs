@@ -4,13 +4,13 @@
 //! and configuration.
 
 use super::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::PclResult;
 
 /// Builder for OctreeSearchXYZ
 pub struct OctreeSearchBuilder {
     resolution: f64,
-    input_cloud: Option<PointCloudXYZ>,
+    input_cloud: Option<PointCloud<XYZ>>,
 }
 
 impl OctreeSearchBuilder {
@@ -29,7 +29,7 @@ impl OctreeSearchBuilder {
     }
 
     /// Set the input cloud (will be moved)
-    pub fn input_cloud(mut self, cloud: PointCloudXYZ) -> Self {
+    pub fn input_cloud(mut self, cloud: PointCloud<XYZ>) -> Self {
         self.input_cloud = Some(cloud);
         self
     }
@@ -49,7 +49,7 @@ impl OctreeSearchBuilder {
 /// Builder for OctreeVoxelCentroidXYZ
 pub struct OctreeVoxelCentroidBuilder {
     resolution: f64,
-    input_cloud: Option<PointCloudXYZ>,
+    input_cloud: Option<PointCloud<XYZ>>,
     auto_build: bool,
 }
 
@@ -70,7 +70,7 @@ impl OctreeVoxelCentroidBuilder {
     }
 
     /// Set the input cloud (will be moved)
-    pub fn input_cloud(mut self, cloud: PointCloudXYZ) -> Self {
+    pub fn input_cloud(mut self, cloud: PointCloud<XYZ>) -> Self {
         self.input_cloud = Some(cloud);
         self
     }
@@ -100,14 +100,14 @@ impl OctreeVoxelCentroidBuilder {
 /// Utility functions for working with octrees
 pub mod utils {
     use super::*;
-    use crate::common::PointCloudXYZ;
+    use crate::common::{PointCloud, XYZ};
     use crate::error::PclResult;
 
     /// Create an octree search structure with optimal resolution
     ///
     /// The resolution is computed as a fraction of the cloud's bounding box diagonal
     pub fn create_octree_with_auto_resolution(
-        cloud: &PointCloudXYZ,
+        cloud: &PointCloud<XYZ>,
         resolution_factor: f64,
     ) -> PclResult<OctreeSearchXYZ> {
         // For now, use a default resolution
@@ -121,7 +121,10 @@ pub mod utils {
     }
 
     /// Downsample a point cloud using voxel centroids
-    pub fn downsample_cloud(cloud: &PointCloudXYZ, voxel_size: f64) -> PclResult<PointCloudXYZ> {
+    pub fn downsample_cloud(
+        cloud: &PointCloud<XYZ>,
+        voxel_size: f64,
+    ) -> PclResult<PointCloud<XYZ>> {
         let mut octree = OctreeVoxelCentroidXYZ::new(voxel_size)?;
         octree.set_input_cloud(cloud)?;
         octree.add_points_from_input_cloud()?;

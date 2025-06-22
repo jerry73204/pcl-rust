@@ -23,18 +23,20 @@ impl PointCloudXYZBuilder {
         self
     }
 
-    /// Add a point from coordinates (alias for backwards compatibility)
+    /// Add a point from coordinates (backward compatibility alias)
     pub fn add_point(self, x: f32, y: f32, z: f32) -> Self {
         self.point(x, y, z)
     }
 
-    /// Add multiple points from coordinates tuples
+    /// Add multiple points from coordinate tuples
     pub fn add_points(mut self, points: Vec<(f32, f32, f32)>) -> Self {
         for (x, y, z) in points {
             self.points.push(PointXYZ::new(x, y, z));
         }
         self
     }
+
+    // Deprecated methods have been removed - use .point() or .point_struct() instead
 
     /// Add a point from struct
     pub fn point_struct(mut self, point: PointXYZ) -> Self {

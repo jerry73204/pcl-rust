@@ -6,7 +6,7 @@
 use crate::common::PointCloud;
 use crate::common::point_types::PointType;
 use crate::error::PclResult;
-use crate::traits::{NormalXyz, Point, Xyz};
+// Removed trait imports - using new marker type system
 use cxx::memory::UniquePtrTarget;
 
 /// Generic trait for surface reconstruction algorithms
@@ -55,16 +55,22 @@ where
 ///
 /// This marker trait indicates that a point type has all the necessary
 /// capabilities for surface reconstruction algorithms.
-pub trait SurfacePoint: Point + PointType + Xyz + NormalXyz
+pub trait SurfacePoint: PointType
 where
     <Self as PointType>::CloudType: UniquePtrTarget,
 {
+    /// Check if the point type has normal information
+    fn has_normals() -> bool;
 }
 
 // Implement SurfacePoint for types that have both coordinates and normals
 use crate::common::PointNormal;
 
-impl SurfacePoint for PointNormal {}
+impl SurfacePoint for PointNormal {
+    fn has_normals() -> bool {
+        true
+    }
+}
 
 /// Configuration options for surface reconstruction algorithms
 #[derive(Debug, Clone)]

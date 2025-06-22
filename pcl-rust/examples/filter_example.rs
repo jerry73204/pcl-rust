@@ -7,8 +7,7 @@
 //! - RadiusOutlierRemoval for removing isolated points
 
 use pcl::{
-    PointCloudXYZ,
-    common::PointCloudXYZBuilder,
+    common::{PointCloud, PointCloudXYZBuilder, XYZ},
     filters::{
         Filter, PassThroughXYZBuilder, RadiusOutlierRemovalXYZBuilder,
         StatisticalOutlierRemovalXYZBuilder, VoxelGridXYZBuilder,
@@ -127,7 +126,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 /// Create a sample point cloud with some structure and noise
-fn create_sample_cloud() -> Result<PointCloudXYZ, Box<dyn std::error::Error>> {
+fn create_sample_cloud() -> Result<PointCloud<XYZ>, Box<dyn std::error::Error>> {
     let mut points = Vec::new();
 
     // Create a structured grid of points

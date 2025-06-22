@@ -5,20 +5,21 @@
 //! the actual visualization will fail but the API structure is demonstrated.
 
 use pcl::{
-    CameraControl, CloudViewer, PclVisualizer, PointCloudXYZ, PointCloudXYZRGB, ViewerXYZ,
-    VisualizationControl, error::PclResult,
+    CameraControl, CloudViewer, PclVisualizer, ViewerXYZ, VisualizationControl,
+    common::{PointCloud, XYZ, XYZRGB},
+    error::PclResult,
 };
 
-fn create_sample_xyz_cloud() -> PclResult<PointCloudXYZ> {
-    let mut cloud = PointCloudXYZ::new()?;
+fn create_sample_xyz_cloud() -> PclResult<PointCloud<XYZ>> {
+    let mut cloud = PointCloud::<XYZ>::new()?;
     // Just create an empty cloud for demonstration
     // In a real application, you would populate this with actual point data
     cloud.resize(100)?;
     Ok(cloud)
 }
 
-fn create_sample_xyzrgb_cloud() -> PclResult<PointCloudXYZRGB> {
-    let mut cloud = PointCloudXYZRGB::new()?;
+fn create_sample_xyzrgb_cloud() -> PclResult<PointCloud<XYZRGB>> {
+    let mut cloud = PointCloud::<XYZRGB>::new()?;
     // Just create an empty cloud for demonstration
     cloud.resize(100)?;
     Ok(cloud)
@@ -167,7 +168,7 @@ fn demo_api_features() -> PclResult<()> {
     let cloud = create_sample_xyz_cloud()?;
 
     // Test different viewer types implementing the same trait
-    fn use_viewer_trait<V: ViewerXYZ>(mut viewer: V, cloud: &PointCloudXYZ) -> PclResult<()> {
+    fn use_viewer_trait<V: ViewerXYZ>(mut viewer: V, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         viewer.show_cloud(cloud, "trait_cloud")?;
         Ok(())
     }

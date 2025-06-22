@@ -3,7 +3,7 @@
 //! This module provides a fast triangulation method for organized point clouds
 //! (e.g., from RGB-D sensors) where the point cloud has a 2D structure.
 
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
 use crate::surface::{PolygonMesh, SurfaceReconstruction};
 use cxx::UniquePtr;
@@ -86,8 +86,8 @@ impl OrganizedFastMeshXYZ {
     }
 }
 
-impl SurfaceReconstruction<PointCloudXYZ, PolygonMesh> for OrganizedFastMeshXYZ {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl SurfaceReconstruction<PointCloud<XYZ>, PolygonMesh> for OrganizedFastMeshXYZ {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }

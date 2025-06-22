@@ -5,13 +5,14 @@
 
 use pcl::common::{PointCloudXYZBuilder, PointCloudXYZRGBBuilder};
 use pcl::{
-    CameraControl, PclError, PclResult, PclVisualizer, PointCloudXYZ, PointCloudXYZRGB, ViewerXYZ,
-    ViewerXYZRGB, VisualizationControl,
+    CameraControl, PclError, PclResult, PclVisualizer, ViewerXYZ, ViewerXYZRGB,
+    VisualizationControl,
+    common::{PointCloud, XYZ, XYZRGB},
 };
 use std::f64::consts::PI;
 
 /// Generate a sphere point cloud
-fn generate_sphere(radius: f64, num_points: usize) -> PclResult<PointCloudXYZ> {
+fn generate_sphere(radius: f64, num_points: usize) -> PclResult<PointCloud<XYZ>> {
     let mut builder = PointCloudXYZBuilder::new();
 
     // Generate points on sphere surface using spherical coordinates
@@ -36,7 +37,7 @@ fn generate_helix(
     height: f64,
     turns: f64,
     num_points: usize,
-) -> PclResult<PointCloudXYZRGB> {
+) -> PclResult<PointCloud<XYZRGB>> {
     let mut builder = PointCloudXYZRGBBuilder::new();
 
     for i in 0..num_points {
@@ -59,7 +60,7 @@ fn generate_helix(
 }
 
 /// Generate a cubic grid of points
-fn generate_grid(size: f64, density: usize) -> PclResult<PointCloudXYZ> {
+fn generate_grid(size: f64, density: usize) -> PclResult<PointCloud<XYZ>> {
     let mut builder = PointCloudXYZBuilder::new();
     let step = size / density as f64;
     let offset = size / 2.0;
@@ -85,7 +86,7 @@ fn generate_torus(
     minor_radius: f64,
     num_major: usize,
     num_minor: usize,
-) -> PclResult<PointCloudXYZRGB> {
+) -> PclResult<PointCloud<XYZRGB>> {
     let mut builder = PointCloudXYZRGBBuilder::new();
 
     for i in 0..num_major {
@@ -237,7 +238,7 @@ fn visualize_all_shapes() -> PclResult<()> {
 }
 
 /// Simple rotation around Z axis
-fn rotate_cloud(_cloud: &PointCloudXYZ, angle: f64) -> PclResult<PointCloudXYZ> {
+fn rotate_cloud(_cloud: &PointCloud<XYZ>, angle: f64) -> PclResult<PointCloud<XYZ>> {
     let mut builder = PointCloudXYZBuilder::new();
     let _cos_a = angle.cos() as f32;
     let _sin_a = angle.sin() as f32;

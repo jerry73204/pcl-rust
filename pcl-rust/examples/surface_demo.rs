@@ -5,7 +5,10 @@
 //! - Generate organized meshes using OrganizedFastMesh
 //! - Save meshes to various file formats
 
-use pcl::{OrganizedFastMeshXYZ, TriangulationType, common::PointCloudXYZBuilder};
+use pcl::{
+    OrganizedFastMeshXYZ, TriangulationType,
+    common::{PointCloud, PointCloudXYZBuilder, XYZ},
+};
 
 fn main() -> pcl::PclResult<()> {
     println!("Surface Reconstruction Demo");
@@ -37,7 +40,7 @@ fn main() -> pcl::PclResult<()> {
 }
 
 /// Create a sample point cloud with some structure
-fn create_sample_cloud() -> pcl::PclResult<pcl::PointCloudXYZ> {
+fn create_sample_cloud() -> pcl::PclResult<PointCloud<XYZ>> {
     let mut points = Vec::new();
 
     // Create a simple 3D structure - a cube
@@ -84,7 +87,7 @@ fn create_sample_cloud() -> pcl::PclResult<pcl::PointCloudXYZ> {
 }
 
 /// Create an organized point cloud (like from a depth sensor)
-fn create_organized_cloud() -> pcl::PclResult<pcl::PointCloudXYZ> {
+fn create_organized_cloud() -> pcl::PclResult<PointCloud<XYZ>> {
     let width = 20;
     let height = 15;
     let mut points = Vec::new();
@@ -113,7 +116,7 @@ fn create_organized_cloud() -> pcl::PclResult<pcl::PointCloudXYZ> {
 /// Demonstrate Marching Cubes surface reconstruction
 /// Note: This is currently not functional as MarchingCubes requires point clouds with normals
 #[allow(dead_code)]
-fn marching_cubes_demo(_cloud: &pcl::PointCloudXYZ) -> pcl::PclResult<()> {
+fn marching_cubes_demo(_cloud: &PointCloud<XYZ>) -> pcl::PclResult<()> {
     println!("\n1. Marching Cubes Hoppe Reconstruction");
     println!("-------------------------------------");
     println!("Note: MarchingCubes algorithms require point clouds with normals.");
@@ -122,7 +125,7 @@ fn marching_cubes_demo(_cloud: &pcl::PointCloudXYZ) -> pcl::PclResult<()> {
 }
 
 /// Demonstrate OrganizedFastMesh surface reconstruction
-fn organized_fast_mesh_demo(_cloud: &pcl::PointCloudXYZ) -> pcl::PclResult<()> {
+fn organized_fast_mesh_demo(_cloud: &PointCloud<XYZ>) -> pcl::PclResult<()> {
     println!("\n2. Organized Fast Mesh Reconstruction");
     println!("------------------------------------");
 

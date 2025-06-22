@@ -3,7 +3,7 @@
 //! This module provides RANSAC-based segmentation for finding geometric models
 //! in point clouds such as planes, spheres, cylinders, etc.
 
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
 use crate::segmentation::{method_types, model_types};
 use cxx::UniquePtr;
@@ -223,7 +223,7 @@ impl SacSegmentationXYZ {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }

@@ -1,6 +1,6 @@
 //! Test example for the features module
 
-use pcl::common::{PointCloudXYZ, PointXYZ};
+use pcl::common::{PointCloud, PointXYZ, XYZ};
 use pcl::error::PclResult;
 use pcl::features::{FpfhEstimation, NormalEstimation, PfhEstimation};
 
@@ -8,7 +8,7 @@ fn main() -> PclResult<()> {
     println!("Testing PCL features module...");
 
     // Create a simple test point cloud
-    let mut cloud = PointCloudXYZ::new()?;
+    let mut cloud = PointCloud::<XYZ>::new()?;
 
     // Add some test points in a simple pattern
     for i in 0..10 {

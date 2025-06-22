@@ -3,7 +3,7 @@
 //! ICP is a popular algorithm for aligning two point clouds by iteratively
 //! minimizing the distance between corresponding points.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::{PclError, PclResult};
 use crate::registration::{RegistrationXYZ, RegistrationXYZRGB, TransformationMatrix};
 use cxx::UniquePtr;
@@ -113,7 +113,7 @@ impl Default for IcpXYZ {
 }
 
 impl RegistrationXYZ for IcpXYZ {
-    fn set_input_source(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    fn set_input_source(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Source cloud is empty"));
         }
@@ -121,7 +121,7 @@ impl RegistrationXYZ for IcpXYZ {
         Ok(())
     }
 
-    fn set_input_target(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    fn set_input_target(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Target cloud is empty"));
         }
@@ -129,7 +129,7 @@ impl RegistrationXYZ for IcpXYZ {
         Ok(())
     }
 
-    fn align(&mut self) -> PclResult<PointCloudXYZ> {
+    fn align(&mut self) -> PclResult<PointCloud<XYZ>> {
         let result = ffi::align_icp_xyz(self.inner.pin_mut());
         if result.is_null() {
             Err(PclError::InvalidState {
@@ -138,14 +138,14 @@ impl RegistrationXYZ for IcpXYZ {
                 actual_state: "null result".to_string(),
             })
         } else {
-            Ok(PointCloudXYZ::from_unique_ptr(result))
+            Ok(PointCloud::<XYZ>::from_unique_ptr(result))
         }
     }
 
     fn align_with_guess(
         &mut self,
         initial_guess: &TransformationMatrix,
-    ) -> PclResult<PointCloudXYZ> {
+    ) -> PclResult<PointCloud<XYZ>> {
         let guess_vec = initial_guess.to_vec();
         let result = ffi::align_with_guess_icp_xyz(self.inner.pin_mut(), &guess_vec);
         if result.is_null() {
@@ -155,7 +155,7 @@ impl RegistrationXYZ for IcpXYZ {
                 actual_state: "null result".to_string(),
             })
         } else {
-            Ok(PointCloudXYZ::from_unique_ptr(result))
+            Ok(PointCloud::<XYZ>::from_unique_ptr(result))
         }
     }
 
@@ -277,7 +277,7 @@ impl Default for IcpXYZRGB {
 }
 
 impl RegistrationXYZRGB for IcpXYZRGB {
-    fn set_input_source(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
+    fn set_input_source(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Source cloud is empty"));
         }
@@ -285,7 +285,7 @@ impl RegistrationXYZRGB for IcpXYZRGB {
         Ok(())
     }
 
-    fn set_input_target(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
+    fn set_input_target(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Target cloud is empty"));
         }
@@ -293,7 +293,7 @@ impl RegistrationXYZRGB for IcpXYZRGB {
         Ok(())
     }
 
-    fn align(&mut self) -> PclResult<PointCloudXYZRGB> {
+    fn align(&mut self) -> PclResult<PointCloud<XYZRGB>> {
         let result = ffi::align_icp_xyzrgb(self.inner.pin_mut());
         if result.is_null() {
             Err(PclError::InvalidState {
@@ -302,14 +302,14 @@ impl RegistrationXYZRGB for IcpXYZRGB {
                 actual_state: "null result".to_string(),
             })
         } else {
-            Ok(PointCloudXYZRGB::from_unique_ptr(result))
+            Ok(PointCloud::<XYZRGB>::from_unique_ptr(result))
         }
     }
 
     fn align_with_guess(
         &mut self,
         initial_guess: &TransformationMatrix,
-    ) -> PclResult<PointCloudXYZRGB> {
+    ) -> PclResult<PointCloud<XYZRGB>> {
         let guess_vec = initial_guess.to_vec();
         let result = ffi::align_with_guess_icp_xyzrgb(self.inner.pin_mut(), &guess_vec);
         if result.is_null() {
@@ -319,7 +319,7 @@ impl RegistrationXYZRGB for IcpXYZRGB {
                 actual_state: "null result".to_string(),
             })
         } else {
-            Ok(PointCloudXYZRGB::from_unique_ptr(result))
+            Ok(PointCloud::<XYZRGB>::from_unique_ptr(result))
         }
     }
 

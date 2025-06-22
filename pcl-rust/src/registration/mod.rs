@@ -19,25 +19,25 @@ pub use icp::{IcpXYZ, IcpXYZBuilder, IcpXYZRGB, IcpXYZRGBBuilder};
 pub use ndt::{NdtXYZ, NdtXYZBuilder, NdtXYZRGB, NdtXYZRGBBuilder};
 pub use transform::{Transform3D, TransformationMatrix};
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::PclResult;
 
 /// Trait for point cloud registration algorithms
 pub trait RegistrationXYZ {
     /// Set the source (moving) point cloud
-    fn set_input_source(&mut self, cloud: &PointCloudXYZ) -> PclResult<()>;
+    fn set_input_source(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()>;
 
     /// Set the target (fixed) point cloud
-    fn set_input_target(&mut self, cloud: &PointCloudXYZ) -> PclResult<()>;
+    fn set_input_target(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()>;
 
     /// Align the source cloud to the target cloud
-    fn align(&mut self) -> PclResult<PointCloudXYZ>;
+    fn align(&mut self) -> PclResult<PointCloud<XYZ>>;
 
     /// Align with initial transformation guess
     fn align_with_guess(
         &mut self,
         initial_guess: &TransformationMatrix,
-    ) -> PclResult<PointCloudXYZ>;
+    ) -> PclResult<PointCloud<XYZ>>;
 
     /// Check if the registration has converged
     fn has_converged(&mut self) -> bool;
@@ -52,19 +52,19 @@ pub trait RegistrationXYZ {
 /// Trait for point cloud registration algorithms with RGB
 pub trait RegistrationXYZRGB {
     /// Set the source (moving) point cloud
-    fn set_input_source(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()>;
+    fn set_input_source(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()>;
 
     /// Set the target (fixed) point cloud
-    fn set_input_target(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()>;
+    fn set_input_target(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()>;
 
     /// Align the source cloud to the target cloud
-    fn align(&mut self) -> PclResult<PointCloudXYZRGB>;
+    fn align(&mut self) -> PclResult<PointCloud<XYZRGB>>;
 
     /// Align with initial transformation guess
     fn align_with_guess(
         &mut self,
         initial_guess: &TransformationMatrix,
-    ) -> PclResult<PointCloudXYZRGB>;
+    ) -> PclResult<PointCloud<XYZRGB>>;
 
     /// Check if the registration has converged
     fn has_converged(&mut self) -> bool;

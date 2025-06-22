@@ -194,7 +194,7 @@ fn main() -> Result<()> {
 }
 
 /// Create a sample point cloud for testing
-fn create_sample_cloud() -> Result<pcl::common::PointCloudXYZ> {
+fn create_sample_cloud() -> Result<pcl::common::PointCloud<pcl::common::XYZ>> {
     // Note: Due to current FFI limitations, we can't actually set point data from Rust
     // This creates an empty cloud with some points allocated
     let builder = PointCloudXYZBuilder::new();

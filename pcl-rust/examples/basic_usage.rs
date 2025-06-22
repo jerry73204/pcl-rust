@@ -7,9 +7,10 @@
 //! - Creating octree structures
 //! - Error handling
 
+use pcl::PclResult;
+use pcl::common::{PointCloud, XYZ, XYZRGB};
 use pcl::octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
-use pcl::search::KdTreeXYZ;
-use pcl::{PclResult, PointCloudXYZ, PointCloudXYZRGB};
+use pcl::search::KdTree;
 
 fn main() -> PclResult<()> {
     println!("PCL Rust Basic Usage Example");
@@ -35,7 +36,7 @@ fn demonstrate_point_clouds() -> PclResult<()> {
     println!("\n🔷 Point Cloud Operations:");
 
     // PointXYZ cloud
-    let mut cloud_xyz = PointCloudXYZ::new()?;
+    let mut cloud_xyz = PointCloud::<XYZ>::new()?;
     println!(
         "  Created PointXYZ cloud: {} points, empty: {}, organized: {}",
         cloud_xyz.size(),
@@ -63,7 +64,7 @@ fn demonstrate_point_clouds() -> PclResult<()> {
     );
 
     // PointXYZRGB cloud
-    let cloud_xyzrgb = PointCloudXYZRGB::new()?;
+    let cloud_xyzrgb = PointCloud::<XYZRGB>::new()?;
     println!(
         "  Created PointXYZRGB cloud: {} points, empty: {}",
         cloud_xyzrgb.size(),
@@ -92,10 +93,10 @@ fn demonstrate_search_structures() -> PclResult<()> {
     println!("\n🔍 Search Structures:");
 
     // KdTree for PointXYZ
-    use pcl::search::{SearchConfiguration, SearchInputCloud};
+    use pcl::search::SearchConfiguration;
 
-    let mut kdtree = KdTreeXYZ::new()?;
-    println!("  Created KdTreeXYZ successfully");
+    let mut kdtree = KdTree::<XYZ>::new()?;
+    println!("  Created KdTree<XYZ> successfully");
     println!("  Initial epsilon: {:.3}", kdtree.epsilon());
 
     // Configure search parameters
@@ -103,26 +104,20 @@ fn demonstrate_search_structures() -> PclResult<()> {
     println!("  Set epsilon to: {:.3}", kdtree.epsilon());
 
     // Create a point cloud and set it as input
-    let mut cloud = PointCloudXYZ::new()?;
+    let mut cloud = PointCloud::<XYZ>::new()?;
     cloud.resize(10)?; // Create 10 default points
     kdtree.set_input_cloud(&cloud)?;
     println!("  Set input cloud with {} points", cloud.size());
 
     // Demonstrate unified search interface
-    use pcl::search::{SearchMethod, SearchXYZ};
-
-    let mut unified_search = SearchXYZ::new(SearchMethod::KdTree)?;
-    println!(
-        "\n  Using unified search interface: {:?}",
-        unified_search.method()
-    );
-    unified_search.set_input_cloud(&cloud)?;
+    // Note: The unified search interface currently requires PointXYZ, not the generic marker types
+    // This is a limitation of the current implementation
 
     // Test KdTree for PointXYZRGB
-    let mut kdtree_rgb = pcl::search::KdTreeXYZRGB::new()?;
-    println!("\n  Created KdTreeXYZRGB successfully");
+    let mut kdtree_rgb = KdTree::<XYZRGB>::new()?;
+    println!("\n  Created KdTree<XYZRGB> successfully");
 
-    let cloud_rgb = PointCloudXYZRGB::new()?;
+    let cloud_rgb = PointCloud::<XYZRGB>::new()?;
     kdtree_rgb.set_input_cloud(&cloud_rgb)?;
     println!("  RGB KdTree configured with empty cloud");
 

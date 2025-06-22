@@ -3,7 +3,7 @@
 use crate::common::{PointCloud, PointXYZ, PointXYZI, XYZ, XYZI};
 use crate::error::PclResult;
 use crate::keypoints::*;
-use crate::search::{KdTreeXYZ, SearchInputCloud};
+use crate::search::KdTree;
 
 /// Create a simple test cloud with known features
 fn create_test_cloud_xyz() -> PclResult<PointCloud<XYZ>> {
@@ -63,7 +63,7 @@ mod harris_tests {
         let mut harris = Harris3D::new().unwrap();
 
         // Set up search
-        let mut kdtree = KdTreeXYZ::new().unwrap();
+        let mut kdtree = KdTree::<XYZ>::new().unwrap();
         kdtree.set_input_cloud(&cloud).unwrap();
         harris.set_search_method(&kdtree).unwrap();
 
@@ -100,7 +100,7 @@ mod harris_tests {
         let cloud = create_test_cloud_xyz().unwrap();
         let mut harris = Harris3D::new().unwrap();
 
-        let mut kdtree = KdTreeXYZ::new().unwrap();
+        let mut kdtree = KdTree::<XYZ>::new().unwrap();
         kdtree.set_input_cloud(&cloud).unwrap();
         harris.set_search_method(&kdtree).unwrap();
 
@@ -140,7 +140,7 @@ mod iss_tests {
         let mut iss = Iss3D::new().unwrap();
 
         // Set up search
-        let mut kdtree = KdTreeXYZ::new().unwrap();
+        let mut kdtree = KdTree::<XYZ>::new().unwrap();
         kdtree.set_input_cloud(&cloud).unwrap();
         iss.set_search_method(&kdtree).unwrap();
 
@@ -188,7 +188,7 @@ mod iss_tests {
         let cloud = create_test_cloud_xyz().unwrap();
         let mut iss = Iss3D::new().unwrap();
 
-        let mut kdtree = KdTreeXYZ::new().unwrap();
+        let mut kdtree = KdTree::<XYZ>::new().unwrap();
         kdtree.set_input_cloud(&cloud).unwrap();
         iss.set_search_method(&kdtree).unwrap();
 
@@ -215,7 +215,7 @@ mod iss_tests {
 #[cfg(test)]
 mod sift_tests {
     use super::*;
-    use crate::search::KdTreeXYZI;
+    use crate::search::KdTree;
 
     #[test]
     fn test_sift_basic_detection() {
@@ -223,7 +223,7 @@ mod sift_tests {
         let mut sift = SiftKeypoint::new().unwrap();
 
         // Set up search with XYZI
-        let mut kdtree = KdTreeXYZI::new().unwrap();
+        let mut kdtree = KdTree::<XYZI>::new().unwrap();
         kdtree.set_input_cloud(&cloud).unwrap();
         sift.set_search_method(&kdtree).unwrap();
 
@@ -359,7 +359,7 @@ mod integration_tests {
 
         // Test Harris detection
         let mut harris = Harris3D::new().unwrap();
-        let mut kdtree = KdTreeXYZ::new().unwrap();
+        let mut kdtree = KdTree::<XYZ>::new().unwrap();
         kdtree.set_input_cloud(&cloud).unwrap();
         harris.set_search_method(&kdtree).unwrap();
         harris.set_radius(0.3).unwrap();

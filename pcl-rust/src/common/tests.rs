@@ -20,7 +20,7 @@ mod point_type_tests {
     #[test]
     fn test_point_xyz_basic() -> PclResult<()> {
         // Points can only be accessed through point clouds
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
         cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
 
         // Test that the point was added successfully
@@ -34,7 +34,7 @@ mod point_type_tests {
     fn test_point_xyzrgb_color() -> PclResult<()> {
         // Test corresponding to TEST (PCL, PointXYZRGB)
         // C++ source: pcl/test/common/test_common.cpp:56-85
-        let mut cloud: PointCloud<PointXYZRGB> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZRGB>::new()?;
         cloud.push(PointXYZRGB::new(0.0, 0.0, 0.0, 127, 64, 254))?;
 
         assert_eq!(cloud.size(), 1);
@@ -48,7 +48,7 @@ mod point_type_tests {
 
     #[test]
     fn test_point_xyzrgb_coordinates() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZRGB> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZRGB>::new()?;
         cloud.push(PointXYZRGB::new(1.0, 2.0, 3.0, 255, 128, 64))?;
 
         assert_eq!(cloud.size(), 1);
@@ -59,7 +59,7 @@ mod point_type_tests {
 
     #[test]
     fn test_point_xyzi_intensity() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZI> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZI>::new()?;
         cloud.push(PointXYZI::new(1.0, 2.0, 3.0, 0.5))?;
 
         assert_eq!(cloud.size(), 1);
@@ -84,7 +84,7 @@ mod point_type_tests {
     fn test_is_finite() -> PclResult<()> {
         // Test corresponding to TEST(PCL, isFinite)
         // C++ source: pcl/test/common/test_common.cpp:121-130
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
 
         // Test finite point
         cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
@@ -109,7 +109,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_new() -> PclResult<()> {
-        let cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let cloud = PointCloud::<XYZ>::new()?;
         assert_eq!(cloud.size(), 0);
         assert!(cloud.is_empty());
         Ok(())
@@ -119,7 +119,7 @@ mod point_cloud_tests {
     fn test_point_cloud_is_organized() -> PclResult<()> {
         // Test corresponding to TEST_F (pointCloudTest, is_organized)
         // C++ source: pcl/test/common/test_pointcloud.cpp:24-29
-        let cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let cloud = PointCloud::<XYZ>::new()?;
         // Note: set_width and set_height are not available in the current API
         // A cloud is organized if height > 1
         assert!(!cloud.is_organized()); // New clouds are not organized by default
@@ -130,7 +130,7 @@ mod point_cloud_tests {
     fn test_point_cloud_not_organized() -> PclResult<()> {
         // Test corresponding to TEST_F (pointCloudTest, not_organized)
         // C++ source: pcl/test/common/test_pointcloud.cpp:31-36
-        let cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let cloud = PointCloud::<XYZ>::new()?;
         // New clouds have height = 1, so they are not organized
         assert!(!cloud.is_organized());
         Ok(())
@@ -138,7 +138,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_push() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
 
         // Push points
         cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
@@ -152,7 +152,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_clear() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
 
         // Add some points
         cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
@@ -169,7 +169,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_resize() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
 
         // Resize cloud
         cloud.resize(10)?;
@@ -184,7 +184,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_at() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
 
         // Add points
         cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
@@ -199,7 +199,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_xyzrgb() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZRGB> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZRGB>::new()?;
 
         // Push colored points
         cloud.push(PointXYZRGB::new(1.0, 2.0, 3.0, 255, 0, 0))?;
@@ -212,7 +212,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_xyzi() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZI> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZI>::new()?;
 
         // Push points with intensity
         cloud.push(PointXYZI::new(1.0, 2.0, 3.0, 0.5))?;
@@ -225,7 +225,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_reserve() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
 
         // Reserve capacity
         cloud.reserve(100)?;
@@ -238,7 +238,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_extend_from_slice() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
 
         // Add multiple points from slice
         let points = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]];
@@ -254,7 +254,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_width_height() -> PclResult<()> {
-        let cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let cloud = PointCloud::<XYZ>::new()?;
 
         // New clouds have default width and height
         assert_eq!(cloud.width(), 0);
@@ -265,7 +265,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_is_dense() -> PclResult<()> {
-        let cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let cloud = PointCloud::<XYZ>::new()?;
 
         // Test is_dense property
         // let _is_dense = cloud.is_dense(); // TODO: Not implemented yet
@@ -370,7 +370,7 @@ mod transform_tests {
 
     #[test]
     fn test_transform_point_cloud() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
         cloud.push(PointXYZ::new(1.0, 0.0, 0.0))?;
         cloud.push(PointXYZ::new(0.0, 1.0, 0.0))?;
         cloud.push(PointXYZ::new(0.0, 0.0, 1.0))?;
@@ -427,7 +427,7 @@ mod utility_tests {
 
     #[test]
     fn test_point_cloud_debug() -> PclResult<()> {
-        let mut cloud: PointCloud<PointXYZ> = PointCloud::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
         cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
 
         let debug_str = format!("{:?}", cloud);
@@ -441,7 +441,7 @@ mod utility_tests {
     #[test]
     fn test_point_cloud_default() -> PclResult<()> {
         // Test Default trait implementation
-        let cloud: PointCloud<PointXYZ> = Default::default();
+        let cloud = PointCloud::<XYZ>::default();
         assert_eq!(cloud.size(), 0);
         assert!(cloud.is_empty());
 

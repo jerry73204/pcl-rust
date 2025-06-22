@@ -51,7 +51,7 @@
 //! # Ok::<(), pcl::PclError>(())
 //! ```
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::PclResult;
 
 pub mod advanced;
@@ -77,13 +77,13 @@ pub use properties::{RenderingProperties, Representation, Shading};
 /// Generic trait for point cloud viewers
 pub trait ViewerXYZ {
     /// Display a PointXYZ cloud with the given name
-    fn show_cloud(&mut self, cloud: &PointCloudXYZ, name: &str) -> PclResult<()>;
+    fn show_cloud(&mut self, cloud: &PointCloud<XYZ>, name: &str) -> PclResult<()>;
 }
 
 /// Generic trait for RGB point cloud viewers  
 pub trait ViewerXYZRGB {
     /// Display a PointXYZRGB cloud with the given name
-    fn show_cloud_rgb(&mut self, cloud: &PointCloudXYZRGB, name: &str) -> PclResult<()>;
+    fn show_cloud_rgb(&mut self, cloud: &PointCloud<XYZRGB>, name: &str) -> PclResult<()>;
 }
 
 /// Common camera control interface

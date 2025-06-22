@@ -3,10 +3,9 @@
 //! This module provides concrete implementations of generic visualization traits
 //! for PCL's visualization classes.
 
+use crate::common::PointCloud;
 use crate::common::point_types::PointType;
-use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::{PclError, PclResult};
-use crate::traits::Point;
 use crate::visualization::{
     cloud_viewer::CloudViewer,
     generic::{AdvancedViewer, ShapeVisualization, Viewer},

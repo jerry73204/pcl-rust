@@ -3,7 +3,7 @@
 //! This module provides Poisson surface reconstruction, which is one of the most
 //! robust methods for reconstructing surfaces from oriented point sets.
 
-use crate::common::PointCloudNormal;
+use crate::common::{Normal, PointCloud};
 use crate::error::{PclError, PclResult};
 use crate::surface::PolygonMesh;
 use cxx::UniquePtr;
@@ -209,7 +209,7 @@ impl PoissonReconstruction {
     }
 
     /// Set the input point cloud with normals
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudNormal) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<Normal>) -> PclResult<()> {
         ffi::set_input_cloud_poisson(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
@@ -232,10 +232,10 @@ impl Default for PoissonReconstruction {
     }
 }
 
-impl crate::surface::SurfaceReconstruction<PointCloudNormal, PolygonMesh>
+impl crate::surface::SurfaceReconstruction<PointCloud<Normal>, PolygonMesh>
     for PoissonReconstruction
 {
-    fn set_input_cloud(&mut self, cloud: &PointCloudNormal) -> PclResult<()> {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<Normal>) -> PclResult<()> {
         self.set_input_cloud(cloud)
     }
 

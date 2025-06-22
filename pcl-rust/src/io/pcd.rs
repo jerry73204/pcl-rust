@@ -4,7 +4,7 @@
 //! PCD files with comprehensive error handling and format options.
 
 use super::BinaryFormat;
-use crate::common::{PointCloudXYZ, PointCloudXYZI, PointCloudXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZI, XYZRGB};
 use crate::error::{PclError, PclResult};
 use std::path::Path;
 
@@ -44,7 +44,7 @@ pub trait PcdIoXYZRGB {
     fn save_pcd_with_format<P: AsRef<Path>>(&self, path: P, format: BinaryFormat) -> PclResult<()>;
 }
 
-impl PcdIoXYZ for PointCloudXYZ {
+impl PcdIoXYZ for PointCloud<XYZ> {
     fn load_pcd<P: AsRef<Path>>(&mut self, path: P) -> PclResult<()> {
         let path_str = path.as_ref().to_str().ok_or_else(|| {
             PclError::invalid_parameters(
@@ -102,7 +102,7 @@ impl PcdIoXYZ for PointCloudXYZ {
     }
 }
 
-impl PcdIoXYZI for PointCloudXYZI {
+impl PcdIoXYZI for PointCloud<XYZI> {
     fn load_pcd<P: AsRef<Path>>(&mut self, path: P) -> PclResult<()> {
         let path_str = path.as_ref().to_str().ok_or_else(|| {
             PclError::invalid_parameters(
@@ -160,7 +160,7 @@ impl PcdIoXYZI for PointCloudXYZI {
     }
 }
 
-impl PcdIoXYZRGB for PointCloudXYZRGB {
+impl PcdIoXYZRGB for PointCloud<XYZRGB> {
     fn load_pcd<P: AsRef<Path>>(&mut self, path: P) -> PclResult<()> {
         let path_str = path.as_ref().to_str().ok_or_else(|| {
             PclError::invalid_parameters(
@@ -221,22 +221,22 @@ impl PcdIoXYZRGB for PointCloudXYZRGB {
 }
 
 /// Convenience functions for loading PCD files
-pub fn load_pcd_xyz<P: AsRef<Path>>(path: P) -> PclResult<PointCloudXYZ> {
-    let mut cloud = PointCloudXYZ::new()?;
+pub fn load_pcd_xyz<P: AsRef<Path>>(path: P) -> PclResult<PointCloud<XYZ>> {
+    let mut cloud = PointCloud::<XYZ>::new()?;
     cloud.load_pcd(path)?;
     Ok(cloud)
 }
 
 /// Convenience functions for loading PCD files with PointXYZI
-pub fn load_pcd_xyzi<P: AsRef<Path>>(path: P) -> PclResult<PointCloudXYZI> {
-    let mut cloud = PointCloudXYZI::new()?;
+pub fn load_pcd_xyzi<P: AsRef<Path>>(path: P) -> PclResult<PointCloud<XYZI>> {
+    let mut cloud = PointCloud::<XYZI>::new()?;
     cloud.load_pcd(path)?;
     Ok(cloud)
 }
 
 /// Convenience functions for loading PCD files with PointXYZRGB
-pub fn load_pcd_xyzrgb<P: AsRef<Path>>(path: P) -> PclResult<PointCloudXYZRGB> {
-    let mut cloud = PointCloudXYZRGB::new()?;
+pub fn load_pcd_xyzrgb<P: AsRef<Path>>(path: P) -> PclResult<PointCloud<XYZRGB>> {
+    let mut cloud = PointCloud::<XYZRGB>::new()?;
     cloud.load_pcd(path)?;
     Ok(cloud)
 }
@@ -248,7 +248,7 @@ mod tests {
 
     #[test]
     fn test_pcd_io_xyz() {
-        let mut cloud = PointCloudXYZ::new().unwrap();
+        let mut cloud = PointCloud::<XYZ>::new().unwrap();
         cloud.resize(10).unwrap();
 
         let temp_file = NamedTempFile::new().unwrap();
@@ -259,14 +259,14 @@ mod tests {
         assert!(path.exists());
 
         // Test loading
-        let mut loaded_cloud = PointCloudXYZ::new().unwrap();
+        let mut loaded_cloud = PointCloud::<XYZ>::new().unwrap();
         assert!(loaded_cloud.load_pcd(path).is_ok());
         assert_eq!(loaded_cloud.size(), cloud.size());
     }
 
     #[test]
     fn test_pcd_format_options() {
-        let mut cloud = PointCloudXYZ::new().unwrap();
+        let mut cloud = PointCloud::<XYZ>::new().unwrap();
         cloud.resize(5).unwrap();
 
         // Test ASCII format
@@ -296,7 +296,7 @@ mod tests {
 
     #[test]
     fn test_convenience_functions() {
-        let mut cloud = PointCloudXYZ::new().unwrap();
+        let mut cloud = PointCloud::<XYZ>::new().unwrap();
         cloud.resize(3).unwrap();
 
         let temp_file = NamedTempFile::new().unwrap();
@@ -309,7 +309,7 @@ mod tests {
 
     #[test]
     fn test_invalid_path_error() {
-        let cloud = PointCloudXYZ::new().unwrap();
+        let cloud = PointCloud::<XYZ>::new().unwrap();
 
         // Test with invalid UTF-8 path (this would need platform-specific testing)
         // For now just test with non-existent directory

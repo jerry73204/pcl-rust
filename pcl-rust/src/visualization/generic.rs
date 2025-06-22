@@ -6,7 +6,6 @@
 use crate::common::PointCloud;
 use crate::common::point_types::PointType;
 use crate::error::PclResult;
-use crate::traits::Point;
 use cxx::memory::UniquePtrTarget;
 
 /// Generic trait for visualizing point clouds of any type
@@ -87,7 +86,7 @@ pub trait ViewportControl {
     fn set_viewport(&mut self, viewport_id: i32) -> PclResult<()>;
 
     /// Add a point cloud to a specific viewport
-    fn add_cloud_to_viewport<T: Point + PointType>(
+    fn add_cloud_to_viewport<T: PointType>(
         &mut self,
         cloud: &PointCloud<T>,
         id: &str,
@@ -116,7 +115,7 @@ pub trait InteractiveViewer {
 }
 
 /// Trait for handling point clouds with normals
-pub trait NormalVisualization<T: Point + PointType>
+pub trait NormalVisualization<T: PointType>
 where
     <T as PointType>::CloudType: UniquePtrTarget,
 {

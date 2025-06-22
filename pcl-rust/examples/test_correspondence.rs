@@ -1,6 +1,6 @@
 //! Test correspondence estimation functionality
 
-use pcl::common::{PointCloudXYZ, PointXYZ};
+use pcl::common::{PointCloud, PointXYZ, XYZ};
 use pcl::error::PclResult;
 use pcl::registration::correspondence::{
     Correspondence, CorrespondenceEstimation, CorrespondenceRejectorSampleConsensus,
@@ -11,8 +11,8 @@ fn main() -> PclResult<()> {
     println!("=== Testing Correspondence Estimation ===\n");
 
     // Create simple test clouds
-    let mut source = PointCloudXYZ::new()?;
-    let mut target = PointCloudXYZ::new()?;
+    let mut source = PointCloud::<XYZ>::new()?;
+    let mut target = PointCloud::<XYZ>::new()?;
 
     // Add some test points - create a simple pattern
     for i in 0..5 {

@@ -70,10 +70,10 @@ fn test_builder_pattern() -> PclResult<()> {
 
     // For now, let's use the concrete types directly since the generic builder
     // has limitations with FFI point creation
-    use pcl::{PointCloudXYZ, PointCloudXYZRGB};
+    use pcl::common::{PointCloud, XYZ, XYZRGB};
 
     // Build PointCloudXYZ using the existing concrete builder
-    let mut xyz_cloud = PointCloudXYZ::new()?;
+    let mut xyz_cloud = PointCloud::<XYZ>::new()?;
     xyz_cloud.reserve(100)?;
     xyz_cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
     xyz_cloud.push(PointXYZ::new(4.0, 5.0, 6.0))?;
@@ -82,7 +82,7 @@ fn test_builder_pattern() -> PclResult<()> {
     println!("   Built PointXYZ cloud with {} points", xyz_cloud.size());
 
     // Build PointCloudXYZRGB using the existing concrete builder
-    let mut xyzrgb_cloud = PointCloudXYZRGB::new()?;
+    let mut xyzrgb_cloud = PointCloud::<XYZRGB>::new()?;
     xyzrgb_cloud.reserve(100)?;
     xyzrgb_cloud.push(PointXYZRGB::new(1.0, 2.0, 3.0, 255, 0, 0))?; // Red point
     xyzrgb_cloud.push(PointXYZRGB::new(4.0, 5.0, 6.0, 0, 255, 0))?; // Green point

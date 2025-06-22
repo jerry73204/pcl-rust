@@ -80,8 +80,8 @@ impl HistogramVisualizer {
 /// Side-by-side point cloud comparison viewer
 pub struct ComparisonViewer {
     viewer: PclVisualizer,
-    viewport_left: i32,
-    viewport_right: i32,
+    _viewport_left: i32,
+    _viewport_right: i32,
 }
 
 impl ComparisonViewer {
@@ -95,8 +95,8 @@ impl ComparisonViewer {
 
         Ok(Self {
             viewer,
-            viewport_left,
-            viewport_right,
+            _viewport_left: viewport_left,
+            _viewport_right: viewport_right,
         })
     }
 

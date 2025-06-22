@@ -1,6 +1,6 @@
 //! Simple test for correspondence estimation
 
-use pcl::common::{PointCloudXYZ, PointXYZ};
+use pcl::common::{PointCloud, PointXYZ, XYZ};
 use pcl::error::PclResult;
 use pcl::registration::correspondence::CorrespondenceEstimation;
 
@@ -8,8 +8,8 @@ fn main() -> PclResult<()> {
     println!("=== Simple Correspondence Test ===\n");
 
     // Create test clouds with more points
-    let mut source = PointCloudXYZ::new()?;
-    let mut target = PointCloudXYZ::new()?;
+    let mut source = PointCloud::<XYZ>::new()?;
+    let mut target = PointCloud::<XYZ>::new()?;
 
     // Create a 3x3 grid of points
     for i in 0..3 {

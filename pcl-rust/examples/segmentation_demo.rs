@@ -7,8 +7,8 @@
 //! - Extract ground points using progressive morphological filtering
 
 use pcl::{
-    ModelType, PointCloudXYZ, ProgressiveMorphologicalFilterXYZ, SacSegmentationXYZ,
-    common::PointCloudXYZBuilder,
+    ModelType, ProgressiveMorphologicalFilterXYZ, SacSegmentationXYZ,
+    common::{PointCloud, PointCloudXYZBuilder, XYZ},
 };
 use rand::Rng;
 
@@ -33,7 +33,7 @@ fn main() -> pcl::PclResult<()> {
 }
 
 /// Create a sample point cloud with some structure
-fn create_sample_cloud() -> pcl::PclResult<PointCloudXYZ> {
+fn create_sample_cloud() -> pcl::PclResult<PointCloud<XYZ>> {
     let mut rng = rand::thread_rng();
     let mut points = Vec::new();
 
@@ -80,7 +80,7 @@ fn create_sample_cloud() -> pcl::PclResult<PointCloudXYZ> {
 }
 
 /// Demonstrate Euclidean clustering
-fn euclidean_clustering_demo(cloud: &PointCloudXYZ) -> pcl::PclResult<()> {
+fn euclidean_clustering_demo(cloud: &PointCloud<XYZ>) -> pcl::PclResult<()> {
     println!("\n1. Euclidean Clustering");
     println!("----------------------");
 
@@ -105,7 +105,7 @@ fn euclidean_clustering_demo(cloud: &PointCloudXYZ) -> pcl::PclResult<()> {
 }
 
 /// Demonstrate RANSAC plane segmentation
-fn ransac_plane_demo(cloud: &PointCloudXYZ) -> pcl::PclResult<()> {
+fn ransac_plane_demo(cloud: &PointCloud<XYZ>) -> pcl::PclResult<()> {
     println!("\n2. RANSAC Plane Segmentation");
     println!("---------------------------");
 
@@ -133,7 +133,7 @@ fn ransac_plane_demo(cloud: &PointCloudXYZ) -> pcl::PclResult<()> {
 }
 
 /// Demonstrate ground extraction using progressive morphological filter
-fn ground_extraction_demo(cloud: &PointCloudXYZ) -> pcl::PclResult<()> {
+fn ground_extraction_demo(cloud: &PointCloud<XYZ>) -> pcl::PclResult<()> {
     println!("\n3. Progressive Morphological Filter (Ground Extraction)");
     println!("-----------------------------------------------------");
 

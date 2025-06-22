@@ -2,6 +2,8 @@
 
 #[cfg(test)]
 mod tests {
+    #[cfg(feature = "search")]
+    use crate::common::PointXYZ;
     #[cfg(feature = "octree")]
     use crate::error::OctreeOperation;
     use crate::error::PclError;
@@ -10,7 +12,7 @@ mod tests {
     #[cfg(feature = "octree")]
     use crate::octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
     #[cfg(feature = "search")]
-    use crate::search::{KdTreeXYZ, SearchConfiguration};
+    use crate::search::{KdTree, SearchConfiguration};
 
     #[test]
     fn test_invalid_parameters_error() {
@@ -187,7 +189,7 @@ mod tests {
     #[test]
     #[cfg(feature = "search")]
     fn test_search_configuration_invalid_epsilon() {
-        let mut searcher = KdTreeXYZ::new().unwrap();
+        let mut searcher = KdTree::<PointXYZ>::new().unwrap();
 
         // Test negative epsilon
         let result = searcher.set_epsilon(-1.0);

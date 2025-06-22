@@ -4,10 +4,10 @@
 //! rotation, and illumination changes. It requires intensity information and
 //! outputs keypoints with scale information.
 
-use crate::common::PointCloudXYZI;
+use crate::common::{PointCloud, XYZI};
 use crate::error::{PclError, PclResult};
 use crate::keypoints::{KeypointBuilder, KeypointDetector, PointWithScale};
-use crate::search::KdTreeXYZI;
+use crate::search::KdTree;
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
@@ -62,7 +62,7 @@ impl SiftKeypoint {
     }
 
     /// Set the search method for finding neighbors
-    pub fn set_search_method(&mut self, kdtree: &KdTreeXYZI) -> PclResult<()> {
+    pub fn set_search_method(&mut self, kdtree: &KdTree<XYZI>) -> PclResult<()> {
         ffi::set_search_method_sift_xyzi(self.inner.pin_mut(), kdtree.inner());
         Ok(())
     }
@@ -138,8 +138,8 @@ impl Default for SiftKeypoint {
     }
 }
 
-impl KeypointDetector<PointCloudXYZI, PointCloudWithScale> for SiftKeypoint {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZI) -> PclResult<()> {
+impl KeypointDetector<PointCloud<XYZI>, PointCloudWithScale> for SiftKeypoint {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZI>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }

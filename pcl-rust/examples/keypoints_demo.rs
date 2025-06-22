@@ -6,7 +6,7 @@
 use pcl::{
     PclResult, PointCloud, PointXYZ, PointXYZI, XYZ, XYZI,
     keypoints::{Harris3D, Iss3D, KeypointDetector, SiftKeypoint},
-    search::{KdTreeXYZ, KdTreeXYZI, SearchInputCloud},
+    search::KdTree,
 };
 
 /// Create a sample point cloud with some distinctive features
@@ -107,7 +107,7 @@ fn demo_harris3d(cloud: &PointCloud<XYZ>) -> PclResult<()> {
     let mut harris = Harris3D::new()?;
 
     // Set up search method
-    let mut kdtree = KdTreeXYZ::new()?;
+    let mut kdtree = KdTree::<XYZ>::new()?;
     kdtree.set_input_cloud(cloud)?;
     harris.set_search_method(&kdtree)?;
 
@@ -141,7 +141,7 @@ fn demo_iss3d(cloud: &PointCloud<XYZ>) -> PclResult<()> {
     let mut iss = Iss3D::new()?;
 
     // Set up search method
-    let mut kdtree = KdTreeXYZ::new()?;
+    let mut kdtree = KdTree::<XYZ>::new()?;
     kdtree.set_input_cloud(cloud)?;
     iss.set_search_method(&kdtree)?;
 
@@ -175,7 +175,7 @@ fn demo_sift(cloud: &PointCloud<XYZI>) -> PclResult<()> {
     let mut sift = SiftKeypoint::new()?;
 
     // Set up search method with XYZI cloud
-    let mut kdtree = KdTreeXYZI::new()?;
+    let mut kdtree = KdTree::<XYZI>::new()?;
     kdtree.set_input_cloud(cloud)?;
     sift.set_search_method(&kdtree)?;
 

@@ -3,7 +3,7 @@
 //! This module provides the progressive morphological filter algorithm
 //! for extracting ground points from point clouds.
 
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
 use cxx::UniquePtr;
 use pcl_sys::ffi;
@@ -30,7 +30,7 @@ impl ProgressiveMorphologicalFilterXYZ {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }

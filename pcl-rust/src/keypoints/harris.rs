@@ -4,10 +4,10 @@
 //! to 3D point clouds. It detects keypoints that represent corners and edges
 //! in the 3D structure.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZI};
+use crate::common::{PointCloud, XYZ, XYZI};
 use crate::error::{PclError, PclResult};
 use crate::keypoints::{KeypointBuilder, KeypointDetector};
-use crate::search::KdTreeXYZ;
+use crate::search::KdTree;
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
@@ -36,7 +36,7 @@ impl Harris3D {
     }
 
     /// Set the search method for finding neighbors
-    pub fn set_search_method(&mut self, kdtree: &KdTreeXYZ) -> PclResult<()> {
+    pub fn set_search_method(&mut self, kdtree: &KdTree<XYZ>) -> PclResult<()> {
         ffi::set_search_method_harris_3d_xyz(self.inner.pin_mut(), kdtree.inner());
         Ok(())
     }
@@ -94,8 +94,8 @@ impl Default for Harris3D {
     }
 }
 
-impl KeypointDetector<PointCloudXYZ, PointCloudXYZI> for Harris3D {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl KeypointDetector<PointCloud<XYZ>, PointCloud<XYZI>> for Harris3D {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
@@ -103,7 +103,7 @@ impl KeypointDetector<PointCloudXYZ, PointCloudXYZI> for Harris3D {
         Ok(())
     }
 
-    fn compute(&mut self) -> PclResult<PointCloudXYZI> {
+    fn compute(&mut self) -> PclResult<PointCloud<XYZI>> {
         let result = ffi::compute_harris_3d_xyz(self.inner.pin_mut());
         if result.is_null() {
             Err(PclError::InvalidState {
@@ -112,7 +112,7 @@ impl KeypointDetector<PointCloudXYZ, PointCloudXYZI> for Harris3D {
                 actual_state: "null result".to_string(),
             })
         } else {
-            Ok(PointCloudXYZI::from_unique_ptr(result))
+            Ok(PointCloud::<XYZI>::from_unique_ptr(result))
         }
     }
 }

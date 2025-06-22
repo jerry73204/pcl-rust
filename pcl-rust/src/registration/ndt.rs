@@ -4,7 +4,7 @@
 //! distributions and finds the transformation that maximizes the likelihood of the
 //! source cloud given the target cloud's normal distributions.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::{PclError, PclResult};
 use crate::registration::{RegistrationXYZ, RegistrationXYZRGB, TransformationMatrix};
 use cxx::UniquePtr;
@@ -70,38 +70,38 @@ impl NdtXYZ {
 }
 
 impl RegistrationXYZ for NdtXYZ {
-    fn set_input_source(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    fn set_input_source(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_source_ndt_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn set_input_target(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    fn set_input_target(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         ffi::set_input_target_ndt_xyz(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn align(&mut self) -> PclResult<PointCloudXYZ> {
+    fn align(&mut self) -> PclResult<PointCloud<XYZ>> {
         let aligned = ffi::align_ndt_xyz(self.inner.pin_mut());
         if aligned.is_null() {
             Err(PclError::ProcessingFailed {
                 message: "NDT alignment failed".into(),
             })
         } else {
-            Ok(PointCloudXYZ::from_unique_ptr(aligned))
+            Ok(PointCloud::<XYZ>::from_unique_ptr(aligned))
         }
     }
 
     fn align_with_guess(
         &mut self,
         initial_guess: &TransformationMatrix,
-    ) -> PclResult<PointCloudXYZ> {
+    ) -> PclResult<PointCloud<XYZ>> {
         let aligned = ffi::align_with_guess_ndt_xyz(self.inner.pin_mut(), &initial_guess.to_vec());
         if aligned.is_null() {
             Err(PclError::ProcessingFailed {
                 message: "NDT alignment with guess failed".into(),
             })
         } else {
-            Ok(PointCloudXYZ::from_unique_ptr(aligned))
+            Ok(PointCloud::<XYZ>::from_unique_ptr(aligned))
         }
     }
 
@@ -179,31 +179,31 @@ impl NdtXYZRGB {
 }
 
 impl RegistrationXYZRGB for NdtXYZRGB {
-    fn set_input_source(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
+    fn set_input_source(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()> {
         ffi::set_input_source_ndt_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn set_input_target(&mut self, cloud: &PointCloudXYZRGB) -> PclResult<()> {
+    fn set_input_target(&mut self, cloud: &PointCloud<XYZRGB>) -> PclResult<()> {
         ffi::set_input_target_ndt_xyzrgb(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
 
-    fn align(&mut self) -> PclResult<PointCloudXYZRGB> {
+    fn align(&mut self) -> PclResult<PointCloud<XYZRGB>> {
         let aligned = ffi::align_ndt_xyzrgb(self.inner.pin_mut());
         if aligned.is_null() {
             Err(PclError::ProcessingFailed {
                 message: "NDT alignment failed".into(),
             })
         } else {
-            Ok(PointCloudXYZRGB::from_unique_ptr(aligned))
+            Ok(PointCloud::<XYZRGB>::from_unique_ptr(aligned))
         }
     }
 
     fn align_with_guess(
         &mut self,
         initial_guess: &TransformationMatrix,
-    ) -> PclResult<PointCloudXYZRGB> {
+    ) -> PclResult<PointCloud<XYZRGB>> {
         let aligned =
             ffi::align_with_guess_ndt_xyzrgb(self.inner.pin_mut(), &initial_guess.to_vec());
         if aligned.is_null() {
@@ -211,7 +211,7 @@ impl RegistrationXYZRGB for NdtXYZRGB {
                 message: "NDT alignment with guess failed".into(),
             })
         } else {
-            Ok(PointCloudXYZRGB::from_unique_ptr(aligned))
+            Ok(PointCloud::<XYZRGB>::from_unique_ptr(aligned))
         }
     }
 

@@ -34,7 +34,7 @@ pub enum BinaryFormat {
 /// Auto-detection functionality for point cloud file formats
 pub mod auto_detect {
     use super::FileFormat;
-    use crate::common::PointCloudXYZ;
+    use crate::common::{PointCloud, XYZ};
     use crate::error::{PclError, Result};
     use pcl_sys::io::{
         detect_file_format, detect_format_from_content, detect_format_from_extension,
@@ -99,10 +99,10 @@ pub mod auto_detect {
         }
     }
 
-    /// Load point cloud with automatic format detection for PointXYZ
-    pub fn load_xyz<P: AsRef<Path>>(path: P) -> Result<PointCloudXYZ> {
+    /// Load point cloud with automatic format detection for XYZ points
+    pub fn load_xyz<P: AsRef<Path>>(path: P) -> Result<PointCloud<XYZ>> {
         let path_str = path.as_ref().to_string_lossy();
-        let mut cloud = PointCloudXYZ::new()?;
+        let mut cloud = PointCloud::<XYZ>::new()?;
 
         let result = load_point_cloud_auto_xyz(&path_str, cloud.inner_mut());
 
@@ -123,6 +123,6 @@ pub use auto_detect::{detect_format, detect_format_from_ext, detect_format_from_
 /// Load point cloud with automatic format detection for PointXYZ
 pub fn load_xyz<P: AsRef<std::path::Path>>(
     path: P,
-) -> crate::error::Result<crate::common::PointCloudXYZ> {
+) -> crate::error::Result<crate::common::PointCloud<crate::common::XYZ>> {
     auto_detect::load_xyz(path)
 }

@@ -5,7 +5,7 @@
 
 use crate::common::PointCloud;
 use crate::error::{PclError, PclResult};
-use crate::traits::{Point, Xyz};
+// Removed trait imports - using new marker type system
 use cxx::{UniquePtr, memory::UniquePtrTarget};
 use std::marker::PhantomData;
 
@@ -25,9 +25,15 @@ where
 }
 
 /// Trait for point types that support VoxelGrid filtering
-pub trait VoxelGridPoint: Point + Xyz {
+pub trait VoxelGridPoint {
     /// The FFI VoxelGrid type for this point type
     type VoxelGridType: Send + Sync;
+
+    /// The FFI cloud type
+    type CloudType: UniquePtrTarget;
+
+    /// Get the type name for debugging
+    fn type_name() -> &'static str;
 
     /// Create a new VoxelGrid filter instance
     fn new_voxel_grid() -> UniquePtr<Self::VoxelGridType>
@@ -125,13 +131,14 @@ where
 impl<T: VoxelGridPoint + crate::common::point_types::PointType> Filter<T> for VoxelGrid<T>
 where
     T::VoxelGridType: UniquePtrTarget,
-    <T as crate::traits::Point>::CloudType: UniquePtrTarget,
+    <T as VoxelGridPoint>::CloudType: UniquePtrTarget,
+    <T as crate::common::point_types::PointType>::CloudType: UniquePtrTarget,
 {
     fn set_input_cloud(&mut self, cloud: &PointCloud<T>) -> PclResult<()> {
-        // SAFETY: Point::CloudType and PointType::CloudType are the same type in our compatibility implementation
+        // SAFETY: VoxelGridPoint::CloudType and PointType::CloudType are the same type
         let inner = unsafe {
             &*(cloud.inner() as *const <T as crate::common::point_types::PointType>::CloudType
-                as *const <T as crate::traits::Point>::CloudType)
+                as *const <T as VoxelGridPoint>::CloudType)
         };
         T::set_input_cloud_voxel(self.inner.pin_mut(), inner);
         Ok(())
@@ -144,10 +151,10 @@ where
                 message: "VoxelGrid filter failed".to_string(),
             });
         }
-        // SAFETY: Point::CloudType and PointType::CloudType are the same type in our compatibility implementation
+        // SAFETY: VoxelGridPoint::CloudType and PointType::CloudType are the same type
         let converted_result = unsafe {
             std::mem::transmute::<
-                cxx::UniquePtr<<T as crate::traits::Point>::CloudType>,
+                cxx::UniquePtr<<T as VoxelGridPoint>::CloudType>,
                 cxx::UniquePtr<<T as crate::common::point_types::PointType>::CloudType>,
             >(result)
         };
@@ -156,9 +163,15 @@ where
 }
 
 /// Trait for point types that support PassThrough filtering
-pub trait PassThroughPoint: Point {
+pub trait PassThroughPoint {
     /// The FFI PassThrough type for this point type
     type PassThroughType: Send + Sync;
+
+    /// The FFI cloud type
+    type CloudType: UniquePtrTarget;
+
+    /// Get the type name for debugging
+    fn type_name() -> &'static str;
 
     /// Create a new PassThrough filter instance
     fn new_pass_through() -> UniquePtr<Self::PassThroughType>
@@ -248,13 +261,14 @@ where
 impl<T: PassThroughPoint + crate::common::point_types::PointType> Filter<T> for PassThrough<T>
 where
     T::PassThroughType: UniquePtrTarget,
-    <T as crate::traits::Point>::CloudType: UniquePtrTarget,
+    <T as PassThroughPoint>::CloudType: UniquePtrTarget,
+    <T as crate::common::point_types::PointType>::CloudType: UniquePtrTarget,
 {
     fn set_input_cloud(&mut self, cloud: &PointCloud<T>) -> PclResult<()> {
-        // SAFETY: Point::CloudType and PointType::CloudType are the same type in our compatibility implementation
+        // SAFETY: PassThroughPoint::CloudType and PointType::CloudType are the same type
         let inner = unsafe {
             &*(cloud.inner() as *const <T as crate::common::point_types::PointType>::CloudType
-                as *const <T as crate::traits::Point>::CloudType)
+                as *const <T as PassThroughPoint>::CloudType)
         };
         T::set_input_cloud_pass_through(self.inner.pin_mut(), inner);
         Ok(())
@@ -267,10 +281,10 @@ where
                 message: "PassThrough filter failed".to_string(),
             });
         }
-        // SAFETY: Point::CloudType and PointType::CloudType are the same type in our compatibility implementation
+        // SAFETY: PassThroughPoint::CloudType and PointType::CloudType are the same type
         let converted_result = unsafe {
             std::mem::transmute::<
-                cxx::UniquePtr<<T as crate::traits::Point>::CloudType>,
+                cxx::UniquePtr<<T as PassThroughPoint>::CloudType>,
                 cxx::UniquePtr<<T as crate::common::point_types::PointType>::CloudType>,
             >(result)
         };
@@ -284,6 +298,11 @@ use pcl_sys::ffi;
 
 impl VoxelGridPoint for PointXYZ {
     type VoxelGridType = ffi::VoxelGrid_PointXYZ;
+    type CloudType = ffi::PointCloud_PointXYZ;
+
+    fn type_name() -> &'static str {
+        "PointXYZ"
+    }
 
     fn new_voxel_grid() -> UniquePtr<Self::VoxelGridType> {
         ffi::new_voxel_grid_xyz()
@@ -312,6 +331,11 @@ impl VoxelGridPoint for PointXYZ {
 
 impl VoxelGridPoint for PointXYZRGB {
     type VoxelGridType = ffi::VoxelGrid_PointXYZRGB;
+    type CloudType = ffi::PointCloud_PointXYZRGB;
+
+    fn type_name() -> &'static str {
+        "PointXYZRGB"
+    }
 
     fn new_voxel_grid() -> UniquePtr<Self::VoxelGridType> {
         ffi::new_voxel_grid_xyzrgb()
@@ -340,6 +364,11 @@ impl VoxelGridPoint for PointXYZRGB {
 
 impl PassThroughPoint for PointXYZ {
     type PassThroughType = ffi::PassThrough_PointXYZ;
+    type CloudType = ffi::PointCloud_PointXYZ;
+
+    fn type_name() -> &'static str {
+        "PointXYZ"
+    }
 
     fn new_pass_through() -> UniquePtr<Self::PassThroughType> {
         ffi::new_pass_through_xyz()
@@ -376,6 +405,11 @@ impl PassThroughPoint for PointXYZ {
 
 impl PassThroughPoint for PointXYZRGB {
     type PassThroughType = ffi::PassThrough_PointXYZRGB;
+    type CloudType = ffi::PointCloud_PointXYZRGB;
+
+    fn type_name() -> &'static str {
+        "PointXYZRGB"
+    }
 
     fn new_pass_through() -> UniquePtr<Self::PassThroughType> {
         ffi::new_pass_through_xyzrgb()

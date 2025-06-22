@@ -2,7 +2,7 @@
 //!
 //! Demonstrates ICP, NDT, and feature-based registration algorithms
 
-use pcl::common::{PointCloudXYZ, PointXYZ};
+use pcl::common::{PointCloud, PointXYZ, XYZ};
 use pcl::error::PclResult;
 use pcl::registration::{
     FeatureBasedRegistrationBuilder, IcpXYZBuilder, NdtXYZBuilder, RegistrationXYZ,
@@ -38,9 +38,9 @@ fn main() -> PclResult<()> {
     Ok(())
 }
 
-fn create_test_clouds() -> PclResult<(PointCloudXYZ, PointCloudXYZ)> {
-    let mut source = PointCloudXYZ::new()?;
-    let mut target = PointCloudXYZ::new()?;
+fn create_test_clouds() -> PclResult<(PointCloud<XYZ>, PointCloud<XYZ>)> {
+    let mut source = PointCloud::<XYZ>::new()?;
+    let mut target = PointCloud::<XYZ>::new()?;
 
     // Create a simple test pattern - a grid of points
     for i in 0..10 {
@@ -63,7 +63,7 @@ fn create_test_clouds() -> PclResult<(PointCloudXYZ, PointCloudXYZ)> {
     Ok((source, target))
 }
 
-fn test_icp_registration(source: &PointCloudXYZ, target: &PointCloudXYZ) -> PclResult<()> {
+fn test_icp_registration(source: &PointCloud<XYZ>, target: &PointCloud<XYZ>) -> PclResult<()> {
     // Test with builder pattern
     let mut icp = IcpXYZBuilder::new()
         .max_iterations(50)
@@ -91,7 +91,7 @@ fn test_icp_registration(source: &PointCloudXYZ, target: &PointCloudXYZ) -> PclR
     Ok(())
 }
 
-fn test_ndt_registration(source: &PointCloudXYZ, target: &PointCloudXYZ) -> PclResult<()> {
+fn test_ndt_registration(source: &PointCloud<XYZ>, target: &PointCloud<XYZ>) -> PclResult<()> {
     // Test with builder pattern
     let mut ndt = NdtXYZBuilder::new()
         .transformation_epsilon(0.01)
@@ -120,8 +120,8 @@ fn test_ndt_registration(source: &PointCloudXYZ, target: &PointCloudXYZ) -> PclR
 }
 
 fn test_feature_based_registration(
-    source: &PointCloudXYZ,
-    target: &PointCloudXYZ,
+    source: &PointCloud<XYZ>,
+    target: &PointCloud<XYZ>,
 ) -> PclResult<()> {
     // Test with builder pattern
     let mut registration = FeatureBasedRegistrationBuilder::new()

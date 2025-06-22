@@ -3,9 +3,8 @@
 //! PclVisualizer provides comprehensive 3D visualization capabilities including
 //! multiple point clouds, shapes, text overlays, camera control, and interactive features.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB, PointXYZ};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::{PclError, PclResult};
-use crate::traits::PointFfi;
 use crate::visualization::{
     CameraControl, RenderingProperties, ViewerXYZ, ViewerXYZRGB, VisualizationControl,
 };
@@ -29,7 +28,7 @@ impl PclVisualizer {
     }
 
     /// Add a PointXYZ cloud to the viewer
-    pub fn add_point_cloud_xyz(&mut self, cloud: &PointCloudXYZ, id: &str) -> PclResult<()> {
+    pub fn add_point_cloud_xyz(&mut self, cloud: &PointCloud<XYZ>, id: &str) -> PclResult<()> {
         let result = ffi::add_point_cloud_xyz(self.inner.pin_mut(), cloud.inner(), id);
         if result != 0 {
             return Err(PclError::VisualizationError {
@@ -41,7 +40,11 @@ impl PclVisualizer {
     }
 
     /// Add a PointXYZRGB cloud to the viewer
-    pub fn add_point_cloud_xyzrgb(&mut self, cloud: &PointCloudXYZRGB, id: &str) -> PclResult<()> {
+    pub fn add_point_cloud_xyzrgb(
+        &mut self,
+        cloud: &PointCloud<XYZRGB>,
+        id: &str,
+    ) -> PclResult<()> {
         let result = ffi::add_point_cloud_xyzrgb(self.inner.pin_mut(), cloud.inner(), id);
         if result != 0 {
             return Err(PclError::VisualizationError {
@@ -53,7 +56,7 @@ impl PclVisualizer {
     }
 
     /// Update an existing PointXYZ cloud in the viewer
-    pub fn update_point_cloud_xyz(&mut self, cloud: &PointCloudXYZ, id: &str) -> PclResult<()> {
+    pub fn update_point_cloud_xyz(&mut self, cloud: &PointCloud<XYZ>, id: &str) -> PclResult<()> {
         let result = ffi::update_point_cloud_xyz(self.inner.pin_mut(), cloud.inner(), id);
         if result != 0 {
             return Err(PclError::VisualizationError {
@@ -67,7 +70,7 @@ impl PclVisualizer {
     /// Update an existing PointXYZRGB cloud in the viewer
     pub fn update_point_cloud_xyzrgb(
         &mut self,
-        cloud: &PointCloudXYZRGB,
+        cloud: &PointCloud<XYZRGB>,
         id: &str,
     ) -> PclResult<()> {
         let result = ffi::update_point_cloud_xyzrgb(self.inner.pin_mut(), cloud.inner(), id);
@@ -230,13 +233,13 @@ impl PclVisualizer {
 }
 
 impl ViewerXYZ for PclVisualizer {
-    fn show_cloud(&mut self, cloud: &PointCloudXYZ, name: &str) -> PclResult<()> {
+    fn show_cloud(&mut self, cloud: &PointCloud<XYZ>, name: &str) -> PclResult<()> {
         self.add_point_cloud_xyz(cloud, name)
     }
 }
 
 impl ViewerXYZRGB for PclVisualizer {
-    fn show_cloud_rgb(&mut self, cloud: &PointCloudXYZRGB, name: &str) -> PclResult<()> {
+    fn show_cloud_rgb(&mut self, cloud: &PointCloud<XYZRGB>, name: &str) -> PclResult<()> {
         self.add_point_cloud_xyzrgb(cloud, name)
     }
 }

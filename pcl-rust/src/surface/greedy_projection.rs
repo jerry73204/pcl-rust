@@ -3,7 +3,7 @@
 //! This module provides the Greedy Projection Triangulation algorithm,
 //! which performs triangulation on a set of points with normals.
 
-use crate::common::PointCloudNormal;
+use crate::common::{Normal, PointCloud};
 use crate::error::{PclError, PclResult};
 use crate::surface::PolygonMesh;
 use cxx::UniquePtr;
@@ -161,7 +161,7 @@ impl GreedyProjectionTriangulation {
     }
 
     /// Set the input point cloud with normals
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudNormal) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<Normal>) -> PclResult<()> {
         ffi::set_input_cloud_greedy(self.inner.pin_mut(), cloud.inner());
         Ok(())
     }
@@ -184,10 +184,10 @@ impl Default for GreedyProjectionTriangulation {
     }
 }
 
-impl crate::surface::SurfaceReconstruction<PointCloudNormal, PolygonMesh>
+impl crate::surface::SurfaceReconstruction<PointCloud<Normal>, PolygonMesh>
     for GreedyProjectionTriangulation
 {
-    fn set_input_cloud(&mut self, cloud: &PointCloudNormal) -> PclResult<()> {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<Normal>) -> PclResult<()> {
         self.set_input_cloud(cloud)
     }
 

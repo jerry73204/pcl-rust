@@ -3,7 +3,7 @@
 //! CloudViewer provides a simplified interface for displaying point clouds
 //! with minimal setup. It's ideal for quick prototyping and simple visualization needs.
 
-use crate::common::{PointCloudXYZ, PointCloudXYZRGB};
+use crate::common::{PointCloud, XYZ, XYZRGB};
 use crate::error::{PclError, PclResult};
 use crate::visualization::{ViewerXYZ, ViewerXYZRGB};
 use pcl_sys::{UniquePtr, ffi};
@@ -44,7 +44,7 @@ impl CloudViewer {
     }
 
     /// Display a PointXYZ cloud
-    pub fn show_cloud_xyz(&mut self, cloud: &PointCloudXYZ, cloud_name: &str) -> PclResult<()> {
+    pub fn show_cloud_xyz(&mut self, cloud: &PointCloud<XYZ>, cloud_name: &str) -> PclResult<()> {
         let result = ffi::show_cloud_xyz(self.inner.pin_mut(), cloud.inner(), cloud_name);
         if result != 0 {
             return Err(PclError::VisualizationError {
@@ -58,7 +58,7 @@ impl CloudViewer {
     /// Display a PointXYZRGB cloud
     pub fn show_cloud_xyzrgb(
         &mut self,
-        cloud: &PointCloudXYZRGB,
+        cloud: &PointCloud<XYZRGB>,
         cloud_name: &str,
     ) -> PclResult<()> {
         let result = ffi::show_cloud_xyzrgb(self.inner.pin_mut(), cloud.inner(), cloud_name);
@@ -73,13 +73,13 @@ impl CloudViewer {
 }
 
 impl ViewerXYZ for CloudViewer {
-    fn show_cloud(&mut self, cloud: &PointCloudXYZ, name: &str) -> PclResult<()> {
+    fn show_cloud(&mut self, cloud: &PointCloud<XYZ>, name: &str) -> PclResult<()> {
         self.show_cloud_xyz(cloud, name)
     }
 }
 
 impl ViewerXYZRGB for CloudViewer {
-    fn show_cloud_rgb(&mut self, cloud: &PointCloudXYZRGB, name: &str) -> PclResult<()> {
+    fn show_cloud_rgb(&mut self, cloud: &PointCloud<XYZRGB>, name: &str) -> PclResult<()> {
         self.show_cloud_xyzrgb(cloud, name)
     }
 }

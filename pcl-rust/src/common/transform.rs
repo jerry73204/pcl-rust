@@ -5,7 +5,7 @@
 
 use crate::common::PointCloud;
 use crate::error::{PclError, PclResult};
-use crate::traits::Point;
+// Removed deprecated trait import
 use pcl_sys::ffi;
 use std::pin::Pin;
 
@@ -20,13 +20,13 @@ use std::pin::Pin;
 ///
 /// # Example
 /// ```no_run
-/// use pcl::common::{PointCloud, PointXYZ, transform_point_cloud};
+/// use pcl::common::{PointCloud, PointXYZ, XYZ, transform_point_cloud};
 /// use pcl::error::PclResult;
 ///
 /// fn example() -> PclResult<()> {
-///     let mut cloud = PointCloud::<PointXYZ>::new()?;
-///     cloud.push(1.0, 0.0, 0.0)?;
-///     cloud.push(0.0, 1.0, 0.0)?;
+///     let mut cloud = PointCloud::<XYZ>::new()?;
+///     cloud.push(PointXYZ::new(1.0, 0.0, 0.0))?;
+///     cloud.push(PointXYZ::new(0.0, 1.0, 0.0))?;
 ///     
 ///     // Create a 90-degree rotation around Z axis
 ///     let transform = [
@@ -40,7 +40,7 @@ use std::pin::Pin;
 ///     Ok(())
 /// }
 /// ```
-pub fn transform_point_cloud<T: Point + crate::common::point_types::PointType>(
+pub fn transform_point_cloud<T: crate::common::point_types::PointType>(
     input: &PointCloud<T>,
     transform: &[f32; 16],
 ) -> PclResult<PointCloud<T>>

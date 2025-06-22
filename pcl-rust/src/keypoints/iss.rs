@@ -4,10 +4,10 @@
 //! covariance matrix computed from the local neighborhood of each point.
 //! It identifies distinctive features that are stable across different views.
 
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
 use crate::keypoints::{KeypointBuilder, KeypointDetector};
-use crate::search::KdTreeXYZ;
+use crate::search::KdTree;
 use cxx::UniquePtr;
 use pcl_sys::ffi;
 
@@ -36,7 +36,7 @@ impl Iss3D {
     }
 
     /// Set the search method for finding neighbors
-    pub fn set_search_method(&mut self, kdtree: &KdTreeXYZ) -> PclResult<()> {
+    pub fn set_search_method(&mut self, kdtree: &KdTree<XYZ>) -> PclResult<()> {
         ffi::set_search_method_iss_3d_xyz(self.inner.pin_mut(), kdtree.inner());
         Ok(())
     }
@@ -126,8 +126,8 @@ impl Default for Iss3D {
     }
 }
 
-impl KeypointDetector<PointCloudXYZ, PointCloudXYZ> for Iss3D {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl KeypointDetector<PointCloud<XYZ>, PointCloud<XYZ>> for Iss3D {
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
@@ -135,7 +135,7 @@ impl KeypointDetector<PointCloudXYZ, PointCloudXYZ> for Iss3D {
         Ok(())
     }
 
-    fn compute(&mut self) -> PclResult<PointCloudXYZ> {
+    fn compute(&mut self) -> PclResult<PointCloud<XYZ>> {
         let result = ffi::compute_iss_3d_xyz(self.inner.pin_mut());
         if result.is_null() {
             Err(PclError::InvalidState {
@@ -144,7 +144,7 @@ impl KeypointDetector<PointCloudXYZ, PointCloudXYZ> for Iss3D {
                 actual_state: "null result".to_string(),
             })
         } else {
-            Ok(PointCloudXYZ::from_unique_ptr(result))
+            Ok(PointCloud::<XYZ>::from_unique_ptr(result))
         }
     }
 }

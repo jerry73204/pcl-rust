@@ -3,13 +3,88 @@
 //! This crate provides safe, idiomatic Rust interfaces to the Point Cloud Library.
 //! It builds on top of the `pcl-sys` crate which provides low-level FFI bindings.
 //!
+//! # Migration Guide (v0.2.0)
+//!
+//! **IMPORTANT**: This version introduces a new point type system using marker types.
+//! The old trait-based system is deprecated but still supported with warnings.
+//!
+//! ## New Point Type System
+//!
+//! ### Before (Deprecated):
+//! ```rust,ignore
+//! use pcl::{PointCloud, PointXYZ};
+//! use pcl::traits::{Point, Xyz, Rgb};
+//!
+//! // Old trait-based approach (now deprecated)
+//! fn process_cloud<T: Point + Xyz>(cloud: &PointCloud<T>) {
+//!     // Process any point type with XYZ coordinates
+//! }
+//! ```
+//!
+//! ### After (Recommended):
+//! ```rust
+//! use pcl::{PointCloud, PointXYZ, PointXYZRGB, XYZ, XYZRGB};
+//!
+//! // New marker type approach
+//! fn process_xyz_cloud(cloud: &PointCloud<XYZ>) {
+//!     // Process specifically XYZ point clouds
+//! }
+//!
+//! fn process_xyzrgb_cloud(cloud: &PointCloud<XYZRGB>) {
+//!     // Process specifically XYZRGB point clouds
+//! }
+//! ```
+//!
+//! ## Point Creation
+//!
+//! ### Before:
+//! ```rust,ignore
+//! use pcl::PointCloudXYZBuilder;
+//!
+//! let cloud = PointCloudXYZBuilder::default()
+//!     .add_point(1.0, 2.0, 3.0)  // Deprecated
+//!     .build()?;
+//! ```
+//!
+//! ### After:
+//! ```rust
+//! use pcl::{PointCloud, PointXYZ, XYZ};
+//!
+//! // Method 1: Direct creation
+//! let mut cloud = PointCloud::<XYZ>::new()?;
+//! cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
+//!
+//! // Method 2: Builder pattern
+//! let cloud = PointCloudXYZBuilder::default()
+//!     .point(1.0, 2.0, 3.0)
+//!     .build()?;
+//! ```
+//!
+//! ## Algorithm Implementation
+//! ```rust
+//! use pcl::{PointXYZ, PointXYZRGB};
+//!
+//! // Specific implementations for each point type
+//! fn compute_centroid_xyz(points: &[PointXYZ]) -> (f32, f32, f32) {
+//!     // Implementation for XYZ points
+//! }
+//!
+//! fn compute_centroid_xyzrgb(points: &[PointXYZRGB]) -> (f32, f32, f32) {
+//!     // Implementation for XYZRGB points
+//! }
+//! ```
+//!
 //! # Examples
 //!
 //! ```rust
-//! use pcl::{PointCloud, PointXYZ};
+//! use pcl::{PointCloud, PointXYZ, XYZ};
 //!
-//! let mut cloud: PointCloud<PointXYZ> = PointCloud::new();
-//! // Add points, perform operations...
+//! // Create a point cloud with the new marker type system
+//! let mut cloud = PointCloud::<XYZ>::new()?;
+//! cloud.push(PointXYZ::new(1.0, 2.0, 3.0))?;
+//!
+//! println!("Cloud has {} points", cloud.size());
+//! # Ok::<(), pcl::error::PclError>(())
 //! ```
 
 pub mod common;
@@ -44,9 +119,8 @@ mod error_tests;
 
 // Re-export common types for convenience
 pub use common::{
-    PointCloud, PointCloudNormal, PointCloudNormalBuilder, PointCloudXYZ, PointCloudXYZBuilder,
-    PointCloudXYZI, PointCloudXYZRGB, PointCloudXYZRGBBuilder, PointNormal, PointXYZ, PointXYZI,
-    PointXYZRGB, XYZ, XYZI, XYZRGB,
+    Normal, PointCloud, PointCloudNormalBuilder, PointCloudXYZBuilder, PointCloudXYZRGBBuilder,
+    PointNormal, PointXYZ, PointXYZI, PointXYZRGB, XYZ, XYZI, XYZRGB,
 };
 pub use error::{PclError, PclResult};
 // Re-export commonly used traits
@@ -55,17 +129,12 @@ pub use io::{
     BinaryFormat, FileFormat, PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB, PlyIoXYZ, PlyIoXYZI, PlyIoXYZRGB,
 };
 #[cfg(feature = "octree")]
-pub use octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
+pub use octree::{OctreeSearch, OctreeVoxelCentroid};
 #[cfg(feature = "search")]
-pub use search::{KdTree, KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB, SearchMethod};
-pub use traits::{
-    ConvertPoint, Curvature, Intensity, NormalXyz, Point, PointIntensityOps, PointRgbOps,
-    PointXyzOps, Rgb, SpatialPoint, SurfacePoint, Xyz, Xyzi, Xyzrgb,
-};
+pub use search::{KdTree, SearchMethod};
+// Deprecated traits have been removed - use the new marker type system instead
 
-// Type aliases for backward compatibility
-pub type PointCloudXYZGeneric = PointCloud<common::PointXYZ>;
-pub type PointCloudXYZRGBGeneric = PointCloud<common::PointXYZRGB>;
+// Deprecated type aliases have been removed
 
 #[cfg(feature = "filters")]
 pub use filters::{
@@ -76,7 +145,7 @@ pub use filters::{
 
 #[cfg(feature = "features")]
 pub use features::{
-    FpfhEstimation, FpfhEstimationOmp, FpfhSignature, Normal, NormalCloud, NormalEstimation,
+    FpfhEstimation, FpfhEstimationOmp, FpfhSignature, NormalCloud, NormalEstimation,
     NormalEstimationOmp, PfhEstimation, PfhSignature,
 };
 #[cfg(feature = "keypoints")]
@@ -146,16 +215,16 @@ pub use visualization::{
 mod tests {
     use super::*;
     #[cfg(feature = "octree")]
-    use crate::octree::{OctreeSearchXYZ, OctreeVoxelCentroidXYZ};
+    use crate::octree::{OctreeSearch, OctreeVoxelCentroid};
     #[cfg(feature = "search")]
-    use crate::search::{KdTreeXYZ, KdTreeXYZI, KdTreeXYZRGB};
+    use crate::search::KdTree;
 
     // Note: Point creation tests are disabled since point creation
     // is not currently supported due to cxx limitations
 
     #[test]
     fn test_point_cloud_creation() {
-        let cloud = PointCloudXYZ::new().unwrap();
+        let cloud = PointCloud::<XYZ>::new().unwrap();
         assert!(cloud.empty());
         assert_eq!(cloud.size(), 0);
         assert_eq!(cloud.width(), 0);
@@ -165,7 +234,7 @@ mod tests {
 
     #[test]
     fn test_point_cloud_xyzrgb_creation() {
-        let cloud = PointCloudXYZRGB::new().unwrap();
+        let cloud = PointCloud::<XYZRGB>::new().unwrap();
         assert!(cloud.empty());
         assert_eq!(cloud.size(), 0);
         assert_eq!(cloud.width(), 0);
@@ -175,7 +244,7 @@ mod tests {
 
     #[test]
     fn test_point_cloud_operations() {
-        let mut cloud = PointCloudXYZ::new().unwrap();
+        let mut cloud = PointCloud::<XYZ>::new().unwrap();
 
         // Test initial state
         assert!(cloud.empty());
@@ -230,15 +299,15 @@ mod tests {
     fn test_kdtree_creation() {
         use crate::search::SearchInputCloud;
 
-        let kdtree = KdTreeXYZ::new().unwrap();
+        let kdtree = KdTree::<XYZ>::new().unwrap();
         assert!(!kdtree.has_input_cloud());
         drop(kdtree);
 
-        let kdtree_xyzi = KdTreeXYZI::new().unwrap();
+        let kdtree_xyzi = KdTree::<XYZI>::new().unwrap();
         assert!(!kdtree_xyzi.has_input_cloud());
         drop(kdtree_xyzi);
 
-        let kdtree_rgb = KdTreeXYZRGB::new().unwrap();
+        let kdtree_rgb = KdTree::<XYZRGB>::new().unwrap();
         assert!(!kdtree_rgb.has_input_cloud());
         drop(kdtree_rgb);
     }
@@ -248,7 +317,7 @@ mod tests {
     fn test_kdtree_configuration() {
         use crate::search::SearchConfiguration;
 
-        let mut kdtree = KdTreeXYZ::new().unwrap();
+        let mut kdtree = KdTree::<XYZ>::new().unwrap();
 
         // Test epsilon configuration
         let initial_epsilon = kdtree.epsilon();
@@ -267,8 +336,8 @@ mod tests {
     fn test_search_input_cloud() {
         use crate::search::SearchInputCloud;
 
-        let mut kdtree = KdTreeXYZ::new().unwrap();
-        let cloud = PointCloudXYZ::new().unwrap();
+        let mut kdtree = KdTree::<XYZ>::new().unwrap();
+        let cloud = PointCloud::<XYZ>::new().unwrap();
 
         assert!(!kdtree.has_input_cloud());
         kdtree.set_input_cloud(&cloud).unwrap();
@@ -289,7 +358,7 @@ mod tests {
     fn test_search_traits() {
         use crate::search::{NearestNeighborSearch, SearchConfiguration};
 
-        let kdtree = KdTreeXYZ::new().unwrap();
+        let kdtree = KdTree::<PointXYZ>::new().unwrap();
 
         // Test trait implementation
         fn accept_search<T: NearestNeighborSearch<PointXYZ> + SearchConfiguration>(_search: &T) {
@@ -302,22 +371,22 @@ mod tests {
     #[test]
     #[cfg(feature = "octree")]
     fn test_octree_creation() {
-        let octree = OctreeSearchXYZ::new(0.1).unwrap();
+        let octree = OctreeSearch::new(0.1).unwrap();
         drop(octree);
 
         // Test invalid resolution
-        let result = OctreeSearchXYZ::new(-1.0);
+        let result = OctreeSearch::new(-1.0);
         assert!(result.is_err());
     }
 
     #[test]
     #[cfg(feature = "octree")]
     fn test_octree_voxel_centroid_creation() {
-        let octree = OctreeVoxelCentroidXYZ::new(0.1).unwrap();
+        let octree = OctreeVoxelCentroid::new(0.1).unwrap();
         drop(octree);
 
         // Test invalid resolution
-        let result = OctreeVoxelCentroidXYZ::new(0.0);
+        let result = OctreeVoxelCentroid::new(0.0);
         assert!(result.is_err());
     }
 
@@ -325,7 +394,7 @@ mod tests {
     #[cfg(feature = "search")]
     fn test_error_handling() {
         // Test parameter validation
-        let _kdtree = KdTreeXYZ::new().unwrap();
+        let _kdtree = KdTree::<PointXYZ>::new().unwrap();
 
         // This would require actual points to test properly, but we can test parameter validation
         // KdTree search methods would need points to work with

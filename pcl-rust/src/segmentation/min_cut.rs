@@ -3,7 +3,7 @@
 //! This module provides min-cut segmentation for foreground/background
 //! separation in point clouds.
 
-use crate::common::PointCloudXYZ;
+use crate::common::{PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
 use cxx::UniquePtr;
 use pcl_sys::ffi;
@@ -29,7 +29,7 @@ impl MinCutSegmentationXYZ {
     }
 
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
@@ -38,7 +38,7 @@ impl MinCutSegmentationXYZ {
     }
 
     /// Set the foreground points
-    pub fn set_foreground_points(&mut self, foreground: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_foreground_points(&mut self, foreground: &PointCloud<XYZ>) -> PclResult<()> {
         if foreground.empty() {
             return Err(PclError::invalid_point_cloud("Foreground points are empty"));
         }

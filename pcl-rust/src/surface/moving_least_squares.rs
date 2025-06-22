@@ -3,8 +3,7 @@
 //! This module provides Moving Least Squares (MLS) surface smoothing and upsampling,
 //! which can be used to smooth noisy point clouds and compute surface normals.
 
-use crate::common::PointCloudNormal;
-use crate::common::PointCloudXYZ;
+use crate::common::{Normal, PointCloud, XYZ};
 use crate::error::{PclError, PclResult};
 use cxx::UniquePtr;
 use pcl_sys::ffi;
@@ -217,7 +216,7 @@ impl MovingLeastSquares {
 
 impl MovingLeastSquares {
     /// Set the input point cloud
-    pub fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+    pub fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         if cloud.empty() {
             return Err(PclError::invalid_point_cloud("Input cloud is empty"));
         }
@@ -226,23 +225,25 @@ impl MovingLeastSquares {
     }
 
     /// Process the input cloud and return a cloud with computed normals
-    pub fn process(&mut self) -> PclResult<PointCloudNormal> {
+    pub fn process(&mut self) -> PclResult<PointCloud<Normal>> {
         let result = ffi::process_mls(self.inner.pin_mut());
         if result.is_null() {
             return Err(PclError::ProcessingFailed {
                 message: "Moving Least Squares processing failed".to_string(),
             });
         }
-        Ok(PointCloudNormal::from_unique_ptr(result))
+        Ok(PointCloud::<Normal>::from_unique_ptr(result))
     }
 }
 
-impl crate::surface::PointCloudSmoothing<PointCloudXYZ, PointCloudNormal> for MovingLeastSquares {
-    fn set_input_cloud(&mut self, cloud: &PointCloudXYZ) -> PclResult<()> {
+impl crate::surface::PointCloudSmoothing<PointCloud<XYZ>, PointCloud<Normal>>
+    for MovingLeastSquares
+{
+    fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
         self.set_input_cloud(cloud)
     }
 
-    fn process(&mut self) -> PclResult<PointCloudNormal> {
+    fn process(&mut self) -> PclResult<PointCloud<Normal>> {
         self.process()
     }
 }
