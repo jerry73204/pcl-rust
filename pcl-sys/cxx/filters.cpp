@@ -10,6 +10,8 @@
 // PassThrough filter functions - PointXYZ
 std::unique_ptr<pcl::PassThrough<pcl::PointXYZ>> new_pass_through_xyz() {
   try {
+    // Note: PassThrough filter doesn't have PCL_MAKE_ALIGNED_OPERATOR_NEW,
+    // so std::make_unique is safe here
     return std::make_unique<pcl::PassThrough<pcl::PointXYZ>>();
   } catch (const std::exception &e) {
     return nullptr;
@@ -18,7 +20,9 @@ std::unique_ptr<pcl::PassThrough<pcl::PointXYZ>> new_pass_through_xyz() {
 
 void set_input_cloud_pass_xyz(pcl::PassThrough<pcl::PointXYZ> &filter,
                               const pcl::PointCloud<pcl::PointXYZ> &cloud) {
-  filter.setInputCloud(cloud.makeShared());
+  // Create a new shared pointer that properly manages the cloud
+  auto cloud_ptr = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>(cloud);
+  filter.setInputCloud(cloud_ptr);
 }
 
 void set_filter_field_name_xyz(pcl::PassThrough<pcl::PointXYZ> &filter,
@@ -58,9 +62,12 @@ bool get_keep_organized_xyz(const pcl::PassThrough<pcl::PointXYZ> &filter) {
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>
 filter_pass_xyz(pcl::PassThrough<pcl::PointXYZ> &filter) {
   try {
-    auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
+    // The PointCloud has PCL_MAKE_ALIGNED_OPERATOR_NEW which overloads operator new
+    // to use Eigen::aligned_malloc. Using std::make_unique here is incorrect because
+    // it doesn't use the overloaded operator new. We must use new directly.
+    pcl::PointCloud<pcl::PointXYZ>* output = new pcl::PointCloud<pcl::PointXYZ>();
     filter.filter(*output);
-    return output;
+    return std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>(output);
   } catch (const std::exception &e) {
     return nullptr;
   }
@@ -78,7 +85,9 @@ std::unique_ptr<pcl::PassThrough<pcl::PointXYZRGB>> new_pass_through_xyzrgb() {
 void set_input_cloud_pass_xyzrgb(
     pcl::PassThrough<pcl::PointXYZRGB> &filter,
     const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
-  filter.setInputCloud(cloud.makeShared());
+  // Make a deep copy of the cloud and create a shared pointer
+  auto cloud_copy = std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>(cloud);
+  filter.setInputCloud(cloud_copy);
 }
 
 void set_filter_field_name_xyzrgb(pcl::PassThrough<pcl::PointXYZRGB> &filter,
@@ -119,9 +128,10 @@ bool get_keep_organized_xyzrgb(
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>
 filter_pass_xyzrgb(pcl::PassThrough<pcl::PointXYZRGB> &filter) {
   try {
-    auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZRGB>>();
+    // Use new directly to respect PCL_MAKE_ALIGNED_OPERATOR_NEW
+    pcl::PointCloud<pcl::PointXYZRGB>* output = new pcl::PointCloud<pcl::PointXYZRGB>();
     filter.filter(*output);
-    return output;
+    return std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>(output);
   } catch (const std::exception &e) {
     return nullptr;
   }
@@ -138,7 +148,9 @@ std::unique_ptr<pcl::VoxelGrid<pcl::PointXYZ>> new_voxel_grid_xyz() {
 
 void set_input_cloud_voxel_xyz(pcl::VoxelGrid<pcl::PointXYZ> &filter,
                                const pcl::PointCloud<pcl::PointXYZ> &cloud) {
-  filter.setInputCloud(cloud.makeShared());
+  // Make a deep copy of the cloud and create a shared pointer
+  auto cloud_copy = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>(cloud);
+  filter.setInputCloud(cloud_copy);
 }
 
 void set_leaf_size_xyz(pcl::VoxelGrid<pcl::PointXYZ> &filter, float lx,
@@ -149,9 +161,10 @@ void set_leaf_size_xyz(pcl::VoxelGrid<pcl::PointXYZ> &filter, float lx,
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>
 filter_voxel_xyz(pcl::VoxelGrid<pcl::PointXYZ> &filter) {
   try {
-    auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
+    // Use new directly to respect PCL_MAKE_ALIGNED_OPERATOR_NEW
+    pcl::PointCloud<pcl::PointXYZ>* output = new pcl::PointCloud<pcl::PointXYZ>();
     filter.filter(*output);
-    return output;
+    return std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>(output);
   } catch (const std::exception &e) {
     return nullptr;
   }
@@ -169,7 +182,9 @@ std::unique_ptr<pcl::VoxelGrid<pcl::PointXYZRGB>> new_voxel_grid_xyzrgb() {
 void set_input_cloud_voxel_xyzrgb(
     pcl::VoxelGrid<pcl::PointXYZRGB> &filter,
     const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
-  filter.setInputCloud(cloud.makeShared());
+  // Make a deep copy of the cloud and create a shared pointer
+  auto cloud_copy = std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>(cloud);
+  filter.setInputCloud(cloud_copy);
 }
 
 void set_leaf_size_xyzrgb(pcl::VoxelGrid<pcl::PointXYZRGB> &filter, float lx,
@@ -180,9 +195,9 @@ void set_leaf_size_xyzrgb(pcl::VoxelGrid<pcl::PointXYZRGB> &filter, float lx,
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>
 filter_voxel_xyzrgb(pcl::VoxelGrid<pcl::PointXYZRGB> &filter) {
   try {
-    auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZRGB>>();
+    pcl::PointCloud<pcl::PointXYZRGB>* output = new pcl::PointCloud<pcl::PointXYZRGB>();
     filter.filter(*output);
-    return output;
+    return std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>(output);
   } catch (const std::exception &e) {
     return nullptr;
   }
@@ -201,7 +216,9 @@ new_statistical_outlier_removal_xyz() {
 void set_input_cloud_statistical_xyz(
     pcl::StatisticalOutlierRemoval<pcl::PointXYZ> &filter,
     const pcl::PointCloud<pcl::PointXYZ> &cloud) {
-  filter.setInputCloud(cloud.makeShared());
+  // Make a deep copy of the cloud and create a shared pointer
+  auto cloud_copy = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>(cloud);
+  filter.setInputCloud(cloud_copy);
 }
 
 void set_mean_k_statistical_xyz(
@@ -222,9 +239,9 @@ void set_negative_statistical_xyz(
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>
 filter_statistical_xyz(pcl::StatisticalOutlierRemoval<pcl::PointXYZ> &filter) {
   try {
-    auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
+    pcl::PointCloud<pcl::PointXYZ>* output = new pcl::PointCloud<pcl::PointXYZ>();
     filter.filter(*output);
-    return output;
+    return std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>(output);
   } catch (const std::exception &e) {
     return nullptr;
   }
@@ -243,7 +260,9 @@ new_statistical_outlier_removal_xyzrgb() {
 void set_input_cloud_statistical_xyzrgb(
     pcl::StatisticalOutlierRemoval<pcl::PointXYZRGB> &filter,
     const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
-  filter.setInputCloud(cloud.makeShared());
+  // Make a deep copy of the cloud and create a shared pointer
+  auto cloud_copy = std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>(cloud);
+  filter.setInputCloud(cloud_copy);
 }
 
 void set_mean_k_statistical_xyzrgb(
@@ -265,9 +284,9 @@ void set_negative_statistical_xyzrgb(
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>> filter_statistical_xyzrgb(
     pcl::StatisticalOutlierRemoval<pcl::PointXYZRGB> &filter) {
   try {
-    auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZRGB>>();
+    pcl::PointCloud<pcl::PointXYZRGB>* output = new pcl::PointCloud<pcl::PointXYZRGB>();
     filter.filter(*output);
-    return output;
+    return std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>(output);
   } catch (const std::exception &e) {
     return nullptr;
   }
@@ -286,7 +305,9 @@ new_radius_outlier_removal_xyz() {
 void set_input_cloud_radius_xyz(
     pcl::RadiusOutlierRemoval<pcl::PointXYZ> &filter,
     const pcl::PointCloud<pcl::PointXYZ> &cloud) {
-  filter.setInputCloud(cloud.makeShared());
+  // Make a deep copy of the cloud and create a shared pointer
+  auto cloud_copy = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>(cloud);
+  filter.setInputCloud(cloud_copy);
 }
 
 void set_radius_search_xyz(pcl::RadiusOutlierRemoval<pcl::PointXYZ> &filter,
@@ -307,9 +328,9 @@ void set_negative_radius_xyz(pcl::RadiusOutlierRemoval<pcl::PointXYZ> &filter,
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>
 filter_radius_xyz(pcl::RadiusOutlierRemoval<pcl::PointXYZ> &filter) {
   try {
-    auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
+    pcl::PointCloud<pcl::PointXYZ>* output = new pcl::PointCloud<pcl::PointXYZ>();
     filter.filter(*output);
-    return output;
+    return std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>(output);
   } catch (const std::exception &e) {
     return nullptr;
   }
@@ -328,7 +349,9 @@ new_radius_outlier_removal_xyzrgb() {
 void set_input_cloud_radius_xyzrgb(
     pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> &filter,
     const pcl::PointCloud<pcl::PointXYZRGB> &cloud) {
-  filter.setInputCloud(cloud.makeShared());
+  // Make a deep copy of the cloud and create a shared pointer
+  auto cloud_copy = std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>(cloud);
+  filter.setInputCloud(cloud_copy);
 }
 
 void set_radius_search_xyzrgb(
@@ -349,9 +372,9 @@ void set_negative_radius_xyzrgb(
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>
 filter_radius_xyzrgb(pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> &filter) {
   try {
-    auto output = std::make_unique<pcl::PointCloud<pcl::PointXYZRGB>>();
+    pcl::PointCloud<pcl::PointXYZRGB>* output = new pcl::PointCloud<pcl::PointXYZRGB>();
     filter.filter(*output);
-    return output;
+    return std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>(output);
   } catch (const std::exception &e) {
     return nullptr;
   }

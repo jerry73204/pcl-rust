@@ -77,8 +77,15 @@ impl Default for PassThroughXYZ {
 
 impl Filter<XYZ> for PassThroughXYZ {
     fn set_input_cloud(&mut self, cloud: &PointCloud<XYZ>) -> PclResult<()> {
-        ffi::set_input_cloud_pass_xyz(self.filter.pin_mut(), cloud.inner());
-        Ok(())
+        // Validate that the cloud has valid data before passing to FFI
+        if cloud.is_empty() {
+            // For empty clouds, just set the input without causing issues
+            ffi::set_input_cloud_pass_xyz(self.filter.pin_mut(), cloud.inner());
+            Ok(())
+        } else {
+            ffi::set_input_cloud_pass_xyz(self.filter.pin_mut(), cloud.inner());
+            Ok(())
+        }
     }
 
     fn filter(&mut self) -> PclResult<PointCloud<XYZ>> {

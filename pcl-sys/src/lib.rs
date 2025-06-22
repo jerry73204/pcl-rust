@@ -14,8 +14,12 @@ pub mod filters;
 pub mod io;
 #[cfg(feature = "keypoints")]
 pub mod keypoints;
+pub mod migration;
 #[cfg(feature = "octree")]
 pub mod octree;
+pub mod pcl_types;
+pub mod ptr;
+pub mod raw_ffi;
 #[cfg(feature = "registration")]
 pub mod registration;
 #[cfg(feature = "sample_consensus")]

@@ -10,6 +10,9 @@ pub mod radius_outlier_removal;
 pub mod statistical_outlier_removal;
 pub mod voxel_grid;
 
+#[cfg(test)]
+mod tests;
+
 pub use pass_through::{
     PassThroughXYZ, PassThroughXYZBuilder, PassThroughXYZRGB, PassThroughXYZRGBBuilder,
 };

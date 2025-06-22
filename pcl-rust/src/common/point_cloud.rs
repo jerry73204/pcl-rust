@@ -284,7 +284,9 @@ impl<T: PointType> PointCloud<T> {
 
     /// Get access to the inner cloud pointer (for compatibility with filters)
     pub(crate) fn inner(&self) -> &T::CloudType {
-        self.inner.as_ref().unwrap()
+        self.inner
+            .as_ref()
+            .expect("PointCloud inner pointer is null")
     }
 
     /// Get mutable access to the inner cloud pointer (for compatibility)

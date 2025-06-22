@@ -6,6 +6,9 @@
 pub mod pcd;
 pub mod ply;
 
+#[cfg(test)]
+mod tests;
+
 // Re-export for convenience
 pub use pcd::*;
 pub use ply::*;
@@ -125,4 +128,26 @@ pub fn load_xyz<P: AsRef<std::path::Path>>(
     path: P,
 ) -> crate::error::Result<crate::common::PointCloud<crate::common::XYZ>> {
     auto_detect::load_xyz(path)
+}
+
+// Re-export PCD functions for convenience
+pub use pcd::{load_pcd_xyz as load_pcd, load_pcd_xyzi, load_pcd_xyzrgb};
+
+// Re-export PLY functions for convenience
+pub use ply::{load_ply_xyz as load_ply, load_ply_xyzi, load_ply_xyzrgb};
+
+/// Save PointCloud<XYZ> to PCD file
+pub fn save_pcd<P: AsRef<std::path::Path>>(
+    cloud: &crate::common::PointCloud<crate::common::XYZ>,
+    path: P,
+) -> crate::error::PclResult<()> {
+    cloud.save_pcd(path)
+}
+
+/// Save PointCloud<XYZ> to PLY file
+pub fn save_ply<P: AsRef<std::path::Path>>(
+    cloud: &crate::common::PointCloud<crate::common::XYZ>,
+    path: P,
+) -> crate::error::PclResult<()> {
+    cloud.save_ply(path)
 }

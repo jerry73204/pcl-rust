@@ -39,24 +39,39 @@ float get_normal_z_point_normal(const pcl::PointNormal &point) {
 
 // PointCloud functions
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>> new_point_cloud_xyz() {
-  return std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
+  // Use new directly to respect PCL_MAKE_ALIGNED_OPERATOR_NEW
+  return std::unique_ptr<pcl::PointCloud<pcl::PointXYZ>>(
+    new pcl::PointCloud<pcl::PointXYZ>()
+  );
 }
 
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZI>> new_point_cloud_xyzi() {
-  return std::make_unique<pcl::PointCloud<pcl::PointXYZI>>();
+  // Use new directly to respect PCL_MAKE_ALIGNED_OPERATOR_NEW
+  return std::unique_ptr<pcl::PointCloud<pcl::PointXYZI>>(
+    new pcl::PointCloud<pcl::PointXYZI>()
+  );
 }
 
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>> new_point_cloud_xyzrgb() {
-  return std::make_unique<pcl::PointCloud<pcl::PointXYZRGB>>();
+  // Use new directly to respect PCL_MAKE_ALIGNED_OPERATOR_NEW
+  return std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGB>>(
+    new pcl::PointCloud<pcl::PointXYZRGB>()
+  );
 }
 
 std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGBA>> new_point_cloud_xyzrgba() {
-  return std::make_unique<pcl::PointCloud<pcl::PointXYZRGBA>>();
+  // Use new directly to respect PCL_MAKE_ALIGNED_OPERATOR_NEW
+  return std::unique_ptr<pcl::PointCloud<pcl::PointXYZRGBA>>(
+    new pcl::PointCloud<pcl::PointXYZRGBA>()
+  );
 }
 
 std::unique_ptr<pcl::PointCloud<pcl::PointNormal>>
 new_point_cloud_point_normal() {
-  return std::make_unique<pcl::PointCloud<pcl::PointNormal>>();
+  // Use new directly to respect PCL_MAKE_ALIGNED_OPERATOR_NEW
+  return std::unique_ptr<pcl::PointCloud<pcl::PointNormal>>(
+    new pcl::PointCloud<pcl::PointNormal>()
+  );
 }
 
 size_t size(const pcl::PointCloud<pcl::PointXYZ> &cloud) {

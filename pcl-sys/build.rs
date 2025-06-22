@@ -316,6 +316,9 @@ fn main() {
     // Always add common source file since it's always required
     build.file("cxx/common.cpp");
 
+    // Add raw pointer functions for Phase 1 FFI migration
+    build.file("cxx/raw_ptr_functions.cpp");
+
     // Conditionally add source files based on enabled features
 
     if is_feature_enabled("search") {
