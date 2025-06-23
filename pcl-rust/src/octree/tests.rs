@@ -554,7 +554,7 @@ mod octree_iterator_tests {
         // This would test iterating through octree nodes, leaves, and branches
         
         // Placeholder test - octree iterator not yet implemented
-        assert!(true, "Octree iterator tests not yet implemented");
+        todo!( "Octree iterator tests not yet implemented");
     }
 
     #[test]
@@ -562,7 +562,7 @@ mod octree_iterator_tests {
         // TODO: Implement leaf iterator tests
         // This would test iterating through only leaf nodes
         
-        assert!(true, "Octree leaf iterator tests not yet implemented");
+        todo!( "Octree leaf iterator tests not yet implemented");
     }
 
     #[test]
@@ -570,7 +570,7 @@ mod octree_iterator_tests {
         // TODO: Implement breadth-first iterator tests
         // This would test breadth-first traversal of octree
         
-        assert!(true, "Octree breadth-first iterator tests not yet implemented");
+        todo!( "Octree breadth-first iterator tests not yet implemented");
     }
 
     #[test]
@@ -578,7 +578,7 @@ mod octree_iterator_tests {
         // TODO: Implement depth-first iterator tests
         // This would test depth-first traversal of octree
         
-        assert!(true, "Octree depth-first iterator tests not yet implemented");
+        todo!( "Octree depth-first iterator tests not yet implemented");
     }
 }
 

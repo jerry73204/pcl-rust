@@ -115,7 +115,8 @@ fn filter_demo() -> PclResult<()> {
 }
 
 // Generic function that works with any point cloud type
-fn print_cloud_info<T: pcl::common::point_types::PointType>(cloud: &PointCloud<T>)
+fn _print_cloud_info<T: pcl::common::point_types::PointType>(cloud: &PointCloud<T>)
+// TODO: Use in generic examples
 where
     T::CloudType: cxx::memory::UniquePtrTarget,
 {

@@ -331,7 +331,7 @@ mod clustering_tests {
         let clusters = ec.extract().unwrap();
 
         // Should find at least 2 clusters (plane and object above)
-        assert!(clusters.len() >= 1);
+        assert!(!clusters.is_empty());
     }
 
     #[test]
@@ -599,7 +599,7 @@ mod integration_tests {
     #[test]
     fn test_segmentation_trait() {
         // Test that the Segmentation trait is properly defined
-        fn accept_segmentation<T, S: Segmentation<T>>(_seg: &S) {}
+        fn _accept_segmentation<T, S: Segmentation<T>>(_seg: &S) {} // TODO: Use in actual trait implementation tests
 
         // This should compile if the trait is properly defined
         // In a real implementation, algorithms would implement this trait

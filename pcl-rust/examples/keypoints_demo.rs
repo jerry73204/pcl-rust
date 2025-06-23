@@ -189,7 +189,7 @@ fn demo_sift(cloud: &PointCloud<XYZI>) -> PclResult<()> {
 
     // Set input cloud and compute keypoints
     sift.set_input_cloud(cloud)?;
-    let keypoints = sift.compute()?;
+    let _keypoints = sift.compute()?; // TODO: Process keypoints when FFI support is ready
 
     println!("Input cloud size: {} points", cloud.size());
     println!("Detected SIFT keypoints with scale information");
@@ -207,7 +207,7 @@ fn demo_builders() -> PclResult<()> {
     use pcl::keypoints::{Harris3DBuilder, Iss3DBuilder, KeypointBuilder, SiftKeypointBuilder};
 
     // Build a Harris detector with custom configuration
-    let harris = Harris3DBuilder::new()
+    let _harris = Harris3DBuilder::new() // TODO: Use when compute is ready
         .radius(0.15)
         .threshold(0.005)
         .non_max_suppression(true)
@@ -216,7 +216,7 @@ fn demo_builders() -> PclResult<()> {
     println!("Created Harris detector with builder");
 
     // Build an ISS detector
-    let iss = Iss3DBuilder::new()
+    let _iss = Iss3DBuilder::new() // TODO: Use when compute is ready
         .salient_radius(0.1)
         .non_max_radius(0.05)
         .threshold21(0.95)
@@ -226,7 +226,7 @@ fn demo_builders() -> PclResult<()> {
     println!("Created ISS detector with builder");
 
     // Build a SIFT detector
-    let sift = SiftKeypointBuilder::new()
+    let _sift = SiftKeypointBuilder::new() // TODO: Use when compute is ready
         .scales(0.01, 4.0, 3)
         .minimum_contrast(0.03)
         .build()?;

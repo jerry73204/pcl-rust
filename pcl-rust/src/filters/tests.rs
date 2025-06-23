@@ -13,7 +13,6 @@
 //! - table_scene_lms400.pcd - Table scene for filtering operations
 //! - milk.pcd - Milk carton scan for general filter testing
 
-use super::*;
 use crate::common::{PointCloud, PointXYZ, PointXYZRGB, XYZ, XYZRGB};
 use crate::error::PclResult;
 
@@ -22,8 +21,8 @@ use crate::error::PclResult;
 mod general_filter_tests {
     use super::*;
     use crate::filters::{
-        PassThroughXYZ, PassThroughXYZRGB, RadiusOutlierRemovalXYZ, StatisticalOutlierRemovalXYZ,
-        VoxelGridXYZ, VoxelGridXYZRGB,
+        Filter, PassThroughXYZ, PassThroughXYZRGB, RadiusOutlierRemovalXYZ,
+        StatisticalOutlierRemovalXYZ, VoxelGridXYZ, VoxelGridXYZRGB,
     };
 
     #[test]
@@ -46,8 +45,8 @@ mod general_filter_tests {
         }
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_filter_field_name("z");
-        filter.set_filter_limits(1.0, 3.0);
+        filter.set_filter_field_name("z")?;
+        filter.set_filter_limits(1.0, 3.0)?;
 
         let filtered = filter.filter()?;
         // Should only keep points with z between 1.0 and 3.0
@@ -67,11 +66,11 @@ mod general_filter_tests {
         }
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_filter_field_name("z");
-        filter.set_filter_limits(1.0, 3.0);
-        filter.set_negative(true); // Keep points outside the range
+        filter.set_filter_field_name("z")?;
+        filter.set_filter_limits(1.0, 3.0)?;
+        filter.set_negative(true)?; // Keep points outside the range
 
-        let filtered = filter.filter()?;
+        let _filtered = filter.filter()?; // TODO: Verify filtered results
         // Should keep points with z < 1.0 or z > 3.0
         Ok(())
     }
@@ -83,8 +82,8 @@ mod general_filter_tests {
         let cloud = PointCloud::<XYZ>::new()?;
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_filter_field_name("x");
-        filter.set_filter_limits(-1.0, 1.0);
+        filter.set_filter_field_name("x")?;
+        filter.set_filter_limits(-1.0, 1.0)?;
 
         let filtered = filter.filter()?;
         assert_eq!(filtered.size(), 0);
@@ -103,8 +102,8 @@ mod general_filter_tests {
         }
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_filter_field_name("z");
-        filter.set_filter_limits(1.0, 2.0); // No points in this range
+        filter.set_filter_field_name("z")?;
+        filter.set_filter_limits(1.0, 2.0)?; // No points in this range
 
         let filtered = filter.filter()?;
         assert_eq!(filtered.size(), 0);
@@ -139,7 +138,7 @@ mod general_filter_tests {
         }
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_leaf_size(0.3, 0.3, 0.3); // Larger voxel size
+        filter.set_leaf_size(0.3, 0.3, 0.3)?; // Larger voxel size
 
         let filtered = filter.filter()?;
         // Should have significantly fewer points
@@ -164,13 +163,13 @@ mod general_filter_tests {
         // Test with small leaf size
         let mut filter1 = VoxelGridXYZ::new()?;
         filter1.set_input_cloud(&cloud)?;
-        filter1.set_leaf_size(0.05, 0.05, 0.05);
+        filter1.set_leaf_size(0.05, 0.05, 0.05)?;
         let filtered1 = filter1.filter()?;
 
         // Test with large leaf size
         let mut filter2 = VoxelGridXYZ::new()?;
         filter2.set_input_cloud(&cloud)?;
-        filter2.set_leaf_size(0.2, 0.2, 0.2);
+        filter2.set_leaf_size(0.2, 0.2, 0.2)?;
         let filtered2 = filter2.filter()?;
 
         // Larger leaf size should result in fewer points
@@ -193,7 +192,7 @@ mod general_filter_tests {
         }
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_leaf_size(0.5, 0.5, 0.5);
+        filter.set_leaf_size(0.5, 0.5, 0.5)?;
 
         let filtered = filter.filter()?;
         assert!(filtered.size() < cloud.size());
@@ -222,8 +221,8 @@ mod general_filter_tests {
         cloud.push(PointXYZ::new(-5.0, -10.0, -10.0))?;
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_mean_k(10);
-        filter.set_std_dev_mul_thresh(1.0);
+        filter.set_mean_k(10)?;
+        filter.set_std_dev_mul_thresh(1.0)?;
 
         let filtered = filter.filter()?;
         // Should remove outliers
@@ -259,8 +258,8 @@ mod general_filter_tests {
         cloud.push(PointXYZ::new(25.0, 0.0, 0.0))?; // Outlier
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_mean_k(10);
-        filter.set_std_dev_mul_thresh(1.0);
+        filter.set_mean_k(10)?;
+        filter.set_std_dev_mul_thresh(1.0)?;
         filter.set_negative(true); // Keep only outliers
 
         let filtered = filter.filter()?;
@@ -290,8 +289,8 @@ mod general_filter_tests {
         cloud.push(PointXYZ::new(10.0, 10.0, 10.0))?;
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_radius_search(1.0);
-        filter.set_min_neighbors_in_radius(2);
+        filter.set_radius_search(1.0)?;
+        filter.set_min_neighbors_in_radius(2)?;
 
         let filtered = filter.filter()?;
         // Should remove isolated point
@@ -328,8 +327,8 @@ mod general_filter_tests {
         }
 
         filter.set_input_cloud(&cloud)?;
-        filter.set_radius_search(1.5);
-        filter.set_min_neighbors_in_radius(3);
+        filter.set_radius_search(1.5)?;
+        filter.set_min_neighbors_in_radius(3)?;
 
         let filtered = filter.filter()?;
         // Most points should be kept in dense cloud
@@ -353,7 +352,7 @@ mod general_filter_tests {
         }
 
         voxel.set_input_cloud(&cloud)?;
-        voxel.set_leaf_size(2.0, 2.0, 1.0);
+        voxel.set_leaf_size(2.0, 2.0, 1.0)?;
 
         let filtered = voxel.filter()?;
         assert!(filtered.size() < cloud.size());
@@ -364,8 +363,6 @@ mod general_filter_tests {
 /// Tests for bilateral filter (placeholder)
 #[cfg(test)]
 mod bilateral_filter_tests {
-    use super::*;
-
     #[test]
     fn test_bilateral_filter_placeholder() {
         // TODO: Implement bilateral filter tests when available
@@ -374,15 +371,13 @@ mod bilateral_filter_tests {
         // Bilateral filter smooths data while preserving edges
         // Uses both spatial and range (intensity) kernels
 
-        assert!(true, "Bilateral filter tests not yet implemented");
+        todo!("Bilateral filter tests not yet implemented");
     }
 }
 
 /// Tests for convolution filters (placeholder)
 #[cfg(test)]
 mod convolution_filter_tests {
-    use super::*;
-
     #[test]
     fn test_convolution_filter_placeholder() {
         // TODO: Implement convolution filter tests when available
@@ -391,15 +386,13 @@ mod convolution_filter_tests {
         // Convolution filters apply various kernels to point cloud data
         // Useful for smoothing, edge detection, etc.
 
-        assert!(true, "Convolution filter tests not yet implemented");
+        todo!("Convolution filter tests not yet implemented");
     }
 }
 
 /// Tests for morphological filters (placeholder)
 #[cfg(test)]
 mod morphological_filter_tests {
-    use super::*;
-
     #[test]
     fn test_morphological_filter_placeholder() {
         // TODO: Implement morphological filter tests when available
@@ -408,21 +401,19 @@ mod morphological_filter_tests {
         // Morphological filters include erosion, dilation, opening, closing
         // Useful for noise removal and feature extraction
 
-        assert!(true, "Morphological filter tests not yet implemented");
+        todo!("Morphological filter tests not yet implemented");
     }
 }
 
 /// Tests for sampling filters
 #[cfg(test)]
 mod sampling_filter_tests {
-    use super::*;
-
     #[test]
     fn test_uniform_sampling_placeholder() {
         // TODO: Implement uniform sampling tests when available
         // Uniform sampling selects points uniformly across the cloud
 
-        assert!(true, "Uniform sampling tests not yet implemented");
+        todo!("Uniform sampling tests not yet implemented");
     }
 
     #[test]
@@ -430,7 +421,7 @@ mod sampling_filter_tests {
         // TODO: Implement random sampling tests when available
         // Random sampling randomly selects a subset of points
 
-        assert!(true, "Random sampling tests not yet implemented");
+        todo!("Random sampling tests not yet implemented");
     }
 
     #[test]
@@ -438,15 +429,13 @@ mod sampling_filter_tests {
         // TODO: Implement normal space sampling tests when available
         // Normal space sampling ensures uniform sampling in normal space
 
-        assert!(true, "Normal space sampling tests not yet implemented");
+        todo!("Normal space sampling tests not yet implemented");
     }
 }
 
 /// Tests for crop hull filter (placeholder)
 #[cfg(test)]
 mod crop_hull_filter_tests {
-    use super::*;
-
     #[test]
     fn test_crop_hull_placeholder() {
         // TODO: Implement crop hull filter tests when available
@@ -455,7 +444,7 @@ mod crop_hull_filter_tests {
         // CropHull filter crops points inside/outside a convex hull
         // Useful for extracting regions of interest
 
-        assert!(true, "Crop hull filter tests not yet implemented");
+        todo!("Crop hull filter tests not yet implemented");
     }
 }
 
@@ -463,6 +452,7 @@ mod crop_hull_filter_tests {
 #[cfg(test)]
 mod filter_integration_tests {
     use super::*;
+    use crate::filters::{Filter, PassThroughXYZ, StatisticalOutlierRemovalXYZ, VoxelGridXYZ};
 
     #[test]
     fn test_filter_pipeline() -> PclResult<()> {
@@ -484,21 +474,21 @@ mod filter_integration_tests {
         // Step 1: Remove outliers
         let mut outlier_filter = StatisticalOutlierRemovalXYZ::new()?;
         outlier_filter.set_input_cloud(&cloud)?;
-        outlier_filter.set_mean_k(10);
-        outlier_filter.set_std_dev_mul_thresh(1.0);
+        outlier_filter.set_mean_k(10)?;
+        outlier_filter.set_std_dev_mul_thresh(1.0)?;
         let cloud_no_outliers = outlier_filter.filter()?;
 
         // Step 2: Downsample
         let mut voxel_filter = VoxelGridXYZ::new()?;
         voxel_filter.set_input_cloud(&cloud_no_outliers)?;
-        voxel_filter.set_leaf_size(0.5, 0.5, 0.5);
+        voxel_filter.set_leaf_size(0.5, 0.5, 0.5)?;
         let cloud_downsampled = voxel_filter.filter()?;
 
         // Step 3: Crop to region
         let mut pass_filter = PassThroughXYZ::new()?;
         pass_filter.set_input_cloud(&cloud_downsampled)?;
-        pass_filter.set_filter_field_name("z");
-        pass_filter.set_filter_limits(0.0, 2.0);
+        pass_filter.set_filter_field_name("z")?;
+        pass_filter.set_filter_limits(0.0, 2.0)?;
         let cloud_final = pass_filter.filter()?;
 
         // Final cloud should be significantly smaller
@@ -519,7 +509,7 @@ mod filter_integration_tests {
         // Apply voxel grid - should merge all points
         let mut voxel = VoxelGridXYZ::new()?;
         voxel.set_input_cloud(&cloud)?;
-        voxel.set_leaf_size(2.0, 2.0, 2.0);
+        voxel.set_leaf_size(2.0, 2.0, 2.0)?;
         let filtered = voxel.filter()?;
 
         assert_eq!(filtered.size(), 1); // All points in same voxel
@@ -527,8 +517,8 @@ mod filter_integration_tests {
         // Apply pass through that excludes this point
         let mut pass = PassThroughXYZ::new()?;
         pass.set_input_cloud(&filtered)?;
-        pass.set_filter_field_name("x");
-        pass.set_filter_limits(2.0, 3.0);
+        pass.set_filter_field_name("x")?;
+        pass.set_filter_limits(2.0, 3.0)?;
         let final_cloud = pass.filter()?;
 
         assert_eq!(final_cloud.size(), 0);
@@ -540,6 +530,7 @@ mod filter_integration_tests {
 #[cfg(test)]
 mod filter_performance_tests {
     use super::*;
+    use crate::filters::{Filter, PassThroughXYZ, VoxelGridXYZ};
 
     #[test]
     fn test_filter_large_cloud() -> PclResult<()> {
@@ -557,7 +548,7 @@ mod filter_performance_tests {
 
         let mut voxel = VoxelGridXYZ::new()?;
         voxel.set_input_cloud(&cloud)?;
-        voxel.set_leaf_size(0.1, 0.1, 0.1);
+        voxel.set_leaf_size(0.1, 0.1, 0.1)?;
 
         let filtered = voxel.filter()?;
         assert!(filtered.size() < cloud.size());
@@ -577,7 +568,7 @@ mod filter_performance_tests {
 
             let mut filter = VoxelGridXYZ::new()?;
             filter.set_input_cloud(&cloud)?;
-            filter.set_leaf_size(0.5, 0.5, 0.5);
+            filter.set_leaf_size(0.5, 0.5, 0.5)?;
             let _filtered = filter.filter()?;
         }
         Ok(())
@@ -597,8 +588,8 @@ mod filter_performance_tests {
 
         let mut filter = PassThroughXYZ::new()?;
         filter.set_input_cloud(&cloud)?;
-        filter.set_filter_field_name("x");
-        filter.set_filter_limits(-1000.0, 1000.0);
+        filter.set_filter_field_name("x")?;
+        filter.set_filter_limits(-1000.0, 1000.0)?;
 
         let filtered = filter.filter()?;
         // Should handle extreme values gracefully
@@ -618,7 +609,7 @@ mod filter_performance_tests {
 
         let mut filter = VoxelGridXYZ::new()?;
         filter.set_input_cloud(&cloud)?;
-        filter.set_leaf_size(0.5, 0.5, 0.5);
+        filter.set_leaf_size(0.5, 0.5, 0.5)?;
 
         let filtered = filter.filter()?;
         // Should handle NaN points appropriately
@@ -631,7 +622,7 @@ mod filter_performance_tests {
 #[cfg(test)]
 mod filter_builder_tests {
     use super::*;
-    use crate::filters::{PassThroughXYZBuilder, VoxelGridXYZBuilder};
+    use crate::filters::{Filter, PassThroughXYZBuilder, VoxelGridXYZBuilder};
 
     #[test]
     fn test_voxel_grid_builder() -> PclResult<()> {

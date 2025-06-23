@@ -265,7 +265,7 @@ mod point_cloud_tests {
 
     #[test]
     fn test_point_cloud_is_dense() -> PclResult<()> {
-        let cloud = PointCloud::<XYZ>::new()?;
+        let _cloud = PointCloud::<XYZ>::new()?; // TODO: Use when is_dense is implemented
 
         // Test is_dense property
         // let _is_dense = cloud.is_dense(); // TODO: Not implemented yet

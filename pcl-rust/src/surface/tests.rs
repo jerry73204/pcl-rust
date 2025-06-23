@@ -500,7 +500,7 @@ mod marching_cubes_tests {
         // Note: This may also be not implemented
         let result = MarchingCubesRbfXYZ::new();
         // Accept either success or not implemented error
-        if let Err(_) = result {
+        if result.is_err() {
             // Not implemented is acceptable
         }
     }
@@ -757,7 +757,7 @@ mod convex_hull_tests {
         // This corresponds to PCL's convex hull computation functionality
 
         // Placeholder test - convex hull not yet implemented
-        assert!(true, "Convex hull tests not yet implemented");
+        todo!("Convex hull tests not yet implemented");
     }
 
     #[test]
@@ -766,7 +766,7 @@ mod convex_hull_tests {
         // This would test hull computation in 2D plane projection
 
         // Placeholder test - 2D convex hull not yet implemented
-        assert!(true, "2D convex hull tests not yet implemented");
+        todo!("2D convex hull tests not yet implemented");
     }
 
     #[test]
@@ -775,7 +775,7 @@ mod convex_hull_tests {
         // This would test full 3D convex hull computation
 
         // Placeholder test - 3D convex hull not yet implemented
-        assert!(true, "3D convex hull tests not yet implemented");
+        todo!("3D convex hull tests not yet implemented");
     }
 
     #[test]
@@ -784,7 +784,7 @@ mod convex_hull_tests {
         // This would test integration with Qhull library
 
         // Placeholder test - Qhull integration not yet implemented
-        assert!(true, "Qhull convex hull tests not yet implemented");
+        todo!("Qhull convex hull tests not yet implemented");
     }
 
     #[test]
@@ -795,10 +795,7 @@ mod convex_hull_tests {
         // - Single/few points
 
         // Placeholder test - degenerate case handling not yet implemented
-        assert!(
-            true,
-            "Convex hull degenerate case tests not yet implemented"
-        );
+        todo!("Convex hull degenerate case tests not yet implemented");
     }
 }
 
@@ -811,7 +808,7 @@ mod concave_hull_tests {
         // This corresponds to PCL's concave hull (alpha shapes) functionality
 
         // Placeholder test - concave hull not yet implemented
-        assert!(true, "Concave hull tests not yet implemented");
+        todo!("Concave hull tests not yet implemented");
     }
 
     #[test]
@@ -820,7 +817,7 @@ mod concave_hull_tests {
         // This would test alpha shape computation with different alpha values
 
         // Placeholder test - alpha shapes not yet implemented
-        assert!(true, "Alpha shapes tests not yet implemented");
+        todo!("Alpha shapes tests not yet implemented");
     }
 
     #[test]
@@ -829,7 +826,7 @@ mod concave_hull_tests {
         // This would test hull computation in 2D plane projection
 
         // Placeholder test - 2D concave hull not yet implemented
-        assert!(true, "2D concave hull tests not yet implemented");
+        todo!("2D concave hull tests not yet implemented");
     }
 
     #[test]
@@ -838,7 +835,7 @@ mod concave_hull_tests {
         // This would test full 3D concave hull computation
 
         // Placeholder test - 3D concave hull not yet implemented
-        assert!(true, "3D concave hull tests not yet implemented");
+        todo!("3D concave hull tests not yet implemented");
     }
 
     #[test]
@@ -847,7 +844,7 @@ mod concave_hull_tests {
         // Different alpha values should produce different hull shapes
 
         // Placeholder test - alpha parameter testing not yet implemented
-        assert!(true, "Alpha parameter tests not yet implemented");
+        todo!("Alpha parameter tests not yet implemented");
     }
 }
 

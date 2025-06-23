@@ -12,10 +12,12 @@
 //! - milk.pcd - Milk carton scan
 //! - Various test PLY files
 
-use super::*;
 use crate::common::{PointCloud, PointXYZ, PointXYZI, PointXYZRGB, XYZ, XYZI, XYZRGB};
 use crate::error::PclResult;
-use crate::io::BinaryFormat;
+use crate::io::{
+    pcd::{PcdIoXYZ, PcdIoXYZI, PcdIoXYZRGB},
+    ply::{PlyIoXYZ, PlyIoXYZRGB},
+};
 use std::fs;
 use std::path::Path;
 
@@ -33,6 +35,7 @@ fn cleanup_test_file<P: AsRef<Path>>(path: P) {
 #[cfg(test)]
 mod pcd_io_tests {
     use super::*;
+    use crate::io::BinaryFormat;
 
     #[test]
     fn test_pcd_save_load_xyz() -> PclResult<()> {
@@ -277,6 +280,7 @@ mod pcd_io_tests {
 #[cfg(test)]
 mod ply_io_tests {
     use super::*;
+    use crate::io::BinaryFormat;
 
     #[test]
     fn test_ply_save_load_xyz() -> PclResult<()> {
@@ -409,8 +413,6 @@ mod ply_io_tests {
 /// Tests for PLY mesh I/O (placeholder)
 #[cfg(test)]
 mod ply_mesh_io_tests {
-    use super::*;
-
     #[test]
     fn test_ply_mesh_io_placeholder() {
         // TODO: Implement PLY mesh I/O tests when mesh support is available
@@ -419,15 +421,13 @@ mod ply_mesh_io_tests {
         // PLY mesh format includes vertices, faces, and other properties
         // Used for saving/loading triangulated surfaces
 
-        assert!(true, "PLY mesh I/O tests not yet implemented");
+        todo!("PLY mesh I/O tests not yet implemented");
     }
 }
 
 /// Tests for octree compression (placeholder)
 #[cfg(test)]
 mod octree_compression_tests {
-    use super::*;
-
     #[test]
     fn test_octree_compression_placeholder() {
         // TODO: Implement octree compression tests when available
@@ -436,15 +436,13 @@ mod octree_compression_tests {
         // Octree compression provides efficient point cloud compression
         // Useful for streaming and storage optimization
 
-        assert!(true, "Octree compression tests not yet implemented");
+        todo!("Octree compression tests not yet implemented");
     }
 }
 
 /// Tests for buffer operations (placeholder)
 #[cfg(test)]
 mod buffer_operation_tests {
-    use super::*;
-
     #[test]
     fn test_buffer_operations_placeholder() {
         // TODO: Implement buffer operation tests when available
@@ -453,7 +451,7 @@ mod buffer_operation_tests {
         // Buffer operations test low-level I/O functionality
         // Including memory buffers, streaming, etc.
 
-        assert!(true, "Buffer operation tests not yet implemented");
+        todo!("Buffer operation tests not yet implemented");
     }
 }
 
@@ -561,6 +559,7 @@ mod io_integration_tests {
 #[cfg(test)]
 mod io_performance_tests {
     use super::*;
+    use crate::io::BinaryFormat;
 
     #[test]
     fn test_io_large_dataset() -> PclResult<()> {

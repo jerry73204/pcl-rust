@@ -22,19 +22,39 @@ impl<T: PointType> PointCloud<T> {
             "PointXYZ" => {
                 let cloud = ffi::new_point_cloud_xyz();
                 // SAFETY: We know the type matches based on type_name
-                unsafe { std::mem::transmute(cloud) }
+                unsafe {
+                    std::mem::transmute::<
+                        pcl_sys::UniquePtr<pcl_sys::common::PointCloudXYZ>,
+                        pcl_sys::UniquePtr<T::CloudType>,
+                    >(cloud)
+                }
             }
             "PointXYZI" => {
                 let cloud = ffi::new_point_cloud_xyzi();
-                unsafe { std::mem::transmute(cloud) }
+                unsafe {
+                    std::mem::transmute::<
+                        pcl_sys::UniquePtr<pcl_sys::common::PointCloudXYZI>,
+                        pcl_sys::UniquePtr<T::CloudType>,
+                    >(cloud)
+                }
             }
             "PointXYZRGB" => {
                 let cloud = ffi::new_point_cloud_xyzrgb();
-                unsafe { std::mem::transmute(cloud) }
+                unsafe {
+                    std::mem::transmute::<
+                        pcl_sys::UniquePtr<pcl_sys::common::PointCloudXYZRGB>,
+                        pcl_sys::UniquePtr<T::CloudType>,
+                    >(cloud)
+                }
             }
             "PointNormal" => {
                 let cloud = ffi::new_point_cloud_point_normal();
-                unsafe { std::mem::transmute(cloud) }
+                unsafe {
+                    std::mem::transmute::<
+                        pcl_sys::UniquePtr<pcl_sys::raw_ffi::PointCloud_PointNormal>,
+                        pcl_sys::UniquePtr<T::CloudType>,
+                    >(cloud)
+                }
             }
             _ => {
                 return Err(PclError::InvalidParameter {

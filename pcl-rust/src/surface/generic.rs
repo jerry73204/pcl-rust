@@ -73,7 +73,7 @@ impl SurfacePoint for PointNormal {
 }
 
 /// Configuration options for surface reconstruction algorithms
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct SurfaceReconstructionConfig {
     /// Search radius for local operations
     pub search_radius: Option<f64>,
@@ -86,17 +86,6 @@ pub struct SurfaceReconstructionConfig {
 
     /// Whether to compute normals if not present
     pub compute_normals: bool,
-}
-
-impl Default for SurfaceReconstructionConfig {
-    fn default() -> Self {
-        Self {
-            search_radius: None,
-            max_neighbors: None,
-            smoothness: None,
-            compute_normals: false,
-        }
-    }
 }
 
 /// Builder for surface reconstruction configuration

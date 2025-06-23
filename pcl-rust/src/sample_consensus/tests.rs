@@ -643,7 +643,7 @@ mod line_model_tests {
         // Line models fit 3D lines to point data
         // Equation: point = origin + t * direction
         
-        assert!(true, "Line model tests not yet implemented");
+        todo!( "Line model tests not yet implemented");
     }
 }
 
@@ -659,7 +659,7 @@ mod quadric_model_tests {
         
         // Quadric models include cylinders, cones, and other quadric surfaces
         
-        assert!(true, "Quadric model tests not yet implemented");
+        todo!( "Quadric model tests not yet implemented");
     }
 }
 

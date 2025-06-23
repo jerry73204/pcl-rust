@@ -334,7 +334,7 @@ mod organized_search_tests {
         // This corresponds to PCL's organized neighbor search functionality
         
         // Placeholder test - organized search not yet implemented
-        assert!(true, "Organized search tests not yet implemented");
+        todo!( "Organized search tests not yet implemented");
     }
 }
 
@@ -349,7 +349,7 @@ mod organized_index_tests {
         // This corresponds to PCL's organized index search functionality
         
         // Placeholder test - organized index search not yet implemented
-        assert!(true, "Organized index search tests not yet implemented");
+        todo!( "Organized index search tests not yet implemented");
     }
 }
 
@@ -364,7 +364,7 @@ mod octree_search_tests {
         // This would test octree-based spatial search operations
         
         // Note: The octree module exists but may not have search interface yet
-        assert!(true, "Octree search tests not yet implemented");
+        todo!( "Octree search tests not yet implemented");
     }
 }
 
@@ -380,7 +380,7 @@ mod flann_search_tests {
         // efficient search for high-dimensional spaces
         
         // Placeholder test - FLANN search not yet implemented
-        assert!(true, "FLANN search tests not yet implemented");
+        todo!( "FLANN search tests not yet implemented");
     }
 }
 

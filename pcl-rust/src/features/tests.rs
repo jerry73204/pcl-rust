@@ -515,7 +515,7 @@ mod shot_estimation_tests {
         // SHOT (Signature of Histograms of OrienTations) is a 3D shape descriptor
         // that is robust to noise and has good distinctiveness properties
         
-        assert!(true, "SHOT estimation tests not yet implemented");
+        todo!( "SHOT estimation tests not yet implemented");
     }
 }
 
@@ -532,7 +532,7 @@ mod boundary_estimation_tests {
         // Boundary estimation detects points that lie on the boundary of surfaces
         // Useful for edge detection in 3D point clouds
         
-        assert!(true, "Boundary estimation tests not yet implemented");
+        todo!( "Boundary estimation tests not yet implemented");
     }
 }
 
@@ -551,7 +551,7 @@ mod curvature_estimation_tests {
         // - Mean and Gaussian curvature
         // - Surface variation estimation
         
-        assert!(true, "Curvature estimation tests not yet implemented");
+        todo!( "Curvature estimation tests not yet implemented");
     }
 }
 
