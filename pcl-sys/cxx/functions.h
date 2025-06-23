@@ -1,5 +1,10 @@
 #pragma once
 
+// CRITICAL: When visualization is enabled, ensure VTK config is included first
+#ifdef PCL_RUST_ENABLE_VISUALIZATION
+#include "vtk_config.h"
+#endif
+
 #include "common_functions.h"
 #include "common_impl.h"
 #include "features_impl.h"
@@ -9,18 +14,8 @@
 #include "surface_impl.h"
 #include "types.h"
 
-// Try to include VTK to determine if visualization is available
-#ifdef __has_include
-#if __has_include(<vtkVersion.h>)
-#include <vtkVersion.h>
-#endif
-#endif
-
-// If VTK is available, include PCL visualization headers
-#ifdef VTK_MAJOR_VERSION
-#include <pcl/visualization/cloud_viewer.h>
-#include <pcl/visualization/pcl_visualizer.h>
-#endif
+// VTK includes have been moved to visualization-specific files
+// to prevent unconditional inclusion via cxx bridge
 
 // Point field access functions
 float get_x(const pcl::PointXYZ &point);

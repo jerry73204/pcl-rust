@@ -1,5 +1,11 @@
+// CRITICAL: Include VTK config first to disable debug features
+#ifdef PCL_RUST_ENABLE_VISUALIZATION
+#include "vtk_config.h"
+#endif
+
 #include "cxx/functions.h"
 #include "visualization_stubs.h"
+#include "visualization_vtk.h"
 
 // Check if VTK headers are available
 #ifdef VTK_MAJOR_VERSION

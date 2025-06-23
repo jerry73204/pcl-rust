@@ -9,7 +9,8 @@ repository = "https://github.com/your-username/pcl-rust"
 [features]
 default = ["search", "io", "filters"]
 full = [
-    "search", "io", "filters", "surface", "octree", "visualization",
+    "search", "io", "filters", "surface", "octree",
+    # "visualization",  # Disabled due to VTK linkage issues - see CLAUDE.md
     "features", "keypoints", "registration", "segmentation", "sample_consensus"
 ]
 
@@ -21,7 +22,7 @@ octree = ["pcl-sys/octree", "search"]  # octree depends on search module
 # Processing modules
 filters = ["pcl-sys/filters", "search"]  # filters uses search functionality
 surface = ["pcl-sys/surface", "search"]  # surface uses search functionality
-visualization = ["pcl-sys/visualization"]
+# visualization = ["pcl-sys/visualization"]  # Disabled due to VTK linkage issues - see CLAUDE.md
 
 # Advanced modules
 features = ["pcl-sys/features", "search"]  # features uses search for KdTree
@@ -84,17 +85,17 @@ required-features = ["registration"]
 name = "keypoints_demo"
 required-features = ["keypoints"]
 
-[[example]]
-name = "visualization_demo"
-required-features = ["visualization"]
+# [[example]]
+# name = "visualization_demo"
+# required-features = ["visualization"]  # Disabled due to VTK linkage issues
 
-[[example]]
-name = "visualization_generic_demo"
-required-features = ["visualization"]
+# [[example]]
+# name = "visualization_generic_demo"
+# required-features = ["visualization"]  # Disabled due to VTK linkage issues
 
-[[example]]
-name = "visualization_test"
-required-features = ["visualization"]
+# [[example]]
+# name = "visualization_test"
+# required-features = ["visualization"]  # Disabled due to VTK linkage issues
 
 [[example]]
 name = "test_correspondence"

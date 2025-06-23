@@ -211,22 +211,46 @@ fn main() {
         println!("cargo:rustc-link-lib=pcl_filters");
     }
 
-    if is_feature_enabled("visualization") {
-        println!("cargo:rustc-link-lib=pcl_visualization");
-        // VTK dependencies required for PCL visualization (with version suffix)
-        println!("cargo:rustc-link-lib=vtkCommonCore-9.1");
-        println!("cargo:rustc-link-lib=vtkCommonDataModel-9.1");
-        println!("cargo:rustc-link-lib=vtkCommonMath-9.1");
-        println!("cargo:rustc-link-lib=vtkRenderingCore-9.1");
-        println!("cargo:rustc-link-lib=vtkRenderingOpenGL2-9.1");
-        println!("cargo:rustc-link-lib=vtkInteractionStyle-9.1");
-        println!("cargo:rustc-link-lib=vtkFiltersSources-9.1");
-        println!("cargo:rustc-link-lib=vtkFiltersCore-9.1");
-        println!("cargo:rustc-link-lib=vtkCommonExecutionModel-9.1");
-        // Additional VTK libraries that might be needed
-        println!("cargo:rustc-link-lib=vtkRenderingAnnotation-9.1");
-        println!("cargo:rustc-link-lib=vtkRenderingLOD-9.1");
-    }
+    // Visualization disabled due to VTK linkage issues
+    // if is_feature_enabled("visualization") {
+    //     // Add linker flags to ensure proper symbol resolution
+    //     println!("cargo:rustc-link-arg=-Wl,--no-as-needed");
+    //
+    //     // VTK dependencies must be linked BEFORE PCL visualization for proper symbol resolution
+    //     // Core VTK libraries for basic functionality (order matters!)
+    //     println!("cargo:rustc-link-lib=vtkCommonCore-9.1");
+    //     println!("cargo:rustc-link-lib=vtkCommonDataModel-9.1");
+    //     println!("cargo:rustc-link-lib=vtkCommonMath-9.1");
+    //     println!("cargo:rustc-link-lib=vtkCommonExecutionModel-9.1");
+    //     println!("cargo:rustc-link-lib=vtkCommonSystem-9.1");
+    //     println!("cargo:rustc-link-lib=vtkCommonTransforms-9.1");
+    //     println!("cargo:rustc-link-lib=vtkCommonMisc-9.1");
+    //     println!("cargo:rustc-link-lib=vtkCommonColor-9.1");
+    //     println!("cargo:rustc-link-lib=vtkCommonComputationalGeometry-9.1");
+    //     // Rendering libraries
+    //     println!("cargo:rustc-link-lib=vtkRenderingCore-9.1");
+    //     println!("cargo:rustc-link-lib=vtkRenderingOpenGL2-9.1");
+    //     println!("cargo:rustc-link-lib=vtkRenderingAnnotation-9.1");
+    //     println!("cargo:rustc-link-lib=vtkRenderingLOD-9.1");
+    //     // Interaction and filtering libraries
+    //     println!("cargo:rustc-link-lib=vtkInteractionStyle-9.1");
+    //     println!("cargo:rustc-link-lib=vtkFiltersSources-9.1");
+    //     println!("cargo:rustc-link-lib=vtkFiltersCore-9.1");
+    //     println!("cargo:rustc-link-lib=vtkFiltersGeneral-9.1");
+    //     // I/O libraries that might be needed
+    //     println!("cargo:rustc-link-lib=vtkIOCore-9.1");
+    //     println!("cargo:rustc-link-lib=vtkIOLegacy-9.1");
+    //     // Debug and object factory libraries (for the missing symbols)
+    //     println!("cargo:rustc-link-lib=vtkWrappingTools-9.1");
+    //
+    //     // Note: Removed --whole-archive as it causes duplicate static initializer issues
+    //
+    //     // PCL visualization library AFTER VTK dependencies
+    //     println!("cargo:rustc-link-lib=pcl_visualization");
+    //
+    //     // Additional linker flags for VTK compatibility
+    //     println!("cargo:rustc-link-arg=-Wl,--as-needed");
+    // }
 
     // Build cxx bridge
     let mut build = cxx_build::bridge("src/lib.rs");
@@ -236,10 +260,29 @@ fn main() {
         .include(".") // For our cxx/types.h (highest priority)
         .std("c++17"); // Use C++17 for better optimization
 
+    // Visualization disabled due to VTK linkage issues
+    // // CRITICAL: Define VTK disables for ALL files when visualization is enabled
+    // // This must happen before ANY includes to prevent VTK static initializers
+    // if is_feature_enabled("visualization") {
+    //     build.define("VTK_DEBUG_LEAKS", "0");
+    //     build.define("VTK_DISABLE_DEBUG_LEAKS", None);
+    //     build.define("VTK_NO_OBJECT_FACTORY_DEBUGGING", None);
+    //     build.define("VTK_LEGACY_REMOVE", None);
+    //     build.define("VTK_ALL_NEW_OBJECT_FACTORY", None);
+    //     build.define("VTK_NO_EXPLICIT_TEMPLATE_INSTANTIATION", None);
+    // }
+
     // Add dynamically discovered PCL include paths
     for include_path in &pcl_include_paths {
         build.include(include_path);
     }
+
+    // Visualization disabled due to VTK linkage issues
+    // // Force include our precompiled header to ensure VTK config is always first
+    // if is_feature_enabled("visualization") {
+    //     build.flag_if_supported("-include");
+    //     build.flag_if_supported("cxx/precompiled.h");
+    // }
 
     // Probe for Eigen3 include paths
     if let Ok(eigen_lib) = pkg_config::probe_library("eigen3") {
@@ -256,59 +299,62 @@ fn main() {
         );
     }
 
-    // Add VTK include path only when visualization feature is enabled
-    if is_feature_enabled("visualization") {
-        // Try to find VTK via pkg-config first
-        let vtk_variants = ["vtk-9.3", "vtk-9.2", "vtk-9.1", "vtk-9.0", "vtk"];
-        let mut vtk_found = false;
-
-        for variant in &vtk_variants {
-            if let Ok(vtk_lib) = pkg_config::probe_library(variant) {
-                for include_path in &vtk_lib.include_paths {
-                    build.include(include_path);
-                }
-                vtk_found = true;
-                break;
-            }
-        }
-
-        if !vtk_found {
-            // VTK often doesn't provide pkg-config files, so try standard locations
-            // VTK is typically found via CMake config files, but we can use common include paths
-            let vtk_include_paths = [
-                "/usr/include/vtk-9.3",
-                "/usr/include/vtk-9.2",
-                "/usr/include/vtk-9.1",
-                "/usr/include/vtk-9.0",
-                "/usr/local/include/vtk-9.3",
-                "/usr/local/include/vtk-9.2",
-                "/usr/local/include/vtk-9.1",
-                "/usr/local/include/vtk-9.0",
-            ];
-
-            for vtk_path in &vtk_include_paths {
-                if std::path::Path::new(vtk_path).exists() {
-                    build.include(vtk_path);
-                    vtk_found = true;
-                    println!("cargo:warning=Found VTK headers at: {}", vtk_path);
-                    break;
-                }
-            }
-
-            if !vtk_found {
-                panic!(
-                    "VTK (Visualization Toolkit) not found.\n\
-                     VTK is required when the 'visualization' feature is enabled.\n\
-                     Please install VTK development libraries:\n\
-                     - Ubuntu/Debian: sudo apt-get install libvtk9-dev\n\
-                     - macOS: brew install vtk\n\
-                     - Or disable the visualization feature if not needed\n\
-                     Searched in: {:#?}",
-                    vtk_include_paths
-                );
-            }
-        }
-    }
+    // Visualization disabled due to VTK linkage issues
+    // // Add VTK include path only when visualization feature is enabled
+    // if is_feature_enabled("visualization") {
+    //     // Define preprocessor flag to enable VTK includes
+    //     build.define("PCL_RUST_ENABLE_VISUALIZATION", None);
+    //     // Try to find VTK via pkg-config first
+    //     let vtk_variants = ["vtk-9.3", "vtk-9.2", "vtk-9.1", "vtk-9.0", "vtk"];
+    //     let mut vtk_found = false;
+    //
+    //     for variant in &vtk_variants {
+    //         if let Ok(vtk_lib) = pkg_config::probe_library(variant) {
+    //             for include_path in &vtk_lib.include_paths {
+    //                 build.include(include_path);
+    //             }
+    //             vtk_found = true;
+    //             break;
+    //         }
+    //     }
+    //
+    //     if !vtk_found {
+    //         // VTK often doesn't provide pkg-config files, so try standard locations
+    //         // VTK is typically found via CMake config files, but we can use common include paths
+    //         let vtk_include_paths = [
+    //             "/usr/include/vtk-9.3",
+    //             "/usr/include/vtk-9.2",
+    //             "/usr/include/vtk-9.1",
+    //             "/usr/include/vtk-9.0",
+    //             "/usr/local/include/vtk-9.3",
+    //             "/usr/local/include/vtk-9.2",
+    //             "/usr/local/include/vtk-9.1",
+    //             "/usr/local/include/vtk-9.0",
+    //         ];
+    //
+    //         for vtk_path in &vtk_include_paths {
+    //             if std::path::Path::new(vtk_path).exists() {
+    //                 build.include(vtk_path);
+    //                 vtk_found = true;
+    //                 println!("cargo:warning=Found VTK headers at: {}", vtk_path);
+    //                 break;
+    //             }
+    //         }
+    //
+    //         if !vtk_found {
+    //             panic!(
+    //                 "VTK (Visualization Toolkit) not found.\n\
+    //                  VTK is required when the 'visualization' feature is enabled.\n\
+    //                  Please install VTK development libraries:\n\
+    //                  - Ubuntu/Debian: sudo apt-get install libvtk9-dev\n\
+    //                  - macOS: brew install vtk\n\
+    //                  - Or disable the visualization feature if not needed\n\
+    //                  Searched in: {:#?}",
+    //                 vtk_include_paths
+    //             );
+    //         }
+    //     }
+    // }
 
     // Check PCL version in headers and warn if mismatch
     check_pcl_version(&pcl_include_paths);
@@ -361,9 +407,10 @@ fn main() {
         build.file("cxx/surface.cpp");
     }
 
-    if is_feature_enabled("visualization") {
-        build.file("cxx/visualization.cpp");
-    }
+    // Visualization disabled due to VTK linkage issues
+    // if is_feature_enabled("visualization") {
+    //     build.file("cxx/visualization.cpp");
+    // }
 
     // Enable ccache if available
     if std::process::Command::new("ccache")

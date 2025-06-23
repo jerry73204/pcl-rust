@@ -111,8 +111,8 @@ pub mod sample_consensus;
 pub mod segmentation;
 #[cfg(feature = "surface")]
 pub mod surface;
-#[cfg(feature = "visualization")]
-pub mod visualization;
+// #[cfg(feature = "visualization")]
+// pub mod visualization;  // Disabled due to VTK linkage issues - see CLAUDE.md
 
 #[cfg(test)]
 mod error_tests;
@@ -175,41 +175,42 @@ pub use surface::{
     OrganizedFastMeshXYZ, PointCloudSmoothing, PoissonReconstruction, PolygonMesh,
     SurfaceReconstruction, TriangulationType, UpsampleMethod,
 };
-#[cfg(feature = "visualization")]
-pub use visualization::{
-    AdvancedViewer,
-    // Advanced visualization features
-    AnimationController,
-    // Core viewers
-    CameraControl,
-    // Configuration
-    CameraPosition,
-    CloudViewer,
-    CloudViewerBuilder,
-    ColorMap,
-    ComparisonViewer,
-    FeatureVisualizer,
-    HistogramVisualizer,
-    InteractiveViewer,
-    MultiCloudViewer,
-    NormalVisualization,
-    PclVisualizer,
-    PclVisualizerBuilder,
-    RangeImageVisualizer,
-    RenderingProperties,
-    Representation,
-    Shading,
-    ShapeVisualization,
-    // Generic visualization traits
-    Viewer,
-    ViewerXYZ,
-    ViewerXYZRGB,
-    ViewportControl,
-    VisualizablePoint,
-    VisualizationConfig,
-    VisualizationConfigBuilder,
-    VisualizationControl,
-};
+// Visualization exports disabled due to VTK linkage issues - see CLAUDE.md
+// #[cfg(feature = "visualization")]
+// pub use visualization::{
+//     AdvancedViewer,
+//     // Advanced visualization features
+//     AnimationController,
+//     // Core viewers
+//     CameraControl,
+//     // Configuration
+//     CameraPosition,
+//     CloudViewer,
+//     CloudViewerBuilder,
+//     ColorMap,
+//     ComparisonViewer,
+//     FeatureVisualizer,
+//     HistogramVisualizer,
+//     InteractiveViewer,
+//     MultiCloudViewer,
+//     NormalVisualization,
+//     PclVisualizer,
+//     PclVisualizerBuilder,
+//     RangeImageVisualizer,
+//     RenderingProperties,
+//     Representation,
+//     Shading,
+//     ShapeVisualization,
+//     // Generic visualization traits
+//     Viewer,
+//     ViewerXYZ,
+//     ViewerXYZRGB,
+//     ViewportControl,
+//     VisualizablePoint,
+//     VisualizationConfig,
+//     VisualizationConfigBuilder,
+//     VisualizationControl,
+// };
 
 #[cfg(test)]
 mod tests {
